@@ -1,0 +1,3821 @@
+#
+# hello.bus.45.bridge.cad
+#
+# serial bus bridge hello-world
+#
+# Neil Gershenfeld
+# CBA MIT 11/20/10
+#
+# (c) Massachusetts Institute of Technology 2010
+# Permission granted for experimental and personal use;
+# license for commercial sale available from MIT.
+#
+
+#
+# uncomment for desired output:
+#
+
+output = "traces, labels, and exterior"
+#output = "traces and exterior"
+#output = "interior"
+#output = "exterior"
+#output = "traces"
+#output = "holes"
+#output = "solder mask"
+
+#
+# define shapes and transformations
+#
+
+# color(color,part)
+# circle(x0, y0, r)
+# cylinder(x0, y0, z0, z1, r)
+# cone(x0, y0, z0, z1, r0)
+# sphere(x0, y0, z0, r)
+# torus(x0, y0, z0, r0, r1)
+# rectangle(x0, x1, y0, y1)
+# cube(x0, x1, y0, y1, z0, z1)
+# right_triangle(x0, y0, h)
+# triangle(x0, y0, x1, y1, x2, y2) (points in clockwise order)
+# pyramid(x0, x1, y0, y1, z0, z1)
+# function(Z_of_XY)
+# functions(upper_Z_of_XY,lower_Z_of_XY)
+# add(part1, part2)
+# subtract(part1, part2)
+# intersect(part1, part2)
+# move(part,dx,dy)
+# translate(part,dx,dy,dz)
+# rotate(part, angle)
+# rotate_x(part, angle)
+# rotate_y(part, angle)
+# rotate_z(part, angle)
+# rotate_90(part)
+# rotate_180(part)
+# rotate_270(part)
+# reflect_x(part,x0)
+# reflect_y(part,y0)
+# reflect_z(part,z0)
+# reflect_xy(part)
+# reflect_xz(part)
+# reflect_yz(part)
+# scale_x(part, x0, sx)
+# scale_y(part, y0, sy)
+# scale_z(part, z0, sz)
+# scale_xy(part, x0, y0, sxy)
+# scale_xyz(part, x0, y0, z0, sxyz)
+# coscale_x_y(part, x0, y0, y1, angle0, angle1, amplitude, offset)
+# coscale_x_z(part, x0, z0, z1, angle0, angle1, amplitude, offset)
+# coscale_xy_z(part, x0, y0, z0, z1, angle0, angle1, amplitude, offset)
+# taper_x_y(part, x0, y0, y1, s0, s1)
+# taper_x_z(part, x0, z0, z1, s0, s1)
+# taper_xy_z(part, x0, y0, z0, z1, s0, s1)
+# shear_x_y(part, y0, y1, dx0, dx1)
+# shear_x_z(part, z0, z1, dx0, dx1)
+
+True = "1"
+False = "0"
+
+def color(color, part):
+   part = '('+str(color)+'*(('+part+')!=0))'
+   return part
+
+Red = (225 << 0)
+Green = (225 << 8)
+Blue = (225 << 16)
+Gray = (128 << 16) + (128 << 8) + (128 << 0)
+White = (255 << 16) + (255 << 8) + (255 << 0)
+Teal = (255 << 16) + (255 << 8)
+Pink = (255 << 16) + (255 << 0)
+Yellow = (255 << 8) + (255 << 0)
+Brown = (45 << 16) + (82 << 8) + (145 << 0)
+Navy = (128 << 16) + (0 << 8) + (0 << 0)
+Tan = (60 << 16) + (90 << 8) + (125 << 0)
+
+def circle(x0, y0, r):
+   part = "(((X-(x0))*(X-(x0)) + (Y-(y0))*(Y-(y0))) <= (r*r))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'r',str(r))
+   return part
+
+def cylinder(x0, y0, z0, z1, r):
+   part = "(((X-(x0))*(X-(x0)) + (Y-(y0))*(Y-(y0)) <= (r*r)) & (Z >= (z0)) & (Z <= (z1)))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   part = replace(part,'r',str(r))
+   return part
+
+def cone(x0, y0, z0, z1, r0):
+   part = cylinder(x0, y0, z0, z1, r0)
+   part = taper_xy_z(part, x0, y0, z0, z1, 1.0, 0.0)
+   return part
+
+def sphere(x0, y0, z0, r):
+   part = "(((X-(x0))*(X-(x0)) + (Y-(y0))*(Y-(y0)) + (Z-(z0))*(Z-(z0))) <= (r*r))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'r',str(r))
+   return part
+
+def torus(x0, y0, z0, r0, r1):
+   part = "(((r0 - sqrt((X-(x0))*(X-(x0)) + (Y-(y0))*(Y-(y0))))*(r0 - sqrt((X-(x0))*(X-(x0)) + (Y-(y0))*(Y-(y0))) + (Z-(z0))*(Z-(z0))) <= (r1*r1))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'r0',str(r0))
+   part = replace(part,'r1',str(r1))
+   return part
+
+def rectangle(x0, x1, y0, y1):
+   part = "((X >= (x0)) & (X <= (x1)) & (Y >= (y0)) & (Y <= (y1)))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'x1',str(x1))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'y1',str(y1))
+   return part
+
+def cube(x0, x1, y0, y1, z0, z1):
+   part = "((X >= (x0)) & (X <= (x1)) & (Y >= (y0)) & (Y <= (y1)) & (Z >= (z0)) & (Z <= (z1)))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'x1',str(x1))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'y1',str(y1))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   return part
+
+def right_triangle(x0, y0, l):
+   part = "((X > x0) & (X < x0 + l - (Y-y0)) & (Y > y0))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'l',str(l))
+   return part
+
+def triangle(x0, y0, x1, y1, x2, y2): # points in clockwise order
+   part = "(((((y1)-(y0))*(X-(x0))-((x1)-(x0))*(Y-(y0))) >= 0) & ((((y2)-(y1))*(X-(x1))-((x2)-(x1))*(Y-(y1))) >= 0) & ((((y0)-(y2))*(X-(x2))-((x0)-(x2))*(Y-(y2))) >= 0))"
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'x1',str(x1))
+   part = replace(part,'y1',str(y1))
+   part = replace(part,'x2',str(x2))
+   part = replace(part,'y2',str(y2))
+   return part
+
+def pyramid(x0, x1, y0, y1, z0, z1):
+   part = cube(x0, x1, y0, y1, z0, z1)
+   part = taper_xy_z(part, (x0+x1)/2., (y0+y1)/2., z0, z1, 1.0, 0.0)
+   return part
+
+def function(Z_of_XY):
+   part = '(Z <= '+Z_of_XY+')'
+   return part
+
+def functions(upper_Z_of_XY,lower_Z_of_XY):
+   part = '(Z <= '+upper_Z_of_XY+') & (Z >= '+lower_Z_of_XY+')'
+   return part
+
+def add(part1, part2):
+   part = "part1 | part2"
+   part = replace(part,'part1',part1)
+   part = replace(part,'part2',part2)
+   return part
+
+def subtract(part1, part2):
+   part = "(part1) & ~(part2)"
+   part = replace(part,'part1',part1)
+   part = replace(part,'part2',part2)
+   return part
+
+def intersect(part1, part2):
+   part = "(part1) & (part2)"
+   part = replace(part,'part1',part1)
+   part = replace(part,'part2',part2)
+   return part
+
+def move(part,dx,dy):
+   part = replace(part,'X','(X-('+str(dx)+'))')
+   part = replace(part,'Y','(Y-('+str(dy)+'))')
+   return part   
+
+def translate(part,dx,dy,dz):
+   part = replace(part,'X','(X-('+str(dx)+'))')
+   part = replace(part,'Y','(Y-('+str(dy)+'))')
+   part = replace(part,'Z','(Z-('+str(dz)+'))')
+   return part   
+
+def rotate(part, angle):
+   angle = angle*pi/180
+   part = replace(part,'X','(cos(angle)*X+sin(angle)*y)')
+   part = replace(part,'Y','(-sin(angle)*X+cos(angle)*y)')
+   part = replace(part,'y','Y')
+   part = replace(part,'angle',str(angle))
+   return part
+
+def rotate_x(part, angle):
+   angle = angle*pi/180
+   part = replace(part,'Y','(cos(angle)*Y+sin(angle)*z)')
+   part = replace(part,'Z','(-sin(angle)*Y+cos(angle)*z)')
+   part = replace(part,'z','Z')
+   part = replace(part,'angle',str(angle))
+   return part
+
+def rotate_y(part, angle):
+   angle = angle*pi/180
+   part = replace(part,'X','(cos(angle)*X+sin(angle)*z)')
+   part = replace(part,'Z','(-sin(angle)*X+cos(angle)*z)')
+   part = replace(part,'z','Z')
+   part = replace(part,'angle',str(angle))
+   return part
+
+def rotate_z(part, angle):
+   angle = angle*pi/180
+   part = replace(part,'X','(cos(angle)*X+sin(angle)*y)')
+   part = replace(part,'Y','(-sin(angle)*X+cos(angle)*y)')
+   part = replace(part,'y','Y')
+   part = replace(part,'angle',str(angle))
+   return part
+
+def rotate_90(part):
+   part = reflect_y(part,0)
+   part = reflect_xy(part)
+   return part
+
+def rotate_180(part):
+   part = rotate_90(part)
+   part = rotate_90(part)
+   return part
+
+def rotate_270(part):
+   part = rotate_90(part)
+   part = rotate_90(part)
+   part = rotate_90(part)
+   return part
+
+def reflect_x(part,x0):
+   part = replace(part,'X','(x0-X)')
+   part = replace(part,'x0',str(x0))
+   return part
+
+def reflect_y(part,y0):
+   part = replace(part,'Y','(y0-Y)')
+   part = replace(part,'y0',str(y0))
+   return part
+
+def reflect_z(part,z0):
+   part = replace(part,'Z','(z0-Z)')
+   part = replace(part,'z0',str(z0))
+   return part
+
+def reflect_xy(part):
+   part = replace(part,'X','temp')
+   part = replace(part,'Y','X')
+   part = replace(part,'temp','Y')
+   return part
+
+def reflect_xz(part):
+   part = replace(part,'X','temp')
+   part = replace(part,'Z','X')
+   part = replace(part,'temp','Z')
+   return part
+
+def reflect_yz(part):
+   part = replace(part,'Y','temp')
+   part = replace(part,'Z','Y')
+   part = replace(part,'temp','Z')
+   return part
+
+def scale_x(part, x0, sx):
+   part = replace(part,'X','((x0) + (X-(x0))/(sx))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'sx',str(sx))
+   return part
+
+def scale_y(part, y0, sy):
+   part = replace(part,'Y','((y0) + (Y-(y0))/(sy))')
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'sy',str(sy))
+   return part
+
+def scale_z(part, z0, sz):
+   part = replace(part,'Z','((z0) + (Z-(z0))/(sz))')
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'sz',str(sz))
+   return part
+
+def scale_xy(part, x0, y0, sxy):
+   part = replace(part,'X','((x0) + (X-(x0))/(sxy))')
+   part = replace(part,'Y','((y0) + (Y-(y0))/(sxy))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'sxy',str(sxy))
+   return part
+
+def scale_xyz(part, x0, y0, z0, sxyz):
+   part = replace(part,'X','((x0) + (X-(x0))/(sxyz))')
+   part = replace(part,'Y','((y0) + (Y-(y0))/(sxyz))')
+   part = replace(part,'Z','((z0) + (Z-(z0))/(sxyz))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'sxyz',str(sxyz))
+   return part
+
+def coscale_x_y(part, x0, y0, y1, angle0, angle1, amplitude, offset):
+   phase0 = pi*angle0/180.
+   phase1 = pi*angle1/180.
+   part = replace(part,'X','((x0) + (X-(x0))/((offset) + (amplitude)*cos((phase0) + ((phase1)-(phase0))*(Y-(y0))/((y1)-(y0)))))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'y1',str(y1))
+   part = replace(part,'phase0',str(phase0))
+   part = replace(part,'phase1',str(phase1))
+   part = replace(part,'amplitude',str(amplitude))
+   part = replace(part,'offset',str(offset))
+   return part
+
+def coscale_x_z(part, x0, z0, z1, angle0, angle1, amplitude, offset):
+   phase0 = pi*angle0/180.
+   phase1 = pi*angle1/180.
+   part = replace(part,'X','((x0) + (X-(x0))/((offset) + (amplitude)*cos((phase0) + ((phase1)-(phase0))*(Z-(z0))/((z1)-(z0)))))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   part = replace(part,'phase0',str(phase0))
+   part = replace(part,'phase1',str(phase1))
+   part = replace(part,'amplitude',str(amplitude))
+   part = replace(part,'offset',str(offset))
+   return part
+
+def coscale_xy_z(part, x0, y0, z0, z1, angle0, angle1, amplitude, offset):
+   phase0 = pi*angle0/180.
+   phase1 = pi*angle1/180.
+   part = replace(part,'X','((x0) + (X-(x0))/((offset) + (amplitude)*cos((phase0) + ((phase1)-(phase0))*(Z-(z0))/((z1)-(z0)))))')
+   part = replace(part,'Y','((y0) + (Y-(y0))/((offset) + (amplitude)*cos((phase0) + ((phase1)-(phase0))*(Z-(z0))/((z1)-(z0)))))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   part = replace(part,'phase0',str(phase0))
+   part = replace(part,'phase1',str(phase1))
+   part = replace(part,'amplitude',str(amplitude))
+   part = replace(part,'offset',str(offset))
+   return part
+
+def taper_x_y(part, x0, y0, y1, s0, s1):
+   part = replace(part,'X','((x0) + (X-(x0))*((y1)-(y0))/((s1)*(Y-(y0)) + (s0)*((y1)-Y)))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'y1',str(y1))
+   part = replace(part,'s0',str(s0))
+   part = replace(part,'s1',str(s1))
+   return part
+
+def taper_x_z(part, x0, z0, z1, s0, s1):
+   part = replace(part,'X','((x0) + (X-(x0))*((z1)-(z0))/((s1)*(Z-(z0)) + (s0)*((z1)-Z)))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   part = replace(part,'s0',str(s0))
+   part = replace(part,'s1',str(s1))
+   return part
+
+def taper_xy_z(part, x0, y0, z0, z1, s0, s1):
+   part = replace(part,'X','((x0) + (X-(x0))*((z1)-(z0))/((s1)*(Z-(z0)) + (s0)*((z1)-Z)))')
+   part = replace(part,'Y','((y0) + (Y-(y0))*((z1)-(z0))/((s1)*(Z-(z0)) + (s0)*((z1)-Z)))')
+   part = replace(part,'x0',str(x0))
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   part = replace(part,'s0',str(s0))
+   part = replace(part,'s1',str(s1))
+   return part
+
+def shear_x_y(part, y0, y1, dx0, dx1):
+   part = replace(part,'X','(X - (dx0) - ((dx1)-(dx0))*(Y-(y0))/((y1)-(y0)))')
+   part = replace(part,'y0',str(y0))
+   part = replace(part,'y1',str(y1))
+   part = replace(part,'dx0',str(dx0))
+   part = replace(part,'dx1',str(dx1))
+   return part
+
+def shear_x_z(part, z0, z1, dx0, dx1):
+   part = replace(part,'X','(X - (dx0) - ((dx1)-(dx0))*(Z-(z0))/((z1)-(z0)))')
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   part = replace(part,'dx0',str(dx0))
+   part = replace(part,'dx1',str(dx1))
+   return part
+
+def coshear_x_z(part, z0, z1, angle0, angle1, amplitude, offset):
+   phase0 = pi*angle0/180.
+   phase1 = pi*angle1/180.
+   part = replace(part,'X','(X - (offset) - (amplitude)*cos((phase0) + ((phase1)-(phase0))*(Z-(z0))/((z1)-(z0))))')
+   part = replace(part,'z0',str(z0))
+   part = replace(part,'z1',str(z1))
+   part = replace(part,'phase0',str(phase0))
+   part = replace(part,'phase1',str(phase1))
+   part = replace(part,'amplitude',str(amplitude))
+   part = replace(part,'offset',str(offset))
+   return part
+
+#
+# text classes and definitions
+#
+
+class text:
+   #
+   # text class
+   #
+   def __init__(self,text,x,y,z,line='',height='',width='',space='',align='CC',color=White,angle=0):
+      #
+      # parameters
+      #
+      if (line == ''):
+         line = 1
+      if (height == ''):
+         height = 6*line
+      if (width == ''):
+         width = 4*line
+      if (space == ''):
+         space = line/2.0
+      self.width = 0
+      self.height = 0
+      self.text = text
+      #
+      # construct shape dictionary
+      #
+      shapes = {}
+      shape = triangle(0,0,width/2.0,height,width,0)
+      cutout = triangle(0,-2.5*line,width/2.0,height-2.5*line,width,-2.5*line)
+      cutout = subtract(cutout,rectangle(0,width,height/4-line/2,height/4+line/2))
+      shape = subtract(shape,cutout)
+      shapes['A'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/4))
+      shape = add(shape,rectangle(width-line,width,0,height/3))
+      shapes['a'] = shape
+      shape = rectangle(0,width-height/4,0,height)
+      shape = add(shape,circle(width-height/4,height/4,height/4))
+      shape = add(shape,circle(width-height/4,3*height/4,height/4))
+      w = height/2-1.5*line
+      shape = subtract(shape,rectangle(line,line+w/1.5,height/2+line/2,height-line))
+      shape = subtract(shape,circle(line+w/1.5,height/2+line/2+w/2,w/2))
+      shape = subtract(shape,rectangle(line,line+w/1.5,line,height/2-line/2))
+      shape = subtract(shape,circle(line+w/1.5,height/2-line/2-w/2,w/2))
+      shapes['B'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/4))
+      shape = add(shape,rectangle(0,line,0,height))
+      shapes['b'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = add(shape,circle(width/2,height-width/2,width/2))
+      shape = add(shape,rectangle(0,width,line+w/2,height-line-w/2))
+      w = width-2*line
+      shape = subtract(shape,circle(width/2,line+w/2,w/2))
+      shape = subtract(shape,circle(width/2,height-line-w/2,w/2))
+      shape = subtract(shape,rectangle(line,width,line+w/2,height-line-w/2))
+      shapes['C'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/4))
+      shape = subtract(shape,rectangle(width/2,width,width/2-line/1.5,width/2+line/1.5))
+      shapes['c'] = shape
+      shape = circle(line,width-line,width-line)
+      shape = subtract(shape,circle(line,width-line,width-2*line))
+      shape = subtract(shape,rectangle(-width,line,0,height))
+      shape = scale_y(shape,0,height/(2*(width-line)))
+      shape = add(shape,rectangle(0,line,0,height))
+      shapes['D'] = shape
+      shape = rectangle(width-line,width,0,height)
+      shape = add(shape,circle(width/2,width/2,width/2))
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shapes['d'] = shape
+      shape = rectangle(0,line,0,height)
+      shape = add(shape,rectangle(0,width,height-line,height))
+      shape = add(shape,rectangle(0,2*width/3,height/2-line/2,height/2+line/2))
+      shape = add(shape,rectangle(0,width,0,line))      
+      shapes['E'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = subtract(shape,triangle(width,0,width/2,width/2-line/2,width,width/2-line/2))
+      shape = add(shape,rectangle(0,width,width/2-line/2,width/2+line/2))
+      shapes['e'] = shape
+      shape = rectangle(0,line,0,height)
+      shape = add(shape,rectangle(0,width,height-line,height))
+      shape = add(shape,rectangle(0,2*width/3,height/2-line/2,height/2+line/2))
+      shapes['F'] = shape
+      shape = circle(width-line/2,height-width/2,width/2)
+      shape = subtract(shape,circle(width-line/2,height-width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width-line/2,0,height-width/2))
+      shape = subtract(shape,rectangle(width-line/2,2*width,0,height))
+      shape = add(shape,rectangle(width/2-line/2,width/2+line/2,0,height-width/2))
+      shape = add(shape,rectangle(width/5,4*width/5,height/2-line/2,height/2+line/2))
+      shapes['f'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = add(shape,circle(width/2,height-width/2,width/2))
+      shape = add(shape,rectangle(0,width,line+w/2,height-line-w/2))
+      w = width-2*line
+      shape = subtract(shape,circle(width/2,line+w/2,w/2))
+      shape = subtract(shape,circle(width/2,height-line-w/2,w/2))
+      shape = subtract(shape,rectangle(line,width,line+w/2,height-line-w/2))
+      shape = add(shape,rectangle(width/2,width,line+w/2,2*line+w/2))
+      shapes['G'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      w = height/3-width/2
+      shape = add(shape,rectangle(width-line,width,w,width))
+      shape = add(shape,subtract(subtract(circle(width/2,w,width/2),circle(width/2,w,width/2-line)),rectangle(0,width,w,height)))
+      shapes['g'] = shape
+      shape = rectangle(0,line,0,height)
+      shape = add(shape,rectangle(width-line,width,0,height))
+      shape = add(shape,rectangle(0,width,height/2-line/2,height/2+line/2))
+      shapes['H'] = shape
+      w = width/2
+      shape = circle(width/2,w,width/2)
+      shape = subtract(shape,circle(width/2,w,width/2-line))
+      shape = subtract(shape,rectangle(0,width,0,w))
+      shape = add(shape,rectangle(0,line,0,height))
+      shape = add(shape,rectangle(width-line,width,0,w))
+      shapes['h'] = shape
+      shape = rectangle(width/2-line/2,width/2+line/2,0,height)
+      shape = add(shape,rectangle(width/5,4*width/5,0,line))
+      shape = add(shape,rectangle(width/5,4*width/5,height-line,height))
+      shapes['I'] = shape
+      shape = rectangle(width/2-line/2,width/2+line/2,0,height/2)
+      shape = add(shape,circle(width/2,3*height/4,.6*line))
+      shapes['i'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width,width/2,height))
+      shape = add(shape,rectangle(width-line,width,width/2,height))
+      shapes['J'] = shape
+      w = height/3-width/2
+      shape = rectangle(width/2-line/2,width/2+line/2,w,height/2)
+      shape = add(shape,subtract(subtract(subtract(circle(width/4-line/2,w,width/2),circle(width/4-line/2,w,width/2-line)),rectangle(0,width,w,height)),rectangle(-width,width/4-line/2,-height/3,height)))
+      shape = add(shape,circle(width/2,3*height/4,.6*line))
+      shapes['j'] = shape
+      shape = rectangle(0,width,0,height)
+      shape = subtract(shape,triangle(line,height,width-1.1*line,height,line,height/2+.5*line))
+      shape = subtract(shape,triangle(width,0,line+0.8*line,height/2,width,height))
+      shape = subtract(shape,triangle(line,0,line,height/2-.5*line,width-1.1*line,0))
+      shapes['K'] = shape
+      shape = rectangle(0,width,0,height)
+      shape = subtract(shape,rectangle(line,width,2*height/3,height))
+      shape = subtract(shape,triangle(line,2*height/3,width-1.3*line,2*height/3,line,height/3+.5*line))
+      shape = subtract(shape,triangle(width,0,line+0.8*line,height/3,width,2*height/3))
+      shape = subtract(shape,triangle(line,0,line,height/3-0.5*line,width-1.3*line,0))
+      shapes['k'] = shape
+      shape = rectangle(0,line,0,height)
+      shape = add(shape,rectangle(0,width,0,line))
+      shapes['L'] = shape
+      shape = rectangle(width/2-line/2,width/2+line/2,0,height)
+      shapes['l'] = shape
+      shape = rectangle(0,width,0,height)
+      shape = subtract(shape,triangle(line,0,line,height-3*line,width/2-line/3,0))
+      shape = subtract(shape,triangle(line,height,width-line,height,width/2,1.5*line))
+      shape = subtract(shape,triangle(width/2+line/3,0,width-line,height-3*line,width-line,0))
+      shapes['M'] = shape
+      w = width/2
+      l = 1.3*line
+      shape = circle(width/2,w,width/2)
+      shape = subtract(shape,circle(width/2,w,width/2-l))
+      shape = subtract(shape,rectangle(0,width,0,w))
+      shape = add(shape,rectangle(width-l,width,0,w))
+      shape = add(shape,move(shape,width-l,0))
+      shape = add(shape,rectangle(0,l,0,width))
+      shape = scale_x(shape,0,width/(2*width-l))
+      shapes['m'] = shape
+      shape = rectangle(0,width,0,height)
+      shape = subtract(shape,triangle(line,height+1.5*line,width-line,height+1.5*line,width-line,1.5*line))
+      shape = subtract(shape,triangle(line,-1.5*line,line,height-1.5*line,width-line,-1.5*line))
+      shapes['N'] = shape
+      w = width/2
+      shape = circle(width/2,w,width/2)
+      shape = subtract(shape,circle(width/2,w,width/2-line))
+      shape = subtract(shape,rectangle(0,width,0,w))
+      shape = add(shape,rectangle(0,line,0,width))
+      shape = add(shape,rectangle(width-line,width,0,w))
+      shapes['n'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = add(shape,circle(width/2,height-width/2,width/2))
+      shape = add(shape,rectangle(0,width,line+w/2,height-line-w/2))
+      w = width-2*line
+      shape = subtract(shape,circle(width/2,line+w/2,w/2))
+      shape = subtract(shape,circle(width/2,height-line-w/2,w/2))
+      shape = subtract(shape,rectangle(line,width-line,line+w/2,height-line-w/2))
+      shapes['O'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shapes['o'] = shape
+      shape = rectangle(0,line,0,height)
+      w = 2*height/3
+      shape = add(shape,circle(width-w/2,height-w/2,w/2))
+      shape = add(shape,rectangle(0,width-w/2,height-w,height))
+      shape = subtract(shape,circle(width-w/2,height-w/2,w/2-line))
+      shape = subtract(shape,rectangle(line,width-w/2,height-w+line,height-line))
+      shapes['P'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/4))
+      shape = add(shape,rectangle(0,line,-height/3,width))
+      shapes['p'] = shape
+      shape = subtract(circle(width/2,width/2,width/2),circle(width/2,width/2,width/2-.9*line))
+      shape = scale_y(shape,0,height/width)
+      shape = add(shape,move(rotate(rectangle(-line/2,line/2,-width/4,width/4),30),3*width/4,width/4))
+      shapes['Q'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = add(shape,rectangle(width-line,width,-height/3,width))
+      shapes['q'] = shape
+      shape = rectangle(0,line,0,height)
+      w = 2*height/3
+      shape = add(shape,circle(width-w/2,height-w/2,w/2))
+      shape = add(shape,rectangle(0,width-w/2,height-w,height))
+      shape = subtract(shape,circle(width-w/2,height-w/2,w/2-line))
+      shape = subtract(shape,rectangle(line,width-w/2,height-w+line,height-line))
+      leg = triangle(line,0,line,height,width,0)
+      leg = subtract(leg,triangle(line,-2.0*line,line,height-2.0*line,width,-2.0*line))
+      leg = subtract(leg,rectangle(0,width,height/3,height))
+      shape = add(shape,leg)
+      shapes['R'] = shape
+      shape = circle(width,0,width)
+      shape = subtract(shape,circle(width,0,width-line))
+      shape = subtract(shape,rectangle(.8*width,2*width,-height,height))
+      shape = subtract(shape,rectangle(0,2*width,-height,0))
+      shape = add(shape,rectangle(0,line,0,width))
+      shapes['r'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width/2,width/2,width))
+      shape = add(shape,move(reflect_y(reflect_x(shape,width),width),0,width-line))
+      shape = scale_y(shape,0,height/(2*width-line))
+      shapes['S'] = shape
+      w = width/3
+      shape = circle(w,w,w)
+      shape = subtract(shape,circle(w,w,w-.9*line))
+      shape = subtract(shape,rectangle(0,w,w,2*w))
+      shape = add(shape,move(reflect_y(reflect_x(shape,2*w),2*w),0,2*w-.9*line))
+      shape = scale_y(shape,0,(2*height/3)/(4*w-.9*line))
+      shape = move(shape,(width/2)-w,0)
+      shapes['s'] = shape
+      shape = rectangle(width/2-line/2,width/2+line/2,0,height)
+      shape = add(shape,rectangle(0,width,height-line,height))
+      shapes['T'] = shape
+      shape = circle(0,3*width/8,3*width/8)
+      shape = subtract(shape,circle(0,3*width/8,3*width/8-line))
+      shape = subtract(shape,rectangle(-width,width,3*width/8,height))
+      shape = subtract(shape,rectangle(0,width,-height,height))
+      shape = move(shape,width/2-line/2+3*width/8,0)
+      shape = add(shape,rectangle(width/2-line/2,width/2+line/2,width/4,3*height/4))
+      shape = add(shape,rectangle(width/5,4*width/5,height/2-line/2,height/2+line/2))
+      shapes['t'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width,width/2,height))
+      shape = add(shape,rectangle(0,line,width/2,height))
+      shape = add(shape,rectangle(width-line,width,width/2,height))
+      shapes['U'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width,width/2,height))
+      shape = add(shape,rectangle(0,line,width/2,2*height/3))
+      shape = add(shape,rectangle(width-line,width,0,2*height/3))
+      shapes['u'] = shape
+      shape = triangle(0,height,width,height,width/2,0)
+      shape = subtract(shape,triangle(0,height+3*line,width,height+3*line,width/2,3*line))
+      shapes['V'] = shape
+      w = 2*height/3.0
+      shape = triangle(0,w,width,w,width/2,0)
+      shape = subtract(shape,triangle(0,w+2*line,width,w+2*line,width/2,2*line))
+      shapes['v'] = shape
+      shape = triangle(0,height,width,height,width/2,0)
+      shape = add(shape,move(shape,.6*width,0))
+      cutout = triangle(0,height+4*line,width,height+4*line,width/2,4*line)
+      cutout = add(cutout,move(cutout,.6*width,0))
+      shape = subtract(shape,cutout)
+      shape = scale_x(shape,0,1/1.6)
+      shapes['W'] = shape
+      shape = scale_y(shapes['W'],0,width/height)
+      shapes['w'] = shape
+      shape = rectangle(0,width,0,height)
+      shape = subtract(shape,triangle(0,0,0,height,width/2-.7*line,height/2))
+      shape = subtract(shape,triangle(width,0,width/2+.7*line,height/2,width,height))
+      shape = subtract(shape,triangle(1.1*line,height,width-1.1*line,height,width/2,height/2+line))
+      shape = subtract(shape,triangle(1.1*line,0,width/2,height/2-line,width-1.1*line,0))
+      shapes['X'] = shape
+      w = 2*height/3.0
+      shape = rectangle(0,width,0,w)
+      shape = subtract(shape,triangle(0,0,0,w,width/2-.75*line,w/2))
+      shape = subtract(shape,triangle(width,0,width/2+.75*line,w/2,width,w))
+      shape = subtract(shape,triangle(1.25*line,0,width/2,w/2-.75*line,width-1.25*line,0))
+      shape = subtract(shape,triangle(1.25*line,w,width-1.25*line,w,width/2,w/2+.75*line))
+      shapes['x'] = shape
+      w = height/2
+      shape = rectangle(0,width,w,height)
+      shape = subtract(shape,triangle(0,w,0,height,width/2-line/2,w))
+      shape = subtract(shape,triangle(width/2+line/2,w,width,height,width,w))
+      shape = subtract(shape,triangle(1.1*line,height,width-1.1*line,height,width/2,w+1.1*line))
+      shape = add(shape,rectangle(width/2-line/2,width/2+line/2,0,w))
+      shapes['Y'] = shape
+      shape = rectangle(0,width,-height/3,width)
+      shape = subtract(shape,triangle(0,-height/3,0,width,width/2-.9*line,0))
+      shape = subtract(shape,triangle(1.1*line,width,width-1.1*line,width,width/2-.2*line,1.6*line))
+      shape = subtract(shape,triangle(1.2*line,-height/3,width,width,width,-height/3))
+      shapes['y'] = shape
+      shape = rectangle(0,width,0,height)
+      shape = subtract(shape,triangle(0,line,0,height-line,width-1.4*line,height-line))
+      shape = subtract(shape,triangle(1.4*line,line,width,height-line,width,line))
+      shapes['Z'] = shape
+      w = 2*height/3
+      shape = rectangle(0,width,0,w)
+      shape = subtract(shape,triangle(0,line,0,w-line,width-1.6*line,w-line))
+      shape = subtract(shape,triangle(width,line,1.6*line,line,width,w-line))
+      shapes['z'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-.9*line))
+      shape = scale_y(shape,0,height/width)
+      shapes['0'] = shape
+      shape = rectangle(width/2-line/2,width/2+line/2,0,height)
+      w = width/2-line/2
+      cutout = circle(0,height,w)
+      shape = add(shape,rectangle(0,width/2,height-w-line,height))
+      shape = subtract(shape,cutout)
+      shape = move(shape,(width/2+line/2)/4,0)
+      shapes['1'] = shape
+      shape = circle(width/2,height-width/2,width/2)
+      shape = subtract(shape,circle(width/2,height-width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width/2,0,height-width/2))
+      shape = add(shape,rectangle(0,width,0,height-width/2))
+      shape = subtract(shape,triangle(0,line,0,height-width/2,width-line,height-width/2))
+      shape = subtract(shape,triangle(1.5*line,line,width,height-width/2-.5*line,width,line))
+      shapes['2'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = scale_y(shape,0,(height/2+line/2)/width)
+      shape = add(shape,move(shape,0,height/2-line/2))
+      shape = subtract(shape,rectangle(0,width/2,height/4,3*height/4))
+      shapes['3'] = shape
+      shape = rectangle(width-line,width,0,height)
+      shape = add(shape,triangle(0,height/3,width-line,height,width-line,height/3))
+      shape = subtract(shape,triangle(1.75*line,height/3+line,width-line,height-1.5*line,width-line,height/3+line))
+      shapes['4'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width/2,width/2,width))
+      shape = add(shape,rectangle(0,width/2,width-line,width))
+      shape = add(shape,rectangle(0,line,width-line,height))
+      shape = add(shape,rectangle(0,width,height-line,height))
+      shapes['5'] = shape
+      shape = circle(width/2,height-width/2,width/2)
+      shape = subtract(shape,circle(width/2,height-width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width,0,height-width/2))
+      shape = subtract(shape,triangle(width,height,width,height/2,width/2,height/2))
+      shape = add(shape,circle(width/2,width/2,width/2))
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = add(shape,rectangle(0,line,width/2,height-width/2))
+      shapes['6'] = shape
+      shape = rectangle(0,width,0,height)
+      shape = subtract(shape,triangle(0,0,0,height-line,width-line,height-line))
+      shape = subtract(shape,triangle(line,0,width,height-line,width,0))
+      shapes['7'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = scale_y(shape,0,(height/2+line/2)/width)
+      shape = add(shape,move(shape,0,height/2-line/2))
+      shapes['8'] = shape
+      shape = circle(width/2,width/2,width/2)
+      shape = subtract(shape,circle(width/2,width/2,width/2-line))
+      shape = subtract(shape,rectangle(0,width,width/2,height))
+      shape = subtract(shape,triangle(0,0,0,height/2,width/2,height/2))
+      shape = add(shape,circle(width/2,height-width/2,width/2))
+      shape = subtract(shape,circle(width/2,height-width/2,width/2-line))
+      shape = add(shape,rectangle(width-line,width,width/2,height-width/2))
+      shapes['9'] = shape
+      w = width/2
+      shape = circle(w,w,w)
+      shape = subtract(shape,circle(w,w,w-line))
+      shape = subtract(shape,rectangle(w,width,0,height))
+      shape = scale_y(shape,0,height/width)
+      shape = move(shape,w/2,0)
+      shapes['('] = shape
+      shape = reflect_x(shape,width)
+      shapes[')'] = shape
+      shapes[' '] = False
+      shape = rectangle(width/2-width/3,width/2+width/3,height/2-line/2,height/2+line/2)
+      shape = add(shape,rectangle(width/2-line/2,width/2+line/2,height/2-width/3,height/2+width/3))
+      shapes['+'] = shape
+      shape = rectangle(width/2-width/3,width/2+width/3,height/2-line/2,height/2+line/2)
+      shapes['-'] = shape
+      shape = circle(width/2,line,.75*line)
+      shapes['.'] = shape
+      shape = rectangle(0,width,0,height)
+      d = .8*line
+      shape = subtract(shape,triangle(d,0,width,height-d,width,0))
+      shape = subtract(shape,triangle(0,d,0,height,width-d,height))
+      shapes['/'] = shape
+      #
+      # to be done
+      #
+      shapes['~'] = shape
+      shapes['!'] = shape
+      shapes['@'] = shape
+      shapes['#'] = shape
+      shapes['$'] = shape
+      shapes['%'] = shape
+      shapes['^'] = shape
+      shapes['&'] = shape
+      shapes['&'] = shape
+      shapes['_'] = shape
+      shapes['='] = shape
+      shapes['['] = shape
+      shapes['{'] = shape
+      shapes[']'] = shape
+      shapes['}'] = shape
+      shapes[';'] = shape
+      shapes[':'] = shape
+      shapes["'"] = shape
+      shapes['"'] = shape
+      shapes[','] = shape
+      shapes['<'] = shape
+      shapes['>'] = shape
+      shapes['?'] = shape
+      #
+      # add a line to text shape
+      #
+      def addline(lineshape):
+         #
+         # LR align
+         #
+         if (align[0] == 'C'):
+            lineshape = move(lineshape,-self.width/2.0,0)
+         elif (align[0] == 'R'):
+            lineshape = move(lineshape,-self.width,0)
+         #
+         # add
+         #
+         self.shape = add(self.shape,lineshape)
+      #
+      # loop over chars
+      #
+      dx = 0
+      dy = -height
+      self.width = -space
+      self.height = height
+      lineshape = False
+      self.shape = False
+      for chr in text:
+         if (chr == '\n'):
+            addline(lineshape)
+            dx = 0
+            dy -= 1.5*self.height
+            self.width = -space
+            self.height += 1.5*self.height
+            lineshape = False
+         else:
+            lineshape = add(lineshape,move(shapes[chr],dx,dy))
+            self.width += space + width
+            dx += width + space
+      addline(lineshape)
+      #
+      # UD align
+      #
+      if (align[1] == 'C'):
+         self.shape = move(self.shape,0,self.height/2.0)
+      elif (align[1] == 'B'):
+         self.shape = move(self.shape,0,self.height)
+      #
+      # rotate
+      #
+      if (angle == 90):
+         self.shape = rotate_90(self.shape)
+      elif (angle == 180):
+         self.shape = rotate_180(self.shape)
+      elif ((angle == 270) | (angle == -90)):
+         self.shape = rotate_270(self.shape)
+      elif (angle != 0):
+         self.shape = rotate(self.shape,angle)
+      #
+      # translate
+      #
+      self.shape = move(self.shape,x,y)
+      #
+      # color
+      #
+      self.shape = '('+str(color)+'*(('+self.shape+')!=0))'
+
+#
+# PCB classes and definitions
+#
+
+class PCB:
+   def __init__(self,x0,y0,width,height,mask):
+      self.board = False
+      self.labels = False
+      self.interior = rectangle(x0,x0+width,y0,y0+height)
+      self.exterior = subtract(True,rectangle(x0,x0+width,y0,y0+height))
+      self.mask = False
+   def add(self,part):
+      self.board = add(self.board,part)
+      self.mask = add(self.mask,move(part,-mask,mask))
+      self.mask = add(self.mask,move(part,-mask,-mask))
+      self.mask = add(self.mask,move(part,mask,mask))
+      self.mask = add(self.mask,move(part,mask,-mask))
+      return self
+
+class point:
+   def __init__(self,x,y,z=0):
+      self.x = x
+      self.y = y
+      self.z = z
+
+class part:
+   class text:
+      def __init__(self,x,y,z=0,text='',line=0.006,angle=0):
+         self.x = x
+         self.y = y
+         self.z = z
+         self.text = text
+         self.line = line 
+         self.angle = angle
+   def add(self,pcb,x,y,z=0,angle=0,line=0.007):
+      self.x = x
+      self.y = y
+      self.z = z
+      self.angle = angle
+      if (angle == 90):
+         self.shape = rotate_90(self.shape)
+      elif (angle == 180):
+         self.shape = rotate_180(self.shape)
+      elif ((angle == 270) | (angle == -90)):
+         self.shape = rotate_270(self.shape)
+      elif (angle != 0):
+         self.shape = rotate(self.shape,angle)
+      deg_angle = angle
+      angle = pi*angle/180
+      self.shape = translate(self.shape,x,y,z)
+      for i in range(len(self.pad)):
+         xnew = cos(angle)*self.pad[i].x - sin(angle)*self.pad[i].y
+         ynew = sin(angle)*self.pad[i].x + cos(angle)*self.pad[i].y
+         self.pad[i].x = x + xnew
+         self.pad[i].y = y + ynew
+         self.pad[i].z += z
+      pcb.labels = add(pcb.labels,text(self.value,x,y,z,line=line,color=Green).shape)
+      for i in range(len(self.labels)):
+         xnew = cos(angle)*self.labels[i].x - sin(angle)*self.labels[i].y
+         ynew = sin(angle)*self.labels[i].x + cos(angle)*self.labels[i].y
+         self.labels[i].x = x + xnew
+         self.labels[i].y = y + ynew
+         self.labels[i].z += z
+         if ((-90 < deg_angle) & (deg_angle <= 90)):
+            pcb.labels = add(pcb.labels,text(self.labels[i].text,self.labels[i].x,self.labels[i].y,self.labels[i].z,self.labels[i].line,color=Red,angle=deg_angle-self.labels[i].angle).shape)
+         else:
+            pcb.labels = add(pcb.labels,text(self.labels[i].text,self.labels[i].x,self.labels[i].y,self.labels[i].z,self.labels[i].line,color=Red,angle=(deg_angle-self.labels[i].angle-180)).shape)
+      pcb = pcb.add(self.shape)
+      return pcb
+   def layer(self,pcb,z):
+      pcb = pcb.add(translate(self.shape,0,0,z))
+      return pcb
+
+def wire(pcb,width,*points):
+   for i in range(1,len(points)):
+      x0 = points[i-1].x
+      y0 = points[i-1].y
+      z0 = points[i-1].z
+      x1 = points[i].x
+      y1 = points[i].y
+      z1 = points[i].z
+      if (x0 < x1):
+         pcb.board = add(pcb.board,cube(x0-width/2,x1+width/2,y0-width/2,y0+width/2,z0,z0))
+      elif (x1 < x0):
+         pcb.board = add(pcb.board,cube(x1-width/2,x0+width/2,y0-width/2,y0+width/2,z0,z0))
+      if (y0 < y1):
+         pcb.board = add(pcb.board,cube(x1-width/2,x1+width/2,y0-width/2,y1+width/2,z0,z0))
+      elif (y1 < y0):
+         pcb.board = add(pcb.board,cube(x1-width/2,x1+width/2,y1-width/2,y0+width/2,z0,z0))
+   return pcb
+
+#
+# PCB library
+#
+
+#
+# discretes
+#
+
+pad_0402 = cube(-.0175,.0175,-.014,.014,0,0)
+
+class R_0402(part):
+   #
+   # 0402 resistor
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.labels = []
+      self.pad = [point(0,0,0)]
+      self.shape = translate(pad_0402,-.0265,0,0)
+      self.pad.append(point(-.0265,0,0))
+      self.shape = add(self.shape,translate(pad_0402,.0265,0,0))
+      self.pad.append(point(.0265,0,0))
+
+pad_SJ = cube(-.02,.02,-.03,.03,0,0)
+
+class SJ(part):
+   #
+   # solder jumper
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.labels = []
+      self.pad = [point(0,0,0)]
+      self.shape = translate(pad_SJ,-.029,0,0)
+      self.pad.append(point(-.029,0,0))
+      self.shape = add(self.shape,translate(pad_SJ,.029,0,0))
+      self.pad.append(point(.029,0,0))
+
+pad_1206 = cube(-.032,.032,-.034,.034,0,0)
+
+class R_1206(part):
+   #
+   # 1206 resistor
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.labels = []
+      self.pad = [point(0,0,0)]
+      self.shape = translate(pad_1206,-.06,0,0)
+      self.pad.append(point(-.06,0,0))
+      self.shape = add(self.shape,translate(pad_1206,.06,0,0))
+      self.pad.append(point(.06,0,0))
+
+class C_1206(part):
+   #
+   # 1206 capacitor
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.labels = []
+      self.pad = [point(0,0,0)]
+      self.shape = translate(pad_1206,-.06,0,0)
+      self.pad.append(point(-.06,0,0))
+      self.shape = add(self.shape,translate(pad_1206,.06,0,0))
+      self.pad.append(point(.06,0,0))
+
+pad_1210 = cube(-.032,.032,-.048,.048,0,0)
+
+class L_1210(part):
+   #
+   # 1210 inductor
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.labels = []
+      self.pad = [point(0,0,0)]
+      self.shape = translate(pad_1210,-.06,0,0)
+      self.pad.append(point(-.06,0,0))
+      self.shape = add(self.shape,translate(pad_1210,.06,0,0))
+      self.pad.append(point(.06,0,0))
+
+pad_choke = cube(-.06,.06,-.06,.06,0,0)
+
+class choke(part):
+   #
+   # Panasonic ELLCTV
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.labels = []
+      self.pad = [point(0,0,0)]
+      self.shape = translate(pad_choke,-.177,-.177,0)
+      self.pad.append(point(-.177,-.177,0))
+      self.shape = add(self.shape,translate(pad_choke,.177,.177,0))
+      self.pad.append(point(.177,.177,0))
+
+#
+# connectors
+#
+
+pad_USB_trace = cube(-.0075,.0075,-.04,.04,0,0)
+pad_USB_feet = cube(-.049,.049,-.043,.043,0,0)
+
+class USB_mini_B(part):
+   #
+   # USB mini B
+   # Hirose UX60-MB-5ST
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_USB_trace,.063,.36,0)
+      self.pad.append(point(.063,.36,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_USB_trace,.0315,.36,0))
+      self.pad.append(point(.0315,.36,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 3
+      #
+      self.shape = add(self.shape,translate(pad_USB_trace,0,.36,0))
+      self.pad.append(point(0,.36,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'+'))
+      #
+      # pin 4
+      #
+      self.shape = add(self.shape,translate(pad_USB_trace,-.0315,.36,0))
+      self.pad.append(point(-.0315,.36,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'-'))
+      #
+      # pin 5
+      #
+      self.shape = add(self.shape,translate(pad_USB_trace,-.063,.36,0))
+      self.pad.append(point(-.063,.36,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # feet
+      #
+      self.shape = add(self.shape,translate(pad_USB_feet,.165,.33,0))
+      self.shape = add(self.shape,translate(pad_USB_feet,-.165,.33,0))
+      self.shape = add(self.shape,translate(pad_USB_feet,.165,.12,0))
+      self.shape = add(self.shape,translate(pad_USB_feet,-.165,.12,0))
+
+pad_header = cube(-.05,.05,-.025,.025,0,0)
+
+class header_4(part):
+   #
+   # 4-pin header
+   # fci 95278-101a04lf bergstik 2x2x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_header,-.107,.05,0)
+      self.shape = add(self.shape,cylinder(-.157,.05,0,0,.025))
+      self.pad.append(point(-.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.05,0))
+      self.pad.append(point(.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'2'))
+      #
+      # pin 3
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.05,0))
+      self.pad.append(point(-.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'3'))
+      #
+      # pin 4
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,-.05,0))
+      self.pad.append(point(.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'4'))
+
+class header_signal(part):
+   #
+   # signal header
+   # FCI 95278-101A04LF Bergstik 2x2x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_header,.107,-.05,0)
+      self.shape = add(self.shape,cylinder(.157,-.05,0,0,.025))
+      self.pad.append(point(.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.05,0))
+      self.pad.append(point(-.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 3: signal
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.05,0))
+      self.pad.append(point(.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'signal'))
+      #
+      # pin 4:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.05,0))
+      self.pad.append(point(-.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+
+
+class header_power(part):
+   #
+   # power header
+   # FCI 95278-101A04LF Bergstik 2x2x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_header,.107,-.05,0)
+      self.shape = add(self.shape,cylinder(.157,-.05,0,0,.025))
+      self.pad.append(point(.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.05,0))
+      self.pad.append(point(-.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 3: V
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.05,0))
+      self.pad.append(point(.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # pin 4:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.05,0))
+      self.pad.append(point(-.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+
+class header_i0(part):
+   #
+   # i0 header
+   # FCI 95278-101A04LF Bergstik 2x2x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_header,.05,.107,0)
+      self.shape = add(self.shape,cylinder(.05,.157,0,0,.025))
+      self.pad.append(point(.05,.107,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 2: data
+      #
+      self.shape = add(self.shape,translate(pad_header,.05,-.107,0))
+      self.pad.append(point(.05,-.107,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'data'))
+      #
+      # pin 3: V
+      #
+      self.shape = add(self.shape,translate(pad_header,-.05,.107,0))
+      self.pad.append(point(-.05,.107,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # pin 4:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.05,-.107,0))
+      self.pad.append(point(-.05,-.107,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+
+class header_serial(part):
+   #
+   # serial comm header
+   # FCI 95278-101A04LF Bergstik 2x2x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_header,.107,-.05,0)
+      self.shape = add(self.shape,cylinder(.157,-.05,0,0,.025))
+      self.pad.append(point(.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 2:DTR
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.05,0))
+      self.pad.append(point(-.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DTR'))
+      #
+      # pin 3: Tx
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.05,0))
+      self.pad.append(point(.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Tx'))
+      #
+      # pin 4: Rx
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.05,0))
+      self.pad.append(point(-.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Rx'))
+
+class header_bus(part):
+   #
+   # bus header
+   # FCI 95278-101A04LF Bergstik 2x2x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_header,.107,-.05,0)
+      self.shape = add(self.shape,cylinder(.157,-.05,0,0,.025))
+      self.pad.append(point(.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 2: Tx
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.05,0))
+      self.pad.append(point(-.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Tx'))
+      #
+      # pin 3: V
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.05,0))
+      self.pad.append(point(.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # pin 4: Rx
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.05,0))
+      self.pad.append(point(-.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Rx'))
+
+class header_APA(part):
+   #
+   # APA header
+   # FCI 95278-101A04LF Bergstik 2x2x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_header,.107,-.05,0)
+      self.shape = add(self.shape,cylinder(.157,-.05,0,0,.025))
+      self.pad.append(point(.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 2: in
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.05,0))
+      self.pad.append(point(-.107,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'in'))
+      #
+      # pin 3: V
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.05,0))
+      self.pad.append(point(.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # pin 4: out
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.05,0))
+      self.pad.append(point(-.107,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'out'))
+
+class header_6(part):
+   #
+   # 6-pin header
+   # FCI 95278-101A06LF Bergstik 2x3x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_header,.107,-.1,0)
+      self.shape = add(self.shape,cylinder(.157,-.1,0,0,.025))
+      self.pad.append(point(.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.1,0))
+      self.pad.append(point(-.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 3
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,0,0))
+      self.pad.append(point(.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 4
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,0,0))
+      self.pad.append(point(-.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 5
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.1,0))
+      self.pad.append(point(.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+      #
+      # pin 6
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.1,0))
+      self.pad.append(point(-.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,''))
+
+class header_ISP(part):
+   #
+   # in-circuit programming header
+   # FCI 95278-101A06LF Bergstik 2x3x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: MISO
+      #
+      self.shape = translate(pad_header,.107,-.1,0)
+      self.shape = add(self.shape,cylinder(.157,-.1,0,0,.025))
+      self.pad.append(point(.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'MISO'))
+      #
+      # pin 2: V
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.1,0))
+      self.pad.append(point(-.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # pin 3: SCK
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,0,0))
+      self.pad.append(point(.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SCK'))
+      #
+      # pin 4: MOSI
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,0,0))
+      self.pad.append(point(-.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'MOSI'))
+      #
+      # pin 5: RST
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.1,0))
+      self.pad.append(point(.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RST'))
+      #
+      # pin 6: GND
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.1,0))
+      self.pad.append(point(-.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+
+class header_unipolar_stepper(part):
+   #
+   # unipolar stepper header
+   # FCI 95278-101A06LF Bergstik 2x3x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_header,.107,-.1,0)
+      self.shape = add(self.shape,cylinder(.157,-.1,0,0,.025))
+      self.pad.append(point(.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'red'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.1,0))
+      self.pad.append(point(-.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'green'))
+      #
+      # pin 3
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,0,0))
+      self.pad.append(point(.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'black'))
+      #
+      # pin 4
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,0,0))
+      self.pad.append(point(-.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'brown'))
+      #
+      # pin 5
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.1,0))
+      self.pad.append(point(.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'orange'))
+      #
+      # pin 6
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.1,0))
+      self.pad.append(point(-.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'yellow'))
+
+class header_LCD(part):
+   #
+   # LCD interface header
+   # FCI 95278-101A10LF Bergstik 2x3x0.1"
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1:
+      #
+      self.shape = translate(pad_header,.107,-.2,0)
+      self.shape = add(self.shape,cylinder(.157,-.2,0,0,.025))
+      self.pad.append(point(.107,-.2,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DB7\n14'))
+      #
+      # pin 2:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.2,0))
+      self.pad.append(point(-.107,-.2,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DB6\n13'))
+      #
+      # pin 3:
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,-.1,0))
+      self.pad.append(point(.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DB5\n12'))
+      #
+      # pin 4:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,-.1,0))
+      self.pad.append(point(-.107,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DB4\n11'))
+      #
+      # pin 5:
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,0,0))
+      self.pad.append(point(.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'E\n6'))
+      #
+      # pin 6:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,0,0))
+      self.pad.append(point(-.107,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'R/W\n5'))
+      #
+      # pin 7:
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.1,0))
+      self.pad.append(point(.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RS\n4'))
+      #
+      # pin 8:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.1,0))
+      self.pad.append(point(-.107,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Vee\n3'))
+      #
+      # pin 9:
+      #
+      self.shape = add(self.shape,translate(pad_header,.107,.2,0))
+      self.pad.append(point(.107,.2,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Vcc\n2'))
+      #
+      # pin 10:
+      #
+      self.shape = add(self.shape,translate(pad_header,-.107,.2,0))
+      self.pad.append(point(-.107,.2,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND\n1'))
+
+class header_FTDI(part):
+   #
+   # FTDI cable header
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: GND (black)
+      #
+      self.shape = translate(pad_header,0,.25,0)
+      self.shape = add(self.shape,cylinder(-.05,.25,0,0,.025))
+      self.pad.append(point(0,.25,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G (blk)'))
+      #
+      # pin 2: CTS (brown)
+      #
+      self.shape = add(self.shape,translate(pad_header,0,.15,0))
+      self.pad.append(point(0,.15,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'CTS'))
+      #
+      # pin 3: VCC (red)
+      #
+      self.shape = add(self.shape,translate(pad_header,0,.05,0))
+      self.pad.append(point(0,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC'))
+      #
+      # pin 4: Tx (orange)
+      #
+      self.shape = add(self.shape,translate(pad_header,0,-0.05,0))
+      self.pad.append(point(0,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Tx'))
+      #
+      # pin 5: Rx (yellow)
+      #
+      self.shape = add(self.shape,translate(pad_header,0,-.15,0))
+      self.pad.append(point(0,-.15,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Rx'))
+      #
+      # pin 6: RTS (green)
+      #
+      self.shape = add(self.shape,translate(pad_header,0,-.25,0))
+      self.pad.append(point(0,-.25,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RTS'))
+
+pad_MTA = cube(-.021,.021,-.041,.041,0,0)
+pad_MTA_solder = cube(-.071,.071,-.041,.041,0,0)
+
+class MTA_2(part):
+   #
+   # AMP 1445121-2
+   # MTA .050 SMT 2-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_MTA,-.025,-.1,0)
+      self.pad.append(point(-.025,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.025,.1,0))
+      self.pad.append(point(.025,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'2'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.187,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.187,0,0))
+
+class MTA_power(part):
+   #
+   # AMP 1445121-2
+   # MTA .050 SMT 2-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_MTA,-.025,-.1,0)
+      self.pad.append(point(-.025,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1\nGND'))
+      #
+      # pin 2: Vcc
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.025,.1,0))
+      self.pad.append(point(.025,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Vcc'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.187,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.187,0,0))
+
+class MTA_3(part):
+   #
+   # AMP 1445121-3
+   # MTA .050 SMT 3-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: GND
+      #
+      self.shape = translate(pad_MTA,.05,.1,0)
+      self.pad.append(point(.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1'))
+      #
+      # pin 2: power 
+      #
+      self.shape = add(self.shape,translate(pad_MTA,-.05,.1,0))
+      self.pad.append(point(-.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'2'))
+      #
+      # pin 3: data
+      #
+      self.shape = add(self.shape,translate(pad_MTA,0,-.1,0))
+      self.pad.append(point(0,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'3'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.212,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.212,0,0))
+
+class MTA_i0(part):
+   #
+   # AMP 1445121-3
+   # MTA .050 SMT 3-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: GND
+      #
+      self.shape = translate(pad_MTA,.05,.1,0)
+      self.pad.append(point(.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1\nGND'))
+      #
+      # pin 2: power 
+      #
+      self.shape = add(self.shape,translate(pad_MTA,-.05,.1,0))
+      self.pad.append(point(-.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # pin 3: data
+      #
+      self.shape = add(self.shape,translate(pad_MTA,0,-.1,0))
+      self.pad.append(point(0,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'data'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.212,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.212,0,0))
+
+class MTA_4(part):
+   #
+   # AMP 1445121-4
+   # MTA .050 SMT 4-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_MTA,-.075,-.1,0)
+      self.pad.append(point(-.075,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.025,-.1,0))
+      self.pad.append(point(.025,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'2'))
+      #
+      # pin 3
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.075,.1,0))
+      self.pad.append(point(.075,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'3'))
+      #
+      # pin 4
+      #
+      self.shape = add(self.shape,translate(pad_MTA,-.025,.1,0))
+      self.pad.append(point(-.025,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'4'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.237,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.237,0,0))
+
+class MTA_serial(part):
+   #
+   # AMP 1445121-4
+   # MTA .050 SMT 4-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_MTA,-.075,-.1,0)
+      self.pad.append(point(-.075,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1'))
+      #
+      # pin 2: Tx
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.025,-.1,0))
+      self.pad.append(point(.025,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Tx'))
+      #
+      # pin 3: Rx
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.075,.1,0))
+      self.pad.append(point(.075,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Rx'))
+      #
+      # pin 4: DTR
+      #
+      self.shape = add(self.shape,translate(pad_MTA,-.025,.1,0))
+      self.pad.append(point(-.025,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DTR'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.237,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.237,0,0))
+
+class MTA_PS2(part):
+   #
+   # AMP 1445121-4
+   # MTA .050 SMT 4-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: GND
+      #
+      self.shape = translate(pad_MTA,-.075,-.1,0)
+      self.pad.append(point(-.075,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1\nGND'))
+      #
+      # pin 2: data
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.025,-.1,0))
+      self.pad.append(point(.025,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'data'))
+      #
+      # pin 3: clock
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.075,.1,0))
+      self.pad.append(point(.075,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'clock'))
+      #
+      # pin 4: 5V
+      #
+      self.shape = add(self.shape,translate(pad_MTA,-.025,.1,0))
+      self.pad.append(point(-.025,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'5V'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.237,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.237,0,0))
+
+class MTA_5(part):
+   #
+   # AMP 1445121-5
+   # MTA .050 SMT 5-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_MTA,-.1,-.1,0)
+      self.pad.append(point(-.1,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_MTA,0,-.1,0))
+      self.pad.append(point(0,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'2'))
+      #
+      # pin 3
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.1,-.1,0))
+      self.pad.append(point(.1,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'3'))
+      #
+      # pin 4
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.05,.1,0))
+      self.pad.append(point(.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'4'))
+      #
+      # pin 5
+      #
+      self.shape = add(self.shape,translate(pad_MTA,-.05,.1,0))
+      self.pad.append(point(-.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'5'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.262,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.262,0,0))
+
+class MTA_ICP(part):
+   #
+   # AMP 1445121-5
+   # MTA .050 SMT 5-pin vertical
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: MISO
+      #
+      self.shape = translate(pad_MTA,-.1,-.1,0)
+      self.pad.append(point(-.1,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'MISO'))
+      #
+      # pin 2: GND
+      #
+      self.shape = add(self.shape,translate(pad_MTA,0,-.1,0))
+      self.pad.append(point(0,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 3: MOSI
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.1,-.1,0))
+      self.pad.append(point(.1,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'MOSI'))
+      #
+      # pin 4: -RESET
+      #
+      self.shape = add(self.shape,translate(pad_MTA,.05,.1,0))
+      self.pad.append(point(.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'-RESET'))
+      #
+      # pin 5: SCK
+      #
+      self.shape = add(self.shape,translate(pad_MTA,-.05,.1,0))
+      self.pad.append(point(-.05,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SCK'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_MTA_solder,-.262,0,0))
+      self.shape = add(self.shape,translate(pad_MTA_solder,.262,0,0))
+
+pad_screw_terminal = cylinder(0,0,0,0,.047)
+hole_screw_terminal = circle(0,0,.025)
+
+class screw_terminal_2(part):
+   #
+   # On Shore ED555/2DS
+   # two position screw terminal
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_screw_terminal,-.069,0,0)
+      self.pad.append(point(-.069,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_screw_terminal,.069,0,0))
+      self.pad.append(point(.069,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'2'))
+      #
+      # holes
+      #
+      self.shape = add(self.shape,translate(hole_screw_terminal,-.069,0,0))
+      self.shape = add(self.shape,translate(hole_screw_terminal,.069,0,0))
+
+class screw_terminal_power(part):
+   #
+   # On Shore ED555/2DS
+   # power screw terminal
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1
+      #
+      self.shape = translate(pad_screw_terminal,-.069,0,0)
+      self.pad.append(point(-.069,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+      #
+      # pin 2
+      #
+      self.shape = add(self.shape,translate(pad_screw_terminal,.069,0,0))
+      self.pad.append(point(.069,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # holes
+      #
+      self.shape = add(self.shape,translate(hole_screw_terminal,-.069,0,0))
+      self.shape = add(self.shape,translate(hole_screw_terminal,.069,0,0))
+
+class screw_terminal_i0(part):
+   #
+   # On Shore ED555/3DS
+   # i0 screw terminal
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Gnd
+      #
+      self.shape = translate(pad_screw_terminal,-.138,0,0)
+      self.pad.append(point(-.138,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Gnd\n1'))
+      #
+      # pin 2: data
+      #
+      self.shape = add(self.shape,pad_screw_terminal)
+      self.pad.append(point(0,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'data'))
+      #
+      # pin 3: V
+      #
+      self.shape = add(self.shape,translate(pad_screw_terminal,.138,0,0))
+      self.pad.append(point(.138,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V'))
+      #
+      # holes
+      #
+      self.shape = add(self.shape,translate(hole_screw_terminal,-.138,0,0))
+      self.shape = add(self.shape,hole_screw_terminal)
+      self.shape = add(self.shape,translate(hole_screw_terminal,.138,0,0))
+
+class power_65mm(part):
+   #
+   # CUI PJ1-023-SMT
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: power
+      #
+      self.shape = cube(.433,.512,-.047,.047,0,0)
+      self.pad.append(point(.467,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'P'))
+      #
+      # pin 2: ground
+      #
+      self.shape = add(self.shape,cube(.285,.423,-.189,-.098,0,0))
+      self.pad.append(point(.354,-.144,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+      #
+      # pin 3: contact
+      #
+      self.shape = add(self.shape,cube(.325,.463,.098,.189,0,0))
+      self.pad.append(point(.394,.144,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'C'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,cube(.108,.246,-.169,-.110,0,0))
+      self.shape = add(self.shape,cube(.069,.207,.110,.169,0,0))
+
+pad_stereo_2_5mm = cube(-.03,.03,-.05,.05,0,0)
+
+class stereo_2_5mm(part):
+   #
+   # CUI SJ1-2533-SMT
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: base
+      #
+      self.shape = translate(pad_stereo_2_5mm,-.130,-.16,0)
+      self.pad.append(point(-.130,-.149,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'base'))
+      #
+      # pin 2: tip
+      #
+      self.shape = add(self.shape,translate(pad_stereo_2_5mm,.197,.15,0))
+      self.pad.append(point(.197,.141,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'tip'))
+      #
+      # pin 3: middle
+      #
+      self.shape = add(self.shape,translate(pad_stereo_2_5mm,-.012,-.16,0))
+      self.pad.append(point(-.012,-.149,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'middle'))
+
+pad_Molex = cube(-.0155,.0155,-.0265,.0265,0,0)
+pad_Molex_solder = cube(-.055,.055,-.065,.065,0,0)
+
+class Molex_serial(part):
+   #
+   # Molex 53261-0471
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: Rx
+      #
+      self.shape = translate(pad_Molex,-.075,.064,0)
+      self.pad.append(point(-.075,.064,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Rx'))
+      #
+      # pin 2: Tx
+      #
+      self.shape = add(self.shape,translate(pad_Molex,-.025,.064,0))
+      self.pad.append(point(-.025,.064,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Tx'))
+      #
+      # pin 3: DTR
+      #
+      self.shape = add(self.shape,translate(pad_Molex,.025,.064,0))
+      self.pad.append(point(.025,.064,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DTR'))
+      #
+      # pin 4: GND
+      #
+      self.shape = add(self.shape,translate(pad_Molex,.075,.064,0))
+      self.pad.append(point(.075,.064,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # solder pads
+      #
+      self.shape = add(self.shape,translate(pad_Molex_solder,-.16,-.065,0))
+      self.shape = add(self.shape,translate(pad_Molex_solder,.16,-.065,0))
+
+#
+# switches
+#
+
+pad_button_6mm = cube(-.04,.04,-.03,.03,0,0)
+
+class button_6mm(part):
+   # 
+   # Omron 6mm pushbutton
+   # B3SN-3112P
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # left 1
+      #
+      self.shape = translate(pad_button_6mm,-.125,.08,0)
+      self.pad.append(point(-.125,.08,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'L1'))
+      #
+      # right 1
+      #
+      self.shape = add(self.shape,translate(pad_button_6mm,-.125,-.08,0))
+      self.pad.append(point(-.125,-.08,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'R1'))
+      #
+      # right 2
+      #
+      self.shape = add(self.shape,translate(pad_button_6mm,.125,-.08,0))
+      self.pad.append(point(.125,-.08,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'R2'))
+      #
+      # left 2
+      #
+      self.shape = add(self.shape,translate(pad_button_6mm,.125,.08,0))
+      self.pad.append(point(.125,.08,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'L2'))
+
+#
+# crystals and resonators
+#
+
+pad_XTAL_EFOBM = cube(-.016,.016,-.085,.085,0,0)
+
+class XTAL_EFOBM(part):
+   #
+   # Panasonic EFOBM series
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # left
+      #
+      self.shape = translate(pad_XTAL_EFOBM,-.053,0,0)
+      self.pad.append(point(-.053,0,0))
+      #
+      # ground
+      #
+      self.shape = add(self.shape,translate(pad_XTAL_EFOBM,0,0,0))
+      self.pad.append(point(0,0,0))
+      #
+      # right
+      #
+      self.shape = add(self.shape,translate(pad_XTAL_EFOBM,.053,0,0))
+      self.pad.append(point(.053,0,0))
+
+pad_XTAL_NX5032GA = cube(-.039,.039,-.047,.047,0,0)
+.079
+
+class XTAL_NX5032GA(part):
+   #
+   # NDK NX5032GA
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # left
+      #
+      self.shape = translate(pad_XTAL_NX5032GA,-.079,0,0)
+      self.pad.append(point(-.079,0,0))
+      #
+      # right
+      #
+      self.shape = add(self.shape,translate(pad_XTAL_NX5032GA,.079,0,0))
+      self.pad.append(point(.079,0,0))
+
+pad_XTAL_CSM_7 = cube(-.108,.108,-.039,.039,0,0)
+
+class XTAL_CSM_7(part):
+   #
+   # ECS CSM-7 series
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # left
+      #
+      self.shape = translate(pad_XTAL_CSM_7,-.187,0,0)
+      self.pad.append(point(-.187,0,0))
+      #
+      # right
+      #
+      self.shape = add(self.shape,translate(pad_XTAL_CSM_7,.187,0,0))
+      self.pad.append(point(.187,0,0))
+
+#
+# diodes, transistors, regulators
+#
+
+class D_1206(part):
+   #
+   # 1206 diode
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # anode
+      #
+      self.shape = translate(pad_1206,-.06,0,0)
+      self.pad.append(point(-.055,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'A'))
+      #
+      # cathode
+      #
+      self.shape = add(self.shape,translate(pad_1206,.06,0,0))
+      self.pad.append(point(.055,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'C'))
+
+class LED_1206(part):
+   #
+   # 1206 LED
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # anode
+      #
+      self.shape = translate(pad_1206,-.06,0,0)
+      self.pad.append(point(-.055,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'A'))
+      #
+      # cathode
+      #
+      self.shape = add(self.shape,translate(pad_1206,.06,0,0))
+      self.pad.append(point(.055,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'C'))
+
+pad_RGB = cube(-.02,.02,-.029,.029,0,0)
+
+class LED_RGB(part):
+   #
+   # CREE CLV1A-FKB
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      dx = .029
+      dy = .059
+      #
+      # pin 1: red
+      #
+      self.shape = translate(pad_RGB,-dx,-dy,0)
+      self.shape = add(self.shape,cylinder(-dx,-dy-.029,0,0,.02))
+      self.pad.append(point(-dx,-dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'R'))
+      #
+      # pin 2: anode
+      #
+      self.shape = add(self.shape,translate(pad_RGB,dx,-dy,0))
+      self.pad.append(point(dx,-dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'A'))
+      #
+      # pin 3: blue
+      #
+      self.shape = add(self.shape,translate(pad_RGB,dx,dy,0))
+      self.pad.append(point(dx,dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'B'))
+      #
+      # pin 4: green
+      #
+      self.shape = add(self.shape,translate(pad_RGB,-dx,dy,0))
+      self.pad.append(point(-dx,dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+
+class phototransistor_1206(part):
+   #
+   # 1206 phototransistor
+   # OPTEK 520,521
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # collector
+      #
+      self.shape = translate(pad_1206,-.06,0,0)
+      self.pad.append(point(-.055,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'C'))
+      #
+      # emitter
+      #
+      self.shape = add(self.shape,translate(pad_1206,.06,0,0))
+      self.pad.append(point(.055,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'E'))
+
+pad_PLCC2 = cube(-.029,.029,-.059,.059,0,0)
+
+class phototransistor_PLCC2(part):
+   #
+   # PLCC2 phototransistor
+   # Optek OP580
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # collector
+      #
+      self.shape = translate(pad_PLCC2,-.065,0,0)
+      self.pad.append(point(-.065,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'C'))
+      #
+      # emitter
+      #
+      self.shape = add(self.shape,translate(pad_PLCC2,.065,0,0))
+      self.pad.append(point(.065,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'E'))
+
+pad_SOD_123 = cube(-.02,.02,-.024,.024,0,0)
+
+class D_SOD_123(part):
+   #
+   # SOD-123 diode
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # anode
+      #
+      self.shape = translate(pad_SOD_123,-.07,0,0)
+      self.pad.append(point(-.07,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'A'))
+      #
+      # cathode
+      #
+      self.shape = add(self.shape,translate(pad_SOD_123,.07,0,0))
+      self.pad.append(point(.07,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'C'))
+
+pad_SOT23 = cube(-.02,.02,-.012,.012,0,0)
+
+class NMOSFET_SOT23(part):
+   #
+   # Fairchild NDS355AN
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: gate
+      #
+      self.shape = translate(pad_SOT23,.045,-.0375,0)
+      self.pad.append(point(.045,-.0375,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+      #
+      # pin 2: source
+      #
+      self.shape = add(self.shape,translate(pad_SOT23,.045,.0375,0))
+      self.pad.append(point(.045,.0375,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'S'))
+      #
+      # pin 3: drain
+      #
+      self.shape = add(self.shape,translate(pad_SOT23,-.045,0,0))
+      self.pad.append(point(-.045,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'D'))
+
+class PMOSFET_SOT23(part):
+   #
+   # Fairchild NDS356AP
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: gate
+      #
+      self.shape = translate(pad_SOT23,-.045,-.0375,0)
+      self.pad.append(point(-.045,-.0375,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+      #
+      # pin 2: source
+      #
+      self.shape = add(self.shape,translate(pad_SOT23,-.045,.0375,0))
+      self.pad.append(point(-.045,.0375,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'S'))
+      #
+      # pin 3: drain
+      #
+      self.shape = add(self.shape,translate(pad_SOT23,.045,0,0))
+      self.pad.append(point(.045,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'D'))
+
+class NMOSFET_TO252AA(part):
+   #
+   # Fairchild RFD16N05LSM
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: gate
+      #
+      self.shape = translate(cube(-.031,.031,-.059,.059,0,0),-.090,0,0)
+      self.pad.append(point(-.090,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G 1'))
+      #
+      # pin 2: source
+      #
+      self.shape = add(self.shape,translate(cube(-.031,.031,-.059,.059,0,0),.090,0,0))
+      self.pad.append(point(.090,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'S'))
+      #
+      # pin 3: drain
+      #
+      self.shape = add(self.shape,translate(cube(-.132,.132,-.132,.132,0,0),0,.261,0))
+      self.pad.append(point(0,.261,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'D'))
+
+class regulator_SOT23(part):
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: output
+      #
+      self.shape = translate(pad_SOT23,-.045,.0375,0)
+      self.pad.append(point(-.045,.0375,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'out'))
+      #
+      # pin 2: input
+      #
+      self.shape = add(self.shape,translate(pad_SOT23,-.045,-.0375,0))
+      self.pad.append(point(-.045,-.0375,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'in'))
+      #
+      # pin 3: ground
+      #
+      self.shape = add(self.shape,translate(pad_SOT23,.045,0,0))
+      self.pad.append(point(.045,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'gnd'))
+
+pad_SOT223 = cube(-.02,.02,-.03,.03,0,0)
+pad_SOT223_ground = cube(-.065,.065,-.03,.03,0,0)
+
+class regulator_SOT223(part):
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: input
+      #
+      self.shape = translate(pad_SOT223,-.09,-.12,0)
+      self.pad.append(point(-.09,-.12,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1I'))
+      #
+      # pin 2: ground
+      #
+      self.shape = add(self.shape,translate(pad_SOT223,0,-.12,0))
+      self.pad.append(point(0,-.12,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+      #
+      # pin 3: output
+      #
+      self.shape = add(self.shape,translate(pad_SOT223,.09,-.12,0))
+      self.pad.append(point(.09,-.12,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'O'))
+      #
+      # pin 4: ground
+      #
+      self.shape = add(self.shape,translate(pad_SOT223_ground,0,.12,0))
+      self.pad.append(point(0,.12,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'G'))
+
+pad_SM8 = cube(-.035,.035,-.016,.016,0,0)
+
+class H_bridge_SM8(part):
+   #
+   # Zetex ZXMHC3A01T8
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      d = .13
+      #
+      # pin 1: G3 (right N gate)
+      #
+      self.shape = translate(pad_SM8,-d,.09,0)
+      self.shape = add(self.shape,cylinder(-d-.035,.09,0,0,.016))
+      self.pad.append(point(-d,.09,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GRN'))
+      #
+      # pin 2: S2 S3 (N source)
+      #
+      self.shape = add(self.shape,translate(pad_SM8,-d,.03,0))
+      self.pad.append(point(-d,.03,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SN'))
+      #
+      # pin 3: G2 (left N gate)
+      #
+      self.shape = add(self.shape,translate(pad_SM8,-d,-.03,0))
+      self.pad.append(point(-d,-.03,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GLN'))
+      #
+      # pin 4: G1 (left P gate)
+      #
+      self.shape = add(self.shape,translate(pad_SM8,-d,-.09,0))
+      self.pad.append(point(-d,-.09,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GLP'))
+      #
+      # pin 5: D1 D2 (left drain)
+      #
+      self.shape = add(self.shape,translate(pad_SM8,d,-.09,0))
+      self.pad.append(point(d,-.09,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DL'))
+      #
+      # pin 6: S1 S4 (P source)
+      #
+      self.shape = add(self.shape,translate(pad_SM8,d,-.03,0))
+      self.pad.append(point(d,-.03,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SP'))
+      #
+      # pin 7: D3 D4 (right drain)
+      #
+      self.shape = add(self.shape,translate(pad_SM8,d,.03,0))
+      self.pad.append(point(d,.03,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DR'))
+      #
+      # pin 8: G4 (right N gate)
+      #
+      self.shape = add(self.shape,translate(pad_SM8,d,.09,0))
+      self.pad.append(point(d,.09,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GRP'))
+
+#
+# ICs
+#
+
+pad_SOT23_5 = cube(-.01,.01,-.02,.02,0,0)
+
+class op_amp_SOT23_5(part):
+   def __init__(self,value=''):
+      self.value = value
+      self.x = 0
+      self.y = 0
+      self.z = 0
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: output
+      #
+      self.shape = translate(pad_SOT23_5,-.0375,-.045,0)
+      self.pad.append(point(-.0375,-.045,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'O'))
+      #
+      # pin 2: V-
+      #
+      self.shape = add(self.shape,translate(pad_SOT23_5,0,-.045,0))
+      self.pad.append(point(0,-.045,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V-'))
+      #
+      # pin 3: I+
+      #
+      self.shape = add(self.shape,translate(pad_SOT23_5,.0375,-.045,0))
+      self.pad.append(point(.0375,-.045,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'I+'))
+      #
+      # pin 4: I-
+      #
+      self.shape = add(self.shape,translate(pad_SOT23_5,.0375,.045,0))
+      self.pad.append(point(.0375,.045,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'I-'))
+      #
+      # pin 5: V+
+      #
+      self.shape = add(self.shape,translate(pad_SOT23_5,-.0375,.045,0))
+      self.pad.append(point(-.0375,.045,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V+'))
+
+pad_SOICN = cube(-.035,.035,-.015,.015,0,0)
+
+class op_amp_SOICN(part):
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: A out
+      #
+      self.shape = translate(pad_SOICN,-.12,.075,0)
+      self.pad.append(point(-.12,.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1 Ao'))
+      #
+      # pin 2: A-
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,.025,0))
+      self.pad.append(point(-.12,.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'A-'))
+      #
+      # pin 3: A+
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,-.025,0))
+      self.pad.append(point(-.12,-.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'A+'))
+      #
+      # pin 4: V-
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,-.075,0))
+      self.pad.append(point(-.12,-.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V-'))
+      #
+      # pin 5: B+
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,-.075,0))
+      self.pad.append(point(.12,-.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'B+'))
+      #
+      # pin 6: B-
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,-.025,0))
+      self.pad.append(point(.12,-.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'B-'))
+      #
+      # pin 7: B out
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,.025,0))
+      self.pad.append(point(.12,.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Bo'))
+      #
+      # pin 8: V+
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,.075,0))
+      self.pad.append(point(.12,.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'V+'))
+
+TSSOP_pad_width = 0.040
+TSSOP_pad_height = 0.011
+TSSOP_pad_dy = 0.026
+TSSOP_pad_dx = 0.120
+pad_TSSOP = cube(-TSSOP_pad_width/2.0,TSSOP_pad_width/2.0,-TSSOP_pad_height/2.0,TSSOP_pad_height/2.0,0,0)
+
+class TRC102(part):
+   #
+   # RFM TRC102 ISM transceiver
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: SDI
+      #
+      self.shape = translate(pad_TSSOP,-TSSOP_pad_dx,3.5*TSSOP_pad_dy,0)
+      self.pad.append(point(-TSSOP_pad_dx,3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1 SDI'))
+      #
+      # pin 2: SCK
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SCK'))
+      #
+      # pin 3: nCS
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'nCS'))
+      #
+      # pin 4: SDO
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SDO'))
+      #
+      # pin 5: IRQ
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'IRQ'))
+      #
+      # pin 6: DATA/nFSEL
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DATA'))
+      #
+      # pin 7: CR
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'CR'))
+      #
+      # pin 8: CLKOUT
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'CLKOUT'))
+      #
+      # pin 9: Xtal/Ref
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Xtal'))
+      #
+      # pin 10: RESET
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RESET'))
+      #
+      # pin 11: GND
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 12: RF_P
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RF_P'))
+      #
+      # pin 13: RF_N
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RF_N'))
+      #
+      # pin 14: VDD
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VDD'))
+      #
+      # pin 15: RSSIA
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RSSIA'))
+      #
+      # pin 16: nINT/DDET
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,3.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'nINT'))
+
+pad_SOIC = cube(-.041,.041,-.015,.015,0,0)
+
+class ATtiny45_SOIC(part):
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: PB5/dW/ADC0/-RESET/PCINT5
+      #
+      self.shape = translate(pad_SOIC,-.14,.075,0)
+      self.shape = add(self.shape,cylinder(-.183,.075,0,0,.015))
+      self.pad.append(point(-.14,.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RST'))
+      #
+      # pin 2: PB3/ADC3/-OC1B/CLKI/XTAL1/PCINT3
+      #
+      self.shape = add(self.shape,translate(pad_SOIC,-.14,.025,0))
+      self.pad.append(point(-.14,.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB3'))
+      #
+      # pin 3: PB4/ADC2/OC1B/CLKO/XTAL2/PCINT4
+      #
+      self.shape = add(self.shape,translate(pad_SOIC,-.14,-.025,0))
+      self.pad.append(point(-.14,-.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB4'))
+      #
+      # pin 4: GND
+      #
+      self.shape = add(self.shape,translate(pad_SOIC,-.14,-.075,0))
+      self.pad.append(point(-.14,-.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 5: PB0/MOSI/DI/SDA/AIN0/OC0A/-OC1A/AREF/PCINT0
+      #
+      self.shape = add(self.shape,translate(pad_SOIC,.14,-.075,0))
+      self.pad.append(point(.14,-.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB0'))
+      #
+      # pin 6: PB1/MISO/DO/AIN1/OC0B/OC1A/PCINT1
+      #
+      self.shape = add(self.shape,translate(pad_SOIC,.14,-.025,0))
+      self.pad.append(point(.14,-.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB1'))
+      #
+      # pin 7: PB2/SCK/USCK/SCL/ADC1/T0/INT0/PCINT2
+      #
+      self.shape = add(self.shape,translate(pad_SOIC,.14,.025,0))
+      self.pad.append(point(.14,.025,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB2'))
+      #
+      # pin 8: VCC
+      #
+      self.shape = add(self.shape,translate(pad_SOIC,.14,.075,0))
+      self.pad.append(point(.14,.075,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC'))
+
+class ATtiny44_SOICN(part):
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: VCC
+      #
+      self.shape = translate(pad_SOICN,-.12,.15,0)
+      self.shape = add(self.shape,cylinder(-.155,.15,0,0,.015))
+      self.pad.append(point(-.12,.15,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC'))
+      #
+      # pin 2: PB0/XTAL1/PCINT8
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,.1,0))
+      self.pad.append(point(-.12,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB0'))
+      #
+      # pin 3: PB1/XTAL2/PCINT9
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,.050,0))
+      self.pad.append(point(-.12,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB1'))
+      #
+      # pin 4: PB3/dW/-RESET/PCINT11
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,0,0))
+      self.pad.append(point(-.12,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB3'))
+      #
+      # pin 5: PB2/CKOUT/OC0A/INT0/PCINT10
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,-.05,0))
+      self.pad.append(point(-.12,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB2'))
+      #
+      # pin 6: PA7/ADC7/OC0B/ICP/PCINT7
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,-.1,0))
+      self.pad.append(point(-.12,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA7'))
+      #
+      # pin 7: PA6/ADC6/MOSI/SDA/OC1A/PCINT6
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,-.12,-.15,0))
+      self.pad.append(point(-.12,-.15,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA6'))
+      #
+      # pin 8: PA5/ADC5/DO/MISO/OC1B/PCINT5
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,-.15,0))
+      self.pad.append(point(.12,-.15,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA5'))
+      #
+      # pin 9: PA4/ADC4/USCK/SCL/T1/PCINT4
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,-.1,0))
+      self.pad.append(point(.12,-.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA4'))
+      #
+      # pin 10: PA3/ADC3/T0/PCINT3
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,-.05,0))
+      self.pad.append(point(.12,-.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA3'))
+      #
+      # pin 11: PA2/ADC2/AIN1/PCINT2
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,0,0))
+      self.pad.append(point(.12,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA2'))
+      #
+      # pin 12: PA1/ADC1/AIN0/PCINT1
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,.050,0))
+      self.pad.append(point(.12,.05,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA1'))
+      #
+      # pin 13: PA0/ADC0/AREF/PCINT0
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,.1,0))
+      self.pad.append(point(.12,.1,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA0'))
+      #
+      # pin 14: GND
+      #
+      self.shape = add(self.shape,translate(pad_SOICN,.12,.15,0))
+      self.pad.append(point(.12,.15,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+
+pad_TQFP_h = cube(-.025,.025,-.008,.008,0,0)
+pad_TQFP_v = cube(-.008,.008,-.025,.025,0,0)
+
+class ATmega88_TQFP(part):
+   def __init__(self,value=''):
+      c = .18
+      d = .031
+      s = 0.004
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: PD3/PCINT19/OC2B/INT1
+      #
+      self.shape = translate(pad_TQFP_h,-c,3.5*d,0)
+      self.pad.append(point(-c,3.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1 PD3',line=s))
+      #
+      # pin 2: PD4/PCINT20/XCK/T0
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,2.5*d,0))
+      self.pad.append(point(-c,2.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD4',line=s))
+      #
+      # pin 3: GND
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,1.5*d,0))
+      self.pad.append(point(-c,1.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND',line=s))
+      #
+      # pin 4: VCC
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,.5*d,0))
+      self.pad.append(point(-c,.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC',line=s))
+      #
+      # pin 5: GND
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-.5*d,0))
+      self.pad.append(point(-c,-.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND',line=s))
+      #
+      # pin 6: VCC
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-1.5*d,0))
+      self.pad.append(point(-c,-1.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC',line=s))
+      #
+      # pin 7: PB6/PCINT6/XTAL1/TOSC1
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-2.5*d,0))
+      self.pad.append(point(-c,-2.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB6',line=s))
+      #
+      # pin 8: PB7/PCINT7/XTAL2/TOSC2
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-3.5*d,0))
+      self.pad.append(point(-c,-3.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB7',line=s))
+      #
+      # pin 9: PD5/PCINT21/OC0B/T1
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-3.5*d,-c,0))
+      self.pad.append(point(-3.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD5',angle=90,line=s))
+      #
+      # pin 10: PD6/PCINT22/OC0A/AIN0
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-2.5*d,-c,0))
+      self.pad.append(point(-2.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD6',angle=90,line=s))
+      #
+      # pin 11: PD7/PCINT23/AIN1
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-1.5*d,-c,0))
+      self.pad.append(point(-1.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD7',angle=90,line=s))
+      #
+      # pin 12: PB0/PCINT0/CLKO/ICP1
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-.5*d,-c,0))
+      self.pad.append(point(-.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB0',angle=90,line=s))
+      #
+      # pin 13: PB1/PCINT1/OC1A
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,.5*d,-c,0))
+      self.pad.append(point(.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB1',angle=90,line=s))
+      #
+      # pin 14: PB2/PCINT2/-SS/OC1B
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,1.5*d,-c,0))
+      self.pad.append(point(1.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB2',angle=90,line=s))
+      #
+      # pin 15: PB3/PCINT3/OC2A/MOSI
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,2.5*d,-c,0))
+      self.pad.append(point(2.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB3',angle=90,line=s))
+      #
+      # pin 16: PB4/PCINT4/MISO
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,3.5*d,-c,0))
+      self.pad.append(point(3.5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB4',angle=90,line=s))
+      #
+      # pin 17: PB5/SCK/PCINT5
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-3.5*d,0))
+      self.pad.append(point(c,-3.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB5',line=s))
+      #
+      # pin 18: AVCC
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-2.5*d,0))
+      self.pad.append(point(c,-2.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'AVCC',line=s))
+      #
+      # pin 19: ADC6
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-1.5*d,0))
+      self.pad.append(point(c,-1.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'ADC6',line=s))
+      #
+      # pin 20: AREF
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-.5*d,0))
+      self.pad.append(point(c,-.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'AREF',line=s))
+      #
+      # pin 21: GND
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,.5*d,0))
+      self.pad.append(point(c,.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND',line=s))
+      #
+      # pin 22: ADC7
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,1.5*d,0))
+      self.pad.append(point(c,1.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'ADC7',line=s))
+      #
+      # pin 23: PC0/ADC0/PCINT8
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,2.5*d,0))
+      self.pad.append(point(c,2.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC0',line=s))
+      #
+      # pin 24: PC1/ADC1/PCINT9
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,3.5*d,0))
+      self.pad.append(point(c,3.5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC1',line=s))
+      #
+      # pin 25: PC2/ADC2/PCINT10
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,3.5*d,c,0))
+      self.pad.append(point(3.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC2',angle=90,line=s))
+      #
+      # pin 26: PC3/ADC3/PCINT11
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,2.5*d,c,0))
+      self.pad.append(point(2.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC3',angle=90,line=s))
+      #
+      # pin 27: PC4/ADC4/SDA/PCINT12
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,1.5*d,c,0))
+      self.pad.append(point(1.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC4',angle=90,line=s))
+      #
+      # pin 28: PC5/ADC5/SCL/PCINT13
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,.5*d,c,0))
+      self.pad.append(point(.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC5',angle=90,line=s))
+      #
+      # pin 29: PC6/-RESET/PCINT14
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-.5*d,c,0))
+      self.pad.append(point(-.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC6',angle=90,line=s))
+      #
+      # pin 30: PD0/RXD/PCINT16
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-1.5*d,c,0))
+      self.pad.append(point(-1.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD0',angle=90,line=s))
+      #
+      # pin 31: PD1/TXD/PCINT17
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-2.5*d,c,0))
+      self.pad.append(point(-2.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD1',angle=90,line=s))
+      #
+      # pin 32: PD2/INT0/PCINT18
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-3.5*d,c,0))
+      self.pad.append(point(-3.5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD2',angle=90,line=s))
+
+class ATmega644_TQFP(part):
+   def __init__(self,value=''):
+      c = .235
+      d = .031
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: PB5/PCINT13/MOSI
+      #
+      self.shape = translate(pad_TQFP_h,-c,5*d,0)
+      self.pad.append(point(-c,5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'*MOSI (1)'))
+      #
+      # pin 2: PB6/PCINT14/MISO
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,4*d,0))
+      self.pad.append(point(-c,4*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'MISO'))
+      #
+      # pin 3: PB7/PCINT15/SCK
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,3*d,0))
+      self.pad.append(point(-c,3*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SCK'))
+      #
+      # pin 4: -RESET
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,2*d,0))
+      self.pad.append(point(-c,2*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'-RESET'))
+      #
+      # pin 5: VCC
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,d,0))
+      self.pad.append(point(-c,d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC'))
+      #
+      # pin 6: GND
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,0,0))
+      self.pad.append(point(-c,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 7: XTAL2
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-d,0))
+      self.pad.append(point(-c,-d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'XTAL2'))
+      #
+      # pin 8: XTAL1
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-2*d,0))
+      self.pad.append(point(-c,-2*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'XTAL1'))
+      #
+      # pin 9: PD0/PCINT24/RXD0
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-3*d,0))
+      self.pad.append(point(-c,-3*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RXD0'))
+      #
+      # pin 10: PD1/PCINT25/TXD0
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-4*d,0))
+      self.pad.append(point(-c,-4*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'TXD0'))
+      #
+      # pin 11: PD2/PCINT26/INT0
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,-c,-5*d,0))
+      self.pad.append(point(-c,-5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD2'))
+      #
+      # pin 12: PD3/PCINT27/INT1
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-5*d,-c,0))
+      self.pad.append(point(-5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD3'))
+      #
+      # pin 13: PD4/PCINT28/OC1B
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-4*d,-c,0))
+      self.pad.append(point(-4*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD4'))
+      #
+      # pin 14: PD5/PCINT28/OC1A
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-3*d,-c,0))
+      self.pad.append(point(-3*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD5'))
+      #
+      # pin 15: PD6/PCINT30/OC2B/ICP
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-2*d,-c,0))
+      self.pad.append(point(-2*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD6'))
+      #
+      # pin 16: PD7/PCINT31/OC2A
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-d,-c,0))
+      self.pad.append(point(-d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PD7'))
+      #
+      # pin 17: VCC
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,0,-c,0))
+      self.pad.append(point(0,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC'))
+      #
+      # pin 18: GND
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,d,-c,0))
+      self.pad.append(point(d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 19: PC0/PCINT16/SCL
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,2*d,-c,0))
+      self.pad.append(point(2*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC0'))
+      #
+      # pin 20: PC1/PCINT17/SDA
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,3*d,-c,0))
+      self.pad.append(point(3*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC1'))
+      #
+      # pin 21: PC2/PCINT18/TCK
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,4*d,-c,0))
+      self.pad.append(point(4*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC2'))
+      #
+      # pin 22: PC3/PCINT19/TMS
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,5*d,-c,0))
+      self.pad.append(point(5*d,-c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC3'))
+      #
+      # pin 23: PC4/TDO/PCINT20
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-5*d,0))
+      self.pad.append(point(c,-5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC4'))
+      #
+      # pin 24: PC5/TDI/PCINT21
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-4*d,0))
+      self.pad.append(point(c,-4*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC5'))
+      #
+      # pin 25: PC6/TOSC1/PCINT22
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-3*d,0))
+      self.pad.append(point(c,-3*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC6'))
+      #
+      # pin 26: PC7/TOSC2/PCINT23
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-2*d,0))
+      self.pad.append(point(c,-2*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PC7'))
+      #
+      # pin 27: AVCC
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,-d,0))
+      self.pad.append(point(c,-d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'AVCC'))
+      #
+      # pin 28: GND
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,0,0))
+      self.pad.append(point(c,0,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 29: AREF
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,d,0))
+      self.pad.append(point(c,d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'AREF'))
+      #
+      # pin 30: PA7/ADC7/PCINT7
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,2*d,0))
+      self.pad.append(point(c,2*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA7'))
+      #
+      # pin 31: PA6/ADC6/PCINT6
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,3*d,0))
+      self.pad.append(point(c,3*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA6'))
+      #
+      # pin 32: PA5/ADC5/PCINT5
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,4*d,0))
+      self.pad.append(point(c,4*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA5'))
+      #
+      # pin 33: PA4/ADC4/PCINT4
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_h,c,5*d,0))
+      self.pad.append(point(c,5*d,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA4'))
+      #
+      # pin 34: PA3/ADC3/PCINT3
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,5*d,c,0))
+      self.pad.append(point(5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA3'))
+      #
+      # pin 35: PA2/ADC2/PCINT2
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,4*d,c,0))
+      self.pad.append(point(4*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA2'))
+      #
+      # pin 36: PA1/ADC1/PCINT1
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,3*d,c,0))
+      self.pad.append(point(3*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA1'))
+      #
+      # pin 37: PA0/ADC0/PCINT0
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,2*d,c,0))
+      self.pad.append(point(2*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PA0'))
+      #
+      # pin 38: VCC
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,d,c,0))
+      self.pad.append(point(d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VCC'))
+      #
+      # pin 39: GND
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,0,c,0))
+      self.pad.append(point(0,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 40: PB0/XCK0/T0/PCINT8
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-d,c,0))
+      self.pad.append(point(-d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB0'))
+      #
+      # pin 41: PB1/T1/CLKO/PCINT9
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-2*d,c,0))
+      self.pad.append(point(-2*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB1'))
+      #
+      # pin 42: PB2/AIN0/INT2/PCINT10
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-3*d,c,0))
+      self.pad.append(point(-3*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB2'))
+      #
+      # pin 43: PB3/AIN1/OC0A/PCINT11
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-4*d,c,0))
+      self.pad.append(point(-4*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB2'))
+      #
+      # pin 44: PB4/-SS/OC0B/PCINT12
+      #
+      self.shape = add(self.shape,translate(pad_TQFP_v,-5*d,c,0))
+      self.pad.append(point(-5*d,c,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'PB4'))
+
+TSSOP_pad_width = 0.040
+TSSOP_pad_height = 0.011
+TSSOP_pad_dy = 0.026
+TSSOP_pad_dx = 0.120
+pad_TSSOP = cube(-TSSOP_pad_width/2.0,TSSOP_pad_width/2.0,-TSSOP_pad_height/2.0,TSSOP_pad_height/2.0,0,0)
+
+class TRC102(part):
+   #
+   # RFM TRC102 ISM transceiver
+   #
+   def __init__(self,value=''):
+      self.value = value
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      #
+      # pin 1: SDI
+      #
+      self.shape = translate(pad_TSSOP,-TSSOP_pad_dx,3.5*TSSOP_pad_dy,0)
+      self.pad.append(point(-TSSOP_pad_dx,3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'1 SDI'))
+      #
+      # pin 2: SCK
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SCK'))
+      #
+      # pin 3: nCS
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'nCS'))
+      #
+      # pin 4: SDO
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'SDO'))
+      #
+      # pin 5: IRQ
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'IRQ'))
+      #
+      # pin 6: DATA/nFSEL
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'DATA'))
+      #
+      # pin 7: CR
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'CR'))
+      #
+      # pin 8: CLKOUT
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,-TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.pad.append(point(-TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'CLKOUT'))
+      #
+      # pin 9: Xtal/Ref
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'Xtal'))
+      #
+      # pin 10: RESET
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RESET'))
+      #
+      # pin 11: GND
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'GND'))
+      #
+      # pin 12: RF_P
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,-0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RF_P'))
+      #
+      # pin 13: RF_N
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,0.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RF_N'))
+      #
+      # pin 14: VDD
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,1.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'VDD'))
+      #
+      # pin 15: RSSIA
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,2.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'RSSIA'))
+      #
+      # pin 16: nINT/DDET
+      #
+      self.shape = add(self.shape,translate(pad_TSSOP,TSSOP_pad_dx,3.5*TSSOP_pad_dy,0))
+      self.pad.append(point(TSSOP_pad_dx,3.5*TSSOP_pad_dy,0))
+      self.labels.append(self.text(self.pad[-1].x,self.pad[-1].y,self.pad[-1].z,'nINT'))
+
+
+#
+# graphics
+#
+
+class CBA(part):
+   #
+   # CBA logo
+   #
+   def __init__(self,r=.02):
+      self.value = ''
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      d = 3*r
+      self.shape = cylinder(0,0,0,0,r)
+      self.shape = add(self.shape,translate(cylinder(0,0,0,0,r),-d,d,0))
+      self.shape = add(self.shape,translate(cube(-r,r,-r,r,0,0),-d,0,0))
+      self.shape = add(self.shape,translate(cube(-r,r,-r,r,0,0),-d,-d,0))
+      self.shape = add(self.shape,translate(cube(-r,r,-r,r,0,0),0,-d,0))
+      self.shape = add(self.shape,translate(cube(-r,r,-r,r,0,0),d,-d,0))
+      self.shape = add(self.shape,translate(cube(-r,r,-r,r,0,0),d,0,0))
+      self.shape = add(self.shape,translate(cube(-r,r,-r,r,0,0),d,d,0))
+      self.shape = add(self.shape,translate(cube(-r,r,-r,r,0,0),0,d,0))
+
+class fab(part):
+   def __init__(self,r=.05):
+      self.value = ''
+      self.pad = [point(0,0,0)]
+      self.labels = []
+      d = 1.8*r
+      l = 3.5*r
+      h = r/2.
+      self.shape = rectangle(-d,d,-d,d)
+      self.shape = subtract(self.shape,circle(0,0,r))
+      self.shape = subtract(self.shape,rectangle(-l,0,-h,h))
+      self.shape = add(self.shape,rectangle(d,l,-h,h))
+      self.shape = add(self.shape,circle(l,0,r))
+      self.shape = add(self.shape,circle(-l,0,r))
+
+#
+# define board
+#
+
+x0 = 1
+y0 = 1
+width = 1.23
+height = .75
+z = -.005
+w = .018
+mask = .004
+
+pcb = PCB(x0,y0,width,height,mask)
+
+IC1 = ATtiny45_SOIC('IC1\nt45')
+pcb = IC1.add(pcb,x0+.57,y0+.45,z,angle=-90)
+
+J1 = header_ISP('J1\nISP')
+pcb = J1.add(pcb,IC1.x-.31,IC1.y-.02,z,angle=0)
+
+pcb = wire(pcb,w,
+   J1.pad[1],
+   point(J1.pad[1].x,J1.pad[1].y+.05,z),
+   IC1.pad[6])
+
+pcb = wire(pcb,w,
+   J1.pad[2],
+   point(J1.pad[4].x-.08,J1.pad[4].y+.05,z),
+   IC1.pad[8])
+
+pcb = wire(pcb,w,
+   J1.pad[3],
+   IC1.pad[7])
+
+pcb = wire(pcb,w,
+   IC1.pad[5],
+   point(IC1.pad[5].x,IC1.pad[5].y-.035,z),
+   point(J1.x,J1.y,z),
+   J1.pad[4])
+
+pcb = wire(pcb,w,
+   IC1.pad[1],
+   point(IC1.pad[1].x,IC1.pad[1].y-.07,z),
+   J1.pad[5])
+
+pcb = wire(pcb,w,
+   IC1.pad[4],
+   J1.pad[6])
+
+R1 = R_1206('R1\n10k')
+pcb = R1.add(pcb,IC1.pad[1].x+.09,IC1.y,z,angle=90)
+
+pcb = wire(pcb,w,
+   R1.pad[1],
+   IC1.pad[8])
+
+pcb = wire(pcb,w,
+   IC1.pad[1],
+   point(IC1.pad[1].x,IC1.pad[1].y-.07,z),
+   R1.pad[2])
+
+C1 = C_1206('C1\n1uF')
+pcb = C1.add(pcb,R1.x+.1,R1.y,z,angle=90)
+
+pcb = wire(pcb,w,
+   C1.pad[1],
+   R1.pad[1])
+
+J2 = header_FTDI('J2 FTDI')
+pcb = J2.add(pcb,x0+width-.23,C1.y-.13,z)
+
+pcb = wire(pcb,w,
+   J2.pad[1],
+   C1.pad[2])
+
+pcb = wire(pcb,w,
+   C1.pad[1],
+   point(C1.x+.07,J2.pad[3].y,z),
+   J2.pad[3])
+
+pcb = wire(pcb,w,
+   J2.pad[4],
+   point(J2.pad[4].x+.13,IC1.pad[2].y+.09,z),
+   IC1.pad[2])
+
+pcb = wire(pcb,w,
+   J2.pad[5],
+   point(J2.pad[5].x+.17,IC1.pad[3].y+.13,z),
+   IC1.pad[3])
+
+J3 = header_bus('J3\nbus')
+pcb = J3.add(pcb,IC1.x+.15,IC1.y-.3,z,angle=180)
+
+pcb = wire(pcb,w,
+   J2.pad[1],
+   point(J2.pad[3].x+.09,J2.pad[3].y-.05,z),
+   point(J3.x,J3.pad[1].y,z),
+   J3.pad[1])
+
+pcb = wire(pcb,w,
+   J3.pad[1],
+   point(J3.x,J3.pad[3].y-.07,z),
+   point(J1.pad[6].x-.12,J1.pad[6].y,z),
+   J1.pad[6])
+
+pcb = wire(pcb,w,
+   point(J3.pad[2].x,J3.pad[2].y+.015,z),
+   point(J3.pad[2].x+.08,J2.pad[4].y,z),
+   J2.pad[4])
+
+pcb = wire(pcb,w,
+   J3.pad[4],
+   point(J3.pad[4].x+.08,J2.pad[5].y-.015,z),
+   J2.pad[5])
+
+LED1 = LED_1206('LED1')
+pcb = LED1.add(pcb,J3.x-.3,J3.pad[1].y,z)
+
+pcb = wire(pcb,w,
+   LED1.pad[2],
+   IC1.pad[5])
+
+R2 = R_1206('R2\n1k')
+pcb = R2.add(pcb,LED1.x-.16,J3.y,z,angle=90)
+
+pcb = wire(pcb,w,
+   J3.pad[3],
+   R2.pad[1])
+
+pcb = wire(pcb,w,
+   R2.pad[1],
+   J1.pad[2])
+
+pcb = wire(pcb,w,
+   LED1.pad[1],
+   R2.pad[2])
+
+#
+# select output
+#
+
+if (output == "traces, labels, and exterior"):
+   cad.function = add(add(color(Tan,pcb.board),pcb.labels),color(White,pcb.exterior))
+elif (output == "traces and exterior"):
+   cad.function = color(White,add(pcb.board,pcb.exterior))
+elif (output == "interior"):
+   cad.function = color(White,pcb.interior)
+elif (output == "exterior"):
+   cad.function = color(White,pcb.exterior)
+elif(output == "traces"):
+   cad.function = color(White,pcb.board)
+elif (output == "holes"):
+   z = z-z
+   cad.function = color(White,add(pcb.exterior,subtract(pcb.interior,pcb.board)))
+elif (output == "solder mask"):
+   cad.function = color(White,pcb.mask)
+else:
+   print "oops -- don't recognize output"
+
+#
+# set limits and parameters
+#
+
+d = 0.05
+cad.xmin = x0-d # min x to render
+cad.xmax = x0+width+d # max x to render
+cad.ymin = y0-d # min y to render
+cad.ymax = y0+height+d # max y to render
+cad.zmin = cad.zmax = z # z to zender
+cad.mm_per_unit = 25.4 # use inch units
+cad.type = "RGB" # use RGB color
