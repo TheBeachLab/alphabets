@@ -1,0 +1,23 @@
+from koko.lib.shapes import *
+
+cad.mm_per_unit=1
+
+r1=rectangle(0,25,0,55)
+t1=tab(3,55,6,3,0,0.2)
+t2=move(t1,19,0)
+
+
+tabs=t1+t2
+tabi=rotate(tabs,180)
+tabi=move(tabi,25,55)
+
+tr1=triangle(4,4,4,48,18,4)
+tr2=rotate(tr1,180)
+tr2=move(tr2,25,55)
+r1-=tr1
+r1-=tr2
+
+
+
+
+cad.shapes = r1,tabs,tabi

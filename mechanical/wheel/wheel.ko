@@ -1,0 +1,29 @@
+from koko.lib.shapes import *
+cad.mm_per_unit=1
+
+shaft=3.
+r=30.
+d=2.5
+n=4
+
+c1=circle(0, 0, r)
+c4=circle(0,0,r-2*d)
+c4=color(c4,'red')
+
+for i in range (40):
+ c2=circle(0,r-d,1.5)
+ c2+=rotate(c2,i*360./40)
+ c1-=c2
+
+for i in range (n):
+ c3=circle(0,r-6*d,1.5)
+ c3+=rotate(c3,i*360/n)
+ c1-=c3
+ c4-=c3
+
+c1-=circle(0,0,shaft/2)
+c4-=circle(0,0,shaft/2)
+
+
+
+cad.shapes =  c1,

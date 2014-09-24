@@ -1,0 +1,174 @@
+from math import sqrt, atan2, sin, cos, pi, radians
+import operator
+
+cad.mm_per_unit = 1
+
+from koko.lib.shapes import *
+"""
+examples/gearing1.ko
+
+This example uses the gear function in examples/gearing.ko to draw
+two gears based on the distance in between the axles of the two gears
+and the reduction ratio.
+
+A gear with an infinite number of teeth would
+always be the best since theoretically it could give you any ratio.
+That would imply microscopic teeth, which cannot be manufactured.
+The program uses another parameter, the 'module', which is a
+standard in the industry and it is defined as the diameter divided
+into the number of teeth.  If you multiply that by PI, you would get
+the distance in between teeth.  A module of 1 means teeth are set
+3 units  (mm, inches or whatever) apart.  By setting the minimum module
+you limit how small a tooth can get.
+
+For irrational ratios (such as pi) or any other very
+weird ratio not easily expressed as a fraction, the code will provide the
+best approximation.  The error is printed in the output panel.
+"""
+
+dist = 40  # distance in between the axles
+rel = 3   # ratio of the gears
+mmin = .5   # minimum module
+
+"""
+
+Turned the gear example into a generic function
+to produce solid gears.
+
+See gear.ko for description and notes for the original function.
+
+This function takes
+        R radius of the gear.
+        z0 and z1, top and bottom elevation to produce the thickness of the gear
+        nt, number of teeth of the gear. Defaults to 32
+        pressureAngle, defaults to 20, an industry standard.  See tutorial.
+        clearance: extra depth to compensate for fillet produce by the tool.
+                           1.157 in US, 1.1666 in EU
+
+Returns a full 3D shape that can be manipulated just like any other.
+To make a hole for the axis, you can just substract a cylinder from it.
+
+Though the radius doesn't produce any visible feature on the gear,
+it is what should be used in calculations about how this gear
+engages other gears.  It is the radius a toothless gear, that is,
+a wheel, would have to roll on another toothless gear.
+
+The involute gear construction is based on the tutorial at
+http://www.cartertools.com/involute.html
+"""
+
+
+
+
+def gear(R, z0, z1, nt = 32, pressureAngle = 20, clearance = 1.16666):
+        P  = nt / R / 2    # diametral pitch
+
+        RB = R*cos(radians(pressureAngle))   # base circle radius
+        a = 1/P     # addendum
+        d = clearance/P # dedendum
+        RO = R+a    # outer radius
+        RR = R-d    # root radius
+
+
+        # MathTree expressions for r and r**2
+        r_2 = MathTree.square(X) + MathTree.square(Y)
+        r = MathTree.sqrt(r_2)
+
+        # See note (1) for derivation of tooth rotation
+        t = sqrt(R**2/RB**2 -1)
+        rot = atan2(sin(t)-t*cos(t), cos(t)+t*sin(t)) + pi/2/nt
+
+        # See note (2) for derivation of involute curve
+        tooth = (
+                MathTree.sqrt(r_2-RB**2) - RB*(MathTree.atan(Y/X) +
+                MathTree.acos(RB/r)) - RB*rot
+        )
+
+        tooth.shape = True
+        tooth &= reflect_y(tooth)
+
+        # If we have an odd number of teeth, then we can't take
+        # advantage of bilateral tooth symmetry.
+        if nt % 2:
+                tooth &= -X
+                teeth = reduce(operator.add, [rotate(tooth, i*360./nt)
+                                                                          for i in range(nt)])
+        else:
+                teeth = reduce(operator.add, [rotate(tooth, i*360./nt)
+                                                                          for i in range(nt/2)])
+
+        teeth += circle(0, 0, RR)
+        teeth &= circle(0, 0, RO)
+        teeth.bounds = circle(0, 0, RO).bounds
+        teeth = extrusion(teeth, z0, z1)
+
+        return teeth
+
+
+
+# Radius of the two gears
+r1 = float(dist) / (float(rel) + 1.)
+r2 = r1 * float(rel)
+
+#Searching for possible solutions up to the minimum module
+#It calculates the error for each set of teeth
+r = []
+nt1 = 1
+while True:
+    nt2 = int(round(nt1 * rel))
+    if (2. * r1) / nt1 < mmin: break
+    if (2. * r2) / nt2 < mmin: break
+
+    r.append((nt1, nt2, (float(nt2) / nt1) / rel - 1))
+    nt1 += 1
+
+#The list of options is sorted to get the minimum error
+#and the maximum number of teeth (for smoother run)
+r =  sorted(r, key=lambda x: (abs(x[2]), -x[0]))
+
+#The values to be used should be in the first item in the sorted list
+nt1 = r[0][0]
+nt2 = r[0][1]
+print 'Gears selected:'
+print '1: radius: {0:f}, number of teeth: {1:>4}'.format(r1, nt1)
+print '2: radius: {0:f}, number of teeth: {1:>4}'.format(r2, nt2)
+print 'Error in the gear shown: {0: .5%}'.format(r[0][2])
+
+print '\nAlternatives:'
+for x in r:
+        print 'Error: {0[2]: .3%},    nt1: {0[0]:>4},   nt2:{0[1]:>4}'.format(x)
+
+# Now it gets to the actual drawing
+#height of both
+h = 1
+
+#radius of hole
+axld = 1.5
+
+g1 = gear(r1, 0, h, nt1)
+#g1.color = 'blue'
+g1 -=cylinder(0, 0, 0, h, axld)
+
+g2 = gear(r2, 0, h, nt2)
+
+for i in range (40):
+ c2=circle(0,r2-3.5,1.5)
+ c2+=rotate(c2,i*360./40)
+ g2-=c2
+
+sl1=rectangle(0,5.63,0,3)
+sl1+=move(sl1,19,0)
+sl1=move(sl1,-12.5,-1.5)
+
+for i in range (3):
+ lock1=move(sl1,0,r2-17)
+ lock1+=rotate(lock1,i*360/3)
+ g2-=lock1
+
+
+g2 -= cylinder(0, 0, 0, h, axld)
+#g2.color = 'red'
+if not nt2 % 2:
+        g2 = rotate(g2, 180. / nt2)
+g2 = move(g2, r1 + r2, 0, 0)
+cad.shapes = g2,#g1

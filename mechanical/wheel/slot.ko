@@ -1,0 +1,9 @@
+from koko.lib.shapes import *
+
+cad.mm_per_unit=1
+
+sl1=rectangle(0,5.60,0,3)
+sl1+=move(sl1,19,0)
+sl1=move(sl1,-12.5,-1.5)
+
+cad.shape = sl1
