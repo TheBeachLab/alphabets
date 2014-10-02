@@ -26,8 +26,10 @@ weird ratio not easily expressed as a fraction, the code will provide the
 best approximation.  The error is printed in the output panel.
 """
 
-dist = 15  # distance in between the axles
-rel = 2   # ratio of the gears
+dist=25.  # distance in between the axles 1 and 2
+dist2=50.  # distance in between the axles 2 and 3
+rel = 4.  # ratio of the gears 1 and 2
+rel2= 6
 mmin = .5   # minimum module
 
 """
@@ -107,8 +109,9 @@ def gear(R, z0, z1, nt = 32, pressureAngle = 20, clearance = 1.16666):
 
 
 # Radius of the two gears
-r1 = float(dist) / (float(rel) + 1.)
-r2 = r1 * float(rel)
+r1 = 5.
+r2 = r1 * rel
+r3= r1*rel2
 
 #Searching for possible solutions up to the minimum module
 #It calculates the error for each set of teeth
@@ -122,40 +125,37 @@ while True:
     r.append((nt1, nt2, (float(nt2) / nt1) / rel - 1))
     nt1 += 1
 
-#The list of options is sorted to get the minimum error
-#and the maximum number of teeth (for smoother run)
-r =  sorted(r, key=lambda x: (abs(x[2]), -x[0]))
 
-#The values to be used should be in the first item in the sorted list
-nt1 = r[0][0]
-nt2 = r[0][1]
-print 'Gears selected:'
-print '1: radius: {0:f}, number of teeth: {1:>4}'.format(r1, nt1)
-print '2: radius: {0:f}, number of teeth: {1:>4}'.format(r2, nt2)
-print 'Error in the gear shown: {0: .5%}'.format(r[0][2])
-
-print '\nAlternatives:'
-for x in r:
-        print 'Error: {0[2]: .3%},    nt1: {0[0]:>4},   nt2:{0[1]:>4}'.format(x)
+nt3=nt1*rel2
 
 # Now it gets to the actual drawing
 #height of both
 h = 1
 
-#radius of hole
-axld = 2.4
+axld = 2.4 #radius of hole 1
+axld2 = 1.5 #radius of hole 2
+axld3 = 1.5 #radius of hole 3
 
 g1 = gear(r1, 0, h, nt1)
-#g1.color = 'blue'
+g1.color = 'blue'
 g1 -=cylinder(0, 0, 0, h, axld)
 
-g2 = gear(r2, 0, h, nt2)
+g2 = gear(r2, 0, h,nt2)
 
-'''
+
+
+g2 -= cylinder(0, 0, 0, h, axld2)
+g2.color = 'red'
+
+g3 = gear(r3, 0, h,nt3)
+g3 -= cylinder(0, 0, 0, h, axld3)
+g3.color = 'green'
+
+
 for i in range (40):
- c2=circle(0,r2-3.5,1.5)
+ c2=circle(0,r3-3.5,1.5)
  c2+=rotate(c2,i*360./40)
- g2-=c2
+ g3-=c2
 
 
 sl1=rectangle(0,5.63,0,3)
@@ -163,14 +163,17 @@ sl1+=move(sl1,19,0)
 sl1=move(sl1,-12.5,-1.5)
 
 for i in range (3):
- lock1=move(sl1,0,r2-17)
+ lock1=move(sl1,0,r3-16)
  lock1+=rotate(lock1,i*360/3)
- g2-=lock1
-'''
+ g3-=lock1
 
-g2 -= cylinder(0, 0, 0, h, axld)
-#g2.color = 'red'
+
+g3 = move(g3, r1 + 2*r2 +r3, 0, 0)
+
+
 if not nt2 % 2:
         g2 = rotate(g2, 180. / nt2)
 g2 = move(g2, r1 + r2, 0, 0)
-cad.shapes = g1,#g1
+
+
+cad.shapes = g1,g2,g3
