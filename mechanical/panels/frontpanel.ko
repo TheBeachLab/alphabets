@@ -1,0 +1,20 @@
+from koko.lib.shapes import *
+
+cad.mm_per_unit=1
+
+
+
+
+r1=rectangle(0,76,0,140)
+
+# Fixing holes
+c1=circle(20,5,1.5)
+c1+=move(c1,36,0)
+c1+=move(c1,0,130)
+r1-=c1
+
+# Internal rectangle
+r2=rectangle(6,70,13,115)
+r1-=r2
+
+cad.shape = r1

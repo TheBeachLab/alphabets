@@ -26,8 +26,8 @@ weird ratio not easily expressed as a fraction, the code will provide the
 best approximation.  The error is printed in the output panel.
 """
 
-dist = 40  # distance in between the axles
-rel = 3   # ratio of the gears
+dist = 15  # distance in between the axles
+rel = 2   # ratio of the gears
 mmin = .5   # minimum module
 
 """
@@ -143,7 +143,7 @@ for x in r:
 h = 1
 
 #radius of hole
-axld = 1.5
+axld = 2.4
 
 g1 = gear(r1, 0, h, nt1)
 #g1.color = 'blue'
@@ -151,10 +151,12 @@ g1 -=cylinder(0, 0, 0, h, axld)
 
 g2 = gear(r2, 0, h, nt2)
 
+'''
 for i in range (40):
  c2=circle(0,r2-3.5,1.5)
  c2+=rotate(c2,i*360./40)
  g2-=c2
+
 
 sl1=rectangle(0,5.63,0,3)
 sl1+=move(sl1,19,0)
@@ -164,11 +166,11 @@ for i in range (3):
  lock1=move(sl1,0,r2-17)
  lock1+=rotate(lock1,i*360/3)
  g2-=lock1
-
+'''
 
 g2 -= cylinder(0, 0, 0, h, axld)
 #g2.color = 'red'
 if not nt2 % 2:
         g2 = rotate(g2, 180. / nt2)
 g2 = move(g2, r1 + r2, 0, 0)
-cad.shapes = g2,#g1
+cad.shapes = g1,#g1

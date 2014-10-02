@@ -1,0 +1,32 @@
+from koko.lib.shapes import *
+
+cad.mm_per_unit=1
+
+fit_A4="True"
+
+# Rectangle shape
+if fit_A4 == "True":
+ r1=rectangle(0,100,0,140)
+else: 
+ r1=rectangle(0,110,0,140)
+
+# Fixing holes
+c1=circle(25,5,1.5)
+c1+=move(c1,50,0)
+c1+=move(c1,0,130)
+r1-=c1
+
+# Hole spool
+c2=circle(27.7,75,1.5)
+r1-=c2
+
+# Hole stepper motor
+c3=circle(89,31,1.5)
+r1-=c3
+
+# Hole middle gear
+c4= circle(68.5,45.666,1.5)
+r1-=c4
+
+
+cad.shape = r1
