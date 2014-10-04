@@ -9,10 +9,10 @@ String s1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:e ";
 String s2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:e ";
 String s3 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:e ";
 
-AccelStepper stepper0(1,12,13);
-AccelStepper stepper1(1,10,11);
-AccelStepper stepper2(1,6,7);
-AccelStepper stepper3(1,8,9);
+AccelStepper stepper3(1,12,13);
+AccelStepper stepper2(1,10,11);
+AccelStepper stepper1(1,6,7);
+AccelStepper stepper0(1,8,9);
 
 char serialdata[4];
 int lf = 10;
@@ -28,14 +28,14 @@ void setup()
   Serial.println("Flip-Flap Ready!");
   Serial.println("Enter the 4 characters that the flipflap is displaying:");
   
-  stepper0.setMaxSpeed(12000);
-  stepper0.setAcceleration(24000.0);
-  stepper1.setMaxSpeed(12000);
-  stepper1.setAcceleration(24000.0);
-  stepper2.setMaxSpeed(12000);
-  stepper2.setAcceleration(24000.0);
-  stepper3.setMaxSpeed(12000);
-  stepper3.setAcceleration(24000.0);
+  stepper0.setMaxSpeed(15000);
+  stepper0.setAcceleration(28000.0);
+  stepper1.setMaxSpeed(15000);
+  stepper1.setAcceleration(28000.0);
+  stepper2.setMaxSpeed(15000);
+  stepper2.setAcceleration(28000.0);
+  stepper3.setMaxSpeed(15000);
+  stepper3.setAcceleration(28000.0);
 }
 
 void loop()
@@ -44,15 +44,10 @@ void loop()
 
     Serial.readBytesUntil(lf, serialdata, 4);
     
-    int p0 = s0.indexOf(0);
-    int p1 = s1.indexOf(1);
-    int p2 = s2.indexOf(2);
-    int p3 = s3.indexOf(3);
-    
-    Serial.println(p0);
-    Serial.println(p1);
-    Serial.println(p2);
-    Serial.println(p3);
+    int p0 = s0.indexOf(serialdata[0]);
+    int p1 = s1.indexOf(serialdata[1]);
+    int p2 = s2.indexOf(serialdata[2]);
+    int p3 = s3.indexOf(serialdata[3]);
     
     if (calibrated) {
       // read incoming serial data:
@@ -62,7 +57,7 @@ void loop()
         s0 = s0.substring(p0) + s0.substring(0,p0);
       }
       if (p1 >= 0) {
-        stepper1.runToNewPosition(480 * p1);
+        stepper1.runToNewPosition(240 * p1);
         stepper1.setCurrentPosition(0);
         s1 = s1.substring(p1) + s1.substring(0,p1);
       }
@@ -80,7 +75,7 @@ void loop()
       s0 = s0.substring(p0) + s0.substring(0,p0);
       s1 = s1.substring(p1) + s1.substring(0,p1);
       s2 = s2.substring(p2) + s2.substring(0,p2);
-      s3 = s3.substring(p2) + s3.substring(0,p3);
+      s3 = s3.substring(p3) + s3.substring(0,p3);
       calibrated = true;
     }
 
