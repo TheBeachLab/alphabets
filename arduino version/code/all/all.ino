@@ -121,7 +121,7 @@ void loop() {
         if (i < p3)  {
           digitalWrite(STEP_3, HIGH);}
         
-        delayMicroseconds(120);
+        delayMicroseconds(130);
         
         if (i < p0) {
           digitalWrite(STEP_0, LOW);}
