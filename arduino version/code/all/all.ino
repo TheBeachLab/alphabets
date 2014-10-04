@@ -63,8 +63,8 @@ void setup() {
   
   
   // Display Message
-  Serial.println("Flip-Flap Ready!");
-  Serial.println("Enter the 4 characters that the flipflap is displaying:");
+//  Serial.println("Flip-Flap Ready!");
+//  Serial.println("Enter the 4 characters that the flipflap is displaying:");
 
 }
 
@@ -78,25 +78,29 @@ void loop() {
   if (Serial.available() > 0) {
 
     Serial.readBytesUntil(10, serialdata, 4);
-
-    p0 = s0.indexOf(0);
-    p1 = s1.indexOf(1);
-    p2 = s2.indexOf(2);
-    p3 = s3.indexOf(3);
-
+    p0 = s0.indexOf(serialdata[0]);
+    p1 = s1.indexOf(serialdata[1]);
+    p2 = s2.indexOf(serialdata[2]);
+    p3 = s3.indexOf(serialdata[3]);
+    
     if(!calibrated) {
+      calibrated = true;
       s0 = s0.substring(p0) + s0.substring(0,p0);
       s1 = s1.substring(p1) + s1.substring(0,p1);
       s2 = s2.substring(p2) + s2.substring(0,p2);
-      s3 = s3.substring(p2) + s3.substring(0,p3);
-      calibrated = true;
-    } 
-    else {
+      s3 = s3.substring(p3) + s3.substring(0,p3);
+
+      p0 = s0.indexOf(' ');
+      p1 = s1.indexOf(' ');
+      p2 = s2.indexOf(' ');
+      p3 = s3.indexOf(' ');
+    }
 
       p0 *= 480;
-      p1 *= 480;
+      p1 *= 240;
       p2 *= 480;    
-      p3 *= 480;   
+      p3 *= 480;
+      
       
         
       // Obtaining max of p0,p1,p2,p3  
@@ -117,7 +121,7 @@ void loop() {
         if (i < p3)  {
           digitalWrite(STEP_3, HIGH);}
         
-        delayMicroseconds(100);
+        delayMicroseconds(120);
         
         if (i < p0) {
           digitalWrite(STEP_0, LOW);}
@@ -128,15 +132,30 @@ void loop() {
         if (i < p3)  {
           digitalWrite(STEP_3, LOW);}    
       } 
+      Serial.println('!');
+      
+      p0 /= 480;
+      p1 /= 240;
+      p2 /= 480;    
+      p3 /= 480; 
+      
       
      // Shift strings
      s0 = s0.substring(p0) + s0.substring(0,p0);
      s1 = s1.substring(p1) + s1.substring(0,p1);
      s2 = s2.substring(p2) + s2.substring(0,p2);
      s3 = s3.substring(p3) + s3.substring(0,p3);
-     Serial.println("Done!"); 
+     
+     
+     
 
-    }
+  
+      
+//      
+//     Serial.print(p0); 
+//     Serial.print(">>"); 
+//     Serial.println(s0); 
+    
   }
 
 

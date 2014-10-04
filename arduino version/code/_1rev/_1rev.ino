@@ -25,7 +25,7 @@ void setup()
     ; // wait for serial port to connect. Needed for Leonardo only
   }
 
-  Serial.write("Flip-Flap Ready!");
+  Serial.println("Flip-Flap Ready!");
   Serial.println("Enter the 4 characters that the flipflap is displaying:");
   
   stepper0.setMaxSpeed(12000);
