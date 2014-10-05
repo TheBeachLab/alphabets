@@ -2,13 +2,20 @@ from koko.lib.shapes import *
 
 cad.mm_per_unit=1
 
-fit_A4="True"
+# CUSTOM SHAPE NEMA 17 MOUNT
+def nema17 (x0,y0,angle=0):
+ c1=circle (0,0,1.5)
+ c2=circle(15.5,15.5,1.5)
+ c3=reflect_y(c2) 
+ c4=reflect_x(c3)
+ m=c1+c2+c3+c4
+ m=rotate(m,angle)
+ m=move(m,x0,y0)
+ m.shape=True
+ return m
 
-# Rectangle shape
-if fit_A4 == "True":
- r1=rectangle(0,100,0,140)
-else: 
- r1=rectangle(0,110,0,140)
+
+r1=rectangle(0,110,0,140)
 
 # Fixing holes
 c1=circle(25,5,1.5)
@@ -29,8 +36,9 @@ dy=math.sqrt(75**2-dx**2) # y distance between spool axis and motor axis
 mx=sx+dx # x coordinate of the motor axis
 my=sy-44 # y coordinate of the motor axis
 
-c3=circle(mx,my,1.5)
-r1-=c3
+motor=nema17(mx,my)
+
+r1-=motor
 
 # Hole middle gear
 gx=sx+dx*10./15 # x coordinate of the middle gear
