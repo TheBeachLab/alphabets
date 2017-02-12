@@ -4,6 +4,8 @@
 
 Welcome to the public repository of the second edition of the worldwide loved open source split-flap display. Please find information about the first release [here](V1).
 
+Please also check the [videos](https://www.youtube.com/playlist?list=PLKDpiLmgp6EuLGCovD-QFxrmyNdrbUmKX)
+
 ## What's new?
 * 120% pure awesomeness.
 * Build your own for free or order a kit or ready built module.
