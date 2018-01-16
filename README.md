@@ -10,7 +10,7 @@ Please also check the [videos](https://www.youtube.com/playlist?list=PLKDpiLmgp6
 * 120% pure awesomeness.
 * Build your own for free or order a kit or ready built module.
 * Entirely designed with widely adopted open source software.
-* 144 characters in a single 6 rows and 12 columns.
+* Assemble in multiple layouts of rows and columns.
 * Networked electronics: Connect from one to infinite modules together.
 * Custom colors: Request custom colored modules and custom characters.
 * Web based interface: Control your modules interactively with your web browser.
