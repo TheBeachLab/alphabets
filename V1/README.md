@@ -1,11 +1,13 @@
 # Mechanical display Flip-Flap
 
 ## About
+
 Flip-Flap is an *Open Source* Mechanical Split Flap Display, AKA *Solari* display.
 
 There are 2 versions. One for using an Arduino microcontroller and another for using a custom networked stepper board.
 
 ## Instructions and documentation
+
 You have probably seen mechanical Split-Flap displays, they are usually located at airports and train stations all over the world. Their sound and movement are very characteristic. They are also called Solari boards because of the italian maker [Solari Udine](http://www.solari.it/index.php). I love these displays but the problem is that they are **extremely** expensive.
 
 ![solari](solari.jpg)
@@ -138,5 +140,3 @@ For Maker Faire Rome we brought an Arduino version instead of the final design b
 ## Project files
 
 You can download all the files related to the Flip Flap project in our [Github](https://github.com/thebeachlab), please feel free to download, fork, modify and improve it.
-
-For more (actually less) information about this project visit: http://beachlab.org/
