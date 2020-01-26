@@ -16,8 +16,3 @@ Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLK
 * Custom colors: Request custom colored modules and custom characters.
 * Web based interface: Control your modules interactively with your web browser.
 * Twitter interface: Create a twitter account for your installation and let the crowd interactively tweet to your modules.
-
-## Come visit us in Dubai!
-What to see it live? If you have the chance come see us in Dubai for the **Fab Festival from the 22nd of February to the 28th of February** in Hamdan Awards building.
-
-[theAlphabets.xyx](theAlphabets.xyx)
