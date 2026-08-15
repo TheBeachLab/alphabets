@@ -6,6 +6,8 @@ Welcome to the public repository of the second edition of the worldwide loved **
 
 Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLKDpiLmgp6EuLGCovD-QFxrmyNdrbUmKX)
 
+The V2 modular communication protocol is documented in [V2/PROTOCOL.md](V2/PROTOCOL.md).
+
 ## What's new
 * 120% pure awesomeness.
 * Build your own for free or order a kit or ready built module.
