@@ -5,14 +5,14 @@
 	(uuid "a28f3aa4-9690-4cb4-9ef8-8380353b4fb7")
 	(paper "A4")
 	(title_block
-		(title "Alphabets V2 ATtiny44 SPI ring module")
+		(title "Alphabets V2 ATtiny44 millable ring module")
 		(date "2026-08-15")
-		(rev "1.0")
+		(rev "2.0")
 		(company "TheBeachLab / Alphabets")
-		(comment 1 "5 V module for 28BYJ-48 unipolar motor")
-		(comment 2 "CLOCK + LATCH shared; DATA regenerated; RETURN passed through")
-		(comment 3 "Ring connector order: +5V, GND, CLOCK, LATCH, DATA, RETURN")
-		(comment 4 "Open-collector home input with pull-up and RC filter")
+		(comment 1 "Single-sided isolation-milled module; 18 mil minimum tracks")
+		(comment 2 "External 28BYJ-48 driver board logic inputs: IN1..IN4")
+		(comment 3 "One CHAIN_RING and one AVR ISP use 2x3 2.54 mm SMD headers")
+		(comment 4 "All discrete SMD passives use 1206 packages")
 	)
 	(lib_symbols
 		(symbol "attiny44-ring:ATTINY44A"
@@ -580,137 +580,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "attiny44-ring:CONN3"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at 0 6.35 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "CONN3"
-				(at 0 -6.35 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical"
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "CONN3_0_1"
-				(rectangle
-					(start -3.81 3.81)
-					(end 3.81 -3.81)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "CONN3_1_1"
-				(pin passive line
-					(at 8.89 2.54 180)
-					(length 5.08)
-					(name "1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 8.89 0 180)
-					(length 5.08)
-					(name "2"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 8.89 -2.54 180)
-					(length 5.08)
-					(name "3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "attiny44-ring:CONN5"
+		(symbol "attiny44-ring:CONN4"
 			(pin_names
 				(offset 1.016)
 			)
@@ -769,7 +639,7 @@
 					)
 				)
 			)
-			(symbol "CONN5_0_1"
+			(symbol "CONN4_0_1"
 				(rectangle
 					(start -3.81 6.35)
 					(end 3.81 -6.35)
@@ -782,7 +652,7 @@
 					)
 				)
 			)
-			(symbol "CONN5_1_1"
+			(symbol "CONN4_1_1"
 				(pin passive line
 					(at 8.89 5.08 180)
 					(length 5.08)
@@ -848,24 +718,6 @@
 						)
 					)
 					(number "4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 8.89 -5.08 180)
-					(length 5.08)
-					(name "5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "5"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -1050,131 +902,6 @@
 						)
 					)
 					(number "6"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "attiny44-ring:CP"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "C"
-				(at 1.778 2.032 90)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "CP"
-				(at 1.778 -0.508 90)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm"
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "CP_0_1"
-				(polyline
-					(pts
-						(xy -2.032 0.762) (xy 2.032 0.762)
-					)
-					(stroke
-						(width 0.3048)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.032 -0.762) (xy 2.032 -0.762)
-					)
-					(stroke
-						(width 0.3048)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "CP_1_1"
-				(pin passive line
-					(at 0 5.08 270)
-					(length 4.318)
-					(name "+"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -5.08 90)
-					(length 4.318)
-					(name "-"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "2"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -1481,502 +1208,22 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "attiny44-ring:TESTPOINT"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "TP"
-				(at 0 5.08 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "TESTPOINT"
-				(at 0 2.54 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "TESTPOINT_0_1"
-				(circle
-					(center 0 0)
-					(radius 1.27)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "TESTPOINT_1_1"
-				(pin passive line
-					(at 0 -5.08 90)
-					(length 3.81)
-					(name "1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "attiny44-ring:ULN2003A"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at 0 22.86 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "ULN2003A"
-				(at 0 20.32 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.st.com/resource/en/datasheet/uln2001.pdf"
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name yes)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "ULN2003A_0_1"
-				(rectangle
-					(start -7.62 17.78)
-					(end 7.62 -17.78)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "ULN2003A_1_1"
-				(pin input line
-					(at -12.7 15.24 0)
-					(length 5.08)
-					(name "1B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 10.16 0)
-					(length 5.08)
-					(name "2B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 5.08 0)
-					(length 5.08)
-					(name "3B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 0 0)
-					(length 5.08)
-					(name "4B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 -5.08 0)
-					(length 5.08)
-					(name "5B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 -10.16 0)
-					(length 5.08)
-					(name "6B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 -15.24 0)
-					(length 5.08)
-					(name "7B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 12.7 -15.24 180)
-					(length 5.08)
-					(name "GND"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 12.7 -10.16 180)
-					(length 5.08)
-					(name "COM"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "9"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 -5.08 180)
-					(length 5.08)
-					(name "7C"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "10"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 0 180)
-					(length 5.08)
-					(name "6C"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "11"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 5.08 180)
-					(length 5.08)
-					(name "5C"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "12"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 10.16 180)
-					(length 5.08)
-					(name "COIL_D"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "13"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 15.24 180)
-					(length 5.08)
-					(name "COIL_C"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "14"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 20.32 180)
-					(length 5.08)
-					(name "COIL_B"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "15"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 25.4 180)
-					(length 5.08)
-					(name "COIL_A"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "16"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(no_connect
-		(at 195.58 78.74)
-		(uuid "00da23c8-ca9a-5485-8dee-9a57038b8459")
+		(at 114.3 63.5)
+		(uuid "b08b6c25-010e-5389-955e-186c4e40e38b")
 	)
 	(no_connect
-		(at 170.18 83.82)
-		(uuid "0eadeb39-9af2-5535-be27-cffc1e661731")
+		(at 114.3 78.74)
+		(uuid "ea44e63c-2a88-546f-ae2b-adb326d17b78")
 	)
 	(no_connect
-		(at 195.58 68.58)
-		(uuid "35ec49b2-5768-5dbc-ad19-5feec9a4b96e")
-	)
-	(no_connect
-		(at 170.18 88.9)
-		(uuid "6152af84-bcfb-54cd-8f7b-71895d1e6e55")
-	)
-	(no_connect
-		(at 195.58 73.66)
-		(uuid "9e180057-1782-58f0-839d-b121ccf20ce2")
-	)
-	(no_connect
-		(at 170.18 78.74)
-		(uuid "d6242752-0b78-50b9-a047-924a52258921")
+		(at 114.3 68.58)
+		(uuid "fc5ae471-0f80-5d95-9041-79b9eaed4d5d")
 	)
 	(wire
 		(pts
-			(xy 193.04 104.14) (xy 193.04 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "010d9375-2bf8-5a54-a256-e943ef0cb8e4")
-	)
-	(wire
-		(pts
-			(xy 163.83 119.38) (xy 158.75 119.38)
+			(xy 158.75 114.3) (xy 153.67 114.3)
 		)
 		(stroke
 			(width 0)
@@ -1986,7 +1233,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 55.88) (xy 240.03 55.88)
+			(xy 217.17 58.42) (xy 222.25 58.42)
 		)
 		(stroke
 			(width 0)
@@ -1996,83 +1243,43 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 114.3) (xy 193.04 119.38)
+			(xy 251.46 152.4) (xy 251.46 147.32)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "08c3525a-c4ed-593b-bd92-f0f8b860612a")
+		(uuid "0a9ade2f-4e0a-55fa-bd5d-a14210b2befe")
 	)
 	(wire
 		(pts
-			(xy 157.48 106.68) (xy 157.48 111.76)
+			(xy 160.02 149.86) (xy 160.02 154.94)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0c18e675-9d22-5fd3-9abc-09393cff7413")
+		(uuid "0c9f84bb-b2ee-5e51-b94d-a1b583fbf882")
 	)
 	(wire
 		(pts
-			(xy 52.07 90.17) (xy 57.15 90.17)
+			(xy 91.44 139.7) (xy 91.44 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10dd0934-95ed-516a-a2b8-8a4084896124")
+		(uuid "1473f830-5a9b-5e88-b2a9-6a89c9345d29")
 	)
 	(wire
 		(pts
-			(xy 52.07 87.63) (xy 57.15 87.63)
+			(xy 228.6 152.4) (xy 228.6 147.32)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "16373d37-1012-5df8-a0c0-eb9b17e6772c")
-	)
-	(wire
-		(pts
-			(xy 91.44 121.92) (xy 91.44 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "17a4193f-d3d7-5228-8efc-4bb6a0a14de0")
-	)
-	(wire
-		(pts
-			(xy 195.58 83.82) (xy 200.66 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1a044b5f-0911-54ee-8ae5-fdddd029b52e")
-	)
-	(wire
-		(pts
-			(xy 76.2 121.92) (xy 76.2 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1f86b551-6fcc-58f7-ace9-76a2dea0cec3")
-	)
-	(wire
-		(pts
-			(xy 195.58 48.26) (xy 200.66 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "217f3caf-df4e-520e-9b2c-27e3cdebba86")
+		(uuid "20f15cde-d795-57bf-8467-8eb0ec291df2")
 	)
 	(wire
 		(pts
@@ -2096,7 +1303,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 121.92) (xy 158.75 121.92)
+			(xy 158.75 116.84) (xy 153.67 116.84)
 		)
 		(stroke
 			(width 0)
@@ -2106,27 +1313,27 @@
 	)
 	(wire
 		(pts
-			(xy 170.18 63.5) (xy 165.1 63.5)
+			(xy 91.44 149.86) (xy 91.44 154.94)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "309e66de-6e76-5063-a511-d8409a302f45")
+		(uuid "32b52b2a-5723-5860-8779-7b523ae3c9a2")
 	)
 	(wire
 		(pts
-			(xy 88.9 106.68) (xy 88.9 111.76)
+			(xy 114.3 165.1) (xy 114.3 160.02)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "38987b59-87aa-51df-8fa7-a994a24cc3c6")
+		(uuid "3abf6da6-060a-5d05-94fb-b056248c793b")
 	)
 	(wire
 		(pts
-			(xy 163.83 124.46) (xy 158.75 124.46)
+			(xy 158.75 119.38) (xy 153.67 119.38)
 		)
 		(stroke
 			(width 0)
@@ -2136,33 +1343,33 @@
 	)
 	(wire
 		(pts
-			(xy 170.18 73.66) (xy 165.1 73.66)
+			(xy 114.3 139.7) (xy 114.3 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "492b252f-00e0-5f7f-9a02-e4473f724f44")
+		(uuid "3e712aaa-f4a5-5b61-90e7-cfa08fda87fe")
 	)
 	(wire
 		(pts
-			(xy 88.9 96.52) (xy 88.9 91.44)
+			(xy 91.44 165.1) (xy 91.44 160.02)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4eb97fa7-374e-5418-8998-4820c486b6c5")
+		(uuid "440e994e-7cb0-5b99-934c-0434f8c9d812")
 	)
 	(wire
 		(pts
-			(xy 232.41 91.44) (xy 237.49 91.44)
+			(xy 137.16 149.86) (xy 137.16 154.94)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5460f638-b302-535c-a518-7e47f3acc012")
+		(uuid "4f644bef-5cb7-5860-9cff-9b012e016eae")
 	)
 	(wire
 		(pts
@@ -2186,23 +1393,33 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 58.42) (xy 240.03 58.42)
+			(xy 114.3 149.86) (xy 114.3 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "613e3eac-dadf-5ad9-921a-7ff55ea7a96b")
+	)
+	(wire
+		(pts
+			(xy 205.74 162.56) (xy 205.74 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "632140af-d2e9-5efb-82b7-16087f7fe7fd")
+	)
+	(wire
+		(pts
+			(xy 217.17 60.96) (xy 222.25 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "6bac988b-90be-5046-9d4f-689161628f2e")
-	)
-	(wire
-		(pts
-			(xy 114.3 78.74) (xy 109.22 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6d869f30-ca42-5615-9e2e-05081b76d81c")
 	)
 	(wire
 		(pts
@@ -2216,23 +1433,13 @@
 	)
 	(wire
 		(pts
-			(xy 195.58 53.34) (xy 200.66 53.34)
+			(xy 137.16 139.7) (xy 137.16 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "73e222c0-a775-585a-934f-a510e932a9e7")
-	)
-	(wire
-		(pts
-			(xy 195.58 88.9) (xy 200.66 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "777ce90d-485a-5ebf-a586-fbb34a748dbc")
+		(uuid "74a4b418-c637-5c65-89a8-fc62562edf00")
 	)
 	(wire
 		(pts
@@ -2246,7 +1453,27 @@
 	)
 	(wire
 		(pts
-			(xy 127 114.3) (xy 127 119.38)
+			(xy 100.33 54.61) (xy 105.41 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79135763-5afb-5aed-aaeb-4b6ec14f778f")
+	)
+	(wire
+		(pts
+			(xy 205.74 152.4) (xy 205.74 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7db59772-a7fe-52b8-ba43-890002fe2761")
+	)
+	(wire
+		(pts
+			(xy 134.62 111.76) (xy 134.62 116.84)
 		)
 		(stroke
 			(width 0)
@@ -2263,16 +1490,6 @@
 			(type default)
 		)
 		(uuid "7e9c0716-2099-5d6a-8597-a4c75668e91d")
-	)
-	(wire
-		(pts
-			(xy 232.41 93.98) (xy 237.49 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "82d29ea3-71fc-5f7f-9608-e147fca1a5aa")
 	)
 	(wire
 		(pts
@@ -2296,7 +1513,7 @@
 	)
 	(wire
 		(pts
-			(xy 186.69 121.92) (xy 191.77 121.92)
+			(xy 181.61 116.84) (xy 186.69 116.84)
 		)
 		(stroke
 			(width 0)
@@ -2306,23 +1523,13 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 53.34) (xy 240.03 53.34)
+			(xy 217.17 55.88) (xy 222.25 55.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "8a93ea3b-09dd-5bee-be78-0687e9b266a2")
-	)
-	(wire
-		(pts
-			(xy 114.3 68.58) (xy 109.22 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8c009eb2-3f79-59a8-93b2-5415b490d973")
 	)
 	(wire
 		(pts
@@ -2336,17 +1543,7 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 92.71) (xy 57.15 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "96f2a305-8087-5783-8cc6-b6b45b1c569f")
-	)
-	(wire
-		(pts
-			(xy 127 104.14) (xy 127 99.06)
+			(xy 134.62 101.6) (xy 134.62 96.52)
 		)
 		(stroke
 			(width 0)
@@ -2356,33 +1553,23 @@
 	)
 	(wire
 		(pts
-			(xy 170.18 58.42) (xy 165.1 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9769ca06-26cd-51a4-b921-baf8555e0c5d")
-	)
-	(wire
-		(pts
-			(xy 232.41 88.9) (xy 237.49 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "97c56642-a5c8-57be-8cd6-aebf1ab275c5")
-	)
-	(wire
-		(pts
-			(xy 144.78 104.14) (xy 144.78 99.06)
+			(xy 152.4 101.6) (xy 152.4 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "9beea17b-8d10-5d2f-8506-31b6a056723a")
+	)
+	(wire
+		(pts
+			(xy 91.44 175.26) (xy 91.44 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e7b518a-ea33-58de-a5cc-909abc3f969c")
 	)
 	(wire
 		(pts
@@ -2406,6 +1593,16 @@
 	)
 	(wire
 		(pts
+			(xy 100.33 57.15) (xy 105.41 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8097082-043b-5209-8e2c-60c11103a7f9")
+	)
+	(wire
+		(pts
 			(xy 114.3 73.66) (xy 109.22 73.66)
 		)
 		(stroke
@@ -2426,6 +1623,16 @@
 	)
 	(wire
 		(pts
+			(xy 228.6 162.56) (xy 228.6 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4a26801-8ee6-556b-87ab-5f3584606edf")
+	)
+	(wire
+		(pts
 			(xy 111.76 96.52) (xy 111.76 91.44)
 		)
 		(stroke
@@ -2436,27 +1643,7 @@
 	)
 	(wire
 		(pts
-			(xy 170.18 68.58) (xy 165.1 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bc5a839b-3534-550c-b2a6-a72adbb4ac0c")
-	)
-	(wire
-		(pts
-			(xy 114.3 63.5) (xy 109.22 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c1c6c323-c722-5a15-988d-abf809456057")
-	)
-	(wire
-		(pts
-			(xy 186.69 124.46) (xy 191.77 124.46)
+			(xy 181.61 119.38) (xy 186.69 119.38)
 		)
 		(stroke
 			(width 0)
@@ -2466,7 +1653,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 60.96) (xy 240.03 60.96)
+			(xy 217.17 63.5) (xy 222.25 63.5)
 		)
 		(stroke
 			(width 0)
@@ -2476,43 +1663,13 @@
 	)
 	(wire
 		(pts
-			(xy 157.48 96.52) (xy 157.48 91.44)
+			(xy 251.46 162.56) (xy 251.46 167.64)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cf64aea1-7694-5abe-a2bb-095d61c2193f")
-	)
-	(wire
-		(pts
-			(xy 232.41 123.19) (xy 237.49 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d031d3e8-84b1-510c-abc2-8bba29f0f9d4")
-	)
-	(wire
-		(pts
-			(xy 52.07 82.55) (xy 57.15 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d32585c7-7054-53d7-b128-f6ab2829a083")
-	)
-	(wire
-		(pts
-			(xy 52.07 80.01) (xy 57.15 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d5ba1751-9f62-5a9c-9994-0084a1f8de68")
+		(uuid "d109411b-0539-5603-8791-905450164d66")
 	)
 	(wire
 		(pts
@@ -2526,7 +1683,7 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 114.3) (xy 144.78 119.38)
+			(xy 152.4 111.76) (xy 152.4 116.84)
 		)
 		(stroke
 			(width 0)
@@ -2546,23 +1703,13 @@
 	)
 	(wire
 		(pts
-			(xy 186.69 119.38) (xy 191.77 119.38)
+			(xy 181.61 114.3) (xy 186.69 114.3)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "e5983fa1-7edb-5583-91ae-cc1ee510b954")
-	)
-	(wire
-		(pts
-			(xy 52.07 85.09) (xy 57.15 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e6251397-f365-524a-ab39-b6234e210e80")
 	)
 	(wire
 		(pts
@@ -2576,43 +1723,13 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 63.5) (xy 240.03 63.5)
+			(xy 160.02 139.7) (xy 160.02 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "edbc9d66-9690-5a5e-ab3a-d4ccbcc12f6e")
-	)
-	(wire
-		(pts
-			(xy 232.41 120.65) (xy 237.49 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "efc4336b-5070-51a2-9298-17012fbdb2d4")
-	)
-	(wire
-		(pts
-			(xy 195.58 58.42) (xy 200.66 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f34ec614-609d-5072-8ead-0257f7df58a1")
-	)
-	(wire
-		(pts
-			(xy 195.58 63.5) (xy 200.66 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f74d585a-2824-53fe-88c3-dcbbd9c095eb")
+		(uuid "f0fde0cb-e94b-5a40-8cf2-103b17e241e2")
 	)
 	(wire
 		(pts
@@ -2624,70 +1741,17 @@
 		)
 		(uuid "fbaaf0f0-88b9-5d2a-a8f3-ca8a3b3c94d1")
 	)
-	(global_label "MOTOR1"
-		(shape passive)
-		(at 165.1 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
+	(wire
+		(pts
+			(xy 114.3 175.26) (xy 114.3 180.34)
 		)
-		(uuid "03c83533-a5ab-50d1-8c57-028a2de67b6f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
+		(uuid "fecc0351-818e-52a4-9397-bc63fe20aba7")
 	)
-	(global_label "COIL_C"
-		(shape passive)
-		(at 200.66 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "05643f1b-9991-5349-90b8-d49d3a42a95f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 200.66 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "MOTOR3"
-		(shape passive)
-		(at 165.1 68.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "06b9c37e-c85c-576f-8d06-a83e4ffd4c1a")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V"
+	(global_label "LATCH_TOP"
 		(shape passive)
 		(at 57.15 49.53 0)
 		(effects
@@ -2708,17 +1772,17 @@
 			)
 		)
 	)
-	(global_label "HOME"
+	(global_label "DATA_OUT_A"
 		(shape passive)
-		(at 157.48 91.44 0)
+		(at 160.02 134.62 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "0d720550-1c42-5612-a2b4-c2bb8982bde9")
+		(uuid "0c5d70c2-5a42-5adf-9c84-f340326c8ca4")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 157.48 91.44 0)
+			(at 160.02 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2729,17 +1793,17 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "CLOCK_TOP"
 		(shape passive)
-		(at 237.49 88.9 0)
+		(at 91.44 134.62 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "10522f7d-607a-5880-90f2-2516cbd3a80c")
+		(uuid "1530be11-780f-5556-b28a-40b3a6876e22")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 237.49 88.9 0)
+			(at 91.44 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2750,9 +1814,30 @@
 			)
 		)
 	)
-	(global_label "COIL_A"
+	(global_label "CLOCK_A"
 		(shape passive)
-		(at 240.03 53.34 0)
+		(at 205.74 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "17ff9155-1a50-5090-9079-914f273ead6c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 205.74 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "MOTOR1"
+		(shape passive)
+		(at 222.25 55.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2760,7 +1845,7 @@
 		)
 		(uuid "18198b5a-3411-5aa9-b8fe-656d3d021503")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 240.03 53.34 0)
+			(at 222.25 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2773,7 +1858,7 @@
 	)
 	(global_label "RESET"
 		(shape passive)
-		(at 158.75 124.46 0)
+		(at 153.67 119.38 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2781,49 +1866,7 @@
 		)
 		(uuid "1d539237-2a66-5628-88f7-af5ef4627e30")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 158.75 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 57.15 82.55 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "1e0a6089-45c8-5beb-806b-36ffce54ec29")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 57.15 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "LATCH"
-		(shape passive)
-		(at 57.15 87.63 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "224a9883-17fe-5eda-950b-fa358ab91208")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 57.15 87.63 0)
+			(at 153.67 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2857,7 +1900,7 @@
 	)
 	(global_label "+5V"
 		(shape passive)
-		(at 144.78 99.06 0)
+		(at 152.4 96.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2865,7 +1908,7 @@
 		)
 		(uuid "267a4918-beca-576c-80de-c4a397dfa32e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 144.78 99.06 0)
+			(at 152.4 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2876,9 +1919,30 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "LATCH_A"
 		(shape passive)
-		(at 127 99.06 0)
+		(at 114.3 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2f4dd2be-06d0-55d8-99b6-54a6b2e4aa8f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 114.3 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_U1"
+		(shape passive)
+		(at 134.62 96.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2886,7 +1950,7 @@
 		)
 		(uuid "3293109b-a9f2-5b2b-9858-f8692943a126")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 127 99.06 0)
+			(at 134.62 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2897,7 +1961,28 @@
 			)
 		)
 	)
-	(global_label "LATCH"
+	(global_label "CLOCK_U1"
+		(shape passive)
+		(at 205.74 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "356301af-cb59-5351-a3dc-6b40127dc781")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 205.74 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_CHAIN"
 		(shape passive)
 		(at 57.15 57.15 0)
 		(effects
@@ -2918,17 +2003,101 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "GND"
 		(shape passive)
-		(at 240.03 63.5 0)
+		(at 105.41 57.15 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "3f71abe3-2c6a-5abf-b204-02ee56ee3ef7")
+		(uuid "39922fdc-a8a5-5151-b2d2-fde708961741")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 240.03 63.5 0)
+			(at 105.41 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "CLOCK_A"
+		(shape passive)
+		(at 91.44 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "39cffae4-3366-57d6-bb07-0b4cd46b370d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 91.44 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "LATCH_TOP"
+		(shape passive)
+		(at 114.3 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3a979620-1cd5-5fa8-8fe8-dc5cf5d30874")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 114.3 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V"
+		(shape passive)
+		(at 251.46 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3aed5173-3574-5d34-9408-c25e3ce94193")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 251.46 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V"
+		(shape passive)
+		(at 91.44 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3c6ec769-5f2e-5baf-8a95-b8275bed3499")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 91.44 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2941,7 +2110,7 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 191.77 124.46 0)
+		(at 186.69 119.38 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2949,7 +2118,7 @@
 		)
 		(uuid "41bf41ad-6c16-5073-8124-c2ab7a2f5fe2")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 191.77 124.46 0)
+			(at 186.69 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2981,51 +2150,9 @@
 			)
 		)
 	)
-	(global_label "COIL_B"
-		(shape passive)
-		(at 200.66 53.34 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "478298a7-8c00-5dd6-8213-51e926c00832")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 200.66 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "MOTOR2"
-		(shape passive)
-		(at 165.1 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "4a8bfbe8-38f9-5d73-9905-68ceffaf5314")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
-		(at 127 119.38 0)
+		(at 134.62 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3033,7 +2160,7 @@
 		)
 		(uuid "4f90ee95-6119-55f7-8f1c-63494c282b76")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 127 119.38 0)
+			(at 134.62 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3044,9 +2171,9 @@
 			)
 		)
 	)
-	(global_label "DATA_OUT"
+	(global_label "DATA_OUT_A"
 		(shape passive)
-		(at 158.75 119.38 0)
+		(at 153.67 114.3 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3054,7 +2181,7 @@
 		)
 		(uuid "50bfc459-9430-5db9-b34e-11cbda640020")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 158.75 119.38 0)
+			(at 153.67 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3065,17 +2192,17 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "DATA_TOP"
 		(shape passive)
-		(at 200.66 83.82 0)
+		(at 137.16 154.94 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "53fcf292-0820-5b69-97a3-032f7469f0ca")
+		(uuid "51e6e62e-d105-52df-9bbb-42674511a904")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 200.66 83.82 0)
+			(at 137.16 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3107,17 +2234,17 @@
 			)
 		)
 	)
-	(global_label "GND"
+	(global_label "DATA_OUT_CHAIN"
 		(shape passive)
-		(at 237.49 123.19 0)
+		(at 160.02 154.94 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "5b322b6c-8b80-58f2-8d5b-a52d916bae88")
+		(uuid "69fe1e8f-ff79-58fd-b74b-561799ea67c6")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 237.49 123.19 0)
+			(at 160.02 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3128,133 +2255,7 @@
 			)
 		)
 	)
-	(global_label "RETURN"
-		(shape passive)
-		(at 57.15 92.71 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "5d596130-040e-5541-a8dd-9f3fddc48719")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 57.15 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "HOME"
-		(shape passive)
-		(at 88.9 111.76 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "625ba8ec-6515-5071-8dd1-32afbfee3247")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 88.9 111.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "PB1"
-		(shape passive)
-		(at 91.44 127 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "633c955c-5675-5adc-8a5c-184739052e25")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 91.44 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "DATA_OUT"
-		(shape passive)
-		(at 57.15 90.17 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "670fa8a0-85d7-511d-adeb-25e1cded8d9b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 57.15 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "COIL_A"
-		(shape passive)
-		(at 200.66 48.26 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "67efed74-ca6f-59c7-af41-49ba122881c9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 200.66 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "PB1"
-		(shape passive)
-		(at 109.22 68.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "6de7a94a-e479-544c-b1c0-958471911357")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 109.22 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
+	(global_label "CLOCK_TOP"
 		(shape passive)
 		(at 57.15 52.07 0)
 		(effects
@@ -3265,48 +2266,6 @@
 		(uuid "742d3004-6fbb-53b5-9b46-268b6a1cf02a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 57.15 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "HOME"
-		(shape passive)
-		(at 109.22 78.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "77687924-128b-527b-96ec-b1e5016bbbf1")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 109.22 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V"
-		(shape passive)
-		(at 88.9 91.44 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "77959c2b-c4c5-55b7-a217-1ab063c42f3a")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 88.9 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3338,17 +2297,17 @@
 			)
 		)
 	)
-	(global_label "PB0"
+	(global_label "ISP_VCC"
 		(shape passive)
-		(at 76.2 127 0)
+		(at 114.3 160.02 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "8892f8c0-9458-5ca7-95fe-b634d1485294")
+		(uuid "8a7a01b6-edf6-5502-bffb-9b8a8e4ac7b5")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 76.2 127 0)
+			(at 114.3 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3380,38 +2339,17 @@
 			)
 		)
 	)
-	(global_label "GND"
+	(global_label "+5V_CHAIN"
 		(shape passive)
-		(at 157.48 111.76 0)
+		(at 91.44 160.02 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "9aadc485-3475-5364-8516-c18c921f8fca")
+		(uuid "932d5171-45fb-529a-b256-6a6adafbb280")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 157.48 111.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V"
-		(shape passive)
-		(at 193.04 99.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "9b3fffcb-58d2-53cb-91d8-dd815e011b95")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 193.04 99.06 0)
+			(at 91.44 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3443,9 +2381,9 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "ISP_VCC"
 		(shape passive)
-		(at 191.77 119.38 0)
+		(at 186.69 114.3 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3453,7 +2391,7 @@
 		)
 		(uuid "a094690a-e9e2-5f5e-9ed4-90c991014a3e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 191.77 119.38 0)
+			(at 186.69 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3464,7 +2402,7 @@
 			)
 		)
 	)
-	(global_label "DATA_OUT"
+	(global_label "DATA_OUT_A"
 		(shape passive)
 		(at 144.78 88.9 0)
 		(effects
@@ -3485,7 +2423,7 @@
 			)
 		)
 	)
-	(global_label "DATA_IN"
+	(global_label "DATA_OUT_CHAIN"
 		(shape passive)
 		(at 57.15 59.69 0)
 		(effects
@@ -3506,17 +2444,17 @@
 			)
 		)
 	)
-	(global_label "GND"
+	(global_label "DATA_IN"
 		(shape passive)
-		(at 193.04 119.38 0)
+		(at 137.16 134.62 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "a7a6e8f2-111c-540a-bfa0-60ce1185bab7")
+		(uuid "a6071fcf-ae7a-54b5-b5de-6f0c2d580f32")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 193.04 119.38 0)
+			(at 137.16 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3527,17 +2465,17 @@
 			)
 		)
 	)
-	(global_label "GND"
+	(global_label "DATA_CHAIN_IN"
 		(shape passive)
-		(at 200.66 88.9 0)
+		(at 228.6 147.32 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "acadcb9f-f8a4-53c4-9a7b-ebff61cfd20f")
+		(uuid "aec94aca-2211-5064-89ef-152f070c6e5c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 200.66 88.9 0)
+			(at 228.6 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3548,28 +2486,7 @@
 			)
 		)
 	)
-	(global_label "MOTOR4"
-		(shape passive)
-		(at 165.1 73.66 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "b37206f2-ab87-591a-88d5-31097b4a4b6a")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "CLOCK"
+	(global_label "DATA_CHAIN_IN"
 		(shape passive)
 		(at 57.15 54.61 0)
 		(effects
@@ -3590,28 +2507,7 @@
 			)
 		)
 	)
-	(global_label "HOME"
-		(shape passive)
-		(at 237.49 93.98 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "b48726d6-06b6-5ab5-bdb5-5ca48fc0c51c")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 237.49 93.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "CLOCK"
+	(global_label "CLOCK_U1"
 		(shape passive)
 		(at 144.78 83.82 0)
 		(effects
@@ -3632,7 +2528,7 @@
 			)
 		)
 	)
-	(global_label "LATCH"
+	(global_label "LATCH_A"
 		(shape passive)
 		(at 109.22 83.82 0)
 		(effects
@@ -3653,17 +2549,17 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "+5V_U1"
 		(shape passive)
-		(at 57.15 80.01 0)
+		(at 105.41 54.61 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "c3ddd571-86fe-55e0-ac5c-e3379877b678")
+		(uuid "c3fcc818-bc6f-5b56-8d23-bde418eda786")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 57.15 80.01 0)
+			(at 105.41 54.61 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3674,7 +2570,7 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "+5V_U1"
 		(shape passive)
 		(at 109.22 58.42 0)
 		(effects
@@ -3716,30 +2612,9 @@
 			)
 		)
 	)
-	(global_label "COIL_D"
+	(global_label "MOTOR3"
 		(shape passive)
-		(at 200.66 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "c548bcd5-ce4e-5255-a475-3be44b78029f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 200.66 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "COIL_C"
-		(shape passive)
-		(at 240.03 58.42 0)
+		(at 222.25 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3747,7 +2622,7 @@
 		)
 		(uuid "c63b540c-c8c0-59e2-9029-d6c87452e9fe")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 240.03 58.42 0)
+			(at 222.25 60.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3758,7 +2633,7 @@
 			)
 		)
 	)
-	(global_label "RETURN"
+	(global_label "GND"
 		(shape passive)
 		(at 57.15 62.23 0)
 		(effects
@@ -3779,9 +2654,9 @@
 			)
 		)
 	)
-	(global_label "CLOCK"
+	(global_label "CLOCK_U1"
 		(shape passive)
-		(at 158.75 121.92 0)
+		(at 153.67 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3789,28 +2664,7 @@
 		)
 		(uuid "cdbb8bb3-a85b-5c74-b9e6-dd5d54730bf9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 158.75 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V"
-		(shape passive)
-		(at 237.49 120.65 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "ced2acbf-7958-5ace-b1b4-e42ba708dd80")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 237.49 120.65 0)
+			(at 153.67 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3823,7 +2677,7 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 144.78 119.38 0)
+		(at 152.4 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3831,7 +2685,7 @@
 		)
 		(uuid "d1b0e856-e881-5aca-a5f3-574c4504e34f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 144.78 119.38 0)
+			(at 152.4 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3842,17 +2696,17 @@
 			)
 		)
 	)
-	(global_label "CLOCK"
+	(global_label "DATA_TOP"
 		(shape passive)
-		(at 57.15 85.09 0)
+		(at 228.6 167.64 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "ddbcdcb0-29a4-5a6f-b4fe-f83a7f5243b3")
+		(uuid "df7c16a7-f9ca-5f6e-870e-711a187e1bd9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 57.15 85.09 0)
+			(at 228.6 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3884,9 +2738,30 @@
 			)
 		)
 	)
-	(global_label "COIL_B"
+	(global_label "+5V_U1"
 		(shape passive)
-		(at 240.03 55.88 0)
+		(at 251.46 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e1d62e61-f0e4-5698-ac9a-bf6ea4129492")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 251.46 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "MOTOR2"
+		(shape passive)
+		(at 222.25 58.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3894,7 +2769,7 @@
 		)
 		(uuid "e467c788-e3cf-5f6e-a741-2d43d3fa7caf")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 240.03 55.88 0)
+			(at 222.25 58.42 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3907,7 +2782,7 @@
 	)
 	(global_label "DATA_IN"
 		(shape passive)
-		(at 191.77 121.92 0)
+		(at 186.69 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3915,7 +2790,7 @@
 		)
 		(uuid "e4ba2d57-7d24-5fbf-83e5-5785f8b62cdc")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 191.77 121.92 0)
+			(at 186.69 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3926,9 +2801,9 @@
 			)
 		)
 	)
-	(global_label "COIL_D"
+	(global_label "MOTOR4"
 		(shape passive)
-		(at 240.03 60.96 0)
+		(at 222.25 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3936,7 +2811,7 @@
 		)
 		(uuid "e8370109-2050-5cbc-b23f-6956ac1ebd4a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 240.03 60.96 0)
+			(at 222.25 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3968,38 +2843,17 @@
 			)
 		)
 	)
-	(global_label "GND"
+	(global_label "+5V"
 		(shape passive)
-		(at 237.49 91.44 0)
+		(at 114.3 180.34 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "fb768f5b-3dd5-5b57-9b77-5a4f6d44267a")
+		(uuid "f36e482b-8cda-5076-b964-94b5008ca97c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 237.49 91.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "PB0"
-		(shape passive)
-		(at 109.22 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "ff84b533-ad64-528f-852d-8ed0c20c3702")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 109.22 63.5 0)
+			(at 114.3 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4011,8 +2865,8 @@
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:ULN2003A")
-		(at 182.88 73.66 0)
+		(lib_id "attiny44-ring:R")
+		(at 91.44 144.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4021,9 +2875,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "00b9af7c-9386-5573-a74e-f7140d6d9ff7")
-		(property "Reference" "U2"
-			(at 182.88 50.8 0)
+		(uuid "10a473a8-01e9-5876-a8a6-fc00e6748cdb")
+		(property "Reference" "JP5"
+			(at 91.44 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4032,8 +2886,8 @@
 				)
 			)
 		)
-		(property "Value" "ULN2003A"
-			(at 182.88 53.34 0)
+		(property "Value" "0R CLOCK input jumper 1206"
+			(at 91.44 124.46 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4042,130 +2896,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
-			(at 182.88 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.st.com/resource/en/datasheet/uln2001.pdf"
-			(at 182.88 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 182.88 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5c76d518-3016-54b1-821e-631638b64e55")
-		)
-		(pin "2"
-			(uuid "9f9f92f7-e3f4-5ea8-9ca1-468c57f3edf2")
-		)
-		(pin "3"
-			(uuid "60bcb551-86e3-5a21-bef2-b85a81de5d73")
-		)
-		(pin "4"
-			(uuid "46933fdd-6c4a-5b29-b541-fc184ae0f45e")
-		)
-		(pin "5"
-			(uuid "b1049359-2b23-5b74-b948-d89fff684922")
-		)
-		(pin "6"
-			(uuid "d3469447-5e3b-5bd3-8bf6-ce72ba33c615")
-		)
-		(pin "7"
-			(uuid "66f0e586-d1d3-5848-b1dd-df46c78623c7")
-		)
-		(pin "8"
-			(uuid "735f9215-9744-5e23-9135-f38aaed3bd40")
-		)
-		(pin "9"
-			(uuid "17f0dbb1-f47d-5625-8d37-edb749366be4")
-		)
-		(pin "10"
-			(uuid "4d957433-7f7c-5db9-afb0-89640b1d14b1")
-		)
-		(pin "11"
-			(uuid "a54e7cb7-1622-57c2-9482-f4284fe77774")
-		)
-		(pin "12"
-			(uuid "804a091e-fc6f-5f2e-8530-bf14463de68a")
-		)
-		(pin "13"
-			(uuid "bafe3092-196a-5e7d-bceb-83e6bf1a2f24")
-		)
-		(pin "14"
-			(uuid "02fdaed1-b8a6-5b2f-943c-dc0b33e5c3ef")
-		)
-		(pin "15"
-			(uuid "708c539b-9167-5dc5-b153-69da21073f30")
-		)
-		(pin "16"
-			(uuid "c3554f89-c5fe-5da2-b351-dfd895524565")
-		)
-		(instances
-			(project "attiny44-ring"
-				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "U2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "attiny44-ring:TESTPOINT")
-		(at 76.2 116.84 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "056ae877-30d7-5b9e-9cfe-80b0fb438f6e")
-		(property "Reference" "TP1"
-			(at 76.2 93.98 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PB0"
-			(at 76.2 96.52 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 76.2 116.84 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 91.44 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4176,7 +2908,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 76.2 116.84 0)
+			(at 91.44 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4187,7 +2919,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 76.2 116.84 0)
+			(at 91.44 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4198,20 +2930,23 @@
 			)
 		)
 		(pin "1"
-			(uuid "13c4ddc3-e488-5738-9ab4-544d9a5a78e0")
+			(uuid "0eadf426-9cf4-5cca-8abb-dc72dce9850b")
+		)
+		(pin "2"
+			(uuid "45b93bf4-4f35-5b2a-bc87-323829220162")
 		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "TP1")
+					(reference "JP5")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:CONN2")
-		(at 223.52 121.92 0)
+		(lib_id "attiny44-ring:R")
+		(at 91.44 170.18 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4220,9 +2955,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "05fbbd4f-7c3a-56cb-a03d-3689343637c0")
-		(property "Reference" "J6"
-			(at 223.52 99.06 0)
+		(uuid "19b025d4-804a-5f1b-b6cb-4fc817334427")
+		(property "Reference" "JP19"
+			(at 91.44 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4231,8 +2966,8 @@
 				)
 			)
 		)
-		(property "Value" "5V_INJECT"
-			(at 223.52 101.6 0)
+		(property "Value" "0R CHAIN power bridge 1206"
+			(at 91.44 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4241,8 +2976,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
-			(at 223.52 121.92 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 91.44 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4253,7 +2988,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 223.52 121.92 0)
+			(at 91.44 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4264,7 +2999,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 223.52 121.92 0)
+			(at 91.44 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4275,23 +3010,23 @@
 			)
 		)
 		(pin "1"
-			(uuid "41786a8f-a9d0-55e0-8747-c7116cc957ea")
+			(uuid "3666d0c0-a427-5214-a15e-d5cd35573038")
 		)
 		(pin "2"
-			(uuid "4bc2c134-be78-5e98-a3be-d2d81b184e16")
+			(uuid "185c0668-6456-5d09-b91d-df837293ea2e")
 		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "J6")
+					(reference "JP19")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:CP")
-		(at 193.04 109.22 0)
+		(lib_id "attiny44-ring:R")
+		(at 114.3 144.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4300,9 +3035,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "0632c9e7-d3e8-59c3-9d88-60080c5e3310")
-		(property "Reference" "C4"
-			(at 193.04 86.36 0)
+		(uuid "28696ec9-662e-5a41-b6a0-cdd526a6e757")
+		(property "Reference" "JP6"
+			(at 114.3 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4311,8 +3046,8 @@
 				)
 			)
 		)
-		(property "Value" "47u 10V"
-			(at 193.04 88.9 0)
+		(property "Value" "0R LATCH input jumper 1206"
+			(at 114.3 124.46 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4321,8 +3056,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm"
-			(at 193.04 109.22 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 114.3 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4333,7 +3068,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 193.04 109.22 0)
+			(at 114.3 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4344,7 +3079,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 193.04 109.22 0)
+			(at 114.3 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4355,15 +3090,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "6baf0cb2-4f35-5d59-a9a7-a644f0d6ee12")
+			(uuid "f5fefe67-5ce8-5b91-b27f-46a06e00f408")
 		)
 		(pin "2"
-			(uuid "bd76cbc8-1d20-5eb5-9ca1-c0498c1596e9")
+			(uuid "75ee09c0-8945-56f7-8780-8a0fb329bb1c")
 		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "C4")
+					(reference "JP6")
 					(unit 1)
 				)
 			)
@@ -4391,7 +3126,7 @@
 				)
 			)
 		)
-		(property "Value" "CHAIN_IN"
+		(property "Value" "CHAIN_RING"
 			(at 43.18 35.56 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4401,7 +3136,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_XH_B6B-XH-A_1x06_P2.50mm_Vertical"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical_SMD"
 			(at 43.18 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -4462,8 +3197,8 @@
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:CONN5")
-		(at 226.06 58.42 0)
+		(lib_id "attiny44-ring:CONN4")
+		(at 208.28 60.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4474,7 +3209,7 @@
 		(fields_autoplaced yes)
 		(uuid "43bb4efa-f878-57f2-b992-02178a4ebe3f")
 		(property "Reference" "J3"
-			(at 226.06 35.56 0)
+			(at 208.28 38.1 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4483,8 +3218,8 @@
 				)
 			)
 		)
-		(property "Value" "28BYJ-48"
-			(at 226.06 38.1 0)
+		(property "Value" "STEPPER_DRIVER_IN"
+			(at 208.28 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4493,8 +3228,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_XH_B5B-XH-A_1x05_P2.50mm_Vertical"
-			(at 226.06 58.42 0)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical_SMD_Pin1Left"
+			(at 208.28 60.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4505,7 +3240,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 226.06 58.42 0)
+			(at 208.28 60.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4516,7 +3251,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 226.06 58.42 0)
+			(at 208.28 60.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4538,9 +3273,6 @@
 		(pin "4"
 			(uuid "e4a3ad9d-49a1-5ad2-813e-62f4d3e3ea4c")
 		)
-		(pin "5"
-			(uuid "4bce1860-574d-5c15-9e33-9b8a3c5b8550")
-		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
@@ -4551,8 +3283,8 @@
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:CONN6")
-		(at 43.18 86.36 0)
+		(lib_id "attiny44-ring:R")
+		(at 137.16 144.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4561,9 +3293,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "58ec5644-4744-5f6b-b78a-b0da54f04a66")
-		(property "Reference" "J2"
-			(at 43.18 63.5 0)
+		(uuid "53b898a7-7b49-5a0e-9235-a41e781c3039")
+		(property "Reference" "JP7"
+			(at 137.16 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4572,8 +3304,8 @@
 				)
 			)
 		)
-		(property "Value" "CHAIN_OUT"
-			(at 43.18 66.04 0)
+		(property "Value" "0R DATA input jumper 1206"
+			(at 137.16 124.46 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4582,8 +3314,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_XH_B6B-XH-A_1x06_P2.50mm_Vertical"
-			(at 43.18 86.36 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 137.16 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4594,7 +3326,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 86.36 0)
+			(at 137.16 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4605,7 +3337,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 43.18 86.36 0)
+			(at 137.16 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4616,27 +3348,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "da2e248d-3b65-5f89-96fc-283a3ff973f9")
+			(uuid "7b00c275-69a6-58b2-ad89-d343b4d255dc")
 		)
 		(pin "2"
-			(uuid "20897297-d6a6-5807-9758-6947f6e8376e")
-		)
-		(pin "3"
-			(uuid "7239efd1-6574-5d39-996f-8dd23c2232b2")
-		)
-		(pin "4"
-			(uuid "ffb715ef-937c-5a6b-a995-a368d8640015")
-		)
-		(pin "5"
-			(uuid "e0e96554-659c-5dfc-9bf1-a91d41897216")
-		)
-		(pin "6"
-			(uuid "98f66e4f-d3a6-5aaf-829a-fde8f6964153")
+			(uuid "17b3b5de-481f-5583-8c27-2f3faf767e4a")
 		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "J2")
+					(reference "JP7")
 					(unit 1)
 				)
 			)
@@ -4644,7 +3364,7 @@
 	)
 	(symbol
 		(lib_id "attiny44-ring:C")
-		(at 127 109.22 0)
+		(at 134.62 106.68 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4655,7 +3375,7 @@
 		(fields_autoplaced yes)
 		(uuid "5a88bddd-1d18-5c78-b618-a63ae159061e")
 		(property "Reference" "C1"
-			(at 127 86.36 0)
+			(at 134.62 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4664,8 +3384,8 @@
 				)
 			)
 		)
-		(property "Value" "100n MCU"
-			(at 127 88.9 0)
+		(property "Value" "100n MCU 1206"
+			(at 134.62 86.36 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4674,8 +3394,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 127 109.22 0)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 134.62 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4686,7 +3406,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 127 109.22 0)
+			(at 134.62 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4697,7 +3417,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 127 109.22 0)
+			(at 134.62 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4723,8 +3443,88 @@
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:CONN3")
-		(at 223.52 91.44 0)
+		(lib_id "attiny44-ring:CONN2")
+		(at 91.44 55.88 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "66f21b33-ac32-55a9-bcc5-cedbafae7b7d")
+		(property "Reference" "#PWR1"
+			(at 91.44 33.02 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "POWER_SOURCE_FLAGS"
+			(at 91.44 35.56 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 91.44 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 91.44 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 91.44 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0e4e74f8-d1e9-5fd3-8621-d82cd67874a7")
+		)
+		(pin "2"
+			(uuid "ced29b48-ee56-5841-a576-d17fc5702457")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "#PWR1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "attiny44-ring:R")
+		(at 228.6 157.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4733,9 +3533,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "72261f60-8cdf-5da2-b397-1c10f97b30df")
-		(property "Reference" "J4"
-			(at 223.52 68.58 0)
+		(uuid "6b01906a-a7a7-5aff-bb32-b332fb1b34d9")
+		(property "Reference" "JP17"
+			(at 228.6 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4744,8 +3544,8 @@
 				)
 			)
 		)
-		(property "Value" "HOME_SENSOR"
-			(at 223.52 71.12 0)
+		(property "Value" "0R DATA chain bridge 1206"
+			(at 228.6 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4754,8 +3554,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical"
-			(at 223.52 91.44 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 228.6 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4766,7 +3566,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 223.52 91.44 0)
+			(at 228.6 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4777,7 +3577,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 223.52 91.44 0)
+			(at 228.6 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4788,37 +3588,34 @@
 			)
 		)
 		(pin "1"
-			(uuid "2f271dda-09e8-588b-8c4a-bdb36b285ebe")
+			(uuid "35a1c149-4dab-56c4-ae25-4c501f5c76e9")
 		)
 		(pin "2"
-			(uuid "2e4707a7-4546-5672-8abd-6aa1902470f1")
-		)
-		(pin "3"
-			(uuid "7832dc9d-551b-5482-b811-eda297295db8")
+			(uuid "0ad47c1a-cda4-53b3-b02b-2b6018f790bb")
 		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "J4")
+					(reference "JP17")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:TESTPOINT")
-		(at 91.44 116.84 0)
+		(lib_id "attiny44-ring:R")
+		(at 205.74 157.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "7f23d593-a8f5-5182-8d36-72c02d4fdec0")
-		(property "Reference" "TP2"
-			(at 91.44 93.98 0)
+		(uuid "7f290b2b-f923-52df-b492-133575f320c1")
+		(property "Reference" "JP16"
+			(at 205.74 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4827,8 +3624,8 @@
 				)
 			)
 		)
-		(property "Value" "PB1"
-			(at 91.44 96.52 0)
+		(property "Value" "0R CLOCK MCU bridge 1206"
+			(at 205.74 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4837,8 +3634,8 @@
 				)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 91.44 116.84 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 205.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4849,7 +3646,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 91.44 116.84 0)
+			(at 205.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4860,7 +3657,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 91.44 116.84 0)
+			(at 205.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4871,12 +3668,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "6e5f2190-9d90-511c-bc58-26cb63756dfd")
+			(uuid "c0059252-30e5-50d1-a497-1a66f7526423")
+		)
+		(pin "2"
+			(uuid "5119443e-d576-5cd0-9921-c3730a9dbc76")
 		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "TP2")
+					(reference "JP16")
 					(unit 1)
 				)
 			)
@@ -4904,7 +3704,7 @@
 				)
 			)
 		)
-		(property "Value" "10k RESET pull-up"
+		(property "Value" "10k RESET pull-up 1206"
 			(at 111.76 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4914,7 +3714,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 			(at 111.76 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -4964,7 +3764,7 @@
 	)
 	(symbol
 		(lib_id "attiny44-ring:R")
-		(at 88.9 101.6 0)
+		(at 251.46 157.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4973,9 +3773,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "90534a60-8902-574f-9dfe-1507faf2e6f3")
-		(property "Reference" "R1"
-			(at 88.9 78.74 0)
+		(uuid "86ac2e19-5b6a-55e4-9932-7fa5f68b4647")
+		(property "Reference" "JP18"
+			(at 251.46 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4984,8 +3784,8 @@
 				)
 			)
 		)
-		(property "Value" "10k HOME pull-up"
-			(at 88.9 81.28 0)
+		(property "Value" "0R MCU power bridge 1206"
+			(at 251.46 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4994,8 +3794,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 88.9 101.6 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 251.46 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5006,7 +3806,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 101.6 0)
+			(at 251.46 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5017,7 +3817,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 101.6 0)
+			(at 251.46 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5028,95 +3828,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "615f4c12-1735-5abb-a761-dd723ec79d6f")
+			(uuid "30dc39c8-8832-5b16-8107-a37f0b082b1e")
 		)
 		(pin "2"
-			(uuid "f06d88e1-8381-56a6-9f49-2fa771200e7a")
+			(uuid "24708d3a-955c-561f-ab99-9bee140928c1")
 		)
 		(instances
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "R1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "attiny44-ring:C")
-		(at 157.48 101.6 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d0080942-3481-584b-9d61-3dfa88619245")
-		(property "Reference" "C3"
-			(at 157.48 78.74 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10n HOME filter"
-			(at 157.48 81.28 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 157.48 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 157.48 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 157.48 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e0df5ef4-f997-53a6-8f34-35915ec98031")
-		)
-		(pin "2"
-			(uuid "ffd7ff83-a819-5f73-b451-88ac3a9f59e5")
-		)
-		(instances
-			(project "attiny44-ring"
-				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
-					(reference "C3")
+					(reference "JP18")
 					(unit 1)
 				)
 			)
@@ -5239,8 +3959,8 @@
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:C")
-		(at 144.78 109.22 0)
+		(lib_id "attiny44-ring:R")
+		(at 160.02 144.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5249,9 +3969,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "ede8b5da-578d-5b9d-8b35-b11bed0840b8")
-		(property "Reference" "C2"
-			(at 144.78 86.36 0)
+		(uuid "d8cb884b-488b-58ec-8ad0-169418145af7")
+		(property "Reference" "JP8"
+			(at 160.02 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5260,8 +3980,8 @@
 				)
 			)
 		)
-		(property "Value" "100n DRIVER"
-			(at 144.78 88.9 0)
+		(property "Value" "0R CHAIN DATA_OUT jumper 1206"
+			(at 160.02 124.46 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5270,8 +3990,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 144.78 109.22 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 160.02 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5282,7 +4002,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 144.78 109.22 0)
+			(at 160.02 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5293,7 +4013,87 @@
 			)
 		)
 		(property "Description" ""
-			(at 144.78 109.22 0)
+			(at 160.02 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "91b347b5-4246-501d-af52-b7c11d7aefe4")
+		)
+		(pin "2"
+			(uuid "425f9ef2-dc76-5961-ad2a-1f30d196d6be")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "JP8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "attiny44-ring:C")
+		(at 152.4 106.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ede8b5da-578d-5b9d-8b35-b11bed0840b8")
+		(property "Reference" "C2"
+			(at 152.4 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10u BULK 1206"
+			(at 152.4 86.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 152.4 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 152.4 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5319,8 +4119,8 @@
 		)
 	)
 	(symbol
-		(lib_id "attiny44-ring:ISP6")
-		(at 175.26 121.92 0)
+		(lib_id "attiny44-ring:R")
+		(at 114.3 170.18 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5329,9 +4129,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "f6b6f4c1-e643-5dc8-ac11-d265f1952757")
-		(property "Reference" "J5"
-			(at 175.26 99.06 0)
+		(uuid "f5ea3691-dd5d-5a08-b8d3-26e20871fb88")
+		(property "Reference" "JP20"
+			(at 114.3 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5340,8 +4140,8 @@
 				)
 			)
 		)
-		(property "Value" "AVR_ISP_2X3"
-			(at 175.26 101.6 0)
+		(property "Value" "0R ISP VCC bridge 1206"
+			(at 114.3 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5350,8 +4150,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_IDC:IDC-Header_2x03_P2.54mm_Vertical"
-			(at 175.26 121.92 0)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 114.3 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5362,7 +4162,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 175.26 121.92 0)
+			(at 114.3 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5373,7 +4173,87 @@
 			)
 		)
 		(property "Description" ""
-			(at 175.26 121.92 0)
+			(at 114.3 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3aa19fbe-795b-5096-8d41-de22c40c5933")
+		)
+		(pin "2"
+			(uuid "2a9974dd-dd62-5249-8950-ae2165d62424")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "JP20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "attiny44-ring:ISP6")
+		(at 170.18 116.84 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f6b6f4c1-e643-5dc8-ac11-d265f1952757")
+		(property "Reference" "J5"
+			(at 170.18 93.98 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AVR_ISP_2X3"
+			(at 170.18 96.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical_SMD"
+			(at 170.18 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 170.18 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 170.18 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

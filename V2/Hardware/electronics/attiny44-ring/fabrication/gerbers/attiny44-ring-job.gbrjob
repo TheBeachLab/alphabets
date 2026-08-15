@@ -5,17 +5,17 @@
       "Application": "Pcbnew",
       "Version": "10.0.5"
     },
-    "CreationDate": "2026-08-15T10:44:25+02:00"
+    "CreationDate": "2026-08-15T20:16:22+02:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
       "Name": "attiny44-ring",
       "GUID": "61747469-6e79-4343-942d-72696e672e6b",
-      "Revision": "1.0"
+      "Revision": "2.0"
     },
     "Size": {
-      "X": 35.05,
-      "Y": 70.05
+      "X": 80.05,
+      "Y": 90.05
     },
     "LayerNumber": 2,
     "BoardThickness": 1.6,
@@ -24,10 +24,10 @@
   "DesignRules": [
     {
       "Layers": "Outer",
-      "PadToPad": 0.2,
-      "PadToTrack": 0.2,
-      "TrackToTrack": 0.2,
-      "MinLineWidth": 0.25
+      "PadToPad": 0.25,
+      "PadToTrack": 0.25,
+      "TrackToTrack": 0.4,
+      "MinLineWidth": 0.4572
     }
   ],
   "FilesAttributes": [
@@ -37,28 +37,13 @@
       "FilePolarity": "Positive"
     },
     {
-      "Path": "attiny44-ring-B_Cu.gbl",
-      "FileFunction": "Copper,L2,Bot",
-      "FilePolarity": "Positive"
-    },
-    {
       "Path": "attiny44-ring-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "attiny44-ring-B_Silkscreen.gbo",
-      "FileFunction": "Legend,Bot",
-      "FilePolarity": "Positive"
-    },
-    {
       "Path": "attiny44-ring-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
-      "FilePolarity": "Negative"
-    },
-    {
-      "Path": "attiny44-ring-B_Mask.gbs",
-      "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {

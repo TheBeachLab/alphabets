@@ -17,8 +17,9 @@ board:
 	$(KICAD_PYTHON) tools/generate_board.py --output $(PROJECT).kicad_pcb --dsn routing/$(PROJECT).dsn --footprints "$(KICAD10_FOOTPRINT_DIR)"
 
 route:
-	test -n "$(FREEROUTING_JAR)"
-	java -jar "$(FREEROUTING_JAR)" -de routing/$(PROJECT).dsn -do routing/$(PROJECT).ses -mp 100 -mt 4 -da --gui.enabled=false --api_server.enabled=false --logging.file.enabled=false
+	@test -n "$(FREEROUTING_JAR)" || (echo "FREEROUTING_JAR is required" >&2; exit 2)
+	$(KICAD_PYTHON) tools/prepare_single_layer_dsn.py --input routing/$(PROJECT).dsn --output routing/$(PROJECT)-single-layer.dsn
+	java -jar "$(FREEROUTING_JAR)" -de routing/$(PROJECT)-single-layer.dsn -do routing/$(PROJECT).ses -mp 300 -mt 4 -da --gui.enabled=false --api_server.enabled=false --logging.file.enabled=false
 	$(KICAD_PYTHON) tools/import_routing.py --board $(PROJECT).kicad_pcb --session routing/$(PROJECT).ses
 
 check:
@@ -29,15 +30,15 @@ check:
 
 fabrication:
 	mkdir -p fabrication/gerbers
-	$(KICAD_CLI) pcb export gerbers --output fabrication/gerbers --layers F.Cu,B.Cu,F.Mask,B.Mask,F.Silkscreen,B.Silkscreen,Edge.Cuts $(PROJECT).kicad_pcb
+	$(KICAD_CLI) pcb export stats --output board-stats.json --format json --units mm $(PROJECT).kicad_pcb
+	$(KICAD_CLI) pcb export gerbers --output fabrication/gerbers --layers F.Cu,F.Mask,F.Silkscreen,Edge.Cuts $(PROJECT).kicad_pcb
 	$(KICAD_CLI) pcb export drill --output fabrication/gerbers --format excellon --excellon-units mm --excellon-separate-th --generate-map --map-format svg --generate-report --report-path fabrication/drill-report.txt $(PROJECT).kicad_pcb
-	$(KICAD_CLI) pcb export pos --output fabrication/$(PROJECT)-positions.csv --side both --format csv --units mm $(PROJECT).kicad_pcb
+	$(KICAD_CLI) pcb export pos --output fabrication/$(PROJECT)-positions.csv --side front --format csv --units mm $(PROJECT).kicad_pcb
 	$(KICAD_CLI) sch export bom --output fabrication/$(PROJECT)-bom.csv --fields Reference,Value,Footprint,QUANTITY --labels Refs,Value,Footprint,Qty --group-by Value,Footprint $(PROJECT).kicad_sch
 	$(KICAD_CLI) pcb export step --force --output fabrication/$(PROJECT).step $(PROJECT).kicad_pcb
 
 previews:
 	mkdir -p preview
-	$(KICAD_CLI) pcb render --output preview/top.png --side top --quality high --width 1000 --height 1500 --background opaque $(PROJECT).kicad_pcb
-	$(KICAD_CLI) pcb render --output preview/bottom.png --side bottom --quality high --width 1000 --height 1500 --background opaque $(PROJECT).kicad_pcb
-	$(KICAD_CLI) pcb export svg --output preview/copper.svg --mode-single --layers F.Cu,B.Cu,F.Silkscreen,B.Silkscreen,Edge.Cuts --page-size-mode 2 --fit-page-to-board --exclude-drawing-sheet $(PROJECT).kicad_pcb
+	$(KICAD_CLI) pcb render --output preview/top.png --side top --quality high --width 1400 --height 1500 --background opaque $(PROJECT).kicad_pcb
+	$(KICAD_CLI) pcb export svg --output preview/copper.svg --mode-single --layers F.Cu,F.Silkscreen,Edge.Cuts --page-size-mode 2 --fit-page-to-board --exclude-drawing-sheet $(PROJECT).kicad_pcb
 	$(KICAD_CLI) sch export svg --output preview --exclude-drawing-sheet $(PROJECT).kicad_sch

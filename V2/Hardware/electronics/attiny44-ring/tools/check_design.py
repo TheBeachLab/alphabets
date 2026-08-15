@@ -10,14 +10,10 @@ import pcbnew
 
 
 EXPECTED_PINS = {
-    "J1": {"1": "+5V", "2": "GND", "3": "CLOCK", "4": "LATCH", "5": "DATA_IN", "6": "RETURN"},
-    "J2": {"1": "+5V", "2": "GND", "3": "CLOCK", "4": "LATCH", "5": "DATA_OUT", "6": "RETURN"},
-    "J3": {"1": "COIL_A", "2": "COIL_B", "3": "COIL_C", "4": "COIL_D", "5": "+5V"},
-    "J4": {"1": "+5V", "2": "GND", "3": "HOME"},
-    "J5": {"1": "DATA_OUT", "2": "+5V", "3": "CLOCK", "4": "DATA_IN", "5": "RESET", "6": "GND"},
-    "J6": {"1": "+5V", "2": "GND"},
-    "U1": {"1": "+5V", "2": "PB0", "3": "PB1", "4": "RESET", "5": "HOME", "6": "LATCH", "7": "DATA_IN", "8": "DATA_OUT", "9": "CLOCK", "10": "MOTOR4", "11": "MOTOR3", "12": "MOTOR2", "13": "MOTOR1", "14": "GND"},
-    "U2": {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3", "4": "MOTOR4", "8": "GND", "9": "+5V", "13": "COIL_D", "14": "COIL_C", "15": "COIL_B", "16": "COIL_A"},
+    "J1": {"1": "LATCH_TOP", "2": "CLOCK_TOP", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND"},
+    "J3": {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3", "4": "MOTOR4"},
+    "J5": {"1": "DATA_OUT_A", "2": "ISP_VCC", "3": "CLOCK_U1", "4": "DATA_IN", "5": "RESET", "6": "GND"},
+    "U1": {"1": "+5V_U1", "4": "RESET", "6": "LATCH_A", "7": "DATA_IN", "8": "DATA_OUT_A", "9": "CLOCK_U1", "10": "MOTOR4", "11": "MOTOR3", "12": "MOTOR2", "13": "MOTOR1", "14": "GND"},
 }
 
 
@@ -36,7 +32,7 @@ def check(board_path: Path) -> None:
     outline = board.GetBoardEdgesBoundingBox()
     width = pcbnew.ToMM(outline.GetWidth())
     height = pcbnew.ToMM(outline.GetHeight())
-    if abs(width - 35.0) > 0.1 or abs(height - 70.0) > 0.1:
+    if abs(width - 80.0) > 0.1 or abs(height - 90.0) > 0.1:
         raise AssertionError(f"unexpected board size {width:.3f} x {height:.3f} mm")
 
     mounting_holes = [footprints.get(f"H{index}") for index in range(1, 5)]
@@ -51,12 +47,27 @@ def check(board_path: Path) -> None:
         if item.Type() == pcbnew.PCB_TRACE_T:
             nominal_widths.setdefault(item.GetNetname(), set()).add(round(pcbnew.ToMM(item.GetWidth()), 3))
 
-    for net in ("+5V", "GND"):
-        if 1.0 not in nominal_widths.get(net, set()):
-            raise AssertionError(f"{net} has no 1.0 mm power routing")
-    for net in ("COIL_A", "COIL_B", "COIL_C", "COIL_D"):
-        if nominal_widths.get(net) != {0.5}:
-            raise AssertionError(f"{net} is not routed at 0.5 mm")
+    if any(item.Type() == pcbnew.PCB_VIA_T for item in board.GetTracks()):
+        raise AssertionError("vias are not permitted; use 1206 zero-ohm links")
+    if any(item.GetLayer() != pcbnew.F_Cu for item in board.GetTracks() if item.Type() == pcbnew.PCB_TRACE_T):
+        raise AssertionError("all copper routing must remain on F.Cu")
+    for net, widths in nominal_widths.items():
+        if min(widths) < 0.457:
+            raise AssertionError(f"{net} contains a track narrower than 18 mil")
+    if any(widths != {0.457} for widths in nominal_widths.values()):
+        raise AssertionError("every routed net must use the 18 mil milling width")
+
+    smd_2x3 = [
+        reference for reference, footprint in footprints.items()
+        if footprint.GetFPID().GetLibItemName().wx_str() == "PinHeader_2x03_P2.54mm_Vertical_SMD"
+    ]
+    if sorted(smd_2x3) != ["J1", "J5"]:
+        raise AssertionError(f"expected only J1 and J5 as SMD 2x3 headers, got {sorted(smd_2x3)}")
+
+    passives = [reference for reference in footprints if reference.startswith(("R", "C", "JP"))]
+    for reference in passives:
+        if "1206_3216Metric" not in footprints[reference].GetFPID().GetLibItemName().wx_str():
+            raise AssertionError(f"{reference} does not use a 1206 footprint")
 
     print(f"OK: {width:.2f} x {height:.2f} mm, {len(footprints)} footprints, 0 unrouted connections")
 

@@ -4,6 +4,7 @@
   (lib (name "Capacitor_THT")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Capacitor_THT.pretty")(options "")(descr ""))
   (lib (name "Connector_IDC")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Connector_IDC.pretty")(options "")(descr ""))
   (lib (name "Connector_JST")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Connector_JST.pretty")(options "")(descr ""))
+  (lib (name "Connector_PinHeader_2.54mm")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Connector_PinHeader_2.54mm.pretty")(options "")(descr ""))
   (lib (name "MountingHole")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/MountingHole.pretty")(options "")(descr ""))
   (lib (name "Package_SO")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Package_SO.pretty")(options "")(descr ""))
   (lib (name "Resistor_SMD")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Resistor_SMD.pretty")(options "")(descr ""))
