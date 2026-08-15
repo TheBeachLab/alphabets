@@ -1,0 +1,4 @@
+# Preserve formatting emitted by the manufacturing and preview exporters.
+*.step -whitespace
+*.svg -whitespace
+routing/*.ses -whitespace

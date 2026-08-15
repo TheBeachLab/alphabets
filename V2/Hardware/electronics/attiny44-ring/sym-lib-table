@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "attiny44-ring")(type "KiCad")(uri "${KIPRJMOD}/attiny44-ring.kicad_sym")(options "")(descr "Alphabets V2 local symbols"))
+)
