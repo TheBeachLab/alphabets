@@ -1,0 +1,28 @@
+Drill report for attiny44-ring.kicad_pcb
+Created on 2026-08-15T10:44:26
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L2 :  B.Cu                      back
+
+
+Drill file 'attiny44-ring-PTH.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.350mm  0.0138"  (12 holes))
+    T2  0.450mm  0.0177"  (2 holes))
+    T3  0.800mm  0.0315"  (2 holes))
+    T4  0.950mm  0.0374"  (20 holes))
+    T5  1.000mm  0.0394"  (8 holes))
+    T6  2.000mm  0.0787"  (2 holes))
+
+    Total plated holes count 46
+
+
+Drill file 'attiny44-ring-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  3.200mm  0.1260"  (4 holes))
+
+    Total unplated holes count 4
