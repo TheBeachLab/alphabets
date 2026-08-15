@@ -15,7 +15,7 @@
       )
     )
     (layer B.Cu
-      (type signal)
+      (type power)
       (property
         (index 1)
       )
@@ -24,7 +24,6 @@
       (path pcb 0  170000 -180000  90000 -180000  90000 -90000  170000 -90000
             170000 -180000)
     )
-    (via "Via[0-1]_600:300_um")
     (rule
       (width 457.2)
       (clearance 400)
