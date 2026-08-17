@@ -21,6 +21,7 @@ route:
 	$(KICAD_PYTHON) tools/prepare_single_layer_dsn.py --input routing/$(PROJECT).dsn --output routing/$(PROJECT)-single-layer.dsn
 	java -jar "$(FREEROUTING_JAR)" -de routing/$(PROJECT)-single-layer.dsn -do routing/$(PROJECT).ses -mp 300 -mt 4 -da --gui.enabled=false --api_server.enabled=false --logging.file.enabled=false
 	$(KICAD_PYTHON) tools/import_routing.py --board $(PROJECT).kicad_pcb --session routing/$(PROJECT).ses
+	$(KICAD_PYTHON) tools/compact_board.py --board $(PROJECT).kicad_pcb
 
 check:
 	mkdir -p validation

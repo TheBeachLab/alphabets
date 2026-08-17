@@ -10,10 +10,13 @@ import pcbnew
 
 
 EXPECTED_PINS = {
-    "J1": {"1": "LATCH_TOP", "2": "CLOCK_TOP", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND"},
+    "J1": {"1": "LATCH_CONN", "2": "CLOCK_TOP", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND"},
     "J3": {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3", "4": "MOTOR4"},
     "J5": {"1": "DATA_OUT_A", "2": "ISP_VCC", "3": "CLOCK_U1", "4": "DATA_IN", "5": "RESET", "6": "GND"},
     "U1": {"1": "+5V_U1", "4": "RESET", "6": "LATCH_A", "7": "DATA_IN", "8": "DATA_OUT_A", "9": "CLOCK_U1", "10": "MOTOR4", "11": "MOTOR3", "12": "MOTOR2", "13": "MOTOR1", "14": "GND"},
+    "JP21": {"1": "+5V_MID", "2": "+5V_TOP"},
+    "JP22": {"1": "LATCH_CONN", "2": "LATCH_TOP"},
+    "JP23": {"1": "+5V", "2": "+5V_MID"},
 }
 
 
@@ -32,12 +35,11 @@ def check(board_path: Path) -> None:
     outline = board.GetBoardEdgesBoundingBox()
     width = pcbnew.ToMM(outline.GetWidth())
     height = pcbnew.ToMM(outline.GetHeight())
-    if abs(width - 80.0) > 0.1 or abs(height - 90.0) > 0.1:
+    if abs(width - 50.0) > 0.1 or abs(height - 57.0) > 0.1:
         raise AssertionError(f"unexpected board size {width:.3f} x {height:.3f} mm")
 
-    mounting_holes = [footprints.get(f"H{index}") for index in range(1, 5)]
-    if any(hole is None or not hole.IsBoardOnly() for hole in mounting_holes):
-        raise AssertionError("four board-only M3 mounting holes are required")
+    if any(reference.startswith("H") for reference in footprints):
+        raise AssertionError("compact board must not contain mounting holes")
 
     if board.GetConnectivity().GetUnconnectedCount(False) != 0:
         raise AssertionError("PCB connectivity contains unrouted connections")
@@ -52,10 +54,10 @@ def check(board_path: Path) -> None:
     if any(item.GetLayer() != pcbnew.F_Cu for item in board.GetTracks() if item.Type() == pcbnew.PCB_TRACE_T):
         raise AssertionError("all copper routing must remain on F.Cu")
     for net, widths in nominal_widths.items():
-        if min(widths) < 0.457:
-            raise AssertionError(f"{net} contains a track narrower than 18 mil")
-    if any(widths != {0.457} for widths in nominal_widths.values()):
-        raise AssertionError("every routed net must use the 18 mil milling width")
+        if min(widths) < 0.406:
+            raise AssertionError(f"{net} contains a track narrower than 16 mil")
+    if any(widths != {0.406} for widths in nominal_widths.values()):
+        raise AssertionError("every routed net must use the 16 mil milling width")
 
     smd_2x3 = [
         reference for reference, footprint in footprints.items()

@@ -1,5 +1,5 @@
 Drill report for attiny44-ring.kicad_pcb
-Created on 2026-08-15T20:16:22
+Created on 2026-08-17T18:43:20
 
 Copper Layer Stackup:
     =============================================================
@@ -17,6 +17,5 @@ Drill file 'attiny44-ring-PTH.drl' contains
 Drill file 'attiny44-ring-NPTH.drl' contains
     unplated through holes:
     =============================================================
-    T1  3.200mm  0.1260"  (4 holes))
 
-    Total unplated holes count 4
+    Total unplated holes count 0
