@@ -9,7 +9,7 @@
 		(date "2026-08-15")
 		(rev "2.0")
 		(company "TheBeachLab / Alphabets")
-		(comment 1 "Single-sided isolation-milled module; 18 mil minimum tracks")
+		(comment 1 "Single-sided isolation-milled module; 16 mil minimum tracks")
 		(comment 2 "External 28BYJ-48 driver board logic inputs: IN1..IN4")
 		(comment 3 "One CHAIN_RING and one AVR ISP use 2x3 2.54 mm SMD headers")
 		(comment 4 "All discrete SMD passives use 1206 packages")
@@ -1243,6 +1243,16 @@
 	)
 	(wire
 		(pts
+			(xy 137.16 175.26) (xy 137.16 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0503c777-024a-5421-92aa-84f8e3c5fa69")
+	)
+	(wire
+		(pts
 			(xy 251.46 152.4) (xy 251.46 147.32)
 		)
 		(stroke
@@ -1373,6 +1383,16 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 175.26) (xy 160.02 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "523214ab-686c-5674-9be2-c4cf837e8908")
+	)
+	(wire
+		(pts
 			(xy 111.76 106.68) (xy 111.76 111.76)
 		)
 		(stroke
@@ -1440,6 +1460,16 @@
 			(type default)
 		)
 		(uuid "74a4b418-c637-5c65-89a8-fc62562edf00")
+	)
+	(wire
+		(pts
+			(xy 137.16 165.1) (xy 137.16 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "757d8605-8895-559b-b83c-722c804b1a61")
 	)
 	(wire
 		(pts
@@ -1553,6 +1583,16 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 165.1) (xy 160.02 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a790020-fffd-5ba4-9fde-3e202ed50854")
+	)
+	(wire
+		(pts
 			(xy 152.4 101.6) (xy 152.4 96.52)
 		)
 		(stroke
@@ -1623,6 +1663,16 @@
 	)
 	(wire
 		(pts
+			(xy 182.88 165.1) (xy 182.88 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b1dabd27-b1a3-54a3-a447-e16e29ff7db2")
+	)
+	(wire
+		(pts
 			(xy 228.6 162.56) (xy 228.6 167.64)
 		)
 		(stroke
@@ -1630,6 +1680,16 @@
 			(type default)
 		)
 		(uuid "b4a26801-8ee6-556b-87ab-5f3584606edf")
+	)
+	(wire
+		(pts
+			(xy 182.88 175.26) (xy 182.88 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bbd3f9b4-0183-5605-b80f-5d0ba01a7711")
 	)
 	(wire
 		(pts
@@ -1751,7 +1811,7 @@
 		)
 		(uuid "fecc0351-818e-52a4-9397-bc63fe20aba7")
 	)
-	(global_label "LATCH_TOP"
+	(global_label "LATCH_CONN"
 		(shape passive)
 		(at 57.15 49.53 0)
 		(effects
@@ -1804,6 +1864,27 @@
 		(uuid "1530be11-780f-5556-b28a-40b3a6876e22")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 91.44 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V"
+		(shape passive)
+		(at 182.88 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "1625c463-3198-5d82-9dac-a437f1722cb7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 182.88 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1877,6 +1958,27 @@
 			)
 		)
 	)
+	(global_label "+5V_MID"
+		(shape passive)
+		(at 182.88 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2191ecfd-2bb4-5a11-9096-f1f93f7f8dd4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 182.88 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "MOTOR3"
 		(shape passive)
 		(at 144.78 73.66 0)
@@ -1898,7 +2000,7 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "+5V_TOP"
 		(shape passive)
 		(at 152.4 96.52 0)
 		(effects
@@ -2087,7 +2189,7 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "+5V_TOP"
 		(shape passive)
 		(at 91.44 180.34 0)
 		(effects
@@ -2140,6 +2242,27 @@
 		(uuid "464beafa-ba3a-5703-a7a5-9177555fe5df")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 109.22 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "LATCH_CONN"
+		(shape passive)
+		(at 160.02 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "4a97df3b-748f-5144-a433-40bc8a35bc6f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 160.02 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2297,6 +2420,27 @@
 			)
 		)
 	)
+	(global_label "+5V_MID"
+		(shape passive)
+		(at 137.16 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "865ae3ad-8d3d-526c-af06-ec4e77e4e609")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "ISP_VCC"
 		(shape passive)
 		(at 114.3 160.02 0)
@@ -2329,6 +2473,27 @@
 		(uuid "9037960d-19f3-563a-83c2-38b07d6172d5")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 109.22 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "LATCH_TOP"
+		(shape passive)
+		(at 160.02 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9264013d-79e5-5a3e-9a47-26c8f7bdfef0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 160.02 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2843,7 +3008,7 @@
 			)
 		)
 	)
-	(global_label "+5V"
+	(global_label "+5V_TOP"
 		(shape passive)
 		(at 114.3 180.34 0)
 		(effects
@@ -2854,6 +3019,27 @@
 		(uuid "f36e482b-8cda-5076-b964-94b5008ca97c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 114.3 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_TOP"
+		(shape passive)
+		(at 137.16 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "fbfa0ea2-a0d9-5be6-b884-4d83216a7522")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3191,6 +3377,86 @@
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
 					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "attiny44-ring:R")
+		(at 182.88 170.18 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3a3bb19b-44d9-5c5f-b993-dc4922a0bfe6")
+		(property "Reference" "JP23"
+			(at 182.88 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0R POWER crossover 2 1206"
+			(at 182.88 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Alphabets:R_1206_3216Metric_CompactCrossover"
+			(at 182.88 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 182.88 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "46a01f7e-ed6a-50e0-86a8-51f4198da70b")
+		)
+		(pin "2"
+			(uuid "06c6120e-8c45-5479-ae63-7e4b0f51b307")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "JP23")
 					(unit 1)
 				)
 			)
@@ -3837,6 +4103,166 @@
 			(project "attiny44-ring"
 				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
 					(reference "JP18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "attiny44-ring:R")
+		(at 137.16 170.18 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "95dd0a73-57be-561c-961b-9b9993016687")
+		(property "Reference" "JP21"
+			(at 137.16 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0R POWER crossover 1 1206"
+			(at 137.16 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Alphabets:R_1206_3216Metric_CompactCrossover"
+			(at 137.16 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "84a8d3e5-5c4e-5bf0-ba4c-7596de3be53c")
+		)
+		(pin "2"
+			(uuid "fab9b66a-bad5-539b-b78f-bb5be079fd15")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "JP21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "attiny44-ring:R")
+		(at 160.02 170.18 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c593763b-1a07-5a48-9085-f785e4fee843")
+		(property "Reference" "JP22"
+			(at 160.02 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0R LATCH crossover 1206"
+			(at 160.02 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Alphabets:R_1206_3216Metric_CompactCrossover"
+			(at 160.02 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 160.02 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 160.02 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "310f64b9-336e-51d6-a1b9-a49bab1e805a")
+		)
+		(pin "2"
+			(uuid "4d9b36f6-8b5a-597e-88a2-04e8c8020411")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "JP22")
 					(unit 1)
 				)
 			)

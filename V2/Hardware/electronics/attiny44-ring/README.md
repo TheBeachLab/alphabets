@@ -14,7 +14,7 @@ logic inputs of the external stepper-driver board supplied with the motor.
 - `R2`: 10 kOhm reset pull-up in 1206.
 - `C1`: 100 nF MCU decoupling capacitor in 1206.
 - `C2`: 10 uF bulk capacitor in 1206.
-- `JP5`, `JP6`, `JP7`, `JP8`, and `JP16` through `JP20`: 0 Ohm 1206 links
+- `JP5`, `JP6`, `JP7`, `JP8`, and `JP16` through `JP23`: 0 Ohm 1206 links
   used as physical copper bridges.
 
 The ATtiny44 signal assignment follows the
@@ -34,13 +34,14 @@ regulated 5 V supply and ground with this module.
 
 ## Milling rules
 
-- Board outline: 80 x 90 mm.
+- Board outline: 50 x 57 mm.
 - All routed copper is on `F.Cu`.
-- Every track is at least 18 mil (0.4572 mm).
+- Every track is 16 mil (0.4064 mm).
 - Routed clearance is 0.40 mm for a 0.40 mm milling bit.
 - Crossings use 0 Ohm 1206 links.
 - All discrete SMD passives use 1206 footprints.
-- Four 3.2 mm non-plated M3 mounting holes are provided.
+- `JP21` through `JP23` use the project-local compact-pitch 3216 crossover
+  footprint so their pads fit between the adjacent milled traces.
 
 ## Files and validation
 
@@ -49,8 +50,8 @@ regulated 5 V supply and ground with this module.
 - `fabrication/`: front-copper Gerbers, drill data, BOM, positions, and STEP.
 - `preview/`: rendered top, copper, and schematic views.
 - `validation/`: current ERC and DRC/schematic-parity reports.
-- `tools/`: deterministic schematic, board, single-layer routing, and design
-  checks.
+- `tools/`: deterministic schematic, single-layer routing, compact-board, and
+  design checks.
 
 The workflow uses native files and command-line validation rather than GUI
 automation. To reproduce the placed and routed board, set the KiCad paths and

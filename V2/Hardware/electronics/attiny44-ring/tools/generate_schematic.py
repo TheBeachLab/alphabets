@@ -28,13 +28,13 @@ SCHEMATIC_UUID = "a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
 
 COMPONENTS = [
     ("#PWR1", "CONN2", "POWER_SOURCE_FLAGS", (91.44, 55.88), {"1": "+5V_U1", "2": "GND"}),
-    ("J1", "CONN6", "CHAIN_RING", (43.18, 55.88), {"1": "LATCH_TOP", "2": "CLOCK_TOP", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND"}),
+    ("J1", "CONN6", "CHAIN_RING", (43.18, 55.88), {"1": "LATCH_CONN", "2": "CLOCK_TOP", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND"}),
     ("U1", "ATTINY44A", "ATtiny44A-SS", (127.0, 73.66), {"1": "+5V_U1", "4": "RESET", "6": "LATCH_A", "7": "DATA_IN", "8": "DATA_OUT_A", "9": "CLOCK_U1", "10": "MOTOR4", "11": "MOTOR3", "12": "MOTOR2", "13": "MOTOR1", "14": "GND"}),
     ("J3", "CONN4", "STEPPER_DRIVER_IN", (208.28, 60.96), {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3", "4": "MOTOR4"}),
     ("J5", "ISP6", "AVR_ISP_2X3", (170.18, 116.84), {"1": "DATA_OUT_A", "2": "ISP_VCC", "3": "CLOCK_U1", "4": "DATA_IN", "5": "RESET", "6": "GND"}),
     ("R2", "R", "10k RESET pull-up 1206", (111.76, 101.6), {"1": "+5V", "2": "RESET"}),
     ("C1", "C", "100n MCU 1206", (134.62, 106.68), {"1": "+5V_U1", "2": "GND"}),
-    ("C2", "C", "10u BULK 1206", (152.4, 106.68), {"1": "+5V", "2": "GND"}),
+    ("C2", "C", "10u BULK 1206", (152.4, 106.68), {"1": "+5V_TOP", "2": "GND"}),
     ("JP5", "R", "0R CLOCK input jumper 1206", (91.44, 144.78), {"1": "CLOCK_TOP", "2": "CLOCK_A"}),
     ("JP6", "R", "0R LATCH input jumper 1206", (114.3, 144.78), {"1": "LATCH_TOP", "2": "LATCH_A"}),
     ("JP7", "R", "0R DATA input jumper 1206", (137.16, 144.78), {"1": "DATA_IN", "2": "DATA_TOP"}),
@@ -42,8 +42,11 @@ COMPONENTS = [
     ("JP16", "R", "0R CLOCK MCU bridge 1206", (205.74, 157.48), {"1": "CLOCK_A", "2": "CLOCK_U1"}),
     ("JP17", "R", "0R DATA chain bridge 1206", (228.6, 157.48), {"1": "DATA_CHAIN_IN", "2": "DATA_TOP"}),
     ("JP18", "R", "0R MCU power bridge 1206", (251.46, 157.48), {"1": "+5V", "2": "+5V_U1"}),
-    ("JP19", "R", "0R CHAIN power bridge 1206", (91.44, 170.18), {"1": "+5V_CHAIN", "2": "+5V"}),
-    ("JP20", "R", "0R ISP VCC bridge 1206", (114.3, 170.18), {"1": "ISP_VCC", "2": "+5V"}),
+    ("JP19", "R", "0R CHAIN power bridge 1206", (91.44, 170.18), {"1": "+5V_CHAIN", "2": "+5V_TOP"}),
+    ("JP20", "R", "0R ISP VCC bridge 1206", (114.3, 170.18), {"1": "ISP_VCC", "2": "+5V_TOP"}),
+    ("JP21", "R", "0R POWER crossover 1 1206", (137.16, 170.18), {"1": "+5V_MID", "2": "+5V_TOP"}),
+    ("JP22", "R", "0R LATCH crossover 1206", (160.02, 170.18), {"1": "LATCH_CONN", "2": "LATCH_TOP"}),
+    ("JP23", "R", "0R POWER crossover 2 1206", (182.88, 170.18), {"1": "+5V", "2": "+5V_MID"}),
 ]
 
 
@@ -65,6 +68,9 @@ FOOTPRINTS = {
     "JP18": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
     "JP19": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
     "JP20": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
+    "JP21": "Alphabets:R_1206_3216Metric_CompactCrossover",
+    "JP22": "Alphabets:R_1206_3216Metric_CompactCrossover",
+    "JP23": "Alphabets:R_1206_3216Metric_CompactCrossover",
 }
 
 
@@ -126,7 +132,7 @@ def generate(symbol_path: Path, output_path: Path) -> None:
         revision="2.0",
         company="TheBeachLab / Alphabets",
         comments={
-            1: "Single-sided isolation-milled module; 18 mil minimum tracks",
+            1: "Single-sided isolation-milled module; 16 mil minimum tracks",
             2: "External 28BYJ-48 driver board logic inputs: IN1..IN4",
             3: "One CHAIN_RING and one AVR ISP use 2x3 2.54 mm SMD headers",
             4: "All discrete SMD passives use 1206 packages",

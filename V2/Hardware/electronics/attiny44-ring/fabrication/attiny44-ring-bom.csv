@@ -13,5 +13,8 @@
 "JP18","0R MCU power bridge 1206","Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder","1"
 "JP19","0R CHAIN power bridge 1206","Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder","1"
 "JP20","0R ISP VCC bridge 1206","Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder","1"
+"JP21","0R POWER crossover 1 1206","Alphabets:R_1206_3216Metric_CompactCrossover","1"
+"JP22","0R LATCH crossover 1206","Alphabets:R_1206_3216Metric_CompactCrossover","1"
+"JP23","0R POWER crossover 2 1206","Alphabets:R_1206_3216Metric_CompactCrossover","1"
 "R2","10k RESET pull-up 1206","Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder","1"
 "U1","ATtiny44A-SS","Package_SO:SOIC-14_3.9x8.7mm_P1.27mm","1"

@@ -1,33 +1,33 @@
 {
   "metadata": {
-    "date": "2026-08-15T20:17:01",
+    "date": "2026-08-17T18:43:20",
     "generator": "KiCad 10.0.5",
     "project": "attiny44-ring",
     "board_name": "attiny44-ring"
   },
   "board": {
     "has_outline": true,
-    "width": "80.0000 mm",
-    "height": "90.0000 mm",
-    "area": "7200.00 mm²",
-    "front_component_density": "8.69",
-    "back_component_density": "0.44",
-    "front_copper_area": "524.784 mm²",
-    "back_copper_area": "31.804 mm²",
-    "min_track_clearance": "0.4017 mm",
-    "min_track_width": "0.4572 mm",
-    "min_drill_diameter": "3.2000 mm",
+    "width": "50.0000 mm",
+    "height": "57.0000 mm",
+    "area": "2850.00 mm²",
+    "front_component_density": "17.61",
+    "back_component_density": "0.00",
+    "front_copper_area": "374.375 mm²",
+    "back_copper_area": "0.00 mm²",
+    "min_track_clearance": "0.4043 mm",
+    "min_track_width": "0.4064 mm",
+    "min_drill_diameter": "2147.4836 mm",
     "board_thickness": "1.6000 mm",
-    "front_footprint_area": "625.983 mm²",
-    "back_footprint_area": "31.827 mm²",
-    "front_footprint_density": "8.69",
-    "back_footprint_density": "0.44"
+    "front_footprint_area": "501.824 mm²",
+    "back_footprint_area": "0.00 mm²",
+    "front_footprint_density": "17.61",
+    "back_footprint_density": "0.00"
   },
   "pads": {
     "through_hole": 0,
-    "smd": 54,
+    "smd": 60,
     "connector": 0,
-    "npth": 4,
+    "npth": 0,
     "castellated": 0,
     "press_fit": 0
   },
@@ -44,31 +44,20 @@
       "total": 0
     },
     "smd": {
-      "front": 16,
+      "front": 19,
       "back": 0,
-      "total": 16
+      "total": 19
     },
     "unspecified": {
-      "front": 4,
+      "front": 0,
       "back": 0,
-      "total": 4
+      "total": 0
     },
     "total": {
-      "front": 20,
+      "front": 19,
       "back": 0,
-      "total": 20
+      "total": 19
     }
   },
-  "drill_holes": [
-    {
-      "count": 4,
-      "shape": "Round",
-      "x_size": "3.2000 mm",
-      "y_size": "3.2000 mm",
-      "plated": false,
-      "source": "Pad",
-      "start_layer": "F.Cu",
-      "stop_layer": "B.Cu"
-    }
-  ]
+  "drill_holes": []
 }

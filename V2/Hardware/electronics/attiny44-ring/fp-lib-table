@@ -1,5 +1,6 @@
 (fp_lib_table
   (version 7)
+  (lib (name "Alphabets")(type "KiCad")(uri "${KIPRJMOD}/Alphabets.pretty")(options "")(descr "Project-local fabrication footprints"))
   (lib (name "Capacitor_SMD")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Capacitor_SMD.pretty")(options "")(descr ""))
   (lib (name "Capacitor_THT")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Capacitor_THT.pretty")(options "")(descr ""))
   (lib (name "Connector_IDC")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Connector_IDC.pretty")(options "")(descr ""))
