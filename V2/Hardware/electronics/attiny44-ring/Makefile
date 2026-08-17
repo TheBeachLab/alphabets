@@ -7,7 +7,7 @@ KICAD10_FOOTPRINT_DIR ?=
 
 export KICAD10_FOOTPRINT_DIR
 
-.PHONY: schematic board route check fabrication previews
+.PHONY: schematic board route autoroute check fabrication previews
 
 schematic:
 	$(KIUTILS_PYTHON) tools/generate_schematic.py --symbols $(PROJECT).kicad_sym --output $(PROJECT).kicad_sch
@@ -17,11 +17,13 @@ board:
 	$(KICAD_PYTHON) tools/generate_board.py --output $(PROJECT).kicad_pcb --dsn routing/$(PROJECT).dsn --footprints "$(KICAD10_FOOTPRINT_DIR)"
 
 route:
+	$(KICAD_PYTHON) tools/import_routing.py --board $(PROJECT).kicad_pcb --session routing/$(PROJECT).ses
+
+autoroute:
 	@test -n "$(FREEROUTING_JAR)" || (echo "FREEROUTING_JAR is required" >&2; exit 2)
 	$(KICAD_PYTHON) tools/prepare_single_layer_dsn.py --input routing/$(PROJECT).dsn --output routing/$(PROJECT)-single-layer.dsn
 	java -jar "$(FREEROUTING_JAR)" -de routing/$(PROJECT)-single-layer.dsn -do routing/$(PROJECT).ses -mp 300 -mt 4 -da --gui.enabled=false --api_server.enabled=false --logging.file.enabled=false
-	$(KICAD_PYTHON) tools/import_routing.py --board $(PROJECT).kicad_pcb --session routing/$(PROJECT).ses
-	$(KICAD_PYTHON) tools/compact_board.py --board $(PROJECT).kicad_pcb
+	$(MAKE) route
 
 check:
 	mkdir -p validation

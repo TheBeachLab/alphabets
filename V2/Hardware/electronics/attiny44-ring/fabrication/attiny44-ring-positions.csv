@@ -3,7 +3,7 @@ Ref,Val,Package,PosX,PosY,Rot,Side
 "C2","10u BULK 1206","C_1206_3216Metric_Pad1.33x1.80mm_HandSolder",143.800000,-115.920000,0.000000,top
 "J1","CHAIN_RING","PinHeader_2x03_P2.54mm_Vertical_SMD",105.400000,-108.120000,0.000000,top
 "J3","STEPPER_DRIVER_IN","PinHeader_1x04_P2.54mm_Vertical_SMD_Pin1Left",135.800000,-131.520000,0.000000,top
-"J5","AVR_ISP_2X3","PinHeader_2x03_P2.54mm_Vertical_SMD",131.800000,-151.020000,0.000000,top
+"J5","AVR_ISP_2X3","PinHeader_2x03_P2.54mm_Vertical_SMD",119.800000,-142.000000,90.000000,top
 "JP5","0R CLOCK input jumper 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",126.800000,-124.500000,-90.000000,top
 "JP6","0R LATCH input jumper 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",114.000000,-126.800000,-90.000000,top
 "JP7","0R DATA input jumper 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",113.400000,-133.860000,-90.000000,top
@@ -12,9 +12,11 @@ Ref,Val,Package,PosX,PosY,Rot,Side
 "JP17","0R DATA chain bridge 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",105.000000,-128.400000,-90.000000,top
 "JP18","0R MCU power bridge 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",115.800000,-121.380000,-90.000000,top
 "JP19","0R CHAIN power bridge 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",115.000000,-104.500000,0.000000,top
-"JP20","0R ISP VCC bridge 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",143.800000,-139.320000,90.000000,top
+"JP20","0R ISP VCC bridge 1206","R_1206_3216Metric_CompactCrossover",128.000000,-139.460000,0.000000,top
 "JP21","0R POWER crossover 1 1206","R_1206_3216Metric_CompactCrossover",122.500000,-118.650000,45.000000,top
 "JP22","0R LATCH crossover 1206","R_1206_3216Metric_CompactCrossover",107.450000,-122.000000,0.000000,top
 "JP23","0R POWER crossover 2 1206","R_1206_3216Metric_CompactCrossover",116.550000,-116.060000,45.000000,top
+"JP24","0R ISP RESET crossover 1206","R_1206_3216Metric_CompactCrossover",132.000000,-142.000000,90.000000,top
+"JP25","0R ISP SCK crossover 1206","R_1206_3216Metric_CompactCrossover",128.000000,-146.000000,135.000000,top
 "R2","10k RESET pull-up 1206","R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",109.000000,-128.400000,0.000000,top
 "U1","ATtiny44A-SS","SOIC-14_3.9x8.7mm_P1.27mm",119.800000,-129.960000,0.000000,top

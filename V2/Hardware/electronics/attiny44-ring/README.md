@@ -9,12 +9,13 @@ logic inputs of the external stepper-driver board supplied with the motor.
 
 - `U1`: ATtiny44A-SS in SOIC-14.
 - `J1`: one 2x3, 2.54 mm, surface-mount chain connector.
-- `J5`: one standard 2x3, 2.54 mm, surface-mount AVR ISP connector.
+- `J5`: one standard 2x3, 2.54 mm, surface-mount AVR ISP connector placed
+  immediately below `U1`.
 - `J3`: four logic outputs for `IN1` through `IN4` on the external driver.
 - `R2`: 10 kOhm reset pull-up in 1206.
 - `C1`: 100 nF MCU decoupling capacitor in 1206.
 - `C2`: 10 uF bulk capacitor in 1206.
-- `JP5`, `JP6`, `JP7`, `JP8`, and `JP16` through `JP23`: 0 Ohm 1206 links
+- `JP5`, `JP6`, `JP7`, `JP8`, and `JP16` through `JP25`: 0 Ohm 1206 links
   used as physical copper bridges.
 
 The ATtiny44 signal assignment follows the
@@ -34,13 +35,13 @@ regulated 5 V supply and ground with this module.
 
 ## Milling rules
 
-- Board outline: 50 x 57 mm.
+- Board outline: 50 x 50 mm.
 - All routed copper is on `F.Cu`.
 - Every track is 16 mil (0.4064 mm).
 - Routed clearance is 0.40 mm for a 0.40 mm milling bit.
 - Crossings use 0 Ohm 1206 links.
 - All discrete SMD passives use 1206 footprints.
-- `JP21` through `JP23` use the project-local compact-pitch 3216 crossover
+- `JP20` through `JP25` use the project-local compact-pitch 3216 crossover
   footprint so their pads fit between the adjacent milled traces.
 
 ## Files and validation
@@ -50,13 +51,15 @@ regulated 5 V supply and ground with this module.
 - `fabrication/`: front-copper Gerbers, drill data, BOM, positions, and STEP.
 - `preview/`: rendered top, copper, and schematic views.
 - `validation/`: current ERC and DRC/schematic-parity reports.
-- `tools/`: deterministic schematic, single-layer routing, compact-board, and
-  design checks.
+- `tools/`: deterministic schematic, single-layer routing, and design checks.
 
 The workflow uses native files and command-line validation rather than GUI
-automation. To reproduce the placed and routed board, set the KiCad paths and
-`FREEROUTING_JAR`, then run:
+automation. The checked-in Freerouting session reproduces the verified routing
+deterministically. Set the KiCad paths, then run:
 
 ```sh
 make schematic board route check fabrication previews
 ```
+
+Use `make autoroute FREEROUTING_JAR=/path/to/freerouting.jar` only when the
+placement or netlist changes and a new routing session must be explored.
