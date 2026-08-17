@@ -31,7 +31,7 @@ COMPONENTS = [
     ("J1", "CONN6", "CHAIN_RING", (43.18, 55.88), {"1": "LATCH_CONN", "2": "CLOCK_TOP", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND"}),
     ("U1", "ATTINY44A", "ATtiny44A-SS", (127.0, 73.66), {"1": "+5V_U1", "4": "RESET", "6": "LATCH_A", "7": "DATA_IN", "8": "DATA_OUT_A", "9": "CLOCK_U1", "10": "MOTOR4", "11": "MOTOR3", "12": "MOTOR2", "13": "MOTOR1", "14": "GND"}),
     ("J3", "CONN4", "STEPPER_DRIVER_IN", (208.28, 60.96), {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3", "4": "MOTOR4"}),
-    ("J5", "ISP6", "AVR_ISP_2X3", (170.18, 116.84), {"1": "DATA_OUT_A", "2": "ISP_VCC", "3": "CLOCK_U1", "4": "DATA_IN", "5": "RESET", "6": "GND"}),
+    ("J5", "ISP6", "AVR_ISP_2X3", (170.18, 116.84), {"1": "DATA_OUT_A", "2": "ISP_VCC", "3": "CLOCK_ISP", "4": "DATA_IN", "5": "RESET_ISP", "6": "GND"}),
     ("R2", "R", "10k RESET pull-up 1206", (111.76, 101.6), {"1": "+5V", "2": "RESET"}),
     ("C1", "C", "100n MCU 1206", (134.62, 106.68), {"1": "+5V_U1", "2": "GND"}),
     ("C2", "C", "10u BULK 1206", (152.4, 106.68), {"1": "+5V_TOP", "2": "GND"}),
@@ -47,6 +47,8 @@ COMPONENTS = [
     ("JP21", "R", "0R POWER crossover 1 1206", (137.16, 170.18), {"1": "+5V_MID", "2": "+5V_TOP"}),
     ("JP22", "R", "0R LATCH crossover 1206", (160.02, 170.18), {"1": "LATCH_CONN", "2": "LATCH_TOP"}),
     ("JP23", "R", "0R POWER crossover 2 1206", (182.88, 170.18), {"1": "+5V", "2": "+5V_MID"}),
+    ("JP24", "R", "0R ISP RESET crossover 1206", (205.74, 170.18), {"1": "RESET_ISP", "2": "RESET"}),
+    ("JP25", "R", "0R ISP SCK crossover 1206", (228.6, 170.18), {"1": "CLOCK_ISP", "2": "CLOCK_U1"}),
 ]
 
 
@@ -67,10 +69,12 @@ FOOTPRINTS = {
     "JP17": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
     "JP18": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
     "JP19": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
-    "JP20": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
+    "JP20": "Alphabets:R_1206_3216Metric_CompactCrossover",
     "JP21": "Alphabets:R_1206_3216Metric_CompactCrossover",
     "JP22": "Alphabets:R_1206_3216Metric_CompactCrossover",
     "JP23": "Alphabets:R_1206_3216Metric_CompactCrossover",
+    "JP24": "Alphabets:R_1206_3216Metric_CompactCrossover",
+    "JP25": "Alphabets:R_1206_3216Metric_CompactCrossover",
 }
 
 

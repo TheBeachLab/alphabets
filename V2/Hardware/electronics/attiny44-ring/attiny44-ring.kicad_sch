@@ -1403,6 +1403,16 @@
 	)
 	(wire
 		(pts
+			(xy 205.74 175.26) (xy 205.74 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5805df74-74a5-5cba-9596-1ce17a1ac3c5")
+	)
+	(wire
+		(pts
 			(xy 52.07 54.61) (xy 57.15 54.61)
 		)
 		(stroke
@@ -1553,6 +1563,16 @@
 	)
 	(wire
 		(pts
+			(xy 228.6 165.1) (xy 228.6 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89340bec-74af-5d26-ae71-f16bd102e213")
+	)
+	(wire
+		(pts
 			(xy 217.17 55.88) (xy 222.25 55.88)
 		)
 		(stroke
@@ -1673,6 +1693,16 @@
 	)
 	(wire
 		(pts
+			(xy 205.74 165.1) (xy 205.74 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b306cdf4-3d9b-563a-ac5a-956dc6a98e34")
+	)
+	(wire
+		(pts
 			(xy 228.6 162.56) (xy 228.6 167.64)
 		)
 		(stroke
@@ -1710,6 +1740,16 @@
 			(type default)
 		)
 		(uuid "c59f1189-1fa6-5e22-9abb-deeed727af50")
+	)
+	(wire
+		(pts
+			(xy 228.6 175.26) (xy 228.6 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c7f38774-f27b-5dd9-bde5-c902e64581b2")
 	)
 	(wire
 		(pts
@@ -1832,6 +1872,27 @@
 			)
 		)
 	)
+	(global_label "RESET_ISP"
+		(shape passive)
+		(at 205.74 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "0b75a347-2e98-509e-bade-69fb01755ac7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 205.74 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "DATA_OUT_A"
 		(shape passive)
 		(at 160.02 134.62 0)
@@ -1937,7 +1998,7 @@
 			)
 		)
 	)
-	(global_label "RESET"
+	(global_label "RESET_ISP"
 		(shape passive)
 		(at 153.67 119.38 0)
 		(effects
@@ -2252,6 +2313,27 @@
 			)
 		)
 	)
+	(global_label "RESET"
+		(shape passive)
+		(at 205.74 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "477d4d15-d5cd-565c-810e-0fb20c4dbf5d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 205.74 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "LATCH_CONN"
 		(shape passive)
 		(at 160.02 160.02 0)
@@ -2368,6 +2450,27 @@
 		(uuid "69fe1e8f-ff79-58fd-b74b-561799ea67c6")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 160.02 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "CLOCK_ISP"
+		(shape passive)
+		(at 228.6 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6bee66ee-308d-5d52-9bed-108c1f31b996")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2819,7 +2922,7 @@
 			)
 		)
 	)
-	(global_label "CLOCK_U1"
+	(global_label "CLOCK_ISP"
 		(shape passive)
 		(at 153.67 116.84 0)
 		(effects
@@ -2914,6 +3017,27 @@
 		(uuid "e1d62e61-f0e4-5698-ac9a-bf6ea4129492")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 251.46 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "CLOCK_U1"
+		(shape passive)
+		(at 228.6 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e38e437f-801f-5a56-bb8b-9178a31e6220")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3870,6 +3994,86 @@
 	)
 	(symbol
 		(lib_id "attiny44-ring:R")
+		(at 228.6 170.18 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7ceb139c-72d5-5058-92d2-b1ca0a49d88e")
+		(property "Reference" "JP25"
+			(at 228.6 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0R ISP SCK crossover 1206"
+			(at 228.6 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Alphabets:R_1206_3216Metric_CompactCrossover"
+			(at 228.6 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 228.6 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 228.6 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a39cb7f6-d2e7-59c9-a2ca-7dd1796d86e6")
+		)
+		(pin "2"
+			(uuid "8da849db-a5fd-53a6-a69a-e36195d4eb58")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "JP25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "attiny44-ring:R")
 		(at 205.74 157.48 0)
 		(unit 1)
 		(body_style 1)
@@ -4269,6 +4473,86 @@
 		)
 	)
 	(symbol
+		(lib_id "attiny44-ring:R")
+		(at 205.74 170.18 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d087293c-884d-5fb5-b8fb-8e0207fbad6b")
+		(property "Reference" "JP24"
+			(at 205.74 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0R ISP RESET crossover 1206"
+			(at 205.74 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Alphabets:R_1206_3216Metric_CompactCrossover"
+			(at 205.74 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 205.74 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 205.74 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e4b59096-463d-542e-bb37-ea2dc89d4db7")
+		)
+		(pin "2"
+			(uuid "a1dfebe1-052b-5801-ab62-bfeb33c0af2b")
+		)
+		(instances
+			(project "attiny44-ring"
+				(path "/a28f3aa4-9690-4cb4-9ef8-8380353b4fb7"
+					(reference "JP24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "attiny44-ring:ATTINY44A")
 		(at 127 73.66 0)
 		(unit 1)
@@ -4576,7 +4860,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Alphabets:R_1206_3216Metric_CompactCrossover"
 			(at 114.3 170.18 0)
 			(hide yes)
 			(show_name no)
