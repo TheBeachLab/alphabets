@@ -6,6 +6,8 @@ import unittest
 from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
+from fontTools.pens.boundsPen import BoundsPen
+
 
 STICKERS_DIR = Path(__file__).resolve().parent
 if str(STICKERS_DIR) not in sys.path:
@@ -75,7 +77,7 @@ class StickerGeneratorTests(unittest.TestCase):
                 ]
                 self.assertEqual(unsupported_characters, [])
         self.assertEqual(
-            self.faces[0].label, "Noto Sans Mono wdth 100 wght 700"
+            self.faces[0].label, "Overpass Mono Medium Regular"
         )
 
     def test_svg_has_64_cards_63_outlined_glyphs_and_no_text_elements(self):
@@ -106,10 +108,10 @@ class StickerGeneratorTests(unittest.TestCase):
         self.assertEqual(len(positions), 64)
         self.assertEqual(
             {position["font"] for position in positions if position["character"] != " "},
-            {"Noto Sans Mono wdth 100 wght 700"},
+            {"Overpass Mono Medium Regular"},
         )
 
-    def test_special_characters_share_scale_advance_and_baseline(self):
+    def test_special_characters_share_scale_baseline_and_card_center(self):
         geometry = SheetGeometry(columns=22)
         layout = typography_layout(
             self.profile.characters, self.faces[0], geometry
@@ -118,32 +120,58 @@ class StickerGeneratorTests(unittest.TestCase):
             glyph_placement(character, self.faces[0], 0, 0, geometry, layout)
             for character in "AÄẞ@€?."
         ]
-        self.assertEqual({placement.scale_x for placement in placements}, {layout.scale})
-        self.assertEqual({placement.scale_y for placement in placements}, {layout.scale})
+        self.assertEqual({placement.scale_x for placement in placements}, {layout.scale_x})
+        self.assertEqual({placement.scale_y for placement in placements}, {layout.scale_y})
         self.assertEqual(
             {placement.baseline_y_mm for placement in placements},
             {layout.baseline_in_card_mm},
         )
-        self.assertEqual(
-            {round(placement.x_mm, 9) for placement in placements},
-            {round((geometry.card_width_mm - layout.advance_mm) / 2, 9)},
-        )
+        self.assertTrue(layout.is_monospaced)
+        glyph_set = self.faces[0].glyph_set()
+        for placement in placements:
+            bounds_pen = BoundsPen(glyph_set)
+            glyph_set[placement.glyph_name].draw(bounds_pen)
+            self.assertIsNotNone(bounds_pen.bounds)
+            x_min, _, x_max, _ = bounds_pen.bounds
+            visible_center = placement.x_mm + (x_min + x_max) * layout.scale_x / 2
+            self.assertAlmostEqual(visible_center, geometry.card_width_mm / 2)
 
-    def test_narrow_card_crops_side_space_without_changing_type_alignment(self):
+    def test_tall_narrow_card_recalculates_one_safe_shared_scale(self):
         standard = typography_layout(
             self.profile.characters, self.faces[0], SheetGeometry(card_width_mm=55)
         )
+        narrow_geometry = SheetGeometry(card_width_mm=50, card_height_mm=96)
         narrow = typography_layout(
-            self.profile.characters, self.faces[0], SheetGeometry(card_width_mm=50)
+            self.profile.characters, self.faces[0], narrow_geometry
         )
-        self.assertEqual(narrow.scale, standard.scale)
-        self.assertEqual(
-            narrow.baseline_in_card_mm, standard.baseline_in_card_mm
+        self.assertLess(narrow.scale_x, standard.scale_x)
+        self.assertGreater(narrow.scale_y, standard.scale_y)
+        self.assertLessEqual(
+            narrow.max_visible_width_units * narrow.scale_x,
+            narrow_geometry.card_width_mm - 2 * narrow_geometry.glyph_padding_x_mm,
         )
+        self.assertLess(narrow.width_ratio, standard.width_ratio)
         self.assertLess(
-            SheetGeometry(card_width_mm=50).page_size(64)[0],
+            narrow_geometry.page_size(64)[0],
             SheetGeometry(card_width_mm=55).page_size(64)[0],
         )
+
+    def test_proportional_font_uses_the_same_centering_model(self):
+        face = FontFace.load(STICKERS_DIR / "fonts" / "Blue Highway D.otf")
+        geometry = SheetGeometry(columns=4)
+        layout = typography_layout("ABMW", face, geometry)
+        self.assertFalse(layout.is_monospaced)
+        glyph_set = face.glyph_set()
+        for character in "ABMW":
+            placement = glyph_placement(
+                character, face, 0, 0, geometry, layout
+            )
+            bounds_pen = BoundsPen(glyph_set)
+            glyph_set[placement.glyph_name].draw(bounds_pen)
+            self.assertIsNotNone(bounds_pen.bounds)
+            x_min, _, x_max, _ = bounds_pen.bounds
+            visible_center = placement.x_mm + (x_min + x_max) * layout.scale_x / 2
+            self.assertAlmostEqual(visible_center, geometry.card_width_mm / 2)
 
     def test_main_writes_svg_pdf_and_manifest_with_exact_profile(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -187,14 +215,13 @@ class StickerGeneratorTests(unittest.TestCase):
             self.assertIsNone(data["colors"]["guide"])
             self.assertEqual(data["geometry_mm"]["rows"], 3)
             self.assertEqual(len(data["fonts"]), 1)
-            self.assertEqual(data["fonts"][0]["family"], "Noto Sans Mono")
-            self.assertEqual(
-                data["fonts"][0]["variation"], {"wdth": 100.0, "wght": 700.0}
-            )
+            self.assertEqual(data["fonts"][0]["family"], "Overpass Mono Medium")
+            self.assertEqual(data["fonts"][0]["variation"], {})
             self.assertEqual(
                 data["typography"]["alignment"],
-                "monospaced-common-baseline",
+                "common-transform-baseline-centered-bounds",
             )
+            self.assertEqual(data["typography"]["spacing"], "monospaced")
             self.assertEqual(len(data["positions"]), 64)
 
     def test_cut_svg_contains_only_cut_geometry(self):

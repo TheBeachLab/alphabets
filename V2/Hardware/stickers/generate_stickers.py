@@ -44,9 +44,9 @@ COLOR_PRESETS = {
     "white-black": ("#FFFFFF", "#000000"),
 }
 DEFAULT_COLOR_PRESET = "black-white"
-DEFAULT_FONT = STICKERS_DIR / "fonts" / "NotoSansMono[wdth,wght].ttf"
-DEFAULT_FONT_WEIGHT = 700
-DEFAULT_FONT_WIDTH = 100
+DEFAULT_FONT = STICKERS_DIR / "fonts" / "OverpassMono-Medium.otf"
+DEFAULT_FONT_WEIGHT: float | None = None
+DEFAULT_FONT_WIDTH: float | None = None
 HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
 
@@ -181,16 +181,30 @@ class GlyphPlacement:
 
 @dataclass(frozen=True)
 class TypographyLayout:
-    """One scale, advance and baseline shared by the complete sheet."""
+    """One global x/y transform and baseline shared by the complete sheet."""
 
-    scale: float
-    advance_units: float
+    scale_x: float
+    scale_y: float
     baseline_in_card_mm: float
     source_bounds: tuple[float, float, float, float]
+    advance_units_range: tuple[float, float]
+    max_visible_width_units: float
 
     @property
-    def advance_mm(self) -> float:
-        return self.advance_units * self.scale
+    def advance_mm_range(self) -> tuple[float, float]:
+        return tuple(value * self.scale_x for value in self.advance_units_range)
+
+    @property
+    def width_ratio(self) -> float:
+        return self.scale_x / self.scale_y
+
+    @property
+    def is_monospaced(self) -> bool:
+        return math.isclose(
+            self.advance_units_range[0],
+            self.advance_units_range[1],
+            abs_tol=1e-6,
+        )
 
 
 def normalize_color(value: str) -> str:
@@ -243,37 +257,32 @@ def typography_layout(
             raise StickerError(f"glyph {character!r} has no visible outline")
         bounds.append(bounds_pen.bounds)
 
-    rounded_advances = {round(advance, 6) for advance in advances}
-    if len(rounded_advances) != 1:
-        raise StickerError(
-            f"font {face.label!r} is not monospaced for the selected characters"
-        )
-    advance = advances[0]
     x_min = min(bound[0] for bound in bounds)
     y_min = min(bound[1] for bound in bounds)
     x_max = max(bound[2] for bound in bounds)
     y_max = max(bound[3] for bound in bounds)
+    max_visible_width = max(bound[2] - bound[0] for bound in bounds)
 
-    horizontal_half_extent = max(
-        abs(x_min - advance / 2), abs(x_max - advance / 2)
-    )
     horizontal_scale = (
-        geometry.card_width_mm / 2 - geometry.glyph_padding_x_mm
-    ) / horizontal_half_extent
+        geometry.card_width_mm - 2 * geometry.glyph_padding_x_mm
+    ) / max_visible_width
     vertical_scale = (
         geometry.card_height_mm - 2 * geometry.glyph_padding_y_mm
     ) / (y_max - y_min)
     cap_scale = geometry.cap_height_mm / face.cap_height
-    scale = min(horizontal_scale, vertical_scale, cap_scale)
+    scale_x = horizontal_scale
+    scale_y = min(vertical_scale, cap_scale)
 
     baseline = (
-        geometry.card_height_mm / 2 + (y_max + y_min) * scale / 2
+        geometry.card_height_mm / 2 + (y_max + y_min) * scale_y / 2
     )
     return TypographyLayout(
-        scale=scale,
-        advance_units=advance,
+        scale_x=scale_x,
+        scale_y=scale_y,
         baseline_in_card_mm=baseline,
         source_bounds=(x_min, y_min, x_max, y_max),
+        advance_units_range=(min(advances), max(advances)),
+        max_visible_width_units=max_visible_width,
     )
 
 
@@ -299,11 +308,14 @@ def glyph_placement(
     glyph.draw(svg_pen)
     path_data = svg_pen.getCommands()
 
-    scale_x = typography.scale
-    scale_y = typography.scale
-    x_mm = card_x + (
-        geometry.card_width_mm - glyph.width * typography.scale
-    ) / 2
+    scale_x = typography.scale_x
+    scale_y = typography.scale_y
+    visible_width_mm = (x_max - x_min) * scale_x
+    x_mm = (
+        card_x
+        + (geometry.card_width_mm - visible_width_mm) / 2
+        - x_min * scale_x
+    )
     baseline_y_mm = card_y + typography.baseline_in_card_mm
 
     visible_left = x_mm + x_min * scale_x
@@ -585,7 +597,7 @@ def write_pdf(
         pdf.clipPath(clip_path, stroke=0, fill=0)
         pdf.translate(placement.x_mm * mm, (page_height - placement.baseline_y_mm) * mm)
         pdf.scale(placement.scale_x * mm, placement.scale_y * mm)
-        # TrueType contours use non-zero winding. ReportLab defaults to the
+        # OpenType contours use non-zero winding. ReportLab defaults to the
         # even-odd rule, which punches false inverse rectangles where contours
         # overlap (most visibly across the crossbar of A and accented A glyphs).
         pdf.drawPath(pdf_path, fill=1, stroke=0, fillMode=1)
@@ -649,9 +661,14 @@ def build_manifest(
         },
         "omit_blank": omit_blank,
         "typography": {
-            "alignment": "monospaced-common-baseline",
-            "scale_mm_per_font_unit": typography.scale,
-            "advance_mm": typography.advance_mm,
+            "alignment": "common-transform-baseline-centered-bounds",
+            "spacing": "monospaced" if typography.is_monospaced else "proportional",
+            "scale_x_mm_per_font_unit": typography.scale_x,
+            "scale_y_mm_per_font_unit": typography.scale_y,
+            "width_ratio": typography.width_ratio,
+            "advance_range_mm": list(typography.advance_mm_range),
+            "max_visible_width_mm": typography.max_visible_width_units
+            * typography.scale_x,
             "baseline_from_card_top_mm": typography.baseline_in_card_mm,
             "vertical_padding_min_mm": geometry.glyph_padding_y_mm,
         },
@@ -704,13 +721,13 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "--font-weight",
         type=float,
         default=DEFAULT_FONT_WEIGHT,
-        help="wght axis value for a variable font (default: 700)",
+        help="optional wght axis value for a variable font",
     )
     parser.add_argument(
         "--font-width",
         type=float,
         default=DEFAULT_FONT_WIDTH,
-        help="wdth axis value for a variable font (default: 100)",
+        help="optional wdth axis value for a variable font",
     )
     parser.add_argument("--columns", type=int, default=22)
     parser.add_argument("--card-width", type=float, default=55.0)

@@ -32,14 +32,16 @@ remove a strip from the artwork. Print files are clean by default; the cutter
 geometry is written separately with `--output-cut-svg`, so lines never cover or
 visually merge with the letters. `--guides` is available only for an overlaid
 alignment proof. Every vector glyph is also clipped to its own card boundary
-and uses the TrueType non-zero winding rule in SVG and PDF, avoiding inverted
+and uses the non-zero winding rule in SVG and PDF, avoiding inverted
 areas where the outlines overlap.
 
-Every visible character uses one shared typographic scale, monospaced advance
-and baseline. The scale is calculated once from the widest and tallest glyph
-in the selected 64-position profile. If an accent needs more vertical room,
-the complete profile becomes slightly smaller and gains equal top/bottom
-clearance; individual glyphs are never shifted or resized.
+Every visible character uses one shared horizontal scale, vertical scale and
+baseline. The two scales are calculated once from the widest and tallest glyph
+in the selected 64-position profile. This global transform gives the complete
+set the tall, narrow proportion of Blue Highway D without per-character
+distortion. Each visible outline is geometrically centered in its equal-sized
+card; proportional advance widths do not change the card size. No glyph
+receives an individual scale or vertical offset.
 
 The physical default remains the existing `55 × 86 mm`. A taller, narrower
 comparison can be generated without changing the shared alignment:
@@ -92,23 +94,23 @@ production files if any selected font cannot render a required character.
 
 ## Typeface
 
-The project history names Blue Highway Bold as the selected Solari-like
-typeface, but the available Blue Highway files do not contain uppercase `ẞ`
-and are proportional. The generator therefore uses **Noto Sans Mono** at
-weight 700 and width 100. This single monospaced font contains every
-character in both `international-64` and `demo-64`, including `ẞ` and `■`.
-It is distributed under the SIL Open Font License 1.1 from the
-[official Google Fonts repository](https://github.com/google/fonts/tree/main/ofl/notosansmono).
+The generator uses **Overpass Mono Medium** at weight 500. Blue Highway and
+Overpass both derive from FHWA/Highway Gothic road-sign lettering, while the
+mono variant keeps every drum position on a common advance. It provides the
+full `international-64` and `demo-64` coverage in one font, including `ẞ` and
+`■`. The bundled OTF is the unmodified official release from the
+[Red Hat Overpass repository](https://github.com/RedHatOfficial/Overpass) and
+is distributed under the SIL Open Font License 1.1.
 
 The alignment model follows the lesson from Scott Bezek's production
 [splitflap generator](https://github.com/scottbez1/splitflap/blob/master/3d/flap_fonts.scad):
 font scale and position are explicit manufacturing parameters. This generator
-uses the stricter option requested here—one scale, advance and baseline for
-the entire profile, rather than per-character overrides. Exact provenance and
+uses one global x/y transform and baseline for the entire profile, with each
+font outline centered inside the common physical card. Exact provenance and
 checksums are recorded in [`fonts/`](fonts/README.md).
 
 Choose another OpenType font with `--font path/to/font.otf`. For a variable
 font, select its weight and width with `--font-weight 600 --font-width 80`.
 The generator rejects the font unless that single file covers every selected
-character with one common advance. The manifest records the resolved file,
-variation, shared baseline/scale/advance and SHA-256 checksum.
+character. The manifest records the resolved file, variation, spacing model,
+shared baseline/scale, advance range and SHA-256 checksum.
