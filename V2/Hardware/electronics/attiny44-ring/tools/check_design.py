@@ -46,20 +46,38 @@ def check(board_path: Path) -> None:
     if board.GetConnectivity().GetUnconnectedCount(False) != 0:
         raise AssertionError("PCB connectivity contains unrouted connections")
 
+    copper_items = [
+        item for item in board.GetTracks()
+        if item.GetClass() in ("PCB_TRACK", "PCB_ARC")
+    ]
     nominal_widths = {}
-    for item in board.GetTracks():
-        if item.Type() == pcbnew.PCB_TRACE_T:
-            nominal_widths.setdefault(item.GetNetname(), set()).add(round(pcbnew.ToMM(item.GetWidth()), 3))
+    for item in copper_items:
+        nominal_widths.setdefault(item.GetNetname(), set()).add(round(pcbnew.ToMM(item.GetWidth()), 3))
 
     if any(item.Type() == pcbnew.PCB_VIA_T for item in board.GetTracks()):
         raise AssertionError("vias are not permitted; use 1206 zero-ohm links")
-    if any(item.GetLayer() != pcbnew.F_Cu for item in board.GetTracks() if item.Type() == pcbnew.PCB_TRACE_T):
+    if any(item.GetLayer() != pcbnew.F_Cu for item in copper_items):
         raise AssertionError("all copper routing must remain on F.Cu")
     for net, widths in nominal_widths.items():
         if min(widths) < 0.406:
             raise AssertionError(f"{net} contains a track narrower than 16 mil")
-    if any(widths != {0.406} for widths in nominal_widths.values()):
-        raise AssertionError("every routed net must use the 16 mil milling width")
+    allowed_widths = {0.406, 0.508}
+    if any(not widths.issubset(allowed_widths) for widths in nominal_widths.values()):
+        raise AssertionError("routed copper must use only 16 mil neckdowns or 20 mil preferred width")
+
+    total_length = sum(item.GetLength() for item in copper_items)
+    wide_length = sum(
+        item.GetLength() for item in copper_items
+        if round(pcbnew.ToMM(item.GetWidth()), 3) == 0.508
+    )
+    wide_ratio = wide_length / total_length
+    arcs = sum(item.GetClass() == "PCB_ARC" for item in copper_items)
+    if wide_ratio < 0.50:
+        raise AssertionError(f"only {wide_ratio:.1%} of routed length uses the 20 mil width")
+    if arcs < 100:
+        raise AssertionError(f"expected organic routing arcs, found only {arcs}")
+    if len(board.Zones()) < 40:
+        raise AssertionError(f"expected SMD teardrops, found only {len(board.Zones())} copper zones")
 
     smd_2x3 = [
         reference for reference, footprint in footprints.items()
@@ -73,7 +91,11 @@ def check(board_path: Path) -> None:
         if "1206_3216Metric" not in footprints[reference].GetFPID().GetLibItemName().wx_str():
             raise AssertionError(f"{reference} does not use a 1206 footprint")
 
-    print(f"OK: {width:.2f} x {height:.2f} mm, {len(footprints)} footprints, 0 unrouted connections")
+    print(
+        f"OK: {width:.2f} x {height:.2f} mm, {len(footprints)} footprints, "
+        f"{wide_ratio:.1%} at 20 mil, {arcs} arcs, {len(board.Zones())} teardrops, "
+        "0 unrouted connections"
+    )
 
 
 def main() -> None:

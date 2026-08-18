@@ -9,7 +9,7 @@
 		(date "2026-08-15")
 		(rev "2.0")
 		(company "TheBeachLab / Alphabets")
-		(comment 1 "Single-sided isolation-milled module; 16 mil minimum tracks")
+		(comment 1 "Single-sided isolation-milled module; 20 mil preferred, 16 mil minimum")
 		(comment 2 "External 28BYJ-48 driver board logic inputs: IN1..IN4")
 		(comment 3 "One CHAIN_RING and one AVR ISP use 2x3 2.54 mm SMD headers")
 		(comment 4 "All discrete SMD passives use 1206 packages")

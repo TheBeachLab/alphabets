@@ -136,7 +136,7 @@ def generate(symbol_path: Path, output_path: Path) -> None:
         revision="2.0",
         company="TheBeachLab / Alphabets",
         comments={
-            1: "Single-sided isolation-milled module; 16 mil minimum tracks",
+            1: "Single-sided isolation-milled module; 20 mil preferred, 16 mil minimum",
             2: "External 28BYJ-48 driver board logic inputs: IN1..IN4",
             3: "One CHAIN_RING and one AVR ISP use 2x3 2.54 mm SMD headers",
             4: "All discrete SMD passives use 1206 packages",

@@ -179,7 +179,7 @@ def generate(output: Path, dsn_output: Path, footprint_root: Path) -> None:
     board.GetTitleBlock().SetTitle("Alphabets V2 ATtiny44 millable ring module")
     board.GetTitleBlock().SetRevision("2.0")
     board.GetTitleBlock().SetCompany("TheBeachLab / Alphabets")
-    board.GetTitleBlock().SetComment(0, "Single-sided F.Cu; 16 mil tracks; 0.4 mm isolation")
+    board.GetTitleBlock().SetComment(0, "Single-sided F.Cu; 16-20 mil organic tracks; 0.4 mm isolation")
 
     default_class = board.GetAllNetClasses()["Default"]
     default_class.SetClearance(MM(ISOLATION))
@@ -223,7 +223,7 @@ def generate(output: Path, dsn_output: Path, footprint_root: Path) -> None:
     add_segment(board, (BOARD_LEFT, BOARD_BOTTOM), (BOARD_LEFT, BOARD_TOP), pcbnew.Edge_Cuts)
     add_segment(board, (BOARD_RIGHT, BOARD_BOTTOM), (BOARD_LEFT, BOARD_BOTTOM), pcbnew.Edge_Cuts)
 
-    add_text(board, "A2 / 16 mil", (133.0, 102.0), size=0.9)
+    add_text(board, "A2 / 16-20 mil", (133.0, 102.0), size=0.9)
     add_text(board, "CHAIN", (105.5, 113.4))
     add_text(board, "DRIVER", (135.8, 138.2))
     add_text(board, "ISP", (119.8, 147.2))

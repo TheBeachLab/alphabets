@@ -203,7 +203,10 @@
           "td_width_to_size_filter_ratio": 0.9
         }
       ],
-      "track_widths": [],
+      "track_widths": [
+        0.4064,
+        0.508
+      ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
           "corner_radius_percentage": 80,
@@ -282,7 +285,7 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.4064,
+        "track_width": 0.508,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -301,7 +304,7 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": -1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.4064,
+        "track_width": 0.508,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
