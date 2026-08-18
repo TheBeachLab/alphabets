@@ -7,7 +7,7 @@ KICAD10_FOOTPRINT_DIR ?=
 
 export KICAD10_FOOTPRINT_DIR
 
-.PHONY: schematic board route autoroute check fabrication previews
+.PHONY: schematic board route organic autoroute check fabrication previews
 
 schematic:
 	$(KIUTILS_PYTHON) tools/generate_schematic.py --symbols $(PROJECT).kicad_sym --output $(PROJECT).kicad_sch
@@ -18,6 +18,9 @@ board:
 
 route:
 	$(KICAD_PYTHON) tools/import_routing.py --board $(PROJECT).kicad_pcb --session routing/$(PROJECT).ses
+
+organic:
+	$(KICAD_PYTHON) tools/organicize_board.py --board $(PROJECT).kicad_pcb --kicad-cli "$(KICAD_CLI)"
 
 autoroute:
 	@test -n "$(FREEROUTING_JAR)" || (echo "FREEROUTING_JAR is required" >&2; exit 2)

@@ -37,8 +37,11 @@ regulated 5 V supply and ground with this module.
 
 - Board outline: 50 x 50 mm.
 - All routed copper is on `F.Cu`.
-- Every track is 16 mil (0.4064 mm).
+- Preferred tracks are 20 mil (0.508 mm); compact neckdowns remain 16 mil
+  (0.4064 mm), never below the requested 15 mil minimum.
 - Routed clearance is 0.40 mm for a 0.40 mm milling bit.
+- Corners are native KiCad arcs with a 0.20 mm maximum radius, and routed SMD
+  pad entries use curved copper teardrops.
 - Crossings use 0 Ohm 1206 links.
 - All discrete SMD passives use 1206 footprints.
 - `JP20` through `JP25` use the project-local compact-pitch 3216 crossover
@@ -51,15 +54,25 @@ regulated 5 V supply and ground with this module.
 - `fabrication/`: front-copper Gerbers, drill data, BOM, positions, and STEP.
 - `preview/`: rendered top, copper, and schematic views.
 - `validation/`: current ERC and DRC/schematic-parity reports.
-- `tools/`: deterministic schematic, single-layer routing, and design checks.
+- `tools/`: deterministic schematic, single-layer routing, organic post-process,
+  and design checks.
+- `third_party/`: the vendored, licensed geometry engines from
+  [KiCad Round Tracks 1.6](https://github.com/mitxela/kicad-round-tracks/releases/tag/1.6)
+  and [NilujePerchut's teardrop helper](https://github.com/NilujePerchut/kicad_scripts).
 
 The workflow uses native files and command-line validation rather than GUI
 automation. The checked-in Freerouting session reproduces the verified routing
 deterministically. Set the KiCad paths, then run:
 
 ```sh
-make schematic board route check fabrication previews
+make schematic board route organic check fabrication previews
 ```
+
+`make board route` is the easy-to-edit angular source. `make organic` creates
+the fabrication board by fitting 20 mil tracks wherever DRC preserves the full
+0.40 mm isolation, retaining 16 mil only where the compact layout requires it.
+It then applies native rounded arcs and curved SMD teardrops before the normal
+ERC/DRC, fabrication, and preview steps.
 
 Use `make autoroute FREEROUTING_JAR=/path/to/freerouting.jar` only when the
 placement or netlist changes and a new routing session must be explored.

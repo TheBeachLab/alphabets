@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "date": "2026-08-17T20:01:50",
+    "date": "2026-08-18T14:37:43",
     "generator": "KiCad 10.0.5",
     "project": "attiny44-ring",
     "board_name": "attiny44-ring"
@@ -12,7 +12,7 @@
     "area": "2500.00 mm²",
     "front_component_density": "20.63",
     "back_component_density": "0.00",
-    "front_copper_area": "392.755 mm²",
+    "front_copper_area": "475.222 mm²",
     "back_copper_area": "0.00 mm²",
     "min_track_clearance": "0.4017 mm",
     "min_track_width": "0.4064 mm",
