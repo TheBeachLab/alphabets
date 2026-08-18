@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "settings.schema.json",
+  "title": "Alphabets V2 settings",
+  "type": "object",
+  "required": ["settings_version", "character_set"],
+  "additionalProperties": false,
+  "properties": {
+    "settings_version": {
+      "const": 1
+    },
+    "character_set": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["preset"],
+          "additionalProperties": false,
+          "properties": {
+            "preset": {
+              "enum": ["demo-64", "international-64"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["custom"],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "custom": {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            "uppercase_input": {
+              "type": "boolean",
+              "default": false
+            },
+            "aliases": {
+              "type": "object",
+              "propertyNames": {
+                "minLength": 1,
+                "maxLength": 1
+              },
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

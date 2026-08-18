@@ -81,8 +81,15 @@ Every command byte has bit 7 cleared.
 | `0x00` | Keep the current target |
 | `0x01` to `0x40` | Move to drum position 0 to 63 (`position = value - 1`) |
 
-Drum position identifiers follow the sequence defined in
+Drum position identifiers follow the character set selected in the controller
+settings. Canonical presets and custom-profile validation are defined in
+[`Code/character_sets.json`](Code/character_sets.json) and documented in
 [`Code/letters.md`](Code/letters.md).
+
+Modules are character-set agnostic: they receive only position identifiers.
+The selected 64-character software sequence must therefore match the physical
+flap order installed on every connected module. Changing a preset changes the
+text-to-position mapping, not the command-byte format.
 
 ## Status byte
 
