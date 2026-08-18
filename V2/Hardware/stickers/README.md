@@ -28,13 +28,17 @@ character order, colors, card/page dimensions and font checksum. Card size is
 55 × 86 mm with the flap cut at 43 mm. The default 22-column layout is
 1388 × 278 mm, matching the limits of the surviving production sheet. The
 center cut passes through the uninterrupted character: the generator does not
-remove a strip from the artwork. The magenta card outlines and center cuts are
+remove a strip from the artwork. The magenta sticker outlines and center cuts are
 superimposed vector paths in the print SVG and PDF by default, matching the
 production file. `--no-guides` produces clean artwork when required, while
 `--output-cut-svg` also writes the same cutter geometry as a separate SVG.
-Every vector glyph is clipped to its own card boundary and uses the non-zero
+Every vector glyph is clipped to its own sticker boundary and uses the non-zero
 winding rule in SVG and PDF, avoiding inverted areas where the outlines
 overlap.
+
+These lines cut the rectangular stickers; they are not the physical flap/card
+die. The card die includes the two drum tabs and is generated separately in
+[`../cards/`](../cards/README.md).
 
 Every visible character uses one shared horizontal scale, vertical scale and
 baseline. The two scales are calculated once from the widest and tallest glyph
@@ -44,8 +48,9 @@ distortion. Each visible outline is geometrically centered in its equal-sized
 card; proportional advance widths do not change the card size. No glyph
 receives an individual scale or vertical offset.
 
-The physical default remains the existing `55 × 86 mm`. A taller, narrower
-comparison can be generated without changing the shared alignment:
+The matched V2 production geometry is `50 × 96 mm`: after the center cut it
+creates two `50 × 48 mm` stickers for the narrower physical cards. Generate it
+without changing the shared alignment with:
 
 ```sh
 python3 V2/Hardware/stickers/generate_stickers.py \
@@ -57,6 +62,9 @@ python3 V2/Hardware/stickers/generate_stickers.py \
 
 `--horizontal-padding` and `--vertical-padding` control the guaranteed clear
 area. Increasing either value reduces the entire type system uniformly.
+The matching card cutter and 51 mm drum separation are documented in
+[`../cards/`](../cards/README.md). The existing `55 × 86 mm` output remains
+available by passing those dimensions explicitly.
 
 ## Color presets
 

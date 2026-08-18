@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="60mm" height="50mm" viewBox="0 0 60 50">
+  <title>V2 card 50 x 48 mm cut path</title>
+  <path id="card-cut" d="M 5 49 L 55 49 L 55 4 L 59 4 L 59 1 L 1 1 L 1 4 L 5 4 Z" fill="none" stroke="#FF00FF" stroke-width="0.15"/>
+</svg>
