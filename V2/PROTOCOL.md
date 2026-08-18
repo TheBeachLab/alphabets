@@ -69,6 +69,11 @@ shifts one bit. The nominal clock frequency is 50 kHz.
 6. Every module validates and applies the command byte now held in its serial
    register.
 
+While `LATCH` remains low, every module forwards each fully received byte to
+the next module. A frame that ends between byte boundaries is discarded. This
+allows discovery frames to continue until the controller receives its marker
+without assigning addresses or a fixed chain length to the modules.
+
 Commands are transmitted in reverse physical order. For a four-module display
 whose target positions are `H O L A`, the controller transmits the command for
 `A`, then `L`, then `O`, and finally `H`.
@@ -84,6 +89,7 @@ Every command byte has bit 7 cleared.
 | --- | --- |
 | `0x00` | Keep the current target |
 | `0x01` to `0x40` | Move to drum position 0 to 63 (`position = value - 1`) |
+| `0x41` | Declare the stationary drum's current alignment as position 0 |
 
 Drum position identifiers follow the character set selected in the controller
 settings. Canonical presets and custom-profile validation are defined in
@@ -105,8 +111,10 @@ bit 6      ready
 bits 5..0  current drum position, 0 to 63
 ```
 
-`ready` is cleared while the module is moving. It is set after the requested
-drum position has been reached and the motor phases have been released.
+`ready` is cleared while the position reference is unknown, while the module is
+moving, and while a completed position is being persisted. It is set after the
+requested drum position has been reached, the motor phases have been released,
+and the current position has been stored.
 
 The controller completes a display update when every module reports `ready = 1`
 and its current position matches the requested position. It repeats the target
@@ -136,12 +144,26 @@ its command marker misses the scan deadline.
 
 ## Module motion state
 
-At power-up, a module releases all four motor phases and initializes its serial
-register and position state.
+At power-up, a module releases all four motor phases and loads its last fully
+reached position from EEPROM. The module invalidates that stored reference
+before starting any movement and writes the new position only after completing
+the movement. A power interruption during movement therefore leaves the module
+unreferenced instead of ready at a stale position. Position records rotate
+through a wear-levelled EEPROM journal and become valid only when their commit
+byte has been written.
+
+The current ATtiny44 ring PCB leaves `PB2/HOME` unconnected. At first
+installation, after interrupted movement, or after a mechanical drum change,
+the operator aligns the stationary drum at physical position 0 and the
+controller sends `0x41`. The module records position 0 without moving. Position
+commands are ignored until this reference is established.
 
 For a position command, the module calculates the forward distance modulo 64,
 drives the external unipolar stepper board through that number of positions,
 releases the motor phases, records the new current position, and sets `ready`.
+
+The AVR C implementation and its build instructions are in
+[`Firmware/attiny44-module`](Firmware/attiny44-module).
 
 ## Controller update sequence
 

@@ -4,6 +4,8 @@ This directory contains the editable KiCad 10 design for one Alphabets V2
 split-flap module. The ATtiny44 participates in the synchronous serial ring
 defined in [`../../../PROTOCOL.md`](../../../PROTOCOL.md) and drives the four
 logic inputs of the external stepper-driver board supplied with the motor.
+Its AVR C firmware is in
+[`../../../Firmware/attiny44-module`](../../../Firmware/attiny44-module).
 
 ## Circuit
 
@@ -32,6 +34,9 @@ The ATtiny44 signal assignment follows the
 The chain harness buses pins 1, 2, 4, and 6. It connects pin 5 of each module
 to pin 3 of the following module. The external motor-driver board shares the
 regulated 5 V supply and ground with this module.
+
+`PB2/HOME` is unconnected on this PCB revision. The firmware uses an explicit
+position-0 calibration command and persists completed positions in EEPROM.
 
 ## Milling rules
 
