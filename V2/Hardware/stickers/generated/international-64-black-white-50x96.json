@@ -14,17 +14,17 @@
   },
   "geometry_mm": {
     "card": [
-      55.0,
-      86.0
+      50.0,
+      96.0
     ],
     "page": [
-      1388.0,
-      278.0
+      1278.0,
+      308.0
     ],
     "margin": 5.0,
     "column_gap": 8.0,
     "row_gap": 5.0,
-    "split_y": 43.0,
+    "split_y": 48.0,
     "glyph_padding": [
       3.0,
       4.0
@@ -35,9 +35,9 @@
   "omit_blank": false,
   "typography": {
     "alignment": "monospaced-common-baseline",
-    "scale_mm_per_font_unit": 0.06270094191583206,
-    "advance_mm": 37.620565149499235,
-    "baseline_from_card_top_mm": 66.9517739402003,
+    "scale_mm_per_font_unit": 0.0707395242127336,
+    "advance_mm": 42.44371452764016,
+    "baseline_from_card_top_mm": 75.02251418894393,
     "vertical_padding_min_mm": 4.0
   },
   "fonts": [
