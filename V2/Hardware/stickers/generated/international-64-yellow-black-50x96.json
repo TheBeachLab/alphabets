@@ -7,9 +7,9 @@
     "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
   },
   "colors": {
-    "preset": "black-white",
-    "background": "#000000",
-    "foreground": "#FFFFFF",
+    "preset": "yellow-black",
+    "background": "#FFCC00",
+    "foreground": "#000000",
     "guide": "#FF00FF"
   },
   "geometry_mm": {

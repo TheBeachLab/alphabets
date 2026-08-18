@@ -28,12 +28,13 @@ character order, colors, card/page dimensions and font checksum. Card size is
 55 × 86 mm with the flap cut at 43 mm. The default 22-column layout is
 1388 × 278 mm, matching the limits of the surviving production sheet. The
 center cut passes through the uninterrupted character: the generator does not
-remove a strip from the artwork. Print files are clean by default; the cutter
-geometry is written separately with `--output-cut-svg`, so lines never cover or
-visually merge with the letters. `--guides` is available only for an overlaid
-alignment proof. Every vector glyph is also clipped to its own card boundary
-and uses the non-zero winding rule in SVG and PDF, avoiding inverted
-areas where the outlines overlap.
+remove a strip from the artwork. The magenta card outlines and center cuts are
+superimposed vector paths in the print SVG and PDF by default, matching the
+production file. `--no-guides` produces clean artwork when required, while
+`--output-cut-svg` also writes the same cutter geometry as a separate SVG.
+Every vector glyph is clipped to its own card boundary and uses the non-zero
+winding rule in SVG and PDF, avoiding inverted areas where the outlines
+overlap.
 
 Every visible character uses one shared horizontal scale, vertical scale and
 baseline. The two scales are calculated once from the widest and tallest glyph
@@ -76,6 +77,18 @@ python3 V2/Hardware/stickers/generate_stickers.py \
 ```
 
 Colors use `#RRGGBB`. Yellow is the historical `#FFCC00`.
+
+Generate the four production color variants at 50 × 96 mm with:
+
+```sh
+for preset in black-white black-yellow yellow-black white-black; do
+  python3 V2/Hardware/stickers/generate_stickers.py \
+    --card-width 50 --card-height 96 \
+    --color-preset "$preset" \
+    --output-svg "V2/Hardware/stickers/generated/international-64-${preset}-50x96.svg" \
+    --output-pdf "output/pdf/alphabets-international-64-${preset}-50x96-stickers.pdf"
+done
+```
 
 ## Preset or custom characters
 
