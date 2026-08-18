@@ -1,5 +1,5 @@
 Drill report for attiny44-ring.kicad_pcb
-Created on 2026-08-18T14:37:44
+Created on 2026-08-18T14:54:11
 
 Copper Layer Stackup:
     =============================================================

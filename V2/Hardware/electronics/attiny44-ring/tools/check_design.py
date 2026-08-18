@@ -72,12 +72,28 @@ def check(board_path: Path) -> None:
     )
     wide_ratio = wide_length / total_length
     arcs = sum(item.GetClass() == "PCB_ARC" for item in copper_items)
+    arc_radii = {
+        round(pcbnew.ToMM(item.GetRadius()), 3)
+        for item in copper_items if item.GetClass() == "PCB_ARC"
+    }
+    taper_zones = [
+        zone for zone in board.Zones()
+        if 10 <= zone.GetAssignedPriority() < 100
+    ]
+    pad_teardrops = [
+        zone for zone in board.Zones()
+        if zone.GetAssignedPriority() >= 100
+    ]
     if wide_ratio < 0.50:
         raise AssertionError(f"only {wide_ratio:.1%} of routed length uses the 20 mil width")
     if arcs < 100:
         raise AssertionError(f"expected organic routing arcs, found only {arcs}")
-    if len(board.Zones()) < 40:
-        raise AssertionError(f"expected SMD teardrops, found only {len(board.Zones())} copper zones")
+    if len(arc_radii) < 20 or max(arc_radii) < 1.0:
+        raise AssertionError("organic routing does not contain the expected variable-radius corners")
+    if len(taper_zones) < 25:
+        raise AssertionError(f"expected smooth width transitions, found only {len(taper_zones)}")
+    if len(pad_teardrops) < 45:
+        raise AssertionError(f"expected SMD teardrops, found only {len(pad_teardrops)}")
 
     smd_2x3 = [
         reference for reference, footprint in footprints.items()
@@ -93,7 +109,8 @@ def check(board_path: Path) -> None:
 
     print(
         f"OK: {width:.2f} x {height:.2f} mm, {len(footprints)} footprints, "
-        f"{wide_ratio:.1%} at 20 mil, {arcs} arcs, {len(board.Zones())} teardrops, "
+        f"{wide_ratio:.1%} at 20 mil, {arcs} variable-radius arcs, "
+        f"{len(taper_zones)} width tapers, {len(pad_teardrops)} pad teardrops, "
         "0 unrouted connections"
     )
 

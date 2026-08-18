@@ -331,10 +331,7 @@ class RoundTracks(RoundTracksDialog):
         self.config['classes'] = new_config
         self.config['checkboxes'] = {'new_file':self.do_create.IsChecked(), 'native':self.use_native.IsChecked(), 'avoid_junctions':self.avoid_junctions.IsChecked()}
 
-    def addIntermediateTracks( self, scaling = RADIUS_DEFAULT, netclass = None, native = False, onlySelection = False, avoid_junctions = False, msg=""):
-
-        # A 90 degree bend will get a maximum radius of this amount
-        RADIUS = pcbnew.FromMM(scaling /(math.sin( math.pi/4 )+1))
+    def addIntermediateTracks( self, scaling = RADIUS_DEFAULT, netclass = None, native = False, onlySelection = False, avoid_junctions = False, msg="", radius_for_intersection = None):
 
         board = self.board
         netcodes = board.GetNetsByNetcode()
@@ -414,6 +411,11 @@ class RoundTracks(RoundTracksDialog):
                     for ip in intersections:
                         (newX, newY) = ip;
                         intersection = pcbnew.VECTOR2I(newX, newY)
+                        corner_key = (str(net.GetNetname()), layer, newX, newY)
+                        local_scaling = scaling
+                        if radius_for_intersection is not None:
+                            local_scaling = radius_for_intersection(corner_key)
+                        RADIUS = pcbnew.FromMM(local_scaling /(math.sin( math.pi/4 )+1))
                         tracksHere = [];
                         for t1 in tracks:
                             if similarPoints(t1.GetStart(), intersection):
@@ -487,7 +489,7 @@ class RoundTracks(RoundTracksDialog):
                                         tracksToAdd.append((sp, ep, tracksHere[t1].GetWidth(), tracksHere[t1].GetLayer(), tracksHere[t1].GetNetCode()))
                                     else:
                                         mp = pcbnew.VECTOR2I(int(newX*(1-f*2)+sp.x*f+ep.x*f), int(newY*(1-f*2)+sp.y*f+ep.y*f))
-                                        arcsToAdd.append((sp, ep, mp, tracksHere[t1].GetWidth(), tracksHere[t1].GetLayer(), tracksHere[t1].GetNetCode()))
+                                        arcsToAdd.append((sp, ep, mp, tracksHere[t1].GetWidth(), tracksHere[t1].GetLayer(), tracksHere[t1].GetNetCode(), corner_key, local_scaling))
 
                         else:
                             shortenAmount = RADIUS
@@ -521,7 +523,7 @@ class RoundTracks(RoundTracksDialog):
                             track.SetSelected()
 
                     for trackpoints in arcsToAdd:
-                        (sp, ep, mp, width, layer, net) = trackpoints
+                        (sp, ep, mp, width, layer, net, corner_key, local_scaling) = trackpoints
 
                         arc = pcbnew.PCB_ARC(board)
                         arc.SetStart(sp)
@@ -531,6 +533,8 @@ class RoundTracks(RoundTracksDialog):
                         arc.SetLayer(layer)
                         board.Add(arc)
                         arc.SetNetCode(net)
+                        if hasattr(self, 'created_arcs'):
+                            self.created_arcs.append((arc, corner_key, local_scaling))
                         if onlySelection:
                             arc.SetSelected()
 
