@@ -380,8 +380,20 @@ def build_svg(
             f'{number(page_height)}">'
         ),
         f'  <title>{xml_escape(profile.name)} sticker sheet</title>',
-        "  <g id=\"backgrounds\">",
+        "  <defs>",
     ]
+    for sheet_index in range(len(characters)):
+        x, y, _, _ = card_origin(sheet_index, geometry)
+        lines.append(
+            f'    <clipPath id="clip-card-{sheet_index + 1:02d}" '
+            f'clipPathUnits="userSpaceOnUse"><rect x="{number(x)}" y="{number(y)}" '
+            f'width="{number(geometry.card_width_mm)}" '
+            f'height="{number(geometry.card_height_mm)}"/></clipPath>'
+        )
+    lines.extend([
+        "  </defs>",
+        "  <g id=\"backgrounds\">",
+    ])
     positions: list[dict[str, Any]] = []
     placements: list[GlyphPlacement | None] = []
 
@@ -417,6 +429,7 @@ def build_svg(
             continue
         lines.append(
             f'    <path id="glyph-{sheet_index + 1:02d}" data-character="{xml_escape(placement.character)}" '
+            f'clip-path="url(#clip-card-{sheet_index + 1:02d})" '
             f'd="{placement.path_data}" transform="translate({number(placement.x_mm)} '
             f'{number(placement.baseline_y_mm)}) scale({number(placement.scale_x)} '
             f'-{number(placement.scale_y)})"/>'
@@ -441,6 +454,46 @@ def build_svg(
         lines.append("  </g>")
     lines.append("</svg>")
     return "\n".join(lines) + "\n", positions
+
+
+def build_cut_svg(
+    profile: CharacterSet,
+    geometry: SheetGeometry,
+    guide_color: str,
+    omit_blank: bool,
+) -> str:
+    """Build a cutter-only SVG so guides never cover the printed artwork."""
+
+    characters = [
+        character
+        for character in profile.characters
+        if not (omit_blank and character == " ")
+    ]
+    page_width, page_height, _ = geometry.page_size(len(characters))
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{number(page_width)}mm" '
+            f'height="{number(page_height)}mm" viewBox="0 0 {number(page_width)} '
+            f'{number(page_height)}">'
+        ),
+        f'  <title>{xml_escape(profile.name)} cut paths</title>',
+        f'  <g id="cut-guides" fill="none" stroke="{guide_color}" '
+        f'stroke-width="{number(geometry.guide_width_mm)}">',
+    ]
+    for sheet_index in range(len(characters)):
+        x, y, _, _ = card_origin(sheet_index, geometry)
+        lines.append(
+            f'    <rect x="{number(x)}" y="{number(y)}" '
+            f'width="{number(geometry.card_width_mm)}" '
+            f'height="{number(geometry.card_height_mm)}"/>'
+        )
+        lines.append(
+            f'    <path d="M {number(x)} {number(y + geometry.split_y_mm)} '
+            f'H {number(x + geometry.card_width_mm)}"/>'
+        )
+    lines.extend(["  </g>", "</svg>"])
+    return "\n".join(lines) + "\n"
 
 
 class CanvasPathPen(BasePen):
@@ -519,6 +572,15 @@ def write_pdf(
         pdf_path = pdf.beginPath()
         glyph_set[placement.glyph_name].draw(CanvasPathPen(glyph_set, pdf_path))
         pdf.saveState()
+        clip_path = pdf.beginPath()
+        clip_y = page_height - y_top - geometry.card_height_mm
+        clip_path.rect(
+            x * mm,
+            clip_y * mm,
+            geometry.card_width_mm * mm,
+            geometry.card_height_mm * mm,
+        )
+        pdf.clipPath(clip_path, stroke=0, fill=0)
         pdf.translate(placement.x_mm * mm, (page_height - placement.baseline_y_mm) * mm)
         pdf.scale(placement.scale_x * mm, placement.scale_y * mm)
         pdf.drawPath(pdf_path, fill=1, stroke=0)
@@ -651,9 +713,24 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--horizontal-padding", type=float, default=3.0)
     parser.add_argument("--vertical-padding", type=float, default=4.0)
     parser.add_argument("--omit-blank", action="store_true", help="omit the blank drum position")
-    parser.add_argument("--no-guides", action="store_true", help="omit cut outlines and center lines")
+    guide_mode = parser.add_mutually_exclusive_group()
+    guide_mode.add_argument(
+        "--guides",
+        action="store_true",
+        help="overlay cut guides on print artwork (off by default)",
+    )
+    guide_mode.add_argument(
+        "--no-guides",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
     parser.add_argument("--output-svg", type=Path, required=True)
     parser.add_argument("--output-pdf", type=Path)
+    parser.add_argument(
+        "--output-cut-svg",
+        type=Path,
+        help="write separate cutter-only SVG with card outlines and center cuts",
+    )
     parser.add_argument("--manifest", type=Path)
     return parser.parse_args(argv)
 
@@ -676,21 +753,28 @@ def main(argv: Sequence[str] | None = None) -> int:
             glyph_padding_y_mm=args.vertical_padding,
             split_y_mm=args.card_height / 2,
         )
+        include_guides = args.guides and not args.no_guides
         svg, positions = build_svg(
             profile, faces, geometry, background, foreground, guide_color,
-            not args.no_guides, args.omit_blank,
+            include_guides, args.omit_blank,
         )
         args.output_svg.parent.mkdir(parents=True, exist_ok=True)
         args.output_svg.write_text(svg, encoding="utf-8")
+        if args.output_cut_svg:
+            args.output_cut_svg.parent.mkdir(parents=True, exist_ok=True)
+            args.output_cut_svg.write_text(
+                build_cut_svg(profile, geometry, guide_color, args.omit_blank),
+                encoding="utf-8",
+            )
         if args.output_pdf:
             write_pdf(
                 args.output_pdf, profile, faces, geometry, background, foreground,
-                guide_color, not args.no_guides, args.omit_blank,
+                guide_color, include_guides, args.omit_blank,
             )
         manifest_path = args.manifest or args.output_svg.with_suffix(".json")
         manifest = build_manifest(
             profile, faces, positions, geometry, args.color_preset, background,
-            foreground, guide_color, not args.no_guides, args.omit_blank,
+            foreground, guide_color, include_guides, args.omit_blank,
         )
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

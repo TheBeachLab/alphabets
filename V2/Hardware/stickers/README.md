@@ -19,6 +19,7 @@ From the repository root:
 ```sh
 python3 V2/Hardware/stickers/generate_stickers.py \
   --output-svg V2/Hardware/stickers/generated/international-64-black-white.svg \
+  --output-cut-svg V2/Hardware/stickers/generated/international-64-black-white-cut.svg \
   --output-pdf output/pdf/alphabets-international-64-black-white-stickers.pdf
 ```
 
@@ -26,9 +27,11 @@ The SVG is accompanied by a JSON manufacturing manifest containing the exact
 character order, colors, card/page dimensions and font checksum. Card size is
 55 × 86 mm with the flap cut at 43 mm. The default 22-column layout is
 1388 × 278 mm, matching the limits of the surviving production sheet. The
-center cut is a guide over the uninterrupted character: the generator does not
-remove a strip from the artwork. Magenta cut guides are included by default and
-can be omitted with `--no-guides`.
+center cut passes through the uninterrupted character: the generator does not
+remove a strip from the artwork. Print files are clean by default; the cutter
+geometry is written separately with `--output-cut-svg`, so lines never cover or
+visually merge with the letters. `--guides` is available only for an overlaid
+alignment proof. Every vector glyph is also clipped to its own card boundary.
 
 Every visible character uses one shared typographic scale, monospaced advance
 and baseline. The scale is calculated once from the widest and tallest glyph
@@ -36,14 +39,15 @@ in the selected 64-position profile. If an accent needs more vertical room,
 the complete profile becomes slightly smaller and gains equal top/bottom
 clearance; individual glyphs are never shifted or resized.
 
-The physical default remains the existing `55 × 86 mm`. A narrower comparison
-can be generated without changing alignment:
+The physical default remains the existing `55 × 86 mm`. A taller, narrower
+comparison can be generated without changing the shared alignment:
 
 ```sh
 python3 V2/Hardware/stickers/generate_stickers.py \
-  --card-width 50 --card-height 86 \
-  --output-svg /tmp/international-50x86.svg \
-  --output-pdf /tmp/international-50x86.pdf
+  --card-width 50 --card-height 96 \
+  --output-svg /tmp/international-50x96.svg \
+  --output-cut-svg /tmp/international-50x96-cut.svg \
+  --output-pdf /tmp/international-50x96.pdf
 ```
 
 `--horizontal-padding` and `--vertical-padding` control the guaranteed clear
