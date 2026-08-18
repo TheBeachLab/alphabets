@@ -423,7 +423,9 @@ def build_svg(
             }
         )
     lines.append("  </g>")
-    lines.append(f'  <g id="glyphs" fill="{foreground}">')
+    lines.append(
+        f'  <g id="glyphs" fill="{foreground}" fill-rule="nonzero">'
+    )
     for sheet_index, placement in enumerate(placements):
         if placement is None:
             continue
@@ -583,7 +585,10 @@ def write_pdf(
         pdf.clipPath(clip_path, stroke=0, fill=0)
         pdf.translate(placement.x_mm * mm, (page_height - placement.baseline_y_mm) * mm)
         pdf.scale(placement.scale_x * mm, placement.scale_y * mm)
-        pdf.drawPath(pdf_path, fill=1, stroke=0)
+        # TrueType contours use non-zero winding. ReportLab defaults to the
+        # even-odd rule, which punches false inverse rectangles where contours
+        # overlap (most visibly across the crossbar of A and accented A glyphs).
+        pdf.drawPath(pdf_path, fill=1, stroke=0, fillMode=1)
         pdf.restoreState()
 
     if include_guides:

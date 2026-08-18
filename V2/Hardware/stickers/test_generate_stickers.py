@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
 
@@ -27,6 +28,7 @@ from generate_stickers import (  # noqa: E402
     resolve_colors,
     select_face,
     typography_layout,
+    write_pdf,
 )
 
 
@@ -94,6 +96,7 @@ class StickerGeneratorTests(unittest.TestCase):
         self.assertIsNotNone(glyphs)
         self.assertEqual(len(backgrounds.findall(f"{SVG}rect")), 64)
         self.assertEqual(len(glyphs.findall(f"{SVG}path")), 63)
+        self.assertEqual(glyphs.attrib["fill-rule"], "nonzero")
         self.assertTrue(
             all("clip-path" in path.attrib for path in glyphs.findall(f"{SVG}path"))
         )
@@ -206,6 +209,32 @@ class StickerGeneratorTests(unittest.TestCase):
         self.assertIsNone(root.find(f"{SVG}g[@id='glyphs']"))
         self.assertEqual(len(root.findall(f".//{SVG}rect")), 64)
         self.assertEqual(len(root.findall(f".//{SVG}path")), 64)
+
+    def test_pdf_glyphs_use_nonzero_winding_fill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "sheet.pdf"
+            with patch(
+                "generate_stickers.canvas.Canvas.drawPath",
+                autospec=True,
+            ) as draw_path:
+                write_pdf(
+                    output,
+                    self.profile,
+                    self.faces,
+                    SheetGeometry(columns=22),
+                    "#000000",
+                    "#FFFFFF",
+                    "#FF00FF",
+                    False,
+                    False,
+                )
+            self.assertEqual(draw_path.call_count, 63)
+            self.assertTrue(
+                all(
+                    call.kwargs == {"fill": 1, "stroke": 0, "fillMode": 1}
+                    for call in draw_path.call_args_list
+                )
+            )
 
     def test_custom_settings_order_is_used(self):
         custom = self.profile.characters[1:] + self.profile.characters[:1]

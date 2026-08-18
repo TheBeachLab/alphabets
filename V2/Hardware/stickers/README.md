@@ -31,7 +31,9 @@ center cut passes through the uninterrupted character: the generator does not
 remove a strip from the artwork. Print files are clean by default; the cutter
 geometry is written separately with `--output-cut-svg`, so lines never cover or
 visually merge with the letters. `--guides` is available only for an overlaid
-alignment proof. Every vector glyph is also clipped to its own card boundary.
+alignment proof. Every vector glyph is also clipped to its own card boundary
+and uses the TrueType non-zero winding rule in SVG and PDF, avoiding inverted
+areas where the outlines overlap.
 
 Every visible character uses one shared typographic scale, monospaced advance
 and baseline. The scale is calculated once from the widest and tallest glyph
