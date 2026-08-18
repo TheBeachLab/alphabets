@@ -1,0 +1,29 @@
+{
+  "card_mm": {
+    "body_width": 50.0,
+    "body_height": 45.0,
+    "total_height": 48.0,
+    "overall_width_with_tabs": 58.0,
+    "tab_width": 4.0,
+    "tab_height": 3.0,
+    "material_thickness": 1.0
+  },
+  "matching_sticker_mm": [
+    50.0,
+    96.0
+  ],
+  "drum_mm": {
+    "inner_width": 51.0,
+    "axial_clearance": 1.0,
+    "side_thickness": 2.15,
+    "outer_width": 55.3,
+    "diameter": 85.0,
+    "positions": 64
+  },
+  "cut": {
+    "layer": "CUT",
+    "color": "#FF00FF",
+    "stroke_width_mm": 0.15,
+    "svg_margin_mm": 1.0
+  }
+}
