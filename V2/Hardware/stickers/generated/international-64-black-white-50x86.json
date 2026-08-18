@@ -10,7 +10,7 @@
     "preset": "black-white",
     "background": "#000000",
     "foreground": "#FFFFFF",
-    "guide": null
+    "guide": "#FF00FF"
   },
   "geometry_mm": {
     "card": [

@@ -738,14 +738,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     guide_mode = parser.add_mutually_exclusive_group()
     guide_mode.add_argument(
         "--guides",
+        dest="include_guides",
         action="store_true",
-        help="overlay cut guides on print artwork (off by default)",
+        help="overlay cut guides on print artwork (default)",
     )
     guide_mode.add_argument(
         "--no-guides",
-        action="store_true",
-        help=argparse.SUPPRESS,
+        dest="include_guides",
+        action="store_false",
+        help="omit cut outlines and center lines from print artwork",
     )
+    parser.set_defaults(include_guides=True)
     parser.add_argument("--output-svg", type=Path, required=True)
     parser.add_argument("--output-pdf", type=Path)
     parser.add_argument(
@@ -775,7 +778,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             glyph_padding_y_mm=args.vertical_padding,
             split_y_mm=args.card_height / 2,
         )
-        include_guides = args.guides and not args.no_guides
+        include_guides = args.include_guides
         svg, positions = build_svg(
             profile, faces, geometry, background, foreground, guide_color,
             include_guides, args.omit_blank,

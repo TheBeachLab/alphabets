@@ -133,7 +133,7 @@
     <rect id="card-63" x="1049" y="207" width="50" height="96" fill="#000000"/>
     <rect id="card-64" x="1107" y="207" width="50" height="96" fill="#000000"/>
   </g>
-  <g id="glyphs" fill="#FFFFFF" fill-rule="nonzero">
+  <g id="glyphs" fill="#FFCC00" fill-rule="nonzero">
     <path id="glyph-02" data-character="A" clip-path="url(#clip-card-02)" d="M72 0H273L376 335H857L961 0H1160L698 1400H532ZM579 993C588 1020 607 1095 615 1134C622 1095 644 1019 652 993L804 505H429Z" transform="translate(65.91035 78.937042) scale(0.03586 -0.037947)"/>
     <path id="glyph-03" data-character="B" clip-path="url(#clip-card-03)" d="M182 0H632C978 0 1088 208 1088 401C1088 567 992 693 838 738C966 791 1039 897 1039 1030C1039 1215 935 1400 601 1400H182ZM371 811V1227H610C812 1227 855 1122 855 1024C855 895 760 811 568 811ZM371 173V641H590C843 641 904 520 904 394C904 286 850 173 652 173Z" transform="translate(123.229014 78.937042) scale(0.03586 -0.037947)"/>
     <path id="glyph-04" data-character="C" clip-path="url(#clip-card-04)" d="M659 -23C874 -23 1003 110 1068 267L898 332C848 226 779 153 659 153C424 153 322 427 322 700C322 951 410 1247 659 1247C775 1247 836 1174 887 1077L1055 1164C997 1294 882 1423 659 1423C281 1423 126 1059 126 700C126 342 272 -23 659 -23Z" transform="translate(182.591687 78.937042) scale(0.03586 -0.037947)"/>

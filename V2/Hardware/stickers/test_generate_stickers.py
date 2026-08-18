@@ -207,12 +207,15 @@ class StickerGeneratorTests(unittest.TestCase):
             self.assertEqual(len(cut_group.findall(f"{SVG}rect")), 64)
             self.assertEqual(len(cut_group.findall(f"{SVG}path")), 64)
             print_root = ET.fromstring(svg.read_text(encoding="utf-8"))
-            self.assertIsNone(print_root.find(f"{SVG}g[@id='cut-guides']"))
+            print_guides = print_root.find(f"{SVG}g[@id='cut-guides']")
+            self.assertIsNotNone(print_guides)
+            self.assertEqual(len(print_guides.findall(f"{SVG}rect")), 64)
+            self.assertEqual(len(print_guides.findall(f"{SVG}path")), 64)
             data = json.loads(manifest.read_text(encoding="utf-8"))
             self.assertEqual(data["character_set"]["characters"], self.profile.characters)
             self.assertEqual(data["colors"]["background"], "#000000")
             self.assertEqual(data["colors"]["foreground"], "#FFCC00")
-            self.assertIsNone(data["colors"]["guide"])
+            self.assertEqual(data["colors"]["guide"], "#FF00FF")
             self.assertEqual(data["geometry_mm"]["rows"], 3)
             self.assertEqual(len(data["fonts"]), 1)
             self.assertEqual(data["fonts"][0]["family"], "Overpass Mono Medium")
@@ -223,6 +226,28 @@ class StickerGeneratorTests(unittest.TestCase):
             )
             self.assertEqual(data["typography"]["spacing"], "monospaced")
             self.assertEqual(len(data["positions"]), 64)
+
+    def test_no_guides_writes_clean_artwork(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            svg = root / "clean.svg"
+            manifest = root / "clean.json"
+            result = main(
+                [
+                    "--preset",
+                    "international-64",
+                    "--no-guides",
+                    "--output-svg",
+                    str(svg),
+                    "--manifest",
+                    str(manifest),
+                ]
+            )
+            self.assertEqual(result, 0)
+            print_root = ET.fromstring(svg.read_text(encoding="utf-8"))
+            self.assertIsNone(print_root.find(f"{SVG}g[@id='cut-guides']"))
+            data = json.loads(manifest.read_text(encoding="utf-8"))
+            self.assertIsNone(data["colors"]["guide"])
 
     def test_cut_svg_contains_only_cut_geometry(self):
         cut_svg = build_cut_svg(

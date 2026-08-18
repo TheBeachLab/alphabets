@@ -198,4 +198,134 @@
     <path id="glyph-63" data-character="$" clip-path="url(#clip-card-63)" d="M528 -192H715V-17C923 10 1074 150 1074 379C1074 659 859 767 674 838C527 895 397 955 397 1080C397 1184 475 1247 606 1247C729 1247 808 1183 840 1107L1012 1165C976 1288 872 1386 715 1414V1575H528V1416C320 1387 203 1244 203 1079C203 829 409 736 595 663C744 605 879 527 879 376C879 230 784 153 634 153C495 153 387 237 333 360L158 296C211 141 343 19 528 -14Z" transform="translate(1051.91035 252.989651) scale(0.03586 -0.033635)"/>
     <path id="glyph-64" data-character="°" clip-path="url(#clip-card-64)" d="M617 898C811 898 963 1047 963 1242C963 1437 811 1583 617 1583C423 1583 269 1437 269 1242C269 1047 423 898 617 898ZM617 1068C524 1068 451 1143 451 1242C451 1343 524 1414 617 1414C712 1414 780 1343 780 1242C780 1143 712 1068 617 1068Z" transform="translate(1109.91035 252.989651) scale(0.03586 -0.033635)"/>
   </g>
+  <g id="cut-guides" fill="none" stroke="#FF00FF" stroke-width="0.15">
+    <rect x="5" y="5" width="50" height="86"/>
+    <path d="M 5 48 H 55"/>
+    <rect x="63" y="5" width="50" height="86"/>
+    <path d="M 63 48 H 113"/>
+    <rect x="121" y="5" width="50" height="86"/>
+    <path d="M 121 48 H 171"/>
+    <rect x="179" y="5" width="50" height="86"/>
+    <path d="M 179 48 H 229"/>
+    <rect x="237" y="5" width="50" height="86"/>
+    <path d="M 237 48 H 287"/>
+    <rect x="295" y="5" width="50" height="86"/>
+    <path d="M 295 48 H 345"/>
+    <rect x="353" y="5" width="50" height="86"/>
+    <path d="M 353 48 H 403"/>
+    <rect x="411" y="5" width="50" height="86"/>
+    <path d="M 411 48 H 461"/>
+    <rect x="469" y="5" width="50" height="86"/>
+    <path d="M 469 48 H 519"/>
+    <rect x="527" y="5" width="50" height="86"/>
+    <path d="M 527 48 H 577"/>
+    <rect x="585" y="5" width="50" height="86"/>
+    <path d="M 585 48 H 635"/>
+    <rect x="643" y="5" width="50" height="86"/>
+    <path d="M 643 48 H 693"/>
+    <rect x="701" y="5" width="50" height="86"/>
+    <path d="M 701 48 H 751"/>
+    <rect x="759" y="5" width="50" height="86"/>
+    <path d="M 759 48 H 809"/>
+    <rect x="817" y="5" width="50" height="86"/>
+    <path d="M 817 48 H 867"/>
+    <rect x="875" y="5" width="50" height="86"/>
+    <path d="M 875 48 H 925"/>
+    <rect x="933" y="5" width="50" height="86"/>
+    <path d="M 933 48 H 983"/>
+    <rect x="991" y="5" width="50" height="86"/>
+    <path d="M 991 48 H 1041"/>
+    <rect x="1049" y="5" width="50" height="86"/>
+    <path d="M 1049 48 H 1099"/>
+    <rect x="1107" y="5" width="50" height="86"/>
+    <path d="M 1107 48 H 1157"/>
+    <rect x="1165" y="5" width="50" height="86"/>
+    <path d="M 1165 48 H 1215"/>
+    <rect x="1223" y="5" width="50" height="86"/>
+    <path d="M 1223 48 H 1273"/>
+    <rect x="5" y="96" width="50" height="86"/>
+    <path d="M 5 139 H 55"/>
+    <rect x="63" y="96" width="50" height="86"/>
+    <path d="M 63 139 H 113"/>
+    <rect x="121" y="96" width="50" height="86"/>
+    <path d="M 121 139 H 171"/>
+    <rect x="179" y="96" width="50" height="86"/>
+    <path d="M 179 139 H 229"/>
+    <rect x="237" y="96" width="50" height="86"/>
+    <path d="M 237 139 H 287"/>
+    <rect x="295" y="96" width="50" height="86"/>
+    <path d="M 295 139 H 345"/>
+    <rect x="353" y="96" width="50" height="86"/>
+    <path d="M 353 139 H 403"/>
+    <rect x="411" y="96" width="50" height="86"/>
+    <path d="M 411 139 H 461"/>
+    <rect x="469" y="96" width="50" height="86"/>
+    <path d="M 469 139 H 519"/>
+    <rect x="527" y="96" width="50" height="86"/>
+    <path d="M 527 139 H 577"/>
+    <rect x="585" y="96" width="50" height="86"/>
+    <path d="M 585 139 H 635"/>
+    <rect x="643" y="96" width="50" height="86"/>
+    <path d="M 643 139 H 693"/>
+    <rect x="701" y="96" width="50" height="86"/>
+    <path d="M 701 139 H 751"/>
+    <rect x="759" y="96" width="50" height="86"/>
+    <path d="M 759 139 H 809"/>
+    <rect x="817" y="96" width="50" height="86"/>
+    <path d="M 817 139 H 867"/>
+    <rect x="875" y="96" width="50" height="86"/>
+    <path d="M 875 139 H 925"/>
+    <rect x="933" y="96" width="50" height="86"/>
+    <path d="M 933 139 H 983"/>
+    <rect x="991" y="96" width="50" height="86"/>
+    <path d="M 991 139 H 1041"/>
+    <rect x="1049" y="96" width="50" height="86"/>
+    <path d="M 1049 139 H 1099"/>
+    <rect x="1107" y="96" width="50" height="86"/>
+    <path d="M 1107 139 H 1157"/>
+    <rect x="1165" y="96" width="50" height="86"/>
+    <path d="M 1165 139 H 1215"/>
+    <rect x="1223" y="96" width="50" height="86"/>
+    <path d="M 1223 139 H 1273"/>
+    <rect x="5" y="187" width="50" height="86"/>
+    <path d="M 5 230 H 55"/>
+    <rect x="63" y="187" width="50" height="86"/>
+    <path d="M 63 230 H 113"/>
+    <rect x="121" y="187" width="50" height="86"/>
+    <path d="M 121 230 H 171"/>
+    <rect x="179" y="187" width="50" height="86"/>
+    <path d="M 179 230 H 229"/>
+    <rect x="237" y="187" width="50" height="86"/>
+    <path d="M 237 230 H 287"/>
+    <rect x="295" y="187" width="50" height="86"/>
+    <path d="M 295 230 H 345"/>
+    <rect x="353" y="187" width="50" height="86"/>
+    <path d="M 353 230 H 403"/>
+    <rect x="411" y="187" width="50" height="86"/>
+    <path d="M 411 230 H 461"/>
+    <rect x="469" y="187" width="50" height="86"/>
+    <path d="M 469 230 H 519"/>
+    <rect x="527" y="187" width="50" height="86"/>
+    <path d="M 527 230 H 577"/>
+    <rect x="585" y="187" width="50" height="86"/>
+    <path d="M 585 230 H 635"/>
+    <rect x="643" y="187" width="50" height="86"/>
+    <path d="M 643 230 H 693"/>
+    <rect x="701" y="187" width="50" height="86"/>
+    <path d="M 701 230 H 751"/>
+    <rect x="759" y="187" width="50" height="86"/>
+    <path d="M 759 230 H 809"/>
+    <rect x="817" y="187" width="50" height="86"/>
+    <path d="M 817 230 H 867"/>
+    <rect x="875" y="187" width="50" height="86"/>
+    <path d="M 875 230 H 925"/>
+    <rect x="933" y="187" width="50" height="86"/>
+    <path d="M 933 230 H 983"/>
+    <rect x="991" y="187" width="50" height="86"/>
+    <path d="M 991 230 H 1041"/>
+    <rect x="1049" y="187" width="50" height="86"/>
+    <path d="M 1049 230 H 1099"/>
+    <rect x="1107" y="187" width="50" height="86"/>
+    <path d="M 1107 230 H 1157"/>
+  </g>
 </svg>
