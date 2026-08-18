@@ -40,8 +40,11 @@ regulated 5 V supply and ground with this module.
 - Preferred tracks are 20 mil (0.508 mm); compact neckdowns remain 16 mil
   (0.4064 mm), never below the requested 15 mil minimum.
 - Routed clearance is 0.40 mm for a 0.40 mm milling bit.
-- Corners are native KiCad arcs with a 0.20 mm maximum radius, and routed SMD
-  pad entries use curved copper teardrops.
+- Corners are native KiCad arcs fitted independently against DRC, trying radius
+  limits from 2.00 mm down to 0.20 mm only where the 0.40 mm isolation requires
+  it.
+- Changes between 20 mil and 16 mil use curved 0.90 mm copper tapers; routed
+  SMD pad entries use separate curved copper teardrops.
 - Crossings use 0 Ohm 1206 links.
 - All discrete SMD passives use 1206 footprints.
 - `JP20` through `JP25` use the project-local compact-pitch 3216 crossover
@@ -71,8 +74,9 @@ make schematic board route organic check fabrication previews
 `make board route` is the easy-to-edit angular source. `make organic` creates
 the fabrication board by fitting 20 mil tracks wherever DRC preserves the full
 0.40 mm isolation, retaining 16 mil only where the compact layout requires it.
-It then applies native rounded arcs and curved SMD teardrops before the normal
-ERC/DRC, fabrication, and preview steps.
+It then fits the largest safe radius at every corner, adds smooth width tapers
+and curved SMD teardrops, and runs the normal ERC/DRC, fabrication, and preview
+steps.
 
 Use `make autoroute FREEROUTING_JAR=/path/to/freerouting.jar` only when the
 placement or netlist changes and a new routing session must be explored.
