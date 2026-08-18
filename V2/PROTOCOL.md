@@ -1,5 +1,9 @@
 # Alphabets V2 module protocol
 
+Text applications communicate with the controller through the higher-level
+[`MESSAGE_PROTOCOL.md`](MESSAGE_PROTOCOL.md). This document defines the link
+between that controller and the autonomous character modules.
+
 ## Purpose
 
 The Alphabets V2 protocol controls a physical chain of autonomous split-flap
