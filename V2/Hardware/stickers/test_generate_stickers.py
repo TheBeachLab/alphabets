@@ -12,17 +12,20 @@ if str(STICKERS_DIR) not in sys.path:
 
 from generate_stickers import (  # noqa: E402
     COLOR_PRESETS,
-    DEFAULT_FALLBACK_FONTS,
     DEFAULT_FONT,
+    DEFAULT_FONT_WEIGHT,
+    DEFAULT_FONT_WIDTH,
     FontFace,
     SheetGeometry,
     StickerError,
     build_svg,
+    glyph_placement,
     load_profile,
     main,
     normalize_color,
     resolve_colors,
     select_face,
+    typography_layout,
 )
 
 
@@ -32,7 +35,9 @@ SVG = "{http://www.w3.org/2000/svg}"
 class StickerGeneratorTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.faces = [FontFace.load(DEFAULT_FONT), FontFace.load(DEFAULT_FALLBACK_FONTS[0])]
+        cls.faces = [
+            FontFace.load(DEFAULT_FONT, DEFAULT_FONT_WEIGHT, DEFAULT_FONT_WIDTH)
+        ]
         cls.profile = load_profile("international-64", None)
 
     def test_color_presets_and_default(self):
@@ -57,19 +62,24 @@ class StickerGeneratorTests(unittest.TestCase):
                 with self.assertRaisesRegex(StickerError, "#RRGGBB"):
                     normalize_color(color)
 
-    def test_only_sharp_s_uses_fallback_in_international_profile(self):
-        fallback_characters = [
-            character
-            for character in self.profile.characters
-            if character != " " and select_face(character, self.faces) is self.faces[1]
-        ]
-        self.assertEqual(fallback_characters, ["ẞ"])
+    def test_one_font_covers_every_international_character(self):
+        for preset in (self.profile, load_profile("demo-64", None)):
+            with self.subTest(preset=preset.id):
+                unsupported_characters = [
+                    character
+                    for character in preset.characters
+                    if character != " " and not self.faces[0].has(character)
+                ]
+                self.assertEqual(unsupported_characters, [])
+        self.assertEqual(
+            self.faces[0].label, "Noto Sans Mono wdth 100 wght 700"
+        )
 
     def test_svg_has_64_cards_63_outlined_glyphs_and_no_text_elements(self):
         svg, positions = build_svg(
             self.profile,
             self.faces,
-            SheetGeometry(columns=8),
+            SheetGeometry(columns=22),
             "#000000",
             "#FFFFFF",
             "#FF00FF",
@@ -84,10 +94,49 @@ class StickerGeneratorTests(unittest.TestCase):
         self.assertEqual(len(backgrounds.findall(f"{SVG}rect")), 64)
         self.assertEqual(len(glyphs.findall(f"{SVG}path")), 63)
         self.assertEqual(root.findall(f".//{SVG}text"), [])
-        self.assertEqual(root.attrib["viewBox"], "0 0 478 726")
+        self.assertIsNone(root.find(f"{SVG}g[@id='split-lines']"))
+        self.assertEqual(root.attrib["viewBox"], "0 0 1388 278")
         self.assertEqual(len(positions), 64)
-        sharp_s = next(position for position in positions if position["character"] == "ẞ")
-        self.assertEqual(sharp_s["font"], "Dream Orphans Bold")
+        self.assertEqual(
+            {position["font"] for position in positions if position["character"] != " "},
+            {"Noto Sans Mono wdth 100 wght 700"},
+        )
+
+    def test_special_characters_share_scale_advance_and_baseline(self):
+        geometry = SheetGeometry(columns=22)
+        layout = typography_layout(
+            self.profile.characters, self.faces[0], geometry
+        )
+        placements = [
+            glyph_placement(character, self.faces[0], 0, 0, geometry, layout)
+            for character in "AÄẞ@€?."
+        ]
+        self.assertEqual({placement.scale_x for placement in placements}, {layout.scale})
+        self.assertEqual({placement.scale_y for placement in placements}, {layout.scale})
+        self.assertEqual(
+            {placement.baseline_y_mm for placement in placements},
+            {layout.baseline_in_card_mm},
+        )
+        self.assertEqual(
+            {round(placement.x_mm, 9) for placement in placements},
+            {round((geometry.card_width_mm - layout.advance_mm) / 2, 9)},
+        )
+
+    def test_narrow_card_crops_side_space_without_changing_type_alignment(self):
+        standard = typography_layout(
+            self.profile.characters, self.faces[0], SheetGeometry(card_width_mm=55)
+        )
+        narrow = typography_layout(
+            self.profile.characters, self.faces[0], SheetGeometry(card_width_mm=50)
+        )
+        self.assertEqual(narrow.scale, standard.scale)
+        self.assertEqual(
+            narrow.baseline_in_card_mm, standard.baseline_in_card_mm
+        )
+        self.assertLess(
+            SheetGeometry(card_width_mm=50).page_size(64)[0],
+            SheetGeometry(card_width_mm=55).page_size(64)[0],
+        )
 
     def test_main_writes_svg_pdf_and_manifest_with_exact_profile(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -102,7 +151,7 @@ class StickerGeneratorTests(unittest.TestCase):
                     "--color-preset",
                     "black-yellow",
                     "--columns",
-                    "8",
+                    "22",
                     "--output-svg",
                     str(svg),
                     "--output-pdf",
@@ -118,7 +167,16 @@ class StickerGeneratorTests(unittest.TestCase):
             self.assertEqual(data["character_set"]["characters"], self.profile.characters)
             self.assertEqual(data["colors"]["background"], "#000000")
             self.assertEqual(data["colors"]["foreground"], "#FFCC00")
-            self.assertEqual(data["geometry_mm"]["rows"], 8)
+            self.assertEqual(data["geometry_mm"]["rows"], 3)
+            self.assertEqual(len(data["fonts"]), 1)
+            self.assertEqual(data["fonts"][0]["family"], "Noto Sans Mono")
+            self.assertEqual(
+                data["fonts"][0]["variation"], {"wdth": 100.0, "wght": 700.0}
+            )
+            self.assertEqual(
+                data["typography"]["alignment"],
+                "monospaced-common-baseline",
+            )
             self.assertEqual(len(data["positions"]), 64)
 
     def test_custom_settings_order_is_used(self):

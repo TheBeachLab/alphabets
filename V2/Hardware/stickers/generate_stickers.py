@@ -44,8 +44,9 @@ COLOR_PRESETS = {
     "white-black": ("#FFFFFF", "#000000"),
 }
 DEFAULT_COLOR_PRESET = "black-white"
-DEFAULT_FONT = STICKERS_DIR / "fonts" / "Blue Highway D.otf"
-DEFAULT_FALLBACK_FONTS = (STICKERS_DIR / "fonts" / "Dream Orphans Bd.otf",)
+DEFAULT_FONT = STICKERS_DIR / "fonts" / "NotoSansMono[wdth,wght].ttf"
+DEFAULT_FONT_WEIGHT = 700
+DEFAULT_FONT_WIDTH = 100
 HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
 
@@ -58,27 +59,34 @@ class SheetGeometry:
     card_width_mm: float = 55.0
     card_height_mm: float = 86.0
     margin_mm: float = 5.0
-    gap_mm: float = 4.0
-    columns: int = 8
-    glyph_padding_x_mm: float = 4.0
+    column_gap_mm: float = 8.0
+    row_gap_mm: float = 5.0
+    columns: int = 22
+    glyph_padding_x_mm: float = 3.0
+    glyph_padding_y_mm: float = 4.0
     cap_height_mm: float = 67.0
     split_y_mm: float = 43.0
-    split_width_mm: float = 0.8
     guide_width_mm: float = 0.15
 
     def page_size(self, count: int) -> tuple[float, float, int]:
         if self.columns < 1:
             raise StickerError("columns must be at least 1")
+        if self.card_width_mm <= 0 or self.card_height_mm <= 0:
+            raise StickerError("card dimensions must be positive")
+        if not 0 <= self.glyph_padding_x_mm < self.card_width_mm / 2:
+            raise StickerError("horizontal glyph padding does not fit the card")
+        if not 0 <= self.glyph_padding_y_mm < self.card_height_mm / 2:
+            raise StickerError("vertical glyph padding does not fit the card")
         rows = math.ceil(count / self.columns)
         width = (
             2 * self.margin_mm
             + self.columns * self.card_width_mm
-            + max(0, self.columns - 1) * self.gap_mm
+            + max(0, self.columns - 1) * self.column_gap_mm
         )
         height = (
             2 * self.margin_mm
             + rows * self.card_height_mm
-            + max(0, rows - 1) * self.gap_mm
+            + max(0, rows - 1) * self.row_gap_mm
         )
         return width, height, rows
 
@@ -92,9 +100,15 @@ class FontFace:
     sha256: str
     cap_height: int
     cmap: dict[int, str]
+    variation_location: dict[str, float]
 
     @classmethod
-    def load(cls, path: Path) -> "FontFace":
+    def load(
+        cls,
+        path: Path,
+        weight: float | None = None,
+        width: float | None = None,
+    ) -> "FontFace":
         path = path.expanduser().resolve()
         if not path.is_file():
             raise StickerError(f"font file not found: {path}")
@@ -102,9 +116,27 @@ class FontFace:
         cmap = font.getBestCmap() or {}
         family = font["name"].getDebugName(1) or path.stem
         style = font["name"].getDebugName(2) or "Regular"
+        variation_location: dict[str, float] = {}
+        requested_axes = {"wght": weight, "wdth": width}
+        if "fvar" in font:
+            available_axes = {axis.axisTag: axis for axis in font["fvar"].axes}
+            for tag, requested in requested_axes.items():
+                if requested is None or tag not in available_axes:
+                    continue
+                axis = available_axes[tag]
+                if not axis.minValue <= requested <= axis.maxValue:
+                    raise StickerError(
+                        f"font axis {tag!r} must be between {axis.minValue:g} "
+                        f"and {axis.maxValue:g}; got {requested:g}"
+                    )
+                variation_location[tag] = requested
+        if variation_location:
+            style = " ".join(
+                f"{tag} {value:g}" for tag, value in sorted(variation_location.items())
+            )
         cap_height = getattr(font["OS/2"], "sCapHeight", 0)
         if not cap_height:
-            glyph_set = font.getGlyphSet()
+            glyph_set = font.getGlyphSet(location=variation_location or None)
             pen = BoundsPen(glyph_set)
             glyph_set[cmap[ord("H")]].draw(pen)
             if not pen.bounds:
@@ -118,6 +150,7 @@ class FontFace:
             sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
             cap_height=cap_height,
             cmap=cmap,
+            variation_location=variation_location,
         )
 
     @property
@@ -130,6 +163,9 @@ class FontFace:
     def glyph_name(self, character: str) -> str:
         return self.cmap[ord(character)]
 
+    def glyph_set(self) -> Any:
+        return self.font.getGlyphSet(location=self.variation_location or None)
+
 
 @dataclass(frozen=True)
 class GlyphPlacement:
@@ -141,6 +177,20 @@ class GlyphPlacement:
     baseline_y_mm: float
     scale_x: float
     scale_y: float
+
+
+@dataclass(frozen=True)
+class TypographyLayout:
+    """One scale, advance and baseline shared by the complete sheet."""
+
+    scale: float
+    advance_units: float
+    baseline_in_card_mm: float
+    source_bounds: tuple[float, float, float, float]
+
+    @property
+    def advance_mm(self) -> float:
+        return self.advance_units * self.scale
 
 
 def normalize_color(value: str) -> str:
@@ -172,14 +222,70 @@ def select_face(character: str, faces: Sequence[FontFace]) -> FontFace:
     raise StickerError(f"no configured font contains {character!r}: {names}")
 
 
+def typography_layout(
+    characters: str,
+    face: FontFace,
+    geometry: SheetGeometry,
+) -> TypographyLayout:
+    """Fit the whole preset once while preserving a common baseline and cell."""
+
+    glyph_set = face.glyph_set()
+    advances: list[float] = []
+    bounds: list[tuple[float, float, float, float]] = []
+    for character in characters:
+        if character == " ":
+            continue
+        glyph = glyph_set[face.glyph_name(character)]
+        advances.append(glyph.width)
+        bounds_pen = BoundsPen(glyph_set)
+        glyph.draw(bounds_pen)
+        if not bounds_pen.bounds:
+            raise StickerError(f"glyph {character!r} has no visible outline")
+        bounds.append(bounds_pen.bounds)
+
+    rounded_advances = {round(advance, 6) for advance in advances}
+    if len(rounded_advances) != 1:
+        raise StickerError(
+            f"font {face.label!r} is not monospaced for the selected characters"
+        )
+    advance = advances[0]
+    x_min = min(bound[0] for bound in bounds)
+    y_min = min(bound[1] for bound in bounds)
+    x_max = max(bound[2] for bound in bounds)
+    y_max = max(bound[3] for bound in bounds)
+
+    horizontal_half_extent = max(
+        abs(x_min - advance / 2), abs(x_max - advance / 2)
+    )
+    horizontal_scale = (
+        geometry.card_width_mm / 2 - geometry.glyph_padding_x_mm
+    ) / horizontal_half_extent
+    vertical_scale = (
+        geometry.card_height_mm - 2 * geometry.glyph_padding_y_mm
+    ) / (y_max - y_min)
+    cap_scale = geometry.cap_height_mm / face.cap_height
+    scale = min(horizontal_scale, vertical_scale, cap_scale)
+
+    baseline = (
+        geometry.card_height_mm / 2 + (y_max + y_min) * scale / 2
+    )
+    return TypographyLayout(
+        scale=scale,
+        advance_units=advance,
+        baseline_in_card_mm=baseline,
+        source_bounds=(x_min, y_min, x_max, y_max),
+    )
+
+
 def glyph_placement(
     character: str,
     face: FontFace,
     card_x: float,
     card_y: float,
     geometry: SheetGeometry,
+    typography: TypographyLayout,
 ) -> GlyphPlacement:
-    glyph_set = face.font.getGlyphSet()
+    glyph_set = face.glyph_set()
     glyph_name = face.glyph_name(character)
     glyph = glyph_set[glyph_name]
 
@@ -193,24 +299,28 @@ def glyph_placement(
     glyph.draw(svg_pen)
     path_data = svg_pen.getCommands()
 
-    scale_y = geometry.cap_height_mm / face.cap_height
-    glyph_width_mm = (x_max - x_min) * scale_y
-    max_width_mm = geometry.card_width_mm - 2 * geometry.glyph_padding_x_mm
-    scale_x = scale_y * min(1.0, max_width_mm / glyph_width_mm)
+    scale_x = typography.scale
+    scale_y = typography.scale
+    x_mm = card_x + (
+        geometry.card_width_mm - glyph.width * typography.scale
+    ) / 2
+    baseline_y_mm = card_y + typography.baseline_in_card_mm
 
-    transformed_width = (x_max - x_min) * scale_x
-    x_mm = card_x + (geometry.card_width_mm - transformed_width) / 2 - x_min * scale_x
-
-    cap_top = card_y + (geometry.card_height_mm - geometry.cap_height_mm) / 2
-    baseline_y_mm = cap_top + face.cap_height * scale_y
+    visible_left = x_mm + x_min * scale_x
+    visible_right = x_mm + x_max * scale_x
     visible_top = baseline_y_mm - y_max * scale_y
     visible_bottom = baseline_y_mm - y_min * scale_y
-    min_y = card_y + 3.0
-    max_y = card_y + geometry.card_height_mm - 3.0
-    if visible_top < min_y:
-        baseline_y_mm += min_y - visible_top
-    if visible_bottom > max_y:
-        baseline_y_mm -= visible_bottom - max_y
+    tolerance = 1e-6
+    if not (
+        card_x + geometry.glyph_padding_x_mm - tolerance <= visible_left
+        and visible_right
+        <= card_x + geometry.card_width_mm - geometry.glyph_padding_x_mm + tolerance
+        and card_y + geometry.glyph_padding_y_mm - tolerance <= visible_top
+        and visible_bottom
+        <= card_y + geometry.card_height_mm - geometry.glyph_padding_y_mm
+        + tolerance
+    ):
+        raise StickerError(f"glyph {character!r} exceeds its safe card limits")
 
     return GlyphPlacement(
         character=character,
@@ -226,8 +336,12 @@ def glyph_placement(
 
 def card_origin(index: int, geometry: SheetGeometry) -> tuple[float, float, int, int]:
     row, column = divmod(index, geometry.columns)
-    x = geometry.margin_mm + column * (geometry.card_width_mm + geometry.gap_mm)
-    y = geometry.margin_mm + row * (geometry.card_height_mm + geometry.gap_mm)
+    x = geometry.margin_mm + column * (
+        geometry.card_width_mm + geometry.column_gap_mm
+    )
+    y = geometry.margin_mm + row * (
+        geometry.card_height_mm + geometry.row_gap_mm
+    )
     return x, y, row, column
 
 
@@ -256,6 +370,8 @@ def build_svg(
 ) -> tuple[str, list[dict[str, Any]]]:
     characters = [character for character in profile.characters if not (omit_blank and character == " ")]
     page_width, page_height, _ = geometry.page_size(len(characters))
+    face = faces[0]
+    typography = typography_layout(profile.characters, face, geometry)
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         (
@@ -279,8 +395,9 @@ def build_svg(
         placement = None
         font_label = None
         if character != " ":
-            face = select_face(character, faces)
-            placement = glyph_placement(character, face, x, y, geometry)
+            placement = glyph_placement(
+                character, face, x, y, geometry, typography
+            )
             font_label = face.label
         placements.append(placement)
         positions.append(
@@ -303,15 +420,6 @@ def build_svg(
             f'd="{placement.path_data}" transform="translate({number(placement.x_mm)} '
             f'{number(placement.baseline_y_mm)}) scale({number(placement.scale_x)} '
             f'-{number(placement.scale_y)})"/>'
-        )
-    lines.append("  </g>")
-
-    lines.append(f'  <g id="split-lines" fill="{background}">')
-    for sheet_index in range(len(characters)):
-        x, y, _, _ = card_origin(sheet_index, geometry)
-        lines.append(
-            f'    <rect x="{number(x)}" y="{number(y + geometry.split_y_mm - geometry.split_width_mm / 2)}" '
-            f'width="{number(geometry.card_width_mm)}" height="{number(geometry.split_width_mm)}"/>'
         )
     lines.append("  </g>")
 
@@ -381,6 +489,8 @@ def write_pdf(
 ) -> None:
     characters = [character for character in profile.characters if not (omit_blank and character == " ")]
     page_width, page_height, _ = geometry.page_size(len(characters))
+    face = faces[0]
+    typography = typography_layout(profile.characters, face, geometry)
     output.parent.mkdir(parents=True, exist_ok=True)
     pdf = canvas.Canvas(
         str(output),
@@ -402,9 +512,10 @@ def write_pdf(
         if character == " ":
             continue
         x, y_top, _, _ = card_origin(index, geometry)
-        face = select_face(character, faces)
-        placement = glyph_placement(character, face, x, y_top, geometry)
-        glyph_set = face.font.getGlyphSet()
+        placement = glyph_placement(
+            character, face, x, y_top, geometry, typography
+        )
+        glyph_set = face.glyph_set()
         pdf_path = pdf.beginPath()
         glyph_set[placement.glyph_name].draw(CanvasPathPen(glyph_set, pdf_path))
         pdf.saveState()
@@ -412,12 +523,6 @@ def write_pdf(
         pdf.scale(placement.scale_x * mm, placement.scale_y * mm)
         pdf.drawPath(pdf_path, fill=1, stroke=0)
         pdf.restoreState()
-
-    pdf.setFillColor(HexColor(background))
-    for index in range(len(characters)):
-        x, y_top, _, _ = card_origin(index, geometry)
-        y = page_height - y_top - geometry.split_y_mm - geometry.split_width_mm / 2
-        pdf.rect(x * mm, y * mm, geometry.card_width_mm * mm, geometry.split_width_mm * mm, fill=1, stroke=0)
 
     if include_guides:
         pdf.setStrokeColor(HexColor(guide_color))
@@ -446,6 +551,7 @@ def build_manifest(
     omit_blank: bool,
 ) -> dict[str, Any]:
     page_width, page_height, rows = geometry.page_size(len(positions))
+    typography = typography_layout(profile.characters, faces[0], geometry)
     return {
         "schema_version": 1,
         "generator": "generate_stickers.py",
@@ -464,21 +570,34 @@ def build_manifest(
             "card": [geometry.card_width_mm, geometry.card_height_mm],
             "page": [page_width, page_height],
             "margin": geometry.margin_mm,
-            "gap": geometry.gap_mm,
+            "column_gap": geometry.column_gap_mm,
+            "row_gap": geometry.row_gap_mm,
             "split_y": geometry.split_y_mm,
+            "glyph_padding": [
+                geometry.glyph_padding_x_mm,
+                geometry.glyph_padding_y_mm,
+            ],
             "columns": geometry.columns,
             "rows": rows,
         },
         "omit_blank": omit_blank,
+        "typography": {
+            "alignment": "monospaced-common-baseline",
+            "scale_mm_per_font_unit": typography.scale,
+            "advance_mm": typography.advance_mm,
+            "baseline_from_card_top_mm": typography.baseline_in_card_mm,
+            "vertical_padding_min_mm": geometry.glyph_padding_y_mm,
+        },
         "fonts": [
             {
-                "role": "primary" if index == 0 else "fallback",
+                "role": "sheet",
                 "file": face.path.name,
                 "family": face.family,
                 "style": face.style,
+                "variation": face.variation_location,
                 "sha256": face.sha256,
             }
-            for index, face in enumerate(faces)
+            for face in faces
         ],
         "positions": positions,
     }
@@ -508,9 +627,29 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--background", help="background override in #RRGGBB notation")
     parser.add_argument("--foreground", help="letter-color override in #RRGGBB notation")
     parser.add_argument("--guide-color", default="#FF00FF", help="cut-guide color in #RRGGBB notation")
-    parser.add_argument("--font", type=Path, default=DEFAULT_FONT, help="primary OpenType font")
-    parser.add_argument("--fallback-font", action="append", type=Path, dest="fallback_fonts", help="fallback OpenType font; may be repeated")
-    parser.add_argument("--columns", type=int, default=8)
+    parser.add_argument(
+        "--font",
+        type=Path,
+        default=DEFAULT_FONT,
+        help="single OpenType font; it must contain every selected character",
+    )
+    parser.add_argument(
+        "--font-weight",
+        type=float,
+        default=DEFAULT_FONT_WEIGHT,
+        help="wght axis value for a variable font (default: 700)",
+    )
+    parser.add_argument(
+        "--font-width",
+        type=float,
+        default=DEFAULT_FONT_WIDTH,
+        help="wdth axis value for a variable font (default: 100)",
+    )
+    parser.add_argument("--columns", type=int, default=22)
+    parser.add_argument("--card-width", type=float, default=55.0)
+    parser.add_argument("--card-height", type=float, default=86.0)
+    parser.add_argument("--horizontal-padding", type=float, default=3.0)
+    parser.add_argument("--vertical-padding", type=float, default=4.0)
     parser.add_argument("--omit-blank", action="store_true", help="omit the blank drum position")
     parser.add_argument("--no-guides", action="store_true", help="omit cut outlines and center lines")
     parser.add_argument("--output-svg", type=Path, required=True)
@@ -525,12 +664,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         profile = load_profile(args.preset, args.settings)
         background, foreground = resolve_colors(args.color_preset, args.background, args.foreground)
         guide_color = normalize_color(args.guide_color)
-        fallback_paths = tuple(args.fallback_fonts) if args.fallback_fonts is not None else DEFAULT_FALLBACK_FONTS
-        faces = [FontFace.load(args.font), *(FontFace.load(path) for path in fallback_paths)]
+        faces = [FontFace.load(args.font, args.font_weight, args.font_width)]
         for character in profile.characters:
             if character != " ":
                 select_face(character, faces)
-        geometry = SheetGeometry(columns=args.columns)
+        geometry = SheetGeometry(
+            card_width_mm=args.card_width,
+            card_height_mm=args.card_height,
+            columns=args.columns,
+            glyph_padding_x_mm=args.horizontal_padding,
+            glyph_padding_y_mm=args.vertical_padding,
+            split_y_mm=args.card_height / 2,
+        )
         svg, positions = build_svg(
             profile, faces, geometry, background, foreground, guide_color,
             not args.no_guides, args.omit_blank,

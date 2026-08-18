@@ -23,9 +23,31 @@ python3 V2/Hardware/stickers/generate_stickers.py \
 ```
 
 The SVG is accompanied by a JSON manufacturing manifest containing the exact
-character order, colors, card/page dimensions, font checksums and font used for
-each position. Card size is 55 × 86 mm with the flap split at 43 mm. Magenta
-cut guides are included by default and can be omitted with `--no-guides`.
+character order, colors, card/page dimensions and font checksum. Card size is
+55 × 86 mm with the flap cut at 43 mm. The default 22-column layout is
+1388 × 278 mm, matching the limits of the surviving production sheet. The
+center cut is a guide over the uninterrupted character: the generator does not
+remove a strip from the artwork. Magenta cut guides are included by default and
+can be omitted with `--no-guides`.
+
+Every visible character uses one shared typographic scale, monospaced advance
+and baseline. The scale is calculated once from the widest and tallest glyph
+in the selected 64-position profile. If an accent needs more vertical room,
+the complete profile becomes slightly smaller and gains equal top/bottom
+clearance; individual glyphs are never shifted or resized.
+
+The physical default remains the existing `55 × 86 mm`. A narrower comparison
+can be generated without changing alignment:
+
+```sh
+python3 V2/Hardware/stickers/generate_stickers.py \
+  --card-width 50 --card-height 86 \
+  --output-svg /tmp/international-50x86.svg \
+  --output-pdf /tmp/international-50x86.pdf
+```
+
+`--horizontal-padding` and `--vertical-padding` control the guaranteed clear
+area. Increasing either value reduces the entire type system uniformly.
 
 ## Color presets
 
@@ -65,13 +87,22 @@ production files if any selected font cannot render a required character.
 ## Typeface
 
 The project history names Blue Highway Bold as the selected Solari-like
-typeface. Most surviving V2 artwork identifies `Blue Highway D`, so that is the
-generator default. The current Blue Highway fonts do not contain uppercase
-`ẞ`; the generator uses the bundled Dream Orphans Bold only for that glyph.
-Both families are by Raymond Larabie and were obtained from Typodermic's
-[official public-domain collection](https://typodermicfonts.com/public-domain/).
-Exact provenance and checksums are recorded in [`fonts/`](fonts/README.md).
+typeface, but the available Blue Highway files do not contain uppercase `ẞ`
+and are proportional. The generator therefore uses **Noto Sans Mono** at
+weight 700 and width 100. This single monospaced font contains every
+character in both `international-64` and `demo-64`, including `ẞ` and `■`.
+It is distributed under the SIL Open Font License 1.1 from the
+[official Google Fonts repository](https://github.com/google/fonts/tree/main/ofl/notosansmono).
 
-Choose another OpenType font with `--font path/to/font.otf`; repeat
-`--fallback-font path/to/fallback.otf` when required. The manifest records the
-resolved files and SHA-256 checksums.
+The alignment model follows the lesson from Scott Bezek's production
+[splitflap generator](https://github.com/scottbez1/splitflap/blob/master/3d/flap_fonts.scad):
+font scale and position are explicit manufacturing parameters. This generator
+uses the stricter option requested here—one scale, advance and baseline for
+the entire profile, rather than per-character overrides. Exact provenance and
+checksums are recorded in [`fonts/`](fonts/README.md).
+
+Choose another OpenType font with `--font path/to/font.otf`. For a variable
+font, select its weight and width with `--font-weight 600 --font-width 80`.
+The generator rejects the font unless that single file covers every selected
+character with one common advance. The manifest records the resolved file,
+variation, shared baseline/scale/advance and SHA-256 checksum.
