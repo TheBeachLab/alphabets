@@ -1,2 +1,4 @@
 ignore/
 .DS_Store
+__pycache__/
+*.py[cod]
