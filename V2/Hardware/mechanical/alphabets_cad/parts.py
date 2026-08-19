@@ -368,3 +368,189 @@ def enclosure_reference_edges(
     return cq.Compound.makeCompound(
         [outer, vertical, horizontal, upper_reference, lower_reference]
     )
+
+
+def _x_axis_cylinder(
+    radius: float,
+    length: float,
+    x: float,
+    y: float,
+    z: float,
+) -> cq.Solid:
+    return cq.Solid.makeCylinder(
+        radius,
+        length,
+        cq.Vector(x, y, z),
+        cq.Vector(1, 0, 0),
+    )
+
+
+def _drum_enclosure_shell(params: DesignParameters = DESIGN) -> cq.Shape:
+    """Shared rounded shell before it is divided at the drum axis."""
+
+    enclosure = params.drum_enclosure
+    outer_width = params.enclosure_outer_width
+    outer_height = params.enclosure_outer_height
+    outer_depth = params.enclosure_outer_depth
+    inner_width = params.enclosure_inner_width
+    inner_height = params.enclosure_inner_height
+    inner_depth = params.enclosure_inner_depth
+    front_y = -inner_depth / 2 - enclosure.front_thickness
+
+    outer = (
+        cq.Workplane("XY", origin=(0, -enclosure.front_thickness / 2, 0))
+        .box(outer_width, outer_depth, outer_height)
+        .edges("|Y")
+        .fillet(enclosure.outer_corner_radius)
+    )
+    inner_corner_radius = max(
+        enclosure.outer_corner_radius - enclosure.wall_thickness,
+        0.5,
+    )
+    cavity = (
+        cq.Workplane("XY", origin=(0, EPSILON, 0))
+        .box(inner_width, inner_depth + 2 * EPSILON, inner_height)
+        .edges("|Y")
+        .fillet(inner_corner_radius)
+    )
+    window = (
+        cq.Workplane(
+            "XY",
+            origin=(
+                0,
+                front_y + enclosure.front_thickness / 2,
+                0,
+            ),
+        )
+        .box(
+            params.enclosure_window_width,
+            enclosure.front_thickness + 2 * EPSILON,
+            params.enclosure_window_height,
+        )
+        .edges("|Y")
+        .fillet(enclosure.window_corner_radius)
+    )
+    shell = outer.cut(cavity).cut(window)
+
+    left_outer_x = -outer_width / 2
+    right_inner_x = inner_width / 2
+    side_cut_length = enclosure.wall_thickness + 2 * EPSILON
+    shell = shell.cut(
+        _x_axis_cylinder(
+            enclosure.motor_bore_diameter / 2,
+            side_cut_length,
+            left_outer_x - EPSILON,
+            0,
+            0,
+        )
+    ).cut(
+        _x_axis_cylinder(
+            enclosure.shaft_bore_diameter / 2,
+            side_cut_length,
+            right_inner_x - EPSILON,
+            0,
+            0,
+        )
+    )
+
+    for mount_y in (
+        -params.motor.mount_center_offset,
+        params.motor.mount_center_offset,
+    ):
+        shell = shell.cut(
+            _x_axis_cylinder(
+                enclosure.motor_mount_hole_diameter / 2,
+                side_cut_length,
+                left_outer_x - EPSILON,
+                mount_y,
+                -params.motor.shaft_offset,
+            )
+        )
+    return shell.val().clean()
+
+
+def _enclosure_half(
+    upper: bool,
+    params: DesignParameters = DESIGN,
+) -> cq.Shape:
+    enclosure = params.drum_enclosure
+    half_height = (params.enclosure_outer_height - enclosure.split_gap) / 2
+    split_z = enclosure.split_gap / 2
+    center_z = split_z + half_height / 2
+    if not upper:
+        center_z = -center_z
+
+    clipping_box = (
+        cq.Workplane("XY", origin=(0, 0, center_z))
+        .box(
+            params.enclosure_overall_width + 2,
+            2 * params.enclosure_outer_depth,
+            half_height,
+        )
+        .val()
+    )
+    result = _drum_enclosure_shell(params).intersect(clipping_box)
+
+    rear_y = params.enclosure_inner_depth / 2
+    lug_y = rear_y - enclosure.rear_lug_inset
+    lug_start_z = split_z if upper else -split_z - enclosure.rear_lug_height
+    lug_height = enclosure.rear_lug_height
+    for x in (
+        -params.enclosure_rear_lug_center_x,
+        params.enclosure_rear_lug_center_x,
+    ):
+        lug = (
+            cq.Workplane("XY", origin=(x, lug_y, lug_start_z))
+            .circle(enclosure.rear_lug_radius)
+            .extrude(lug_height)
+        )
+        result = result.fuse(lug.val())
+
+        hole_radius = (
+            enclosure.screw_clearance_diameter / 2
+            if upper
+            else enclosure.screw_pilot_diameter / 2
+        )
+        hole = cq.Solid.makeCylinder(
+            hole_radius,
+            lug_height + 2 * EPSILON,
+            cq.Vector(x, lug_y, lug_start_z - EPSILON),
+            cq.Vector(0, 0, 1),
+        )
+        result = result.cut(hole)
+        if upper:
+            counterbore = cq.Solid.makeCylinder(
+                enclosure.screw_head_diameter / 2,
+                enclosure.screw_head_depth + EPSILON,
+                cq.Vector(
+                    x,
+                    lug_y,
+                    lug_start_z + lug_height - enclosure.screw_head_depth,
+                ),
+                cq.Vector(0, 0, 1),
+            )
+            result = result.cut(counterbore)
+    return result.clean()
+
+
+def drum_enclosure_upper(params: DesignParameters = DESIGN) -> cq.Shape:
+    """Upper printable shell with M3 clearance holes and head recesses."""
+
+    return _enclosure_half(True, params)
+
+
+def drum_enclosure_lower(params: DesignParameters = DESIGN) -> cq.Shape:
+    """Lower printable cradle with nominal M3 self-tapping pilot holes."""
+
+    return _enclosure_half(False, params)
+
+
+def drum_enclosure_parts(
+    params: DesignParameters = DESIGN,
+) -> dict[str, cq.Shape]:
+    """The complete rear-open enclosure as exactly two printable solids."""
+
+    return {
+        "enclosure_upper": drum_enclosure_upper(params),
+        "enclosure_lower": drum_enclosure_lower(params),
+    }
