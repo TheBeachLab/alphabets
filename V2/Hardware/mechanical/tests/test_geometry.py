@@ -10,10 +10,17 @@ import cadquery as cq
 import ezdxf
 import pytest
 
-from alphabets_cad.assemblies import drum_component_shapes, module_reference_assembly
+from alphabets_cad.assemblies import (
+    _orient_for_enclosure,
+    drum_component_shapes,
+    enclosed_module_assembly,
+    enclosure_assembly,
+    module_reference_assembly,
+)
 from alphabets_cad.parameters import DESIGN
 from alphabets_cad.parts import (
     card_points,
+    drum_enclosure_parts,
     drum_support,
     enclosure_reference_edges,
     flap_card,
@@ -222,6 +229,91 @@ def test_cq_editor_entry_point_builds_the_reference_module() -> None:
     assert result.toCompound().isValid()
 
 
+def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
+    parts = drum_enclosure_parts()
+    assert tuple(parts) == ("enclosure_upper", "enclosure_lower")
+    assert all(shape.isValid() for shape in parts.values())
+    assert all(len(shape.Solids()) == 1 for shape in parts.values())
+
+    enclosure = DESIGN.drum_enclosure
+    upper_box = parts["enclosure_upper"].BoundingBox()
+    lower_box = parts["enclosure_lower"].BoundingBox()
+    assert upper_box.xlen == pytest.approx(DESIGN.enclosure_overall_width)
+    assert lower_box.xlen == pytest.approx(DESIGN.enclosure_overall_width)
+    assert upper_box.ylen == pytest.approx(DESIGN.enclosure_outer_depth)
+    assert lower_box.ylen == pytest.approx(DESIGN.enclosure_outer_depth)
+    assert upper_box.zmin == pytest.approx(enclosure.split_gap / 2)
+    assert lower_box.zmax == pytest.approx(-enclosure.split_gap / 2)
+    assert parts["enclosure_upper"].intersect(
+        parts["enclosure_lower"]
+    ).Volume() == pytest.approx(0)
+
+    rear_opening_probe = (
+        cq.Workplane(
+            "XY",
+            origin=(0, DESIGN.enclosure_inner_depth / 2, 0),
+        )
+        .box(
+            DESIGN.enclosure_inner_width - 2,
+            1,
+            DESIGN.enclosure_inner_height - 2,
+        )
+        .val()
+    )
+    for shape in parts.values():
+        assert shape.intersect(rear_opening_probe).Volume() == pytest.approx(0)
+
+
+def test_enclosure_window_and_drum_clearances_are_real_geometry() -> None:
+    parts = drum_enclosure_parts()
+    shell = cq.Compound.makeCompound(list(parts.values()))
+    enclosure = DESIGN.drum_enclosure
+    front_y = -DESIGN.enclosure_inner_depth / 2 - enclosure.front_thickness / 2
+    window_probe = (
+        cq.Workplane("XY", origin=(0, front_y, 0))
+        .box(
+            DESIGN.enclosure_window_width - 0.5,
+            enclosure.front_thickness + 1,
+            DESIGN.enclosure_window_height - 0.5,
+        )
+        .edges("|Y")
+        .fillet(enclosure.window_corner_radius)
+        .val()
+    )
+    assert shell.intersect(window_probe).Volume() == pytest.approx(0)
+
+    drum_offset = -DESIGN.drum_outer_width / 2
+    oriented_drum = cq.Compound.makeCompound(
+        [
+            _orient_for_enclosure(shape, drum_offset)
+            for shape in drum_component_shapes().values()
+        ]
+    )
+    assert shell.intersect(oriented_drum).Volume() == pytest.approx(0)
+
+
+def test_enclosure_assemblies_contain_two_shell_parts() -> None:
+    enclosure = enclosure_assembly()
+    assert set(enclosure.objects) == {
+        "alphabets-v2-drum-enclosure",
+        "enclosure_upper",
+        "enclosure_lower",
+    }
+    assert enclosure.toCompound().isValid()
+
+    module = enclosed_module_assembly()
+    assert {"enclosure_upper", "enclosure_lower"} < set(module.objects)
+    assert module.toCompound().isValid()
+
+
+def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
+    namespace = runpy.run_path(str(MECHANICAL_DIR / "view_enclosure.py"))
+    result = namespace["result"]
+    assert isinstance(result, cq.Assembly)
+    assert result.name == "alphabets-v2-enclosed-module"
+    assert result.toCompound().isValid()
+
+
 def test_legacy_holder_and_enclosure_reference_are_preserved() -> None:
     holder = legacy_holder_side()
     assert holder.isValid()
@@ -237,6 +329,8 @@ def test_generated_manufacturing_files_are_readable() -> None:
     assert manifest["units"] == "mm"
     assert manifest["parameters"]["drum"]["positions"] == 64
     assert manifest["geometry"]["drum_assembly"]["valid"] is True
+    assert manifest["geometry"]["enclosure_upper"]["solid_count"] == 1
+    assert manifest["geometry"]["enclosure_lower"]["solid_count"] == 1
 
     for path in sorted((GENERATED / "cut").glob("*.dxf")):
         document = ezdxf.readfile(path)

@@ -2,6 +2,7 @@
   "cad_engine": "CadQuery 2.8.0 / OCCT",
   "fabrication_status": {
     "card_and_laser_cut_drum": "ported from current dimensional sources",
+    "drum_enclosure": "two printable halves; nominal clearances and M3 pilot fit require physical validation",
     "enclosure_sketch": "non-solid reference geometry",
     "holder_side": "ported dormant legacy profile; physical validation required",
     "motor": "clearance reference, not a manufacturing model",
@@ -47,6 +48,86 @@
       "solid_count": 4,
       "valid": true,
       "volume_mm3": 30086.059648
+    },
+    "enclosed_module": {
+      "bounds_mm": {
+        "x": [
+          -51.05,
+          37.75
+        ],
+        "y": [
+          -47.5,
+          44.5
+        ],
+        "z": [
+          -46.9,
+          46.9
+        ]
+      },
+      "component_volume_sum_mm3": 123582.401285,
+      "solid_count": 11,
+      "valid": true,
+      "volume_mm3": 120398.631748
+    },
+    "enclosure_assembly": {
+      "bounds_mm": {
+        "x": [
+          -37.75,
+          37.75
+        ],
+        "y": [
+          -47.5,
+          44.5
+        ],
+        "z": [
+          -46.9,
+          46.9
+        ]
+      },
+      "component_volume_sum_mm3": 74833.20479,
+      "solid_count": 2,
+      "valid": true,
+      "volume_mm3": 74833.20479
+    },
+    "enclosure_lower": {
+      "bounds_mm": {
+        "x": [
+          -37.75,
+          37.75
+        ],
+        "y": [
+          -47.5,
+          44.5
+        ],
+        "z": [
+          -46.9,
+          -0.1
+        ]
+      },
+      "component_volume_sum_mm3": 37445.157193,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 37445.157193
+    },
+    "enclosure_upper": {
+      "bounds_mm": {
+        "x": [
+          -37.75,
+          37.75
+        ],
+        "y": [
+          -47.5,
+          44.5
+        ],
+        "z": [
+          0.1,
+          46.9
+        ]
+      },
+      "component_volume_sum_mm3": 37388.047597,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 37388.047597
     },
     "module_reference": {
       "bounds_mm": {
@@ -217,6 +298,36 @@
       "support_width": 35.0,
       "support_y": 20.0
     },
+    "drum_enclosure": {
+      "axial_clearance": 2.0,
+      "front_thickness": 3.0,
+      "inner_depth": 89.0,
+      "inner_height": 89.0,
+      "inner_width": 59.3,
+      "motor_bore_diameter": 10.0,
+      "motor_mount_hole_diameter": 4.4,
+      "outer_corner_radius": 4.0,
+      "outer_depth": 92.0,
+      "outer_height": 93.8,
+      "outer_width": 64.1,
+      "overall_width": 75.49999999999999,
+      "radial_clearance": 2.0,
+      "rear_lug_edge_overlap": 1.9,
+      "rear_lug_height": 6.0,
+      "rear_lug_inset": 8.0,
+      "rear_lug_radius": 3.8,
+      "screw_clearance_diameter": 3.4,
+      "screw_head_depth": 2.0,
+      "screw_head_diameter": 6.2,
+      "screw_pilot_diameter": 2.6,
+      "shaft_bore_diameter": 3.4,
+      "split_gap": 0.2,
+      "wall_thickness": 2.4,
+      "window_clearance": 1.0,
+      "window_corner_radius": 2.0,
+      "window_height": 50.0,
+      "window_width": 52.0
+    },
     "enclosure_reference": {
       "left_width": 40.0,
       "lower_height": 75.0,
@@ -264,6 +375,7 @@
   "schema_version": 1,
   "source_lineage": {
     "card": "V2/Hardware/cards/generate_card.py",
+    "drum_enclosure": "native CadQuery design around the current V2 drum",
     "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
     "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
     "laser_cut_drum": "V2/Hardware/structure/spool.scad",

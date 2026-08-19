@@ -10,9 +10,15 @@ from pathlib import Path
 import cadquery as cq
 from cadquery.occ_impl.exporters.dxf import DxfDocument
 
-from .assemblies import drum_assembly, module_reference_assembly
+from .assemblies import (
+    drum_assembly,
+    enclosed_module_assembly,
+    enclosure_assembly,
+    module_reference_assembly,
+)
 from .parameters import DESIGN, DesignParameters
 from .parts import (
+    drum_enclosure_parts,
     drum_support,
     enclosure_reference_edges,
     flap_card,
@@ -163,6 +169,10 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
     motor = motor_reference(params)
     drum = drum_assembly(params)
     module = module_reference_assembly(params)
+    enclosure_parts = drum_enclosure_parts(params)
+    enclosure = enclosure_assembly(params)
+    enclosed_module = enclosed_module_assembly(params)
+    exploded_enclosed_module = enclosed_module_assembly(params, exploded=True)
     geometry_summary = {
         "card": _shape_summary(card),
         "motor_disc": _shape_summary(motor_disc),
@@ -173,6 +183,10 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
         "motor_reference": _shape_summary(motor),
         "drum_assembly": _shape_summary(drum.toCompound()),
         "module_reference": _shape_summary(module.toCompound()),
+        "enclosure_upper": _shape_summary(enclosure_parts["enclosure_upper"]),
+        "enclosure_lower": _shape_summary(enclosure_parts["enclosure_lower"]),
+        "enclosure_assembly": _shape_summary(enclosure.toCompound()),
+        "enclosed_module": _shape_summary(enclosed_module.toCompound()),
     }
 
     _export_dxf(directories["cut"] / "flap-card.dxf", [("CUT", card)])
@@ -218,6 +232,22 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
         module.toCompound(),
         directories["step"] / "module-reference.step",
     )
+    _export_step(
+        enclosure_parts["enclosure_upper"],
+        directories["step"] / "drum-enclosure-upper.step",
+    )
+    _export_step(
+        enclosure_parts["enclosure_lower"],
+        directories["step"] / "drum-enclosure-lower.step",
+    )
+    _export_step(
+        enclosure.toCompound(),
+        directories["step"] / "drum-enclosure-assembly.step",
+    )
+    _export_step(
+        enclosed_module.toCompound(),
+        directories["step"] / "enclosed-module-reference.step",
+    )
 
     printed_motor.export(
         str(directories["print"] / "spool-motor-side.stl"),
@@ -226,6 +256,16 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
     )
     printed_shaft.export(
         str(directories["print"] / "spool-shaft-side.stl"),
+        tolerance=0.08,
+        angularTolerance=0.125,
+    )
+    enclosure_parts["enclosure_upper"].exportStl(
+        str(directories["print"] / "drum-enclosure-upper.stl"),
+        tolerance=0.08,
+        angularTolerance=0.125,
+    )
+    enclosure_parts["enclosure_lower"].exportStl(
+        str(directories["print"] / "drum-enclosure-lower.stl"),
         tolerance=0.08,
         angularTolerance=0.125,
     )
@@ -247,6 +287,27 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
     )
     _strip_trailing_whitespace(directories["preview"] / "module-reference.svg")
 
+    for name, model in (
+        ("enclosure-module", enclosed_module),
+        ("enclosure-exploded", exploded_enclosed_module),
+    ):
+        cq.exporters.export(
+            model.toCompound(),
+            str(directories["preview"] / f"{name}.svg"),
+            exportType="SVG",
+            opt={
+                "width": 900,
+                "height": 700,
+                "marginLeft": 30,
+                "marginTop": 30,
+                "projectionDir": (1.0, -1.3, 0.8),
+                "showAxes": False,
+                "showHidden": True,
+                "strokeWidth": 0.35,
+            },
+        )
+        _strip_trailing_whitespace(directories["preview"] / f"{name}.svg")
+
     manifest = {
         "schema_version": 1,
         "units": "mm",
@@ -259,6 +320,7 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
             "motor_reference": "V2/Hardware/structure/28byj48.scad",
             "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
             "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
+            "drum_enclosure": "native CadQuery design around the current V2 drum",
         },
         "geometry": geometry_summary,
         "fabrication_status": {
@@ -267,6 +329,10 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
             "motor": "clearance reference, not a manufacturing model",
             "holder_side": "ported dormant legacy profile; physical validation required",
             "enclosure_sketch": "non-solid reference geometry",
+            "drum_enclosure": (
+                "two printable halves; nominal clearances and M3 pilot fit require "
+                "physical validation"
+            ),
         },
     }
     (output_root / "manifest.json").write_text(

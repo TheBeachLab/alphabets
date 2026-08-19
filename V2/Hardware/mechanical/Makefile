@@ -2,7 +2,7 @@ PYTHON ?= .venv/bin/python
 UV ?= uv
 CQ_EDITOR ?= cq-editor
 
-.PHONY: setup gui generate lint test check verify-generated clean-generated
+.PHONY: setup gui gui-enclosure generate lint test check verify-generated clean-generated
 
 setup:
 	$(UV) venv --python 3.12 .venv
@@ -10,6 +10,9 @@ setup:
 
 gui:
 	$(CQ_EDITOR) view.py
+
+gui-enclosure:
+	$(CQ_EDITOR) view_enclosure.py
 
 generate:
 	PYTHONPATH=. $(PYTHON) generate.py

@@ -101,6 +101,31 @@ class EnclosureReferenceDimensions:
 
 
 @dataclass(frozen=True)
+class DrumEnclosureDimensions:
+    """Printable two-part enclosure around the current 85 mm drum."""
+
+    wall_thickness: float = 2.4
+    front_thickness: float = 3.0
+    radial_clearance: float = 2.0
+    axial_clearance: float = 2.0
+    window_clearance: float = 1.0
+    window_corner_radius: float = 2.0
+    outer_corner_radius: float = 4.0
+    split_gap: float = 0.2
+    motor_bore_diameter: float = 10.0
+    shaft_bore_diameter: float = 3.4
+    motor_mount_hole_diameter: float = 4.4
+    rear_lug_radius: float = 3.8
+    rear_lug_height: float = 6.0
+    rear_lug_edge_overlap: float = 1.9
+    rear_lug_inset: float = 8.0
+    screw_clearance_diameter: float = 3.4
+    screw_pilot_diameter: float = 2.6
+    screw_head_diameter: float = 6.2
+    screw_head_depth: float = 2.0
+
+
+@dataclass(frozen=True)
 class DesignParameters:
     card: CardDimensions = field(default_factory=CardDimensions)
     drum: DrumDimensions = field(default_factory=DrumDimensions)
@@ -112,6 +137,9 @@ class DesignParameters:
     enclosure_reference: EnclosureReferenceDimensions = field(
         default_factory=EnclosureReferenceDimensions
     )
+    drum_enclosure: DrumEnclosureDimensions = field(
+        default_factory=DrumEnclosureDimensions
+    )
 
     @property
     def drum_inner_width(self) -> float:
@@ -121,12 +149,71 @@ class DesignParameters:
     def drum_outer_width(self) -> float:
         return self.drum_inner_width + 2 * self.drum.side_thickness
 
+    @property
+    def enclosure_inner_width(self) -> float:
+        return self.drum_outer_width + 2 * self.drum_enclosure.axial_clearance
+
+    @property
+    def enclosure_outer_width(self) -> float:
+        return self.enclosure_inner_width + 2 * self.drum_enclosure.wall_thickness
+
+    @property
+    def enclosure_inner_height(self) -> float:
+        return self.drum.diameter + 2 * self.drum_enclosure.radial_clearance
+
+    @property
+    def enclosure_outer_height(self) -> float:
+        return self.enclosure_inner_height + 2 * self.drum_enclosure.wall_thickness
+
+    @property
+    def enclosure_inner_depth(self) -> float:
+        return self.drum.diameter + 2 * self.drum_enclosure.radial_clearance
+
+    @property
+    def enclosure_outer_depth(self) -> float:
+        return self.enclosure_inner_depth + self.drum_enclosure.front_thickness
+
+    @property
+    def enclosure_window_width(self) -> float:
+        return self.card.body_width + 2 * self.drum_enclosure.window_clearance
+
+    @property
+    def enclosure_window_height(self) -> float:
+        return self.card.total_height + 2 * self.drum_enclosure.window_clearance
+
+    @property
+    def enclosure_rear_lug_center_x(self) -> float:
+        enclosure = self.drum_enclosure
+        return (
+            self.enclosure_outer_width / 2
+            + enclosure.rear_lug_radius
+            - enclosure.rear_lug_edge_overlap
+        )
+
+    @property
+    def enclosure_overall_width(self) -> float:
+        enclosure = self.drum_enclosure
+        return 2 * (self.enclosure_rear_lug_center_x + enclosure.rear_lug_radius)
+
     def as_dict(self) -> dict[str, Any]:
         result = asdict(self)
         result["card"]["body_height"] = self.card.body_height
         result["card"]["overall_width"] = self.card.overall_width
         result["drum"]["inner_width"] = self.drum_inner_width
         result["drum"]["outer_width"] = self.drum_outer_width
+        result["drum_enclosure"].update(
+            {
+                "inner_width": self.enclosure_inner_width,
+                "outer_width": self.enclosure_outer_width,
+                "overall_width": self.enclosure_overall_width,
+                "inner_height": self.enclosure_inner_height,
+                "outer_height": self.enclosure_outer_height,
+                "inner_depth": self.enclosure_inner_depth,
+                "outer_depth": self.enclosure_outer_depth,
+                "window_width": self.enclosure_window_width,
+                "window_height": self.enclosure_window_height,
+            }
+        )
         return result
 
 
