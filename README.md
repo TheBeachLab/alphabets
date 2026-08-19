@@ -1,6 +1,8 @@
 # Alphabets
 
-![](wall.jpg)
+![Alphabets split-flap strip in a fashion storefront at blue hour](hero-fashion-window.jpg)
+
+![Alphabets split-flap matrix receiving a message inside a cafe](hero-cafe.jpg)
 
 Welcome to the public repository of the second edition of the worldwide loved **open source split-flap display**. Please find information about the first release [here](V1).
 
