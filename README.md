@@ -9,7 +9,9 @@ Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLK
 The V2 application-to-controller message protocol is documented in
 [V2/MESSAGE_PROTOCOL.md](V2/MESSAGE_PROTOCOL.md). The controller-to-module
 protocol is documented in [V2/PROTOCOL.md](V2/PROTOCOL.md).
-The module firmware is in
+The production module firmware is in
+[V2/Firmware/attiny1624-module](V2/Firmware/attiny1624-module). The ATtiny44A
+prototype firmware remains in
 [V2/Firmware/attiny44-module](V2/Firmware/attiny44-module).
 The selectable 64-position character presets and custom drum settings are
 documented in [V2/Code/letters.md](V2/Code/letters.md).
