@@ -14,7 +14,7 @@ and SCK respectively. The standard programming connection is the 2x3,
 
 ## Circuit
 
-- `U1`: ATtiny1624-SS in SOIC-14.
+- `U1`: ATtiny1624-SSU in SOIC-14.
 - `J1`: 2x3 SMD ring connector for LATCH, CLOCK, serial data, +5 V, and GND.
 - `J3`: four logic outputs for the external stepper driver.
 - `J4`: powered three-pin HOME sensor connector with a 10 kOhm pull-up.
@@ -23,7 +23,7 @@ and SCK respectively. The standard programming connection is the 2x3,
 - `R1`: 10 kOhm UPDI pull-up; `R2`: 10 kOhm HOME pull-up.
 - `C1`: 100 nF local MCU decoupling; `C2`: 1 nF high-frequency bypass;
   `C3`: 10 uF board bulk capacitance.
-- `JP1` through `JP4`, `JP6`, `JP8`, and `JP9`: removable 0 Ohm 1206
+- `JP1` through `JP4`, `JP6`, and `JP9`: removable 0 Ohm 1206
   links that partition power, ground, and ring signals for assembly and
   diagnosis.
 
@@ -33,20 +33,20 @@ The board defines this ATtiny1624 signal assignment:
 | --- | --- | ---: |
 | VDD | `VDD` | 1 |
 | LATCH | `PA4 / SPI0 SS` | 2 |
-| Motor 1 | `PA5` | 3 |
-| Motor 2 | `PA6` | 4 |
-| Motor 3 | `PA7` | 5 |
+| HOME | `PA5` | 3 |
 | Motor 4 | `PB3` | 6 |
-| HOME | `PB2` | 7 |
+| Motor 3 | `PB2` | 7 |
+| Motor 2 | `PB1` | 8 |
+| Motor 1 | `PB0` | 9 |
 | UPDI | `PA0 / UPDI` | 10 |
 | DATA_IN | `PA1 / SPI0 MOSI` | 11 |
 | DATA_OUT | `PA2 / SPI0 MISO` | 12 |
 | CLOCK | `PA3 / SPI0 SCK` | 13 |
 | GND | `GND` | 14 |
 
-`PB1` and `PB0` remain available and are intentionally not connected in this
-revision. The existing ATtiny44 firmware is not reused by this hardware; the
-ATtiny1624 firmware target will use SPI0 and UPDI with the mapping above.
+`PA6` and `PA7` remain available and are intentionally not connected in this
+revision. The matching firmware and host-side protocol tests are in
+[`../../../Firmware/attiny1624-module`](../../../Firmware/attiny1624-module).
 
 ## Connectors
 
@@ -74,7 +74,7 @@ next module.
   teardrops.
 - Every discrete resistor and capacitor uses a hand-solderable 1206 footprint.
 
-Six insulated wire links cross above the routed copper. Solder insulated wire
+Ten insulated wire links cross above the routed copper. Solder insulated wire
 between the two pads of each footprint; the dashed `F.Fab` line marks its
 assembly path and is not copper:
 
@@ -82,10 +82,14 @@ assembly path and is not copper:
 | --- | --- | ---: |
 | `JP5` | CLOCK | 22.3 mm |
 | `JP7` | DATA_IN | 25.6 mm |
+| `JP8` | DATA_OUT | 23.5 mm |
 | `JP10` | UPDI | 16.6 mm |
 | `JP11` | chain GND | 29.7 mm |
 | `JP12` | motor phase 3 | 23.5 mm |
 | `JP13` | MCU power source | 17.7 mm |
+| `JP14` | motor phase 1 | 30.3 mm |
+| `JP15` | motor phase 2 | 24.5 mm |
+| `JP16` | main power distribution | 27.0 mm |
 
 ## Files and reproducible validation
 
@@ -113,5 +117,5 @@ make autoroute FREEROUTING_JAR=/path/to/freerouting.jar
 ```
 
 `make check` enforces the 50 x 50 mm outline, front-copper-only routing, zero
-vias, 16/20 mil widths, six wire links, native arcs, teardrops, zero ERC/DRC
+vias, 16/20 mil widths, ten wire links, native arcs, teardrops, zero ERC/DRC
 violations, zero unrouted connections, and exact schematic-to-PCB parity.

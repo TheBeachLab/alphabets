@@ -22,6 +22,7 @@ ISOLATION = 0.4
 
 NETS = [
     "+5V_MAIN",
+    "+5V_MAIN_TOP",
     "+5V_MCU_SOURCE",
     "+5V_CHAIN",
     "+5V_HOME",
@@ -41,16 +42,18 @@ NETS = [
     "UPDI_PROG",
     "UPDI_U1",
     "HOME",
-    "MOTOR1",
-    "MOTOR2",
+    "MOTOR1_U1",
+    "MOTOR1_DRIVER",
+    "MOTOR2_U1",
+    "MOTOR2_DRIVER",
     "MOTOR3_U1",
     "MOTOR3_DRIVER",
     "MOTOR4",
     "unconnected-(J5-NC-Pad3)",
     "unconnected-(J5-NC-Pad4)",
     "unconnected-(J5-NC-Pad5)",
-    "unconnected-(U1-PB1-Pad8)",
-    "unconnected-(U1-PB0-Pad9)",
+    "unconnected-(U1-PA6-Pad4)",
+    "unconnected-(U1-PA7-Pad5)",
 ]
 
 
@@ -61,28 +64,31 @@ DATASHEETS = {
 
 PARTS = [
     ("J1", "Connector_PinHeader_2.54mm", "PinHeader_2x03_P2.54mm_Vertical_SMD", "CHAIN_RING", (105.4, 108.12), 0, {"1": "LATCH_CONN", "2": "CLOCK_CONN", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND_CHAIN"}),
-    ("J3", "Connector_PinHeader_2.54mm", "PinHeader_1x04_P2.54mm_Vertical_SMD_Pin1Left", "STEPPER_DRIVER_IN", (104.0, 141.5), 0, {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3_DRIVER", "4": "MOTOR4"}),
+    ("J3", "Connector_PinHeader_2.54mm", "PinHeader_1x04_P2.54mm_Vertical_SMD_Pin1Left", "STEPPER_DRIVER_IN", (104.0, 141.5), 0, {"1": "MOTOR1_DRIVER", "2": "MOTOR2_DRIVER", "3": "MOTOR3_DRIVER", "4": "MOTOR4"}),
     ("J4", "Connector_PinHeader_2.54mm", "PinHeader_1x03_P2.54mm_Vertical_SMD_Pin1Left", "HOME_SENSOR", (123.0, 141.5), 0, {"1": "+5V_HOME", "2": "HOME", "3": "GND"}),
     ("J5", "Connector_PinHeader_2.54mm", "PinHeader_2x03_P2.54mm_Vertical_SMD", "UPDI_2X3", (141.8, 108.12), 0, {"1": "UPDI_PROG", "2": "+5V_UPDI", "3": "unconnected-(J5-NC-Pad3)", "4": "unconnected-(J5-NC-Pad4)", "5": "unconnected-(J5-NC-Pad5)", "6": "GND"}),
-    ("U1", "Package_SO", "SOIC-14_3.9x8.7mm_P1.27mm", "ATtiny1624-SS", (124.0, 126.0), 0, {"1": "+5V_U1", "2": "LATCH_U1", "3": "MOTOR1", "4": "MOTOR2", "5": "MOTOR3_U1", "6": "MOTOR4", "7": "HOME", "8": "unconnected-(U1-PB1-Pad8)", "9": "unconnected-(U1-PB0-Pad9)", "10": "UPDI_U1", "11": "DATA_IN_U1", "12": "DATA_OUT_U1", "13": "CLOCK_U1", "14": "GND_U1"}),
+    ("U1", "Package_SO", "SOIC-14_3.9x8.7mm_P1.27mm", "ATtiny1624-SSU", (124.0, 126.0), 0, {"1": "+5V_U1", "2": "LATCH_U1", "3": "HOME", "4": "unconnected-(U1-PA6-Pad4)", "5": "unconnected-(U1-PA7-Pad5)", "6": "MOTOR4", "7": "MOTOR3_U1", "8": "MOTOR2_U1", "9": "MOTOR1_U1", "10": "UPDI_U1", "11": "DATA_IN_U1", "12": "DATA_OUT_U1", "13": "CLOCK_U1", "14": "GND_U1"}),
     ("R1", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "10k UPDI pull-up 1206", (136.0, 116.0), 0, {"1": "+5V_UPDI", "2": "UPDI_PROG"}),
     ("R2", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "10k HOME pull-up 1206", (115.0, 134.0), 0, {"1": "+5V_HOME", "2": "HOME"}),
     ("C1", "Capacitor_SMD", "C_1206_3216Metric_Pad1.33x1.80mm_HandSolder", "100n MCU 1206", (120.0, 117.0), 0, {"1": "+5V_U1", "2": "GND_U1"}),
     ("C2", "Capacitor_SMD", "C_1206_3216Metric_Pad1.33x1.80mm_HandSolder", "1n HF 1206", (125.0, 117.0), 0, {"1": "+5V_U1", "2": "GND_U1"}),
     ("C3", "Capacitor_SMD", "C_1206_3216Metric_Pad1.33x1.80mm_HandSolder", "10u BULK 1206", (144.5, 121.0), 90, {"1": "+5V_UPDI", "2": "GND"}),
-    ("JP1", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R CHAIN power bridge 1206", (115.0, 105.0), 0, {"1": "+5V_CHAIN", "2": "+5V_MAIN"}),
-    ("JP2", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R UPDI power bridge 1206", (132.0, 105.0), 0, {"1": "+5V_UPDI", "2": "+5V_MAIN"}),
+    ("JP1", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R CHAIN power bridge 1206", (115.0, 105.0), 0, {"1": "+5V_CHAIN", "2": "+5V_MAIN_TOP"}),
+    ("JP2", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R UPDI power bridge 1206", (132.0, 105.0), 0, {"1": "+5V_UPDI", "2": "+5V_MAIN_TOP"}),
     ("JP3", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R HOME power bridge 1206", (123.0, 135.0), 0, {"1": "+5V_HOME", "2": "+5V_MAIN"}),
     ("JP4", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R MCU power bridge 1206", (116.0, 120.0), 90, {"1": "+5V_MCU_SOURCE", "2": "+5V_U1"}),
     ("JP5", "Alphabets", "WireLink_22.3mm_SMD", "INSULATED CLOCK LINK 22.3mm", (121.25, 117.25), -34, {"1": "CLOCK_CONN", "2": "CLOCK_U1"}),
     ("JP6", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R LATCH bridge 1206", (112.0, 121.0), 90, {"1": "LATCH_CONN", "2": "LATCH_U1"}),
     ("JP7", "Alphabets", "WireLink_25.6mm_SMD", "INSULATED DATA_IN LINK 25.6mm", (120.75, 121.0), -23, {"1": "DATA_CHAIN_IN", "2": "DATA_IN_U1"}),
-    ("JP8", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R DATA output bridge 1206", (134.0, 129.0), 0, {"1": "DATA_OUT_U1", "2": "DATA_OUT_CHAIN"}),
+    ("JP8", "Alphabets", "WireLink_23.5mm_SMD", "INSULATED DATA_OUT LINK 23.5mm", (120.5, 119.5), 177.6, {"1": "DATA_OUT_U1", "2": "DATA_OUT_CHAIN"}),
     ("JP9", "Resistor_SMD", "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", "0R MCU ground bridge 1206", (132.0, 136.0), 0, {"1": "GND_U1", "2": "GND"}),
     ("JP10", "Alphabets", "WireLink_16.6mm_SMD", "INSULATED UPDI LINK 16.6mm", (134.75, 120.15), -121, {"1": "UPDI_PROG", "2": "UPDI_U1"}),
     ("JP11", "Alphabets", "WireLink_29.7mm_SMD", "INSULATED GND LINK 29.7mm", (115.0, 127.0), -70.3, {"1": "GND_CHAIN", "2": "GND"}),
     ("JP12", "Alphabets", "WireLink_23.5mm_SMD", "INSULATED MOTOR3 LINK 23.5mm", (109.65, 135.035), -139, {"1": "MOTOR3_U1", "2": "MOTOR3_DRIVER"}),
     ("JP13", "Alphabets", "WireLink_17.7mm_SMD", "INSULATED MCU POWER LINK 17.7mm", (120.5, 131.0), 137.3, {"1": "+5V_MAIN", "2": "+5V_MCU_SOURCE"}),
+    ("JP14", "Alphabets", "WireLink_30.3mm_SMD", "INSULATED MOTOR1 LINK 30.3mm", (115.25, 134.345), -167.2, {"1": "MOTOR1_U1", "2": "MOTOR1_DRIVER"}),
+    ("JP15", "Alphabets", "WireLink_24.5mm_SMD", "INSULATED MOTOR2 LINK 24.5mm", (119.5, 137.75), -159.7, {"1": "MOTOR2_U1", "2": "MOTOR2_DRIVER"}),
+    ("JP16", "Alphabets", "WireLink_27.0mm_SMD", "INSULATED MAIN POWER LINK 27.0mm", (124.5, 118.5), -90, {"1": "+5V_MAIN_TOP", "2": "+5V_MAIN"}),
 ]
 
 

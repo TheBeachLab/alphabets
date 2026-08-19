@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "date": "2026-08-19T04:48:03",
+    "date": "2026-08-19T04:56:43",
     "generator": "KiCad 10.0.5",
     "project": "attiny1624-ring",
     "board_name": "attiny1624-ring"
@@ -10,22 +10,22 @@
     "width": "50.0000 mm",
     "height": "50.0000 mm",
     "area": "2500.00 mm²",
-    "front_component_density": "21.44",
+    "front_component_density": "21.00",
     "back_component_density": "0.00",
-    "front_copper_area": "449.352 mm²",
+    "front_copper_area": "478.84 mm²",
     "back_copper_area": "0.00 mm²",
     "min_track_clearance": "0.4017 mm",
     "min_track_width": "0.4064 mm",
     "min_drill_diameter": "2147.4836 mm",
     "board_thickness": "1.6000 mm",
-    "front_footprint_area": "535.884 mm²",
+    "front_footprint_area": "524.881 mm²",
     "back_footprint_area": "0.00 mm²",
-    "front_footprint_density": "21.44",
+    "front_footprint_density": "21.00",
     "back_footprint_density": "0.00"
   },
   "pads": {
     "through_hole": 0,
-    "smd": 69,
+    "smd": 75,
     "connector": 0,
     "npth": 0,
     "castellated": 0,
@@ -44,9 +44,9 @@
       "total": 0
     },
     "smd": {
-      "front": 23,
+      "front": 26,
       "back": 0,
-      "total": 23
+      "total": 26
     },
     "unspecified": {
       "front": 0,
@@ -54,9 +54,9 @@
       "total": 0
     },
     "total": {
-      "front": 23,
+      "front": 26,
       "back": 0,
-      "total": 23
+      "total": 26
     }
   },
   "drill_holes": []

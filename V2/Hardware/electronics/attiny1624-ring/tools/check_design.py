@@ -11,12 +11,12 @@ import pcbnew
 
 EXPECTED_PINS = {
     "J1": {"1": "LATCH_CONN", "2": "CLOCK_CONN", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND_CHAIN"},
-    "J3": {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3_DRIVER", "4": "MOTOR4"},
+    "J3": {"1": "MOTOR1_DRIVER", "2": "MOTOR2_DRIVER", "3": "MOTOR3_DRIVER", "4": "MOTOR4"},
     "J4": {"1": "+5V_HOME", "2": "HOME", "3": "GND"},
     "J5": {"1": "UPDI_PROG", "2": "+5V_UPDI", "3": "unconnected-(J5-NC-Pad3)", "4": "unconnected-(J5-NC-Pad4)", "5": "unconnected-(J5-NC-Pad5)", "6": "GND"},
-    "U1": {"1": "+5V_U1", "2": "LATCH_U1", "3": "MOTOR1", "4": "MOTOR2", "5": "MOTOR3_U1", "6": "MOTOR4", "7": "HOME", "8": "unconnected-(U1-PB1-Pad8)", "9": "unconnected-(U1-PB0-Pad9)", "10": "UPDI_U1", "11": "DATA_IN_U1", "12": "DATA_OUT_U1", "13": "CLOCK_U1", "14": "GND_U1"},
-    "JP1": {"1": "+5V_CHAIN", "2": "+5V_MAIN"},
-    "JP2": {"1": "+5V_UPDI", "2": "+5V_MAIN"},
+    "U1": {"1": "+5V_U1", "2": "LATCH_U1", "3": "HOME", "4": "unconnected-(U1-PA6-Pad4)", "5": "unconnected-(U1-PA7-Pad5)", "6": "MOTOR4", "7": "MOTOR3_U1", "8": "MOTOR2_U1", "9": "MOTOR1_U1", "10": "UPDI_U1", "11": "DATA_IN_U1", "12": "DATA_OUT_U1", "13": "CLOCK_U1", "14": "GND_U1"},
+    "JP1": {"1": "+5V_CHAIN", "2": "+5V_MAIN_TOP"},
+    "JP2": {"1": "+5V_UPDI", "2": "+5V_MAIN_TOP"},
     "JP3": {"1": "+5V_HOME", "2": "+5V_MAIN"},
     "JP4": {"1": "+5V_MCU_SOURCE", "2": "+5V_U1"},
     "JP5": {"1": "CLOCK_CONN", "2": "CLOCK_U1"},
@@ -28,6 +28,9 @@ EXPECTED_PINS = {
     "JP11": {"1": "GND_CHAIN", "2": "GND"},
     "JP12": {"1": "MOTOR3_U1", "2": "MOTOR3_DRIVER"},
     "JP13": {"1": "+5V_MAIN", "2": "+5V_MCU_SOURCE"},
+    "JP14": {"1": "MOTOR1_U1", "2": "MOTOR1_DRIVER"},
+    "JP15": {"1": "MOTOR2_U1", "2": "MOTOR2_DRIVER"},
+    "JP16": {"1": "+5V_MAIN_TOP", "2": "+5V_MAIN"},
 }
 
 
@@ -43,8 +46,8 @@ def check(board_path: Path) -> None:
             if actual.get(number, "") != net:
                 raise AssertionError(f"{reference}.{number}: expected {net!r}, got {actual.get(number)!r}")
 
-    if len(footprints) != 23:
-        raise AssertionError(f"expected 23 footprints, got {len(footprints)}")
+    if len(footprints) != 26:
+        raise AssertionError(f"expected 26 footprints, got {len(footprints)}")
 
     outline = board.GetBoardEdgesBoundingBox()
     width = pcbnew.ToMM(outline.GetWidth())
@@ -96,7 +99,7 @@ def check(board_path: Path) -> None:
     passives = [reference for reference in footprints if reference.startswith(("R", "C", "JP"))]
     for reference in passives:
         footprint_name = footprints[reference].GetFPID().GetLibItemName().wx_str()
-        if reference in ("JP5", "JP7", "JP10", "JP11", "JP12", "JP13"):
+        if reference in ("JP5", "JP7", "JP8", "JP10", "JP11", "JP12", "JP13", "JP14", "JP15", "JP16"):
             if not footprint_name.startswith("WireLink_"):
                 raise AssertionError(f"{reference} does not use an insulated SMD wire-link footprint")
         elif "1206_3216Metric" not in footprint_name:

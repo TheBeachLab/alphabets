@@ -27,11 +27,11 @@ SCHEMATIC_UUID = "3f45baf4-f217-4a9d-9a55-c171c7c4e520"
 
 
 COMPONENTS = [
-    ("#PWR1", "CONN2", "POWER_SOURCE_FLAGS", (91.44, 55.88), {"1": "+5V_MAIN", "2": "GND"}),
+    ("#PWR1", "CONN2", "POWER_SOURCE_FLAGS", (91.44, 55.88), {"1": "+5V_MAIN_TOP", "2": "GND"}),
     ("#PWR2", "CONN2", "MCU_POWER_FLAGS", (91.44, 76.2), {"1": "+5V_U1", "2": "GND_U1"}),
     ("J1", "CONN6", "CHAIN_RING", (43.18, 55.88), {"1": "LATCH_CONN", "2": "CLOCK_CONN", "3": "DATA_CHAIN_IN", "4": "+5V_CHAIN", "5": "DATA_OUT_CHAIN", "6": "GND_CHAIN"}),
-    ("U1", "ATTINY1624", "ATtiny1624-SS", (127.0, 73.66), {"1": "+5V_U1", "2": "LATCH_U1", "3": "MOTOR1", "4": "MOTOR2", "5": "MOTOR3_U1", "6": "MOTOR4", "7": "HOME", "10": "UPDI_U1", "11": "DATA_IN_U1", "12": "DATA_OUT_U1", "13": "CLOCK_U1", "14": "GND_U1"}),
-    ("J3", "CONN4", "STEPPER_DRIVER_IN", (208.28, 55.88), {"1": "MOTOR1", "2": "MOTOR2", "3": "MOTOR3_DRIVER", "4": "MOTOR4"}),
+    ("U1", "ATTINY1624", "ATtiny1624-SSU", (127.0, 73.66), {"1": "+5V_U1", "2": "LATCH_U1", "3": "HOME", "6": "MOTOR4", "7": "MOTOR3_U1", "8": "MOTOR2_U1", "9": "MOTOR1_U1", "10": "UPDI_U1", "11": "DATA_IN_U1", "12": "DATA_OUT_U1", "13": "CLOCK_U1", "14": "GND_U1"}),
+    ("J3", "CONN4", "STEPPER_DRIVER_IN", (208.28, 55.88), {"1": "MOTOR1_DRIVER", "2": "MOTOR2_DRIVER", "3": "MOTOR3_DRIVER", "4": "MOTOR4"}),
     ("J4", "CONN3", "HOME_SENSOR", (208.28, 91.44), {"1": "+5V_HOME", "2": "HOME", "3": "GND"}),
     ("J5", "UPDI6", "UPDI_2X3", (170.18, 116.84), {"1": "UPDI_PROG", "2": "+5V_UPDI", "6": "GND"}),
     ("R1", "R", "10k UPDI pull-up 1206", (101.6, 111.76), {"1": "+5V_UPDI", "2": "UPDI_PROG"}),
@@ -39,19 +39,22 @@ COMPONENTS = [
     ("C1", "C", "100n MCU 1206", (139.7, 106.68), {"1": "+5V_U1", "2": "GND_U1"}),
     ("C2", "C", "1n HF 1206", (157.48, 106.68), {"1": "+5V_U1", "2": "GND_U1"}),
     ("C3", "C", "10u BULK 1206", (175.26, 106.68), {"1": "+5V_UPDI", "2": "GND"}),
-    ("JP1", "R", "0R CHAIN power bridge 1206", (91.44, 144.78), {"1": "+5V_CHAIN", "2": "+5V_MAIN"}),
-    ("JP2", "R", "0R UPDI power bridge 1206", (114.3, 144.78), {"1": "+5V_UPDI", "2": "+5V_MAIN"}),
+    ("JP1", "R", "0R CHAIN power bridge 1206", (91.44, 144.78), {"1": "+5V_CHAIN", "2": "+5V_MAIN_TOP"}),
+    ("JP2", "R", "0R UPDI power bridge 1206", (114.3, 144.78), {"1": "+5V_UPDI", "2": "+5V_MAIN_TOP"}),
     ("JP3", "R", "0R HOME power bridge 1206", (137.16, 144.78), {"1": "+5V_HOME", "2": "+5V_MAIN"}),
     ("JP4", "R", "0R MCU power bridge 1206", (160.02, 144.78), {"1": "+5V_MCU_SOURCE", "2": "+5V_U1"}),
     ("JP5", "R", "INSULATED CLOCK LINK 22.3mm", (91.44, 170.18), {"1": "CLOCK_CONN", "2": "CLOCK_U1"}),
     ("JP6", "R", "0R LATCH bridge 1206", (114.3, 170.18), {"1": "LATCH_CONN", "2": "LATCH_U1"}),
     ("JP7", "R", "INSULATED DATA_IN LINK 25.6mm", (137.16, 170.18), {"1": "DATA_CHAIN_IN", "2": "DATA_IN_U1"}),
-    ("JP8", "R", "0R DATA output bridge 1206", (160.02, 170.18), {"1": "DATA_OUT_U1", "2": "DATA_OUT_CHAIN"}),
+    ("JP8", "R", "INSULATED DATA_OUT LINK 23.5mm", (160.02, 170.18), {"1": "DATA_OUT_U1", "2": "DATA_OUT_CHAIN"}),
     ("JP9", "R", "0R MCU ground bridge 1206", (182.88, 170.18), {"1": "GND_U1", "2": "GND"}),
     ("JP10", "R", "INSULATED UPDI LINK 16.6mm", (205.74, 170.18), {"1": "UPDI_PROG", "2": "UPDI_U1"}),
     ("JP11", "R", "INSULATED GND LINK 29.7mm", (228.6, 170.18), {"1": "GND_CHAIN", "2": "GND"}),
     ("JP12", "R", "INSULATED MOTOR3 LINK 23.5mm", (251.46, 170.18), {"1": "MOTOR3_U1", "2": "MOTOR3_DRIVER"}),
     ("JP13", "R", "INSULATED MCU POWER LINK 17.7mm", (274.32, 170.18), {"1": "+5V_MAIN", "2": "+5V_MCU_SOURCE"}),
+    ("JP14", "R", "INSULATED MOTOR1 LINK 30.3mm", (91.44, 195.58), {"1": "MOTOR1_U1", "2": "MOTOR1_DRIVER"}),
+    ("JP15", "R", "INSULATED MOTOR2 LINK 24.5mm", (114.3, 195.58), {"1": "MOTOR2_U1", "2": "MOTOR2_DRIVER"}),
+    ("JP16", "R", "INSULATED MAIN POWER LINK 27.0mm", (137.16, 195.58), {"1": "+5V_MAIN_TOP", "2": "+5V_MAIN"}),
 ]
 
 
@@ -65,18 +68,22 @@ FOOTPRINTS = {
     "J4": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical_SMD_Pin1Left",
     "J5": "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical_SMD",
     "U1": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
-    **{reference: PASSIVE_1206 for reference in ("R1", "R2", "JP1", "JP2", "JP3", "JP4", "JP6", "JP8", "JP9")},
+    **{reference: PASSIVE_1206 for reference in ("R1", "R2", "JP1", "JP2", "JP3", "JP4", "JP6", "JP9")},
     "JP5": "Alphabets:WireLink_22.3mm_SMD",
     "JP10": "Alphabets:WireLink_16.6mm_SMD",
     "JP11": "Alphabets:WireLink_29.7mm_SMD",
     "JP7": "Alphabets:WireLink_25.6mm_SMD",
     "JP12": "Alphabets:WireLink_23.5mm_SMD",
     "JP13": "Alphabets:WireLink_17.7mm_SMD",
+    "JP8": "Alphabets:WireLink_23.5mm_SMD",
+    "JP14": "Alphabets:WireLink_30.3mm_SMD",
+    "JP15": "Alphabets:WireLink_24.5mm_SMD",
+    "JP16": "Alphabets:WireLink_27.0mm_SMD",
     **{reference: CAPACITOR_1206 for reference in ("C1", "C2", "C3")},
 }
 
 
-NO_CONNECTS = {"U1": {"8", "9"}, "J5": {"3", "4", "5"}}
+NO_CONNECTS = {"U1": {"4", "5"}, "J5": {"3", "4", "5"}}
 VIRTUAL_REFS = {"#PWR1", "#PWR2"}
 
 

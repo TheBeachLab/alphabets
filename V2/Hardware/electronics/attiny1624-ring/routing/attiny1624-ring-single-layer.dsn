@@ -31,11 +31,21 @@
     )
   )
   (placement
+    (component Alphabets:WireLink_27.0mm_SMD
+      (place JP16 124500 -118500 front -90 (PN "INSULATED MAIN POWER LINK 27.0mm"))
+    )
+    (component Alphabets:WireLink_24.5mm_SMD
+      (place JP15 119500 -137750 front -159.7 (PN "INSULATED MOTOR2 LINK 24.5mm"))
+    )
+    (component Alphabets:WireLink_30.3mm_SMD
+      (place JP14 115250 -134345 front -167.2 (PN "INSULATED MOTOR1 LINK 30.3mm"))
+    )
     (component Alphabets:WireLink_17.7mm_SMD
       (place JP13 120500 -131000 front 137.3 (PN "INSULATED MCU POWER LINK 17.7mm"))
     )
     (component Alphabets:WireLink_23.5mm_SMD
       (place JP12 109650 -135035 front -139 (PN "INSULATED MOTOR3 LINK 23.5mm"))
+      (place JP8 120500 -119500 front 177.6 (PN "INSULATED DATA_OUT LINK 23.5mm"))
     )
     (component Alphabets:WireLink_29.7mm_SMD
       (place JP11 115000 -127000 front -70.3 (PN "INSULATED GND LINK 29.7mm"))
@@ -45,7 +55,6 @@
     )
     (component Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder
       (place JP9 132000 -136000 front 0 (PN "0R MCU ground bridge 1206"))
-      (place JP8 134000 -129000 front 0 (PN "0R DATA output bridge 1206"))
       (place JP3 123000 -135000 front 0 (PN "0R HOME power bridge 1206"))
       (place JP2 132000 -105000 front 0 (PN "0R UPDI power bridge 1206"))
       (place JP1 115000 -105000 front 0 (PN "0R CHAIN power bridge 1206"))
@@ -70,7 +79,7 @@
       (place C1 120000 -117000 front 0 (PN "100n MCU 1206"))
     )
     (component "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm"
-      (place U1 124000 -126000 front 0 (PN "ATtiny1624-SS"))
+      (place U1 124000 -126000 front 0 (PN "ATtiny1624-SSU"))
     )
     (component Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical_SMD
       (place J5 141800 -108120 front 0 (PN UPDI_2X3))
@@ -84,6 +93,21 @@
     )
   )
   (library
+    (image Alphabets:WireLink_27.0mm_SMD
+      (outline (path signal 300  -13500 0  13500 0))
+      (pin RoundRect[T]Pad_1500.000000x1500.000000_301.142000_um_0.000000_0 1 -13500 0)
+      (pin RoundRect[T]Pad_1500.000000x1500.000000_301.142000_um_0.000000_0 2 13500 0)
+    )
+    (image Alphabets:WireLink_24.5mm_SMD
+      (outline (path signal 300  -12250 0  12250 0))
+      (pin RoundRect[T]Pad_1500.000000x1500.000000_301.142000_um_0.000000_0 1 -12250 0)
+      (pin RoundRect[T]Pad_1500.000000x1500.000000_301.142000_um_0.000000_0 2 12250 0)
+    )
+    (image Alphabets:WireLink_30.3mm_SMD
+      (outline (path signal 300  -15150 0  15150 0))
+      (pin RoundRect[T]Pad_1500.000000x1500.000000_301.142000_um_0.000000_0 1 -15150 0)
+      (pin RoundRect[T]Pad_1500.000000x1500.000000_301.142000_um_0.000000_0 2 15150 0)
+    )
     (image Alphabets:WireLink_17.7mm_SMD
       (outline (path signal 300  -8850 0  8850 0))
       (pin RoundRect[T]Pad_1500.000000x1500.000000_301.142000_um_0.000000_0 1 -8850 0)
@@ -328,7 +352,10 @@
   )
   (network
     (net +5V_MAIN
-      (pins JP13-1 JP3-2 JP2-2 JP1-2)
+      (pins JP16-2 JP13-1 JP3-2)
+    )
+    (net +5V_MAIN_TOP
+      (pins JP16-1 JP2-2 JP1-2)
     )
     (net +5V_MCU_SOURCE
       (pins JP13-2 JP4-1)
@@ -385,16 +412,22 @@
       (pins JP10-2 U1-10)
     )
     (net HOME
-      (pins R2-2 U1-7 J4-2)
+      (pins R2-2 U1-3 J4-2)
     )
-    (net MOTOR1
-      (pins U1-3 J3-1)
+    (net MOTOR1_U1
+      (pins JP14-1 U1-9)
     )
-    (net MOTOR2
-      (pins U1-4 J3-2)
+    (net MOTOR1_DRIVER
+      (pins JP14-2 J3-1)
+    )
+    (net MOTOR2_U1
+      (pins JP15-1 U1-8)
+    )
+    (net MOTOR2_DRIVER
+      (pins JP15-2 J3-2)
     )
     (net MOTOR3_U1
-      (pins JP12-1 U1-5)
+      (pins JP12-1 U1-7)
     )
     (net MOTOR3_DRIVER
       (pins JP12-2 J3-3)
@@ -411,16 +444,17 @@
     (net "unconnected-(J5-NC-Pad5)"
       (pins J5-5)
     )
-    (net "unconnected-(U1-PB1-Pad8)"
-      (pins U1-8)
+    (net "unconnected-(U1-PA6-Pad4)"
+      (pins U1-4)
     )
-    (net "unconnected-(U1-PB0-Pad9)"
-      (pins U1-9)
+    (net "unconnected-(U1-PA7-Pad5)"
+      (pins U1-5)
     )
     (class kicad_default CLOCK_CONN CLOCK_U1 DATA_CHAIN_IN DATA_IN_U1 DATA_OUT_CHAIN
-      DATA_OUT_U1 HOME LATCH_CONN LATCH_U1 MOTOR1 MOTOR2 MOTOR3_DRIVER MOTOR3_U1
-      MOTOR4 UPDI_PROG UPDI_U1 "unconnected-(J5-NC-Pad3)" "unconnected-(J5-NC-Pad4)"
-      "unconnected-(J5-NC-Pad5)" "unconnected-(U1-PB0-Pad9)" "unconnected-(U1-PB1-Pad8)"
+      DATA_OUT_U1 HOME LATCH_CONN LATCH_U1 MOTOR1_DRIVER MOTOR1_U1 MOTOR2_DRIVER
+      MOTOR2_U1 MOTOR3_DRIVER MOTOR3_U1 MOTOR4 UPDI_PROG UPDI_U1 "unconnected-(J5-NC-Pad3)"
+      "unconnected-(J5-NC-Pad4)" "unconnected-(J5-NC-Pad5)" "unconnected-(U1-PA6-Pad4)"
+      "unconnected-(U1-PA7-Pad5)"
       (circuit
         (use_via "Via[0-1]_600:300_um")
       )
@@ -429,8 +463,8 @@
         (clearance 400)
       )
     )
-    (class Power +5V_CHAIN +5V_HOME +5V_MAIN +5V_MCU_SOURCE +5V_U1 +5V_UPDI
-      GND GND_CHAIN GND_U1
+    (class Power +5V_CHAIN +5V_HOME +5V_MAIN +5V_MAIN_TOP +5V_MCU_SOURCE +5V_U1
+      +5V_UPDI GND GND_CHAIN GND_U1
       (circuit
         (use_via "Via[0-1]_600:300_um")
       )
