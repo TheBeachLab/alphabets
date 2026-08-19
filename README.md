@@ -13,6 +13,8 @@ The module firmware is in
 [V2/Firmware/attiny44-module](V2/Firmware/attiny44-module).
 The selectable 64-position character presets and custom drum settings are
 documented in [V2/Code/letters.md](V2/Code/letters.md).
+The parametric mechanical source and fabrication exports are in
+[V2/Hardware/mechanical](V2/Hardware/mechanical/README.md).
 
 ## What's new
 * 120% pure awesomeness.
