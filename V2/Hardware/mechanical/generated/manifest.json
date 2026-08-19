@@ -1,0 +1,274 @@
+{
+  "cad_engine": "CadQuery 2.8.0 / OCCT",
+  "fabrication_status": {
+    "card_and_laser_cut_drum": "ported from current dimensional sources",
+    "enclosure_sketch": "non-solid reference geometry",
+    "holder_side": "ported dormant legacy profile; physical validation required",
+    "motor": "clearance reference, not a manufacturing model",
+    "printed_spool": "ported legacy alternative; physical validation required"
+  },
+  "geometry": {
+    "card": {
+      "bounds_mm": {
+        "x": [
+          -4.0,
+          54.0
+        ],
+        "y": [
+          0.0,
+          48.0
+        ],
+        "z": [
+          0.0,
+          1.0
+        ]
+      },
+      "component_volume_sum_mm3": 2424.0,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 2424.0
+    },
+    "drum_assembly": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          55.3
+        ]
+      },
+      "component_volume_sum_mm3": 30113.407648,
+      "solid_count": 4,
+      "valid": true,
+      "volume_mm3": 30086.059648
+    },
+    "module_reference": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          -19.0,
+          55.3
+        ]
+      },
+      "component_volume_sum_mm3": 46325.196495,
+      "solid_count": 8,
+      "valid": true,
+      "volume_mm3": 43074.053621
+    },
+    "motor_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          2.15
+        ]
+      },
+      "component_volume_sum_mm3": 11100.949467,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 11100.949467
+    },
+    "motor_reference": {
+      "bounds_mm": {
+        "x": [
+          -21.0,
+          21.0
+        ],
+        "y": [
+          -26.0,
+          6.0
+        ],
+        "z": [
+          -19.0,
+          10.0
+        ]
+      },
+      "component_volume_sum_mm3": 16211.788847,
+      "solid_count": 4,
+      "valid": true,
+      "volume_mm3": 13066.856402
+    },
+    "printed_motor_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          2.0
+        ]
+      },
+      "component_volume_sum_mm3": 2674.737307,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 2674.737307
+    },
+    "printed_shaft_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          5.0
+        ]
+      },
+      "component_volume_sum_mm3": 2723.223213,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 2723.223213
+    },
+    "shaft_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          2.15
+        ]
+      },
+      "component_volume_sum_mm3": 11115.078181,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 11115.078181
+    },
+    "support": {
+      "bounds_mm": {
+        "x": [
+          -17.5,
+          17.5
+        ],
+        "y": [
+          -27.65,
+          27.65
+        ],
+        "z": [
+          0.0,
+          2.15
+        ]
+      },
+      "component_volume_sum_mm3": 3948.69,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 3948.69
+    }
+  },
+  "parameters": {
+    "card": {
+      "body_height": 45.0,
+      "body_width": 50.0,
+      "overall_width": 58.0,
+      "tab_height": 3.0,
+      "tab_width": 4.0,
+      "thickness": 1.0,
+      "total_height": 48.0
+    },
+    "drum": {
+      "axial_clearance": 1.0,
+      "diameter": 85.0,
+      "flap_hole_center_radius": 40.0,
+      "flap_hole_diameter": 3.0,
+      "inner_width": 51.0,
+      "laser_kerf": 0.1,
+      "motor_axis_height": 6.0,
+      "motor_axis_radius": 2.5,
+      "motor_axis_width": 3.0,
+      "outer_width": 55.3,
+      "positions": 64,
+      "shaft_axis_radius": 1.5,
+      "side_thickness": 2.15,
+      "support_tab_width": 6.0,
+      "support_width": 35.0,
+      "support_y": 20.0
+    },
+    "enclosure_reference": {
+      "left_width": 40.0,
+      "lower_height": 75.0,
+      "lower_reference_start": -2.11899,
+      "reference_line_length": 41.5,
+      "right_width": 60.0,
+      "upper_height": 60.0,
+      "upper_reference_start": 1.751
+    },
+    "holder": {
+      "axis_radius": 5.0,
+      "end_radius": 20.0,
+      "end_tab_length": 10.0,
+      "kerf": 0.2,
+      "length": 80.0,
+      "thickness": 2.5,
+      "width": 40.0
+    },
+    "motor": {
+      "backpack_extent": 18.0,
+      "backpack_height": 16.0,
+      "backpack_width": 14.6,
+      "chassis_height": 19.0,
+      "chassis_radius": 14.0,
+      "mount_bracket_height": 0.8,
+      "mount_center_offset": 17.5,
+      "mount_hole_radius": 2.1,
+      "mount_outer_radius": 3.5,
+      "shaft_collar_height": 1.5,
+      "shaft_collar_radius": 4.5,
+      "shaft_flat_height": 6.0,
+      "shaft_flat_width": 3.0,
+      "shaft_height": 10.0,
+      "shaft_offset": 8.0,
+      "shaft_radius": 2.5
+    },
+    "printed_spool": {
+      "center_hub_radius": 6.5,
+      "ring_width": 5.0,
+      "shaft_pin_height": 5.0,
+      "shaft_pin_radius": 1.5,
+      "thickness": 2.0
+    }
+  },
+  "schema_version": 1,
+  "source_lineage": {
+    "card": "V2/Hardware/cards/generate_card.py",
+    "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
+    "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
+    "laser_cut_drum": "V2/Hardware/structure/spool.scad",
+    "motor_reference": "V2/Hardware/structure/28byj48.scad",
+    "printed_spool": "V2/Hardware/structure/spool-3dp.scad"
+  },
+  "units": "mm"
+}

@@ -12,14 +12,22 @@ The two drum sides are separated by `51 mm`: the `50 mm` card body plus
 `1 mm` total axial clearance. The drum keeps its `85 mm` diameter and all 64
 flap positions.
 
-## Generated card files
+## Current manufacturing source
+
+The card is now generated with the complete V2 mechanical model in
+[`../mechanical/`](../mechanical/README.md). That model produces the current
+DXF and STEP together with the matching drum and validates their shared
+dimensions automatically.
+
+## Preserved FreeCAD files
 
 - `card-50x48.fcstd`: editable FreeCAD model and dimensional parameter sheet;
 - `card-50x48-cut.svg`: exact vector cutter outline in millimetres;
 - `card-50x48-cut.dxf`: the same closed outline on the `CUT` layer;
 - `card-50x48.json`: manufacturing dimensions and the card/sticker/drum match.
 
-Regenerate them from the repository root with:
+The earlier FreeCAD representation can still be regenerated from the repository
+root with:
 
 ```sh
 /Applications/FreeCAD.app/Contents/Resources/bin/FreeCADCmd \
