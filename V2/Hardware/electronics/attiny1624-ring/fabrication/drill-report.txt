@@ -1,0 +1,21 @@
+Drill report for attiny1624-ring.kicad_pcb
+Created on 2026-08-19T04:56:44
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L2 :  B.Cu                      back
+
+
+Drill file 'attiny1624-ring-PTH.drl' contains
+    plated through holes:
+    =============================================================
+
+    Total plated holes count 0
+
+
+Drill file 'attiny1624-ring-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+
+    Total unplated holes count 0

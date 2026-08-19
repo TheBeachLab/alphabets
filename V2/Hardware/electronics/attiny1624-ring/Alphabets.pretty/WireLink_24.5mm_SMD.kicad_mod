@@ -1,0 +1,15 @@
+(footprint "WireLink_24.5mm_SMD"
+  (version 20240108)
+  (generator "alphabets")
+  (layer "F.Cu")
+  (attr smd)
+  (fp_line (start -12.25 0) (end 12.25 0) (stroke (width 0.3) (type dash)) (layer "F.Fab"))
+  (fp_text reference "JP" (at 0 -1.8 0) (layer "F.SilkS") hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (fp_text value "WIRE_LINK_24.5MM" (at 0 1.8 0) (layer "F.Fab") hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (pad "1" smd roundrect (at -12.25 0) (size 1.5 1.5) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.2))
+  (pad "2" smd roundrect (at 12.25 0) (size 1.5 1.5) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.2))
+)

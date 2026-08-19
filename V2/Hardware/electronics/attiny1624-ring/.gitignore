@@ -1,0 +1,4 @@
+# KiCad user-interface state and automatic backups.
+*.kicad_prl
+*.kicad_sch-bak
+*.kicad_pcb-bak
