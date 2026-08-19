@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import runpy
 from fractions import Fraction
 from pathlib import Path
 
@@ -211,6 +212,14 @@ def test_module_reference_contains_known_drum_and_motor_components() -> None:
         "motor_shaft",
     }
     assert assembly.toCompound().isValid()
+
+
+def test_cq_editor_entry_point_builds_the_reference_module() -> None:
+    namespace = runpy.run_path(str(MECHANICAL_DIR / "view.py"))
+    result = namespace["result"]
+    assert isinstance(result, cq.Assembly)
+    assert result.name == "alphabets-v2-module-reference"
+    assert result.toCompound().isValid()
 
 
 def test_legacy_holder_and_enclosure_reference_are_preserved() -> None:
