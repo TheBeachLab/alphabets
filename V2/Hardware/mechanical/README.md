@@ -41,6 +41,19 @@ To use an existing environment:
 make check PYTHON=/path/to/python
 ```
 
+## Graphical editing
+
+Open the complete reference module in CQ-editor from this directory:
+
+```sh
+make gui
+```
+
+The graphical entry point is `view.py`. CQ-editor adds the script directory to
+its Python import path, so the same file can also be opened directly from the
+editor. The assembly tree preserves the names and colours of the drum, supports
+and 28BYJ-48 motor reference components.
+
 The generated files are committed so a fabricator does not need CadQuery:
 
 - `generated/cut/*.dxf`: millimetre cutter profiles;

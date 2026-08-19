@@ -26,6 +26,7 @@ The controller stores these values as persistent installation settings:
 | `columns` | Number of characters in every row |
 | `cell_to_module` | Physical module index for every logical display cell |
 | `character_set` | The 64-position profile installed on every drum |
+| `module_protocol` | Installed chain profile: `attiny1624-v2` or `attiny44-v1` |
 | `layout_revision` | Monotonic revision changed with any setting above |
 
 Logical cells use row-major order, starting at the upper-left corner. Cell

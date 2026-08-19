@@ -1,11 +1,15 @@
 PYTHON ?= .venv/bin/python
 UV ?= uv
+CQ_EDITOR ?= cq-editor
 
-.PHONY: setup generate lint test check verify-generated clean-generated
+.PHONY: setup gui generate lint test check verify-generated clean-generated
 
 setup:
 	$(UV) venv --python 3.12 .venv
 	$(UV) pip install --python .venv/bin/python -r requirements.txt
+
+gui:
+	$(CQ_EDITOR) view.py
 
 generate:
 	PYTHONPATH=. $(PYTHON) generate.py

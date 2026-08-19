@@ -1,6 +1,8 @@
 # Alphabets
 
-![](wall.jpg)
+![Alphabets split-flap strip in a fashion storefront at blue hour](hero-fashion-window.jpg)
+
+![Alphabets split-flap matrix receiving a message inside a cafe](hero-cafe.jpg)
 
 Welcome to the public repository of the second edition of the worldwide loved **open source split-flap display**. Please find information about the first release [here](V1).
 
@@ -9,7 +11,9 @@ Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLK
 The V2 application-to-controller message protocol is documented in
 [V2/MESSAGE_PROTOCOL.md](V2/MESSAGE_PROTOCOL.md). The controller-to-module
 protocol is documented in [V2/PROTOCOL.md](V2/PROTOCOL.md).
-The module firmware is in
+The production module firmware is in
+[V2/Firmware/attiny1624-module](V2/Firmware/attiny1624-module). The ATtiny44A
+prototype firmware remains in
 [V2/Firmware/attiny44-module](V2/Firmware/attiny44-module).
 The selectable 64-position character presets and custom drum settings are
 documented in [V2/Code/letters.md](V2/Code/letters.md).
