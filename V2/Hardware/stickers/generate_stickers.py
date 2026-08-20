@@ -442,12 +442,15 @@ def build_svg(
         if placement is None:
             continue
         lines.append(
-            f'    <path id="glyph-{sheet_index + 1:02d}" data-character="{xml_escape(placement.character)}" '
-            f'clip-path="url(#clip-card-{sheet_index + 1:02d})" '
+            f'    <g clip-path="url(#clip-card-{sheet_index + 1:02d})">'
+        )
+        lines.append(
+            f'      <path id="glyph-{sheet_index + 1:02d}" data-character="{xml_escape(placement.character)}" '
             f'd="{placement.path_data}" transform="translate({number(placement.x_mm)} '
             f'{number(placement.baseline_y_mm)}) scale({number(placement.scale_x)} '
             f'-{number(placement.scale_y)})"/>'
         )
+        lines.append("    </g>")
     lines.append("  </g>")
 
     if include_guides:

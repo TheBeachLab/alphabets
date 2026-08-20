@@ -34,7 +34,8 @@ production file. `--no-guides` produces clean artwork when required, while
 `--output-cut-svg` also writes the same cutter geometry as a separate SVG.
 Every vector glyph is clipped to its own sticker boundary and uses the non-zero
 winding rule in SVG and PDF, avoiding inverted areas where the outlines
-overlap.
+overlap. In SVG, the clipping is applied to an outer group in sheet coordinates
+so macOS Quick Look renders the transformed glyph paths correctly.
 
 These lines cut the rectangular stickers; they are not the physical flap/card
 die. The card die includes the two drum tabs and is generated separately in
