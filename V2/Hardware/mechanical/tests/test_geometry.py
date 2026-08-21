@@ -292,18 +292,18 @@ def test_stopped_drum_mounts_all_cards_with_front_pair_vertical() -> None:
     assert set(cards) == {f"card_{position:02d}" for position in range(64)}
     assert all(card.isValid() for card in cards.values())
 
-    upper_front = cards["card_00"].BoundingBox()
-    lower_front = cards["card_63"].BoundingBox()
+    upper_front = cards["card_31"].BoundingBox()
+    lower_front = cards["card_32"].BoundingBox()
     assert upper_front.xlen == pytest.approx(DESIGN.card.overall_width)
     assert lower_front.xlen == pytest.approx(DESIGN.card.overall_width)
     assert upper_front.zlen == pytest.approx(DESIGN.card.total_height)
     assert lower_front.zlen == pytest.approx(DESIGN.card.total_height)
     assert (upper_front.ymin + upper_front.ymax) / 2 == pytest.approx(
-        -DESIGN.drum.flap_hole_center_radius
+        DESIGN.drum.flap_hole_center_radius
         * math.cos(math.radians(drum_stop_rotation_degrees()))
     )
     assert (lower_front.ymin + lower_front.ymax) / 2 == pytest.approx(
-        -DESIGN.drum.flap_hole_center_radius
+        DESIGN.drum.flap_hole_center_radius
         * math.cos(math.radians(drum_stop_rotation_degrees()))
     )
     tab_axis_to_top = DESIGN.card.total_height - DESIGN.card.tab_axis_height
