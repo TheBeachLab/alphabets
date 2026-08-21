@@ -18,19 +18,34 @@ class CardGeometryTests(unittest.TestCase):
             (CARDS_DIR / "card-50x48.json").read_text(encoding="utf-8")
         )
 
-    def test_card_matches_the_50x96_sticker_halves(self):
+    def test_card_matches_the_45x91_sticker_halves(self):
         sticker = json.loads(
             (
                 REPO_ROOT
-                / "V2/Hardware/stickers/generated/international-64-black-white-50x96.json"
+                / "V2/Hardware/stickers/generated/international-64-black-white-45x91.json"
             ).read_text(encoding="utf-8")
         )
-        self.assertEqual(self.manifest["matching_sticker_mm"], [50.0, 96.0])
-        self.assertEqual(sticker["geometry_mm"]["card"], [50.0, 96.0])
+        self.assertEqual(self.manifest["matching_sticker_mm"], [45.0, 91.0])
+        self.assertEqual(sticker["geometry_mm"]["card"], [45.0, 91.0])
         self.assertEqual(
-            self.manifest["card_mm"]["total_height"] * 2,
+            self.manifest["card_mm"]["body_height"] * 2,
             sticker["geometry_mm"]["card"][1],
         )
+
+    def test_prototype_card_keeps_55x43_outline_with_50x40_stickers(self):
+        manifest = json.loads((CARDS_DIR / "card.json").read_text(encoding="utf-8"))
+        card = manifest["card_mm"]
+        self.assertEqual(manifest["physical_variant"], "prototype")
+        self.assertEqual(card["body_width"], 55.0)
+        self.assertEqual(card["body_height"], 40.0)
+        self.assertEqual(card["total_height"], 43.0)
+        self.assertEqual(card["overall_width_with_tabs"], 63.0)
+        self.assertEqual(card["material_thickness"], 0.5)
+        self.assertEqual(card["sticker_width"], 50.0)
+        self.assertEqual(card["sticker_face_height"], 40.0)
+        self.assertEqual(card["sticker_side_margin"], 2.5)
+        self.assertEqual(card["finished_thickness"], 0.7)
+        self.assertEqual(manifest["matching_sticker_mm"], [50.0, 80.0])
 
     def test_tabs_rotate_in_the_drum_holes_and_keep_axial_clearance(self):
         card = self.manifest["card_mm"]
@@ -40,6 +55,14 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(card["total_height"], 48.0)
         self.assertEqual(card["tab_width"], 4.0)
         self.assertEqual(card["tab_height"], 2.5)
+        self.assertEqual(card["material_thickness"], 0.5)
+        self.assertEqual(card["sticker_width"], 45.0)
+        self.assertEqual(card["sticker_face_height"], 45.5)
+        self.assertEqual(card["sticker_side_margin"], 2.5)
+        self.assertEqual(card["sticker_face_thickness"], 0.1)
+        self.assertEqual(card["finished_thickness"], 0.7)
+        self.assertEqual(card["display_color_source"], "sticker")
+        self.assertEqual(card["default_display_color"], "#000000")
         self.assertEqual(card["overall_width_with_tabs"], 58.0)
         self.assertEqual(drum["axial_clearance"], 1.0)
         self.assertEqual(drum["inner_width"], 51.0)
@@ -48,7 +71,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(drum["diameter"], 85.0)
         self.assertEqual(drum["positions"], 64)
         self.assertEqual(drum["flap_hole_diameter"], 3.0)
-        self.assertAlmostEqual(drum["tab_rotation_radius"], math.hypot(1.25, 0.5))
+        self.assertAlmostEqual(drum["tab_rotation_radius"], math.hypot(1.25, 0.25))
         self.assertGreaterEqual(drum["tab_radial_clearance"], 0.15)
 
     def test_svg_has_a_closed_58x48_mm_cut_path_with_visible_margin(self):
@@ -76,6 +99,7 @@ class CardGeometryTests(unittest.TestCase):
             document = archive.read("Document.xml").decode("utf-8")
         self.assertIn("CutOutline.Shape.brp", names)
         self.assertIn("Card.Shape.brp", names)
+        self.assertIn("FinishedCard.Shape.brp", names)
         self.assertIn('alias="body_width"', document)
         self.assertIn('content="=50 mm"', document)
         self.assertIn('alias="total_height"', document)
@@ -85,6 +109,12 @@ class CardGeometryTests(unittest.TestCase):
             'content="=body_width + axial_clearance" alias="drum_inner_width"',
             document,
         )
+        self.assertIn('alias="sticker_face_thickness"', document)
+        self.assertIn('alias="sticker_width"', document)
+        self.assertIn('alias="sticker_face_height"', document)
+        self.assertIn('alias="finished_thickness"', document)
+        self.assertIn('name="StickerColor"', document)
+        self.assertIn('value="#000000"', document)
         self.assertIn(
             'expression="Parameters.body_width + 2 * Parameters.tab_width"',
             document,

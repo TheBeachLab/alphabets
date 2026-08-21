@@ -20,7 +20,10 @@ class CardDimensions:
     total_height: float = 48.0
     tab_width: float = 4.0
     tab_height: float = 2.5
-    thickness: float = 1.0
+    thickness: float = 0.5
+    sticker_width: float = 45.0
+    sticker_face_height: float = 45.5
+    sticker_face_thickness: float = 0.1
 
     @property
     def body_height(self) -> float:
@@ -41,6 +44,18 @@ class CardDimensions:
         """Corner radius of the tab's height-by-thickness pivot section."""
 
         return math.hypot(self.tab_height / 2, self.thickness / 2)
+
+    @property
+    def finished_thickness(self) -> float:
+        """Card body thickness with one sticker applied to each face."""
+
+        return self.thickness + 2 * self.sticker_face_thickness
+
+    @property
+    def sticker_side_margin(self) -> float:
+        """Equal placement margin on each lateral edge of the card body."""
+
+        return (self.body_width - self.sticker_width) / 2
 
 
 @dataclass(frozen=True)
@@ -224,6 +239,8 @@ class DesignParameters:
         result["card"]["overall_width"] = self.card.overall_width
         result["card"]["tab_axis_height"] = self.card.tab_axis_height
         result["card"]["tab_rotation_radius"] = self.card.tab_rotation_radius
+        result["card"]["finished_thickness"] = self.card.finished_thickness
+        result["card"]["sticker_side_margin"] = self.card.sticker_side_margin
         result["drum"]["inner_width"] = self.drum_inner_width
         result["drum"]["outer_width"] = self.drum_outer_width
         result["drum"]["flap_tab_radial_clearance"] = self.flap_tab_radial_clearance

@@ -20,21 +20,23 @@ variant. This is the normal fabrication path; see
 enclosure contract.
 
 ```sh
-# Existing 55 mm demonstration hardware.
+# Existing 55 mm demonstration hardware; 2.5 mm side margin.
 python3 V2/Hardware/stickers/generate_stickers.py \
   --variant prototype \
-  --output-svg /tmp/demo-64-prototype-55x86.svg
+  --output-svg /tmp/demo-64-prototype-50x80.svg
 
-# Matched 50 mm definitive hardware.
+# Matched 50 mm definitive hardware; the same 2.5 mm side margin.
 python3 V2/Hardware/stickers/generate_stickers.py \
   --variant definitive \
-  --output-svg /tmp/international-64-definitive-50x96.svg
+  --output-svg /tmp/international-64-definitive-45x91.svg
 ```
 
 `--variant` fixes the character preset, sticker width and sticker height, and
 records the variant in the JSON manifest. It refuses a conflicting width or
-height override. The `50 × 86 mm` output is a retired transition and must not
-be used for either V2 hardware set.
+height override. The historical prototype cut path measures about
+`51 × 40.1 mm`, consistent with the nominal `50 × 40 mm` face plus cutting
+tolerance; its `55 × 86 mm` artwork background is not the sticker's finished
+cut size.
 
 ## Generic legacy sheet
 
@@ -76,23 +78,24 @@ distortion. Each visible outline is geometrically centered in its equal-sized
 card; proportional advance widths do not change the card size. No glyph
 receives an individual scale or vertical offset.
 
-The matched **V2 Definitivo** geometry is `50 × 96 mm`: after the center cut it
-creates two `50 × 48 mm` stickers for the narrower physical cards. Generate it
-without changing the shared alignment with:
+The matched **V2 Definitivo** geometry is `45 × 91 mm`: after the center cut it
+creates two `45 × 45.5 mm` stickers. Each is centred on the `50 × 45.5 mm`
+visible face, leaving `2.5 mm` at each side and no sticker on the pivot band.
+Generate it without changing the shared alignment with:
 
 ```sh
 python3 V2/Hardware/stickers/generate_stickers.py \
   --variant definitive \
-  --output-svg /tmp/international-50x96.svg \
-  --output-cut-svg /tmp/international-50x96-cut.svg \
-  --output-pdf /tmp/international-50x96.pdf
+  --output-svg /tmp/international-45x91.svg \
+  --output-cut-svg /tmp/international-45x91-cut.svg \
+  --output-pdf /tmp/international-45x91.pdf
 ```
 
 `--horizontal-padding` and `--vertical-padding` control the guaranteed clear
 area. Increasing either value reduces the entire type system uniformly.
 The matching card cutter and 51 mm drum separation are documented in
 [`../cards/`](../cards/README.md). Use `--variant prototype` for the existing
-55 × 86 mm / Demo 64 hardware.
+55 mm cards with nominal `50 × 40 mm` stickers / Demo 64 hardware.
 
 ## Color presets
 
@@ -114,15 +117,15 @@ python3 V2/Hardware/stickers/generate_stickers.py \
 
 Colors use `#RRGGBB`. Yellow is the historical `#FFCC00`.
 
-Generate the four production color variants at 50 × 96 mm with:
+Generate the four production color variants at 45 × 91 mm with:
 
 ```sh
 for preset in black-white black-yellow yellow-black white-black; do
   python3 V2/Hardware/stickers/generate_stickers.py \
     --variant definitive \
     --color-preset "$preset" \
-    --output-svg "V2/Hardware/stickers/generated/international-64-${preset}-50x96.svg" \
-    --output-pdf "output/pdf/alphabets-international-64-${preset}-50x96-stickers.pdf"
+    --output-svg "V2/Hardware/stickers/generated/international-64-${preset}-45x91.svg" \
+    --output-pdf "output/pdf/alphabets-international-64-${preset}-45x91-stickers.pdf"
 done
 ```
 

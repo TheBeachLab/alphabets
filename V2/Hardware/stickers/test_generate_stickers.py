@@ -237,8 +237,8 @@ class StickerGeneratorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for variant, preset, card in (
-                ("prototype", "demo-64", [55.0, 86.0]),
-                ("definitive", "international-64", [50.0, 96.0]),
+                ("prototype", "demo-64", [50.0, 80.0]),
+                ("definitive", "international-64", [45.0, 91.0]),
             ):
                 with self.subTest(variant=variant):
                     svg = root / f"{variant}.svg"

@@ -6,11 +6,11 @@ sticker sheet, card, drum spacing and enclosure source.
 
 | Variant | Character preset | Sticker / halves | Card | Drum inner / outer width | Enclosure |
 | --- | --- | --- | --- | --- | --- |
-| **V2 Prototipo** | `demo-64` | 55 × 86 / 55 × 43 mm | 55 × 43 mm, 55 × 40 visible | 56 / 60.3 mm | historical FreeCAD reference only |
-| **V2 Definitivo** | `international-64` | 50 × 96 / 50 × 48 mm | 50 × 48 mm, 50 × 45.5 visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
+| **V2 Prototipo** | `demo-64` | 50 × 80 / 50 × 40 mm | 55 × 43 mm, 55 × 40 visible | 56 / 60.3 mm | historical FreeCAD reference only |
+| **V2 Definitivo** | `international-64` | 45 × 91 / 45 × 45.5 mm | 50 × 48 mm, 50 × 45.5 visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
 
-The 50 × 86 mm sticker is an abandoned transition, not a physical variant. Do
-not use it to make cards, drums or enclosures.
+Both variants leave a 2.5 mm placement margin at each lateral edge. Stickers
+cover the visible face and stop before the bare pivot-tab band.
 
 ## Sticker sheets
 
@@ -21,13 +21,13 @@ and dimensions:
 # Existing ten-module hardware
 python3 V2/Hardware/stickers/generate_stickers.py \
   --variant prototype \
-  --output-svg /tmp/demo-64-prototype-55x86.svg
+  --output-svg /tmp/demo-64-prototype-50x80.svg
 
 # Matched final hardware
 python3 V2/Hardware/stickers/generate_stickers.py \
   --variant definitive \
   --color-preset black-white \
-  --output-svg /tmp/international-64-definitive-50x96.svg
+  --output-svg /tmp/international-64-definitive-45x91.svg
 ```
 
 The sticker generator records the chosen physical variant in its JSON
@@ -35,9 +35,9 @@ manufacturing manifest. It rejects an incompatible width or height override.
 
 ## Sources and fabrication status
 
-The prototype is preserved, not retroactively redesigned. Its original card,
-drum source and enclosure reference remain in the paths listed in
-`variants.json`. Its enclosure is **not** a validated fabrication source.
+The prototype keeps its 55 × 43 mm planar geometry, drum source and enclosure
+reference. The card source is corrected to the measured 0.5 mm substrate; its
+enclosure is **not** a validated fabrication source.
 To reproduce its 55 mm drum source, pass the explicit old flap width:
 
 ```sh
@@ -50,3 +50,7 @@ The definitive variant is the only current manufacturing route: its card,
 64-position drum and two-part enclosure are generated from
 `V2/Hardware/mechanical/alphabets_cad/`. Its enclosure still needs a physical
 fit check before a production run.
+
+Both card substrates are 0.5 mm. A 0.1 mm sticker is applied to each visible
+face, making the covered area 0.7 mm thick; margins and pivot tabs remain bare
+at 0.5 mm.

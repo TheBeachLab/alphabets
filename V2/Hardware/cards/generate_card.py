@@ -67,6 +67,9 @@ def validate_dimensions(args: argparse.Namespace) -> None:
         "tab width": args.tab_width,
         "tab height": args.tab_height,
         "thickness": args.thickness,
+        "sticker width": args.sticker_width,
+        "sticker face height": args.sticker_face_height,
+        "sticker face thickness": args.sticker_face_thickness,
         "axial clearance": args.axial_clearance,
     }
     for label, value in values.items():
@@ -74,6 +77,10 @@ def validate_dimensions(args: argparse.Namespace) -> None:
             raise ValueError(f"{label} must be positive")
     if args.tab_height >= args.total_height:
         raise ValueError("tab height must be smaller than total height")
+    if args.sticker_width >= args.body_width:
+        raise ValueError("sticker width must leave a lateral placement margin")
+    if args.sticker_face_height != args.total_height - args.tab_height:
+        raise ValueError("sticker face height must match the visible card height")
     if args.variant == "definitive":
         tab_corner_radius = math.hypot(args.tab_height / 2, args.thickness / 2)
         usable_hole_radius = FLAP_HOLE_DIAMETER_MM / 2 - FLAP_ROTATION_CLEARANCE_MM
@@ -93,6 +100,18 @@ def add_parameter_sheet(doc: App.Document, args: argparse.Namespace) -> None:
         ("Tab width", args.tab_width, "tab_width"),
         ("Tab height", args.tab_height, "tab_height"),
         ("Material thickness", args.thickness, "material_thickness"),
+        ("Sticker width", args.sticker_width, "sticker_width"),
+        ("Sticker face height", args.sticker_face_height, "sticker_face_height"),
+        (
+            "Sticker face thickness",
+            args.sticker_face_thickness,
+            "sticker_face_thickness",
+        ),
+        (
+            "Finished thickness",
+            args.thickness + 2 * args.sticker_face_thickness,
+            "finished_thickness",
+        ),
         ("Axial clearance", args.axial_clearance, "axial_clearance"),
         (
             "Drum inner width",
@@ -104,7 +123,8 @@ def add_parameter_sheet(doc: App.Document, args: argparse.Namespace) -> None:
         sheet.set(f"A{row}", label)
         sheet.set(f"B{row}", f"{number(value)} mm")
         sheet.setAlias(f"B{row}", alias)
-    sheet.set("B7", "=body_width + axial_clearance")
+    sheet.set("B9", "=material_thickness + 2 * sticker_face_thickness")
+    sheet.set("B11", "=body_width + axial_clearance")
     sheet.setColumnWidth("A", 190)
     sheet.setColumnWidth("B", 100)
 
@@ -181,6 +201,30 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
             "Parameters.material_thickness",
         ),
         (
+            "StickerWidth",
+            "Sticker width",
+            args.sticker_width,
+            "Parameters.sticker_width",
+        ),
+        (
+            "StickerFaceHeight",
+            "Sticker height on each face",
+            args.sticker_face_height,
+            "Parameters.sticker_face_height",
+        ),
+        (
+            "StickerFaceThickness",
+            "Sticker thickness on each face",
+            args.sticker_face_thickness,
+            "Parameters.sticker_face_thickness",
+        ),
+        (
+            "FinishedThickness",
+            "Finished body thickness",
+            args.thickness + 2 * args.sticker_face_thickness,
+            "Parameters.finished_thickness",
+        ),
+        (
             "DrumInnerWidth",
             "Matching drum inner width",
             args.body_width + args.axial_clearance,
@@ -190,6 +234,56 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
         solid.addProperty("App::PropertyLength", name, "Dimensions", label)
         setattr(solid, name, value)
         solid.setExpression(name, expression)
+
+    front_sticker = doc.addObject("Part::Box", "FrontSticker")
+    front_sticker.Label = "Front sticker layer"
+    front_sticker.Length = args.sticker_width
+    front_sticker.Width = args.sticker_face_height
+    front_sticker.Height = args.sticker_face_thickness
+    sticker_x = (args.body_width - args.sticker_width) / 2
+    front_sticker.Placement.Base = App.Vector(
+        sticker_x, 0, -args.sticker_face_thickness
+    )
+    front_sticker.setExpression("Length", "Parameters.sticker_width")
+    front_sticker.setExpression("Width", "Parameters.sticker_face_height")
+    front_sticker.setExpression("Height", "Parameters.sticker_face_thickness")
+    front_sticker.setExpression(
+        "Placement.Base.x", "(Parameters.body_width - Parameters.sticker_width) / 2"
+    )
+    front_sticker.setExpression(
+        "Placement.Base.z", "-Parameters.sticker_face_thickness"
+    )
+
+    back_sticker = doc.addObject("Part::Box", "BackSticker")
+    back_sticker.Label = "Back sticker layer"
+    back_sticker.Length = args.sticker_width
+    back_sticker.Width = args.sticker_face_height
+    back_sticker.Height = args.sticker_face_thickness
+    back_sticker.Placement.Base = App.Vector(sticker_x, 0, args.thickness)
+    back_sticker.setExpression("Length", "Parameters.sticker_width")
+    back_sticker.setExpression("Width", "Parameters.sticker_face_height")
+    back_sticker.setExpression("Height", "Parameters.sticker_face_thickness")
+    back_sticker.setExpression(
+        "Placement.Base.x", "(Parameters.body_width - Parameters.sticker_width) / 2"
+    )
+    back_sticker.setExpression("Placement.Base.z", "Parameters.material_thickness")
+
+    finished = doc.addObject("Part::MultiFuse", "FinishedCard")
+    finished.Label = "Card with two sticker layers"
+    finished.Shapes = [solid, front_sticker, back_sticker]
+    finished.Refine = True
+    black = (0.015, 0.015, 0.018)
+    for feature in (front_sticker, back_sticker, finished):
+        feature.addProperty(
+            "App::PropertyString",
+            "StickerColor",
+            "Appearance",
+            "Visible sticker colour",
+        )
+        feature.StickerColor = "#000000"
+    for feature in (solid, front_sticker, back_sticker, finished):
+        if feature.ViewObject is not None:
+            feature.ViewObject.ShapeColor = black
 
     doc.recompute()
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -295,8 +389,15 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
             "tab_width": args.tab_width,
             "tab_height": args.tab_height,
             "material_thickness": args.thickness,
+            "sticker_width": args.sticker_width,
+            "sticker_face_height": args.sticker_face_height,
+            "sticker_side_margin": (args.body_width - args.sticker_width) / 2,
+            "sticker_face_thickness": args.sticker_face_thickness,
+            "finished_thickness": args.thickness + 2 * args.sticker_face_thickness,
+            "display_color_source": "sticker",
+            "default_display_color": "#000000",
         },
-        "matching_sticker_mm": [args.body_width, args.total_height * 2],
+        "matching_sticker_mm": [args.sticker_width, args.sticker_face_height * 2],
         "drum_mm": {
             "inner_width": args.body_width + args.axial_clearance,
             "axial_clearance": args.axial_clearance,
@@ -330,6 +431,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tab-width", type=float)
     parser.add_argument("--tab-height", type=float)
     parser.add_argument("--thickness", type=float)
+    parser.add_argument("--sticker-width", type=float)
+    parser.add_argument("--sticker-face-height", type=float)
+    parser.add_argument("--sticker-face-thickness", type=float)
     parser.add_argument("--axial-clearance", type=float)
     parser.add_argument(
         "--output-dir", type=Path, default=Path(__file__).resolve().parent
@@ -355,6 +459,9 @@ def parse_args() -> argparse.Namespace:
         "tab_width": variant.card.tab_width_mm,
         "tab_height": variant.card.tab_height_mm,
         "thickness": variant.card.material_thickness_mm,
+        "sticker_width": variant.sticker.width_mm,
+        "sticker_face_height": variant.sticker.split_y_mm,
+        "sticker_face_thickness": variant.card.sticker_face_thickness_mm,
         "axial_clearance": variant.drum.inner_width_mm - variant.card.body_width_mm,
     }
     for field, expected in values.items():

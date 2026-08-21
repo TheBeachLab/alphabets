@@ -11,7 +11,7 @@ from .parameters import DESIGN, DesignParameters
 from .parts import (
     drum_enclosure_parts,
     drum_support,
-    flap_card,
+    finished_flap_card,
     laser_cut_disc,
     motor_components,
 )
@@ -22,7 +22,7 @@ MOTOR = cq.Color(0.65, 0.65, 0.68)
 SHAFT = cq.Color(0.95, 0.72, 0.1)
 BACKPACK = cq.Color(0.08, 0.23, 0.75)
 ENCLOSURE = cq.Color(0.025, 0.025, 0.03)
-FLAP = cq.Color(0.92, 0.92, 0.88)
+FLAP = cq.Color(0.015, 0.015, 0.018)
 
 
 @dataclass(frozen=True)
@@ -160,7 +160,7 @@ def mounted_card_components(
     # Put the centre of the card's tab edge at the pivot before mapping it to
     # the enclosure coordinate system: X is the axle, Y is depth and Z height.
     card_at_pivot = (
-        flap_card(params)
+        finished_flap_card(params)
         .translate((-card.body_width / 2, -card.tab_axis_height, 0))
         .rotate((0, 0, 0), (1, 0, 0), 90)
         # The card is extruded from z=0 to its material thickness. Once mapped

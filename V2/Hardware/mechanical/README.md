@@ -87,10 +87,15 @@ make gui-enclosure
 The enclosure view mounts all 64 cards as a clearance reference. The drum is
 held at the card stop: half a 64-position pitch (2.8125°). The motor shaft is
 rotated 90° to match the slotted motor-side disc hole, while the tab hinge axes
-are centred on each flap hole. `card_31` (upper) and `card_32` (lower) are the two vertical
-front cards. The lower/front and all southern cards hang with gravity; the
+are centred on each flap hole. `card_31` (upper) and `card_32` (lower) are the
+two vertical front cards. The lower/front and all southern cards hang with gravity; the
 northern cards form the rear-to-front support stack, with the upper/front card
 shown vertical on the pawl.
+
+Each card uses a 0.5 mm blank with one centred 45 × 45.5 × 0.1 mm sticker on
+each face. The covered area is therefore 0.7 mm thick; the 2.5 mm lateral
+margins and pivot tabs remain 0.5 mm. Cards are shown black because their
+visible colour comes from the sticker.
 
 `design.toml` is the committed source for every direct manufacturing dimension.
 Derived values — for example the drum's inner width and the enclosure's overall

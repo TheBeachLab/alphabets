@@ -21,14 +21,24 @@ class PhysicalVariantTests(unittest.TestCase):
         self.assertEqual(
             variants["definitive"].enclosure.status, "manufacturing-source"
         )
+        self.assertEqual(variants["definitive"].card.material_thickness_mm, 0.5)
+        self.assertEqual(variants["definitive"].card.sticker_face_thickness_mm, 0.1)
+        self.assertEqual(variants["definitive"].card.finished_thickness_mm, 0.7)
+        self.assertEqual(variants["prototype"].card.material_thickness_mm, 0.5)
+        self.assertEqual(variants["prototype"].sticker.width_mm, 50.0)
+        self.assertEqual(variants["prototype"].sticker.face_height_mm, 40.0)
+        self.assertEqual(variants["definitive"].sticker.width_mm, 45.0)
+        self.assertEqual(variants["definitive"].sticker.face_height_mm, 45.5)
         for variant in variants.values():
             with self.subTest(variant=variant.id):
-                self.assertEqual(variant.sticker.width_mm, variant.card.body_width_mm)
                 self.assertEqual(
-                    variant.sticker.height_mm, 2 * variant.card.total_height_mm
+                    variant.card.sticker_side_margin_mm(variant.sticker), 2.5
                 )
                 self.assertEqual(
-                    variant.sticker.split_y_mm, variant.card.total_height_mm
+                    variant.sticker.height_mm, 2 * variant.card.visible_height_mm
+                )
+                self.assertEqual(
+                    variant.sticker.split_y_mm, variant.card.visible_height_mm
                 )
                 self.assertEqual(variant.drum.positions, 64)
 

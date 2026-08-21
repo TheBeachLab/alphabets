@@ -45,7 +45,7 @@ def card_points(
 
 
 def flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
-    """Physical split-flap card, including the two drum tabs."""
+    """Bare split-flap card, including its unstickered drum tabs."""
 
     return (
         cq.Workplane("XY")
@@ -53,6 +53,28 @@ def flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
         .close()
         .extrude(params.card.thickness)
         .val()
+        .clean()
+    )
+
+
+def finished_flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
+    """Card with a centered sticker on each visible face, leaving bare margins."""
+
+    card = params.card
+    blank = flap_card(params)
+    sticker = (
+        cq.Workplane("XY")
+        .box(
+            card.sticker_width,
+            card.sticker_face_height,
+            card.sticker_face_thickness,
+            centered=(False, False, False),
+        )
+        .translate((card.sticker_side_margin, 0, 0))
+    )
+    return (
+        blank.fuse(sticker.translate((0, 0, -card.sticker_face_thickness)).val())
+        .fuse(sticker.translate((0, 0, card.thickness)).val())
         .clean()
     )
 

@@ -28,6 +28,7 @@ from alphabets_cad.parts import (
     drum_enclosure_parts,
     drum_support,
     enclosure_reference_edges,
+    finished_flap_card,
     flap_card,
     laser_cut_disc,
     legacy_holder_side,
@@ -121,8 +122,32 @@ def test_flap_card_matches_current_cutter_geometry() -> None:
     assert card_points()[0] == (0.0, 0.0)
     assert card_points()[5] == (-DESIGN.card.tab_width, DESIGN.card.total_height)
     assert DESIGN.card.tab_axis_height == pytest.approx(46.75)
-    assert DESIGN.card.tab_rotation_radius == pytest.approx(math.sqrt(1.25**2 + 0.5**2))
+    assert DESIGN.card.tab_rotation_radius == pytest.approx(
+        math.sqrt(1.25**2 + 0.25**2)
+    )
+    assert DESIGN.card.finished_thickness == pytest.approx(0.7)
+    assert DESIGN.card.sticker_side_margin == pytest.approx(2.5)
     assert DESIGN.flap_tab_radial_clearance >= DESIGN.drum.flap_rotation_clearance
+
+
+def test_finished_flap_card_includes_two_sticker_layers() -> None:
+    card = finished_flap_card()
+    assert card.isValid()
+    assert_bounds(
+        card,
+        (
+            DESIGN.card.overall_width,
+            DESIGN.card.total_height,
+            DESIGN.card.finished_thickness,
+        ),
+    )
+    assert card.Volume() == pytest.approx(
+        flap_card().Volume()
+        + 2
+        * DESIGN.card.sticker_width
+        * DESIGN.card.sticker_face_height
+        * DESIGN.card.sticker_face_thickness
+    )
 
 
 @pytest.mark.parametrize("motor_side", [True, False])
@@ -296,10 +321,15 @@ def test_cq_editor_entry_point_exposes_profile_and_objects(
 
 
 def test_stopped_drum_mounts_all_cards_with_front_pair_vertical() -> None:
-    cards = {component.name: component.shape for component in mounted_card_components()}
+    components = mounted_card_components()
+    cards = {component.name: component.shape for component in components}
     assert drum_stop_rotation_degrees() == pytest.approx(360 / 64 / 2)
     assert set(cards) == {f"card_{position:02d}" for position in range(64)}
     assert all(card.isValid() for card in cards.values())
+    assert all(
+        component.color.toTuple()[:3] == pytest.approx((0.015, 0.015, 0.018))
+        for component in components
+    )
 
     upper_front = cards["card_31"].BoundingBox()
     lower_front = cards["card_32"].BoundingBox()

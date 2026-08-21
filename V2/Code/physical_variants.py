@@ -21,6 +21,10 @@ class StickerDimensions:
     height_mm: float
     split_y_mm: float
 
+    @property
+    def face_height_mm(self) -> float:
+        return self.split_y_mm
+
 
 @dataclass(frozen=True)
 class CardDimensions:
@@ -30,6 +34,14 @@ class CardDimensions:
     tab_width_mm: float
     tab_height_mm: float
     material_thickness_mm: float
+    sticker_face_thickness_mm: float
+
+    @property
+    def finished_thickness_mm(self) -> float:
+        return self.material_thickness_mm + 2 * self.sticker_face_thickness_mm
+
+    def sticker_side_margin_mm(self, sticker: StickerDimensions) -> float:
+        return (self.body_width_mm - sticker.width_mm) / 2
 
 
 @dataclass(frozen=True)
@@ -102,6 +114,7 @@ def _variant(data: dict[str, Any]) -> PhysicalVariant:
         _number(card_data, "tab_width", f"{variant_id}.card_mm"),
         _number(card_data, "tab_height", f"{variant_id}.card_mm"),
         _number(card_data, "material_thickness", f"{variant_id}.card_mm"),
+        _number(card_data, "sticker_face_thickness", f"{variant_id}.card_mm"),
     )
     positions = drum_data.get("positions")
     if not isinstance(positions, int) or positions <= 0:
@@ -142,15 +155,17 @@ def _validate_match(variant: PhysicalVariant) -> None:
         raise PhysicalVariantError(
             f"variant {variant.id!r} must retain 64 drum positions"
         )
-    if variant.sticker.width_mm != variant.card.body_width_mm:
-        raise PhysicalVariantError(f"variant {variant.id!r} sticker/card widths differ")
-    if variant.sticker.height_mm != 2 * variant.card.total_height_mm:
+    if variant.sticker.width_mm >= variant.card.body_width_mm:
         raise PhysicalVariantError(
-            f"variant {variant.id!r} sticker does not contain two cards"
+            f"variant {variant.id!r} sticker must leave a lateral placement margin"
         )
-    if variant.sticker.split_y_mm != variant.card.total_height_mm:
+    if variant.sticker.height_mm != 2 * variant.card.visible_height_mm:
         raise PhysicalVariantError(
-            f"variant {variant.id!r} split does not match card height"
+            f"variant {variant.id!r} sticker does not contain two visible faces"
+        )
+    if variant.sticker.split_y_mm != variant.card.visible_height_mm:
+        raise PhysicalVariantError(
+            f"variant {variant.id!r} split does not match visible card height"
         )
     if (
         variant.card.visible_height_mm + variant.card.tab_height_mm

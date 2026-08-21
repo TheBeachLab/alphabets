@@ -1,15 +1,15 @@
 {
-  "physical_variant": "definitive",
+  "physical_variant": "prototype",
   "card_mm": {
-    "body_width": 50.0,
-    "body_height": 45.5,
-    "total_height": 48.0,
-    "overall_width_with_tabs": 58.0,
+    "body_width": 55.0,
+    "body_height": 40.0,
+    "total_height": 43.0,
+    "overall_width_with_tabs": 63.0,
     "tab_width": 4.0,
-    "tab_height": 2.5,
+    "tab_height": 3.0,
     "material_thickness": 0.5,
-    "sticker_width": 45.0,
-    "sticker_face_height": 45.5,
+    "sticker_width": 50.0,
+    "sticker_face_height": 40.0,
     "sticker_side_margin": 2.5,
     "sticker_face_thickness": 0.1,
     "finished_thickness": 0.7,
@@ -17,19 +17,19 @@
     "default_display_color": "#000000"
   },
   "matching_sticker_mm": [
-    45.0,
-    91.0
+    50.0,
+    80.0
   ],
   "drum_mm": {
-    "inner_width": 51.0,
+    "inner_width": 56.0,
     "axial_clearance": 1.0,
     "side_thickness": 2.15,
-    "outer_width": 55.3,
+    "outer_width": 60.3,
     "diameter": 85.0,
     "positions": 64,
     "flap_hole_diameter": 3.0,
-    "tab_rotation_radius": 1.2747548783981961,
-    "tab_radial_clearance": 0.22524512160180388
+    "tab_rotation_radius": 1.5206906325745548,
+    "tab_radial_clearance": -0.020690632574554835
   },
   "cut": {
     "layer": "CUT",

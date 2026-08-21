@@ -4,14 +4,17 @@ This directory is the **V2 Definitivo** 50 mm card route. The incompatible
 55 mm **V2 Prototipo** card remains preserved as `card.fcstd`; its complete
 physical contract is in [`../../variants/`](../../variants/README.md).
 
-The production card matches one half of the `50 × 96 mm` sticker:
+The production card uses one half of the `45 × 91 mm` sticker sheet:
 
 - visible body: `50 × 45.5 mm`;
 - total card: `50 × 48 mm`;
-- side tabs: `4 × 2.5 mm` each; their `1 mm` thickness is included in the
+- side tabs: `4 × 2.5 mm` each; their bare `0.5 mm` thickness is included in the
   pivot fit, leaving at least `0.15 mm` radial clearance in the `3 mm` holes;
 - total width across the tabs: `58 mm`;
-- material thickness in the CAD preview: `1 mm`.
+- black card substrate: `0.5 mm`;
+- sticker face: `45 × 45.5 mm`, centred with `2.5 mm` lateral margin;
+- one `0.1 mm` sticker on each face, for `0.7 mm` finished body thickness;
+- the visible colour comes from the sticker, not from the substrate model.
 
 The two drum sides are separated by `51 mm`: the `50 mm` card body plus
 `1 mm` total axial clearance. The drum keeps its `85 mm` diameter and all 64
@@ -39,7 +42,8 @@ root with:
   V2/Hardware/cards/generate_card.py
 ```
 
-The earlier `card.fcstd` remains available for the 55 mm prototype hardware.
+The regenerated `card.fcstd`, `card-cut.svg`, `card-cut.dxf`, and `card.json`
+describe the 55 × 43 mm prototype geometry with its corrected 0.5 mm substrate.
 Generate either geometry explicitly with FreeCADCmd:
 
 ```sh
