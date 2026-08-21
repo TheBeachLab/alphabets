@@ -111,13 +111,13 @@ mechanical directory in VS Code and run the file:
 
 ```sh
 make setup-vscode
-code .
+code alphabets-mechanical.code-workspace
 ```
 
-The `.vscode` settings select the dedicated interpreter and the viewer's
-`browser` theme. It uses the same optional `ALPHABETS_PROFILE` value as
-CQ-editor, so a selected profile changes both views and generated fabrication
-files consistently.
+Open the supplied workspace file rather than the repository root: it selects
+the dedicated interpreter and the viewer's `browser` theme. It uses the same
+optional `ALPHABETS_PROFILE` value as CQ-editor, so a selected profile changes
+both views and generated fabrication files consistently.
 
 The generated files are committed so a fabricator does not need CadQuery:
 
