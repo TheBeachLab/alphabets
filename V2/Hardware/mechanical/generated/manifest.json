@@ -56,18 +56,18 @@
           37.75
         ],
         "y": [
-          -61.736869,
+          -61.669713,
           44.5
         ],
         "z": [
           -86.701818,
-          61.736869
+          61.669713
         ]
       },
       "component_volume_sum_mm3": 224806.401285,
       "solid_count": 74,
       "valid": true,
-      "volume_mm3": 210488.922767
+      "volume_mm3": 210200.901837
     },
     "enclosure_assembly": {
       "bounds_mm": {
@@ -279,6 +279,7 @@
       "sticker_face_thickness": 0.1,
       "sticker_side_margin": 2.5,
       "sticker_width": 45.0,
+      "sticker_y_offset": 2.5,
       "tab_axis_height": 46.75,
       "tab_height": 2.5,
       "tab_rotation_radius": 1.2747548783981961,
@@ -286,7 +287,6 @@
       "tab_width": 4.0,
       "thickness": 0.5,
       "total_height": 48.0,
-      "uncovered_hinge_strip": 2.5,
       "visible_height": 48.0
     },
     "drum": {

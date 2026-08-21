@@ -70,7 +70,7 @@ def finished_flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
             card.sticker_face_thickness,
             centered=(False, False, False),
         )
-        .translate((card.sticker_side_margin, 0, 0))
+        .translate((card.sticker_side_margin, card.sticker_y_offset, 0))
     )
     return (
         blank.fuse(sticker.translate((0, 0, -card.sticker_face_thickness)).val())

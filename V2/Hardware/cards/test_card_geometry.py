@@ -45,7 +45,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(card["sticker_width"], 50.0)
         self.assertEqual(card["sticker_face_height"], 40.0)
         self.assertEqual(card["sticker_side_margin"], 2.5)
-        self.assertEqual(card["uncovered_hinge_strip"], 3.0)
+        self.assertEqual(card["sticker_y_offset"], 3.0)
         self.assertEqual(card["finished_thickness"], 0.7)
         self.assertEqual(manifest["matching_sticker_mm"], [50.0, 80.0])
 
@@ -62,7 +62,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(card["sticker_width"], 45.0)
         self.assertEqual(card["sticker_face_height"], 45.5)
         self.assertEqual(card["sticker_side_margin"], 2.5)
-        self.assertEqual(card["uncovered_hinge_strip"], 2.5)
+        self.assertEqual(card["sticker_y_offset"], 2.5)
         self.assertEqual(card["sticker_face_thickness"], 0.1)
         self.assertEqual(card["finished_thickness"], 0.7)
         self.assertEqual(card["display_color_source"], "sticker")
@@ -119,6 +119,10 @@ class CardGeometryTests(unittest.TestCase):
         self.assertIn('alias="finished_thickness"', document)
         self.assertIn('name="StickerColor"', document)
         self.assertIn('value="#000000"', document)
+        self.assertIn(
+            'expression="Parameters.total_height - Parameters.sticker_face_height"',
+            document,
+        )
         self.assertIn(
             'expression="Parameters.body_width + 2 * Parameters.tab_width"',
             document,

@@ -12,7 +12,7 @@
     "sticker_width": 45.0,
     "sticker_face_height": 45.5,
     "sticker_side_margin": 2.5,
-    "uncovered_hinge_strip": 2.5,
+    "sticker_y_offset": 2.5,
     "sticker_face_thickness": 0.1,
     "finished_thickness": 0.7,
     "display_color_source": "sticker",

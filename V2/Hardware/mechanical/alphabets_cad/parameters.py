@@ -58,8 +58,8 @@ class CardDimensions:
         return (self.body_width - self.sticker_width) / 2
 
     @property
-    def uncovered_hinge_strip(self) -> float:
-        """Visible bare strip between the sticker and the card's hinge edge."""
+    def sticker_y_offset(self) -> float:
+        """Offset that aligns the sticker's far edge with the hinge edge."""
 
         return self.total_height - self.sticker_face_height
 
@@ -248,7 +248,7 @@ class DesignParameters:
         result["card"]["tab_rotation_radius"] = self.card.tab_rotation_radius
         result["card"]["finished_thickness"] = self.card.finished_thickness
         result["card"]["sticker_side_margin"] = self.card.sticker_side_margin
-        result["card"]["uncovered_hinge_strip"] = self.card.uncovered_hinge_strip
+        result["card"]["sticker_y_offset"] = self.card.sticker_y_offset
         result["drum"]["inner_width"] = self.drum_inner_width
         result["drum"]["outer_width"] = self.drum_outer_width
         result["drum"]["flap_tab_radial_clearance"] = self.flap_tab_radial_clearance

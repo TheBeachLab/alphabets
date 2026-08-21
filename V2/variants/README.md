@@ -9,10 +9,10 @@ sticker sheet, card, drum spacing and enclosure source.
 | **V2 Prototipo** | `demo-64` | 50 × 80 / 50 × 40 mm | 55 × 43 mm, all visible | 56 / 60.3 mm | historical FreeCAD reference only |
 | **V2 Definitivo** | `international-64` | 45 × 91 / 45 × 45.5 mm | 50 × 48 mm, all visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
 
-Both variants leave a 2.5 mm placement margin at each lateral edge. The whole
-central card face remains visible, while the sticker ends where the lateral tab
-extensions begin: 3 mm before the prototype hinge edge and 2.5 mm before it on
-the definitive card.
+Both variants leave a 2.5 mm placement margin at each lateral edge. The sticker
+is aligned with the hinge/tab edge, not the opposite free edge. The whole card
+face remains visible, with the uncovered strip at the free edge: 3 mm on the
+prototype and 2.5 mm on the definitive card.
 
 ## Sticker sheets
 
@@ -54,5 +54,5 @@ The definitive variant is the only current manufacturing route: its card,
 fit check before a production run.
 
 Both card substrates are 0.5 mm. A 0.1 mm sticker is applied to each face,
-making the covered area 0.7 mm thick; the visible strip next to the tabs,
-lateral margins and tab extensions remain bare at 0.5 mm.
+making the covered area 0.7 mm thick; the opposite free-edge strip, lateral
+margins and tab extensions remain bare at 0.5 mm.

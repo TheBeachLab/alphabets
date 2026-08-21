@@ -128,7 +128,7 @@ def test_flap_card_matches_current_cutter_geometry() -> None:
     )
     assert DESIGN.card.finished_thickness == pytest.approx(0.7)
     assert DESIGN.card.sticker_side_margin == pytest.approx(2.5)
-    assert DESIGN.card.uncovered_hinge_strip == pytest.approx(DESIGN.card.tab_height)
+    assert DESIGN.card.sticker_y_offset == pytest.approx(DESIGN.card.tab_height)
     assert DESIGN.flap_tab_radial_clearance >= DESIGN.drum.flap_rotation_clearance
 
 
@@ -150,6 +150,8 @@ def test_finished_flap_card_includes_two_sticker_layers() -> None:
         * DESIGN.card.sticker_face_height
         * DESIGN.card.sticker_face_thickness
     )
+    assert not card.isInside(cq.Vector(25, 1, -0.05), 1e-6)
+    assert card.isInside(cq.Vector(25, 47, -0.05), 1e-6)
 
 
 @pytest.mark.parametrize("motor_side", [True, False])

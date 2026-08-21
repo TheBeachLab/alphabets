@@ -94,10 +94,11 @@ shown vertical on the pawl.
 
 Each card uses a 0.5 mm blank with one centred 45 × 45.5 × 0.1 mm sticker on
 each face. The paired sticker artwork is cut through its center so curves and
-diagonals continue across the displayed halves. The covered area is 0.7 mm
-thick; the visible strip next to the tabs, 2.5 mm lateral margins and lateral
-tab extensions remain 0.5 mm. Cards are shown black because their visible
-colour comes from the sticker.
+diagonals continue across the displayed halves. Each sticker is aligned to the
+hinge/tab edge; the opposite free-edge strip remains bare. The covered area is
+0.7 mm thick; that 2.5 mm strip, lateral margins and tab extensions remain
+0.5 mm. Cards are shown black because their visible colour comes from the
+sticker.
 
 `design.toml` is the committed source for every direct manufacturing dimension.
 Derived values — for example the drum's inner width and the enclosure's overall

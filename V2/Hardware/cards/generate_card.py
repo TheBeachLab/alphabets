@@ -241,14 +241,18 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
     front_sticker.Width = args.sticker_face_height
     front_sticker.Height = args.sticker_face_thickness
     sticker_x = (args.body_width - args.sticker_width) / 2
+    sticker_y = args.total_height - args.sticker_face_height
     front_sticker.Placement.Base = App.Vector(
-        sticker_x, 0, -args.sticker_face_thickness
+        sticker_x, sticker_y, -args.sticker_face_thickness
     )
     front_sticker.setExpression("Length", "Parameters.sticker_width")
     front_sticker.setExpression("Width", "Parameters.sticker_face_height")
     front_sticker.setExpression("Height", "Parameters.sticker_face_thickness")
     front_sticker.setExpression(
         "Placement.Base.x", "(Parameters.body_width - Parameters.sticker_width) / 2"
+    )
+    front_sticker.setExpression(
+        "Placement.Base.y", "Parameters.total_height - Parameters.sticker_face_height"
     )
     front_sticker.setExpression(
         "Placement.Base.z", "-Parameters.sticker_face_thickness"
@@ -259,12 +263,15 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
     back_sticker.Length = args.sticker_width
     back_sticker.Width = args.sticker_face_height
     back_sticker.Height = args.sticker_face_thickness
-    back_sticker.Placement.Base = App.Vector(sticker_x, 0, args.thickness)
+    back_sticker.Placement.Base = App.Vector(sticker_x, sticker_y, args.thickness)
     back_sticker.setExpression("Length", "Parameters.sticker_width")
     back_sticker.setExpression("Width", "Parameters.sticker_face_height")
     back_sticker.setExpression("Height", "Parameters.sticker_face_thickness")
     back_sticker.setExpression(
         "Placement.Base.x", "(Parameters.body_width - Parameters.sticker_width) / 2"
+    )
+    back_sticker.setExpression(
+        "Placement.Base.y", "Parameters.total_height - Parameters.sticker_face_height"
     )
     back_sticker.setExpression("Placement.Base.z", "Parameters.material_thickness")
 
@@ -393,7 +400,7 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
             "sticker_width": args.sticker_width,
             "sticker_face_height": args.sticker_face_height,
             "sticker_side_margin": (args.body_width - args.sticker_width) / 2,
-            "uncovered_hinge_strip": args.total_height - args.sticker_face_height,
+            "sticker_y_offset": args.total_height - args.sticker_face_height,
             "sticker_face_thickness": args.sticker_face_thickness,
             "finished_thickness": args.thickness + 2 * args.sticker_face_thickness,
             "display_color_source": "sticker",

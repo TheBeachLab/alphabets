@@ -35,8 +35,8 @@ python3 V2/Hardware/stickers/generate_stickers.py \
 records the variant in the JSON manifest. It refuses a conflicting width or
 height override. The prototype sticker is nominally `50 × 80 mm`, split at
 40 mm. The body itself remains visible across its complete 43 mm height; the
-40 mm coordinate marks both the sticker edge and where the lateral tab
-extensions begin, not the end of the visible card face.
+40 mm half is placed from `y=3` to `y=43 mm`, aligned with the hinge/tab edge.
+The opposite `y=0…3 mm` strip remains visible but unstickered.
 
 In the preserved `cut-print/cutprint.svg`, each historical magenta cutter
 rectangle is about `51.0 × 40.1 mm` (`192.756 × 151.570` SVG px at 96 dpi).
@@ -85,8 +85,9 @@ receives an individual scale or vertical offset.
 
 The matched **V2 Definitivo** geometry is `45 × 91 mm`: after the center cut it
 creates two `45 × 45.5 mm` stickers. Each is centred laterally on the complete
-`50 × 48 mm` visible face and ends where the side tabs begin. The center cut
-goes through the continuous artwork so curves and diagonal strokes meet
+`50 × 48 mm` visible face and aligned to its hinge/tab edge. The opposite
+2.5 mm strip remains unstickered. The center-cut edge of each half is the edge
+that must face the tabs; this preserves continuous curves and diagonal strokes
 without a visual jump. Generate it without changing the shared alignment with:
 
 ```sh
