@@ -56,18 +56,18 @@
           37.75
         ],
         "y": [
-          -63.099571,
+          -61.988144,
           44.5
         ],
         "z": [
-          -87.951818,
-          63.099571
+          -86.451818,
+          61.988144
         ]
       },
       "component_volume_sum_mm3": 276294.401285,
       "solid_count": 74,
       "valid": true,
-      "volume_mm3": 252975.684031
+      "volume_mm3": 251407.653193
     },
     "enclosure_assembly": {
       "bounds_mm": {
@@ -275,6 +275,7 @@
       "body_height": 45.0,
       "body_width": 50.0,
       "overall_width": 58.0,
+      "tab_axis_height": 46.5,
       "tab_height": 3.0,
       "tab_width": 4.0,
       "thickness": 1.0,

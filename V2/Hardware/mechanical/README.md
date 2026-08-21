@@ -84,11 +84,13 @@ Open an exploded view of the enclosure, drum and motor with:
 make gui-enclosure
 ```
 
-The enclosure view mounts all 64 cards as a clearance reference. The drum and
-motor shaft are held at the card stop: half a 64-position pitch (2.8125°), so
-`card_31` and `card_32` are the two vertical front cards. The lower/front and
-all southern cards hang with gravity; the northern cards form the rear-to-front
-support stack, with the upper/front card shown vertical on the pawl.
+The enclosure view mounts all 64 cards as a clearance reference. The drum is
+held at the card stop: half a 64-position pitch (2.8125°). The motor shaft is
+rotated 90° to match the slotted motor-side disc hole, while the tab hinge axes
+are centred on each flap hole. `card_00` (upper) and `card_63` (lower) are the two vertical
+front cards. The lower/front and all southern cards hang with gravity; the
+northern cards form the rear-to-front support stack, with the upper/front card
+shown vertical on the pawl.
 
 `design.toml` is the committed source for every direct manufacturing dimension.
 Derived values — for example the drum's inner width and the enclosure's overall

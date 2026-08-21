@@ -29,6 +29,12 @@ class CardDimensions:
     def overall_width(self) -> float:
         return self.body_width + 2 * self.tab_width
 
+    @property
+    def tab_axis_height(self) -> float:
+        """Height of the flap's hinge axis, centred through the tab strip."""
+
+        return self.body_height + self.tab_height / 2
+
 
 @dataclass(frozen=True)
 class DrumDimensions:
@@ -202,6 +208,7 @@ class DesignParameters:
         result = asdict(self)
         result["card"]["body_height"] = self.card.body_height
         result["card"]["overall_width"] = self.card.overall_width
+        result["card"]["tab_axis_height"] = self.card.tab_axis_height
         result["drum"]["inner_width"] = self.drum_inner_width
         result["drum"]["outer_width"] = self.drum_outer_width
         result["drum_enclosure"].update(

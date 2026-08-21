@@ -120,6 +120,7 @@ def test_flap_card_matches_current_cutter_geometry() -> None:
     )
     assert card_points()[0] == (0.0, 0.0)
     assert card_points()[5] == (-DESIGN.card.tab_width, DESIGN.card.total_height)
+    assert DESIGN.card.tab_axis_height == pytest.approx(46.5)
 
 
 @pytest.mark.parametrize("motor_side", [True, False])
@@ -291,8 +292,8 @@ def test_stopped_drum_mounts_all_cards_with_front_pair_vertical() -> None:
     assert set(cards) == {f"card_{position:02d}" for position in range(64)}
     assert all(card.isValid() for card in cards.values())
 
-    upper_front = cards["card_31"].BoundingBox()
-    lower_front = cards["card_32"].BoundingBox()
+    upper_front = cards["card_00"].BoundingBox()
+    lower_front = cards["card_63"].BoundingBox()
     assert upper_front.xlen == pytest.approx(DESIGN.card.overall_width)
     assert lower_front.xlen == pytest.approx(DESIGN.card.overall_width)
     assert upper_front.zlen == pytest.approx(DESIGN.card.total_height)
@@ -301,6 +302,15 @@ def test_stopped_drum_mounts_all_cards_with_front_pair_vertical() -> None:
     assert upper_front.ymax == pytest.approx(
         -DESIGN.drum.flap_hole_center_radius
         * math.cos(math.radians(drum_stop_rotation_degrees()))
+    )
+    tab_axis_to_top = DESIGN.card.total_height - DESIGN.card.tab_axis_height
+    assert upper_front.zmax - tab_axis_to_top == pytest.approx(
+        DESIGN.drum.flap_hole_center_radius
+        * math.sin(math.radians(drum_stop_rotation_degrees()))
+    )
+    assert lower_front.zmax - tab_axis_to_top == pytest.approx(
+        -DESIGN.drum.flap_hole_center_radius
+        * math.sin(math.radians(drum_stop_rotation_degrees()))
     )
 
 
@@ -383,7 +393,7 @@ def test_enclosure_assemblies_contain_two_shell_parts() -> None:
     components = enclosed_module_components(exploded=True)
     assert len(components) == 74
     assert all(component.shape.isValid() for component in components)
-    assert {"card_31", "card_32"} < {component.name for component in components}
+    assert {"card_00", "card_63"} < {component.name for component in components}
 
 
 def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:

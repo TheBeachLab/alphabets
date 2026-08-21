@@ -152,19 +152,22 @@ def mounted_card_components(
     drum = params.drum
     step_degrees = 360.0 / drum.positions
     stop_degrees = drum_stop_rotation_degrees(params)
-    front_upper = drum.positions // 2 - 1
-    front_lower = drum.positions // 2
+    # These are physical card identifiers, not a viewer-only numbering. At
+    # the stopped display, the established sequence puts 00 above the window
+    # and 63 below it; the remaining cards run from 00 around the rear to 63.
+    front_upper = 0
+    front_lower = drum.positions - 1
     # Put the centre of the card's tab edge at the pivot before mapping it to
     # the enclosure coordinate system: X is the axle, Y is depth and Z height.
     card_at_pivot = (
         flap_card(params)
-        .translate((-card.body_width / 2, -card.total_height, 0))
+        .translate((-card.body_width / 2, -card.tab_axis_height, 0))
         .rotate((0, 0, 0), (1, 0, 0), 90)
     )
 
     cards: list[Component] = []
     for position in range(drum.positions):
-        angle_degrees = position * step_degrees + stop_degrees
+        angle_degrees = 180.0 - stop_degrees - position * step_degrees
         angle_radians = math.radians(angle_degrees)
         pivot_depth = drum.flap_hole_center_radius * math.cos(angle_radians)
         pivot_height = drum.flap_hole_center_radius * math.sin(angle_radians)
@@ -253,7 +256,9 @@ def enclosed_module_components(
         Component(
             name=name,
             shape=_orient_for_enclosure(
-                _rotate_drum_to_stop(shape, params) if name == "motor_shaft" else shape,
+                shape.rotate((0, 0, 0), (0, 0, 1), 90)
+                if name == "motor_shaft"
+                else shape,
                 motor_offset,
             ),
             color=motor_colors[name],
