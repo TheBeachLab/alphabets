@@ -14,10 +14,12 @@ from alphabets_cad.assemblies import (
     _orient_for_enclosure,
     drum_component_shapes,
     enclosed_module_assembly,
+    enclosed_module_components,
     enclosure_assembly,
     module_reference_assembly,
+    module_reference_components,
 )
-from alphabets_cad.parameters import DESIGN
+from alphabets_cad.parameters import DESIGN, load_design_profile
 from alphabets_cad.parts import (
     card_points,
     drum_enclosure_parts,
@@ -221,12 +223,63 @@ def test_module_reference_contains_known_drum_and_motor_components() -> None:
     assert assembly.toCompound().isValid()
 
 
+def test_module_reference_exposes_individual_colored_components() -> None:
+    components = module_reference_components()
+    assert tuple(component.name for component in components) == (
+        "motor_side",
+        "shaft_side",
+        "support_front",
+        "support_back",
+        "motor_body",
+        "motor_collar",
+        "motor_backpack",
+        "motor_shaft",
+    )
+    assert all(component.shape.isValid() for component in components)
+    assert all(len(component.color.toTuple()) == 4 for component in components)
+
+
+def test_design_profile_applies_direct_values_and_keeps_derived_values() -> None:
+    profile = MECHANICAL_DIR / "profiles/fit-check.toml"
+    params = load_design_profile(profile, base=DESIGN)
+    assert params.drum.axial_clearance == 1.5
+    assert params.drum_enclosure.radial_clearance == 2.5
+    assert params.drum_inner_width == pytest.approx(51.5)
+    assert params.enclosure_inner_height == pytest.approx(90.0)
+
+
+def test_design_profile_rejects_unknown_dimension(tmp_path: Path) -> None:
+    profile = tmp_path / "invalid.toml"
+    profile.write_text("[drum]\nunknown_dimension = 1\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="unknown_dimension"):
+        load_design_profile(profile, base=DESIGN)
+
+
 def test_cq_editor_entry_point_builds_the_reference_module() -> None:
     namespace = runpy.run_path(str(MECHANICAL_DIR / "view.py"))
     result = namespace["result"]
     assert isinstance(result, cq.Assembly)
     assert result.name == "alphabets-v2-module-reference"
     assert result.toCompound().isValid()
+
+
+def test_cq_editor_entry_point_exposes_profile_and_objects(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    profile = MECHANICAL_DIR / "profiles/fit-check.toml"
+    monkeypatch.setenv("ALPHABETS_PROFILE", str(profile))
+    namespace = runpy.run_path(str(MECHANICAL_DIR / "view.py"))
+    assert namespace["parameters"].drum.axial_clearance == 1.5
+    assert set(namespace["objects"]) == {
+        "motor_side",
+        "shaft_side",
+        "support_front",
+        "support_back",
+        "motor_body",
+        "motor_collar",
+        "motor_backpack",
+        "motor_shaft",
+    }
 
 
 def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
@@ -305,6 +358,10 @@ def test_enclosure_assemblies_contain_two_shell_parts() -> None:
     assert {"enclosure_upper", "enclosure_lower"} < set(module.objects)
     assert module.toCompound().isValid()
 
+    components = enclosed_module_components(exploded=True)
+    assert len(components) == 11
+    assert all(component.shape.isValid() for component in components)
+
 
 def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
     namespace = runpy.run_path(str(MECHANICAL_DIR / "view_enclosure.py"))
@@ -312,6 +369,7 @@ def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
     assert isinstance(result, cq.Assembly)
     assert result.name == "alphabets-v2-enclosed-module"
     assert result.toCompound().isValid()
+    assert len(namespace["objects"]) == 11
 
 
 def test_legacy_holder_and_enclosure_reference_are_preserved() -> None:

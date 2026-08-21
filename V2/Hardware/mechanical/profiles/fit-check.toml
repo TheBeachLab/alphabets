@@ -1,0 +1,9 @@
+# Example only: a reversible fit-check variant.
+# All omitted dimensions inherit from ../design.toml.
+
+[drum]
+axial_clearance = 1.5
+
+[drum_enclosure]
+radial_clearance = 2.5
+axial_clearance = 2.5

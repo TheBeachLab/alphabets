@@ -6,7 +6,10 @@ OpenSCAD drum, 28BYJ-48 reference model, and dormant holder-side profile.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+import tomllib
+from collections.abc import Mapping
+from dataclasses import asdict, dataclass, field, fields, replace
+from pathlib import Path
 from typing import Any
 
 
@@ -217,4 +220,65 @@ class DesignParameters:
         return result
 
 
-DESIGN = DesignParameters()
+_SECTIONS = (
+    "card",
+    "drum",
+    "printed_spool",
+    "motor",
+    "holder",
+    "enclosure_reference",
+    "drum_enclosure",
+)
+
+
+def design_from_mapping(
+    overrides: Mapping[str, Any],
+    *,
+    base: DesignParameters | None = None,
+) -> DesignParameters:
+    """Return a design with validated direct-dimension overrides applied.
+
+    Derived dimensions intentionally are not accepted: they remain calculated
+    from their physical source dimensions in :class:`DesignParameters`.
+    """
+
+    unknown_sections = set(overrides) - set(_SECTIONS)
+    if unknown_sections:
+        names = ", ".join(sorted(unknown_sections))
+        raise ValueError(f"Unknown parameter section(s): {names}")
+
+    design = base or DesignParameters()
+    replacements: dict[str, Any] = {}
+    for section in _SECTIONS:
+        values = overrides.get(section)
+        if values is None:
+            continue
+        if not isinstance(values, Mapping):
+            raise TypeError(f"Parameter section {section!r} must be a table")
+
+        current = getattr(design, section)
+        valid_fields = {item.name for item in fields(current)}
+        unknown_fields = set(values) - valid_fields
+        if unknown_fields:
+            names = ", ".join(sorted(unknown_fields))
+            raise ValueError(f"Unknown parameter(s) in {section}: {names}")
+        replacements[section] = replace(current, **values)
+
+    return replace(design, **replacements)
+
+
+def load_design_profile(
+    path: Path,
+    *,
+    base: DesignParameters | None = None,
+) -> DesignParameters:
+    """Load direct-dimension overrides from a TOML design profile."""
+
+    with path.open("rb") as source:
+        profile = tomllib.load(source)
+    return design_from_mapping(profile, base=base)
+
+
+MECHANICAL_DIR = Path(__file__).resolve().parents[1]
+DEFAULT_PROFILE = MECHANICAL_DIR / "design.toml"
+DESIGN = load_design_profile(DEFAULT_PROFILE)

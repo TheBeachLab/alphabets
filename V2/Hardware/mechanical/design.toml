@@ -1,0 +1,89 @@
+# Canonical direct dimensions for the current V2 mechanical design (millimetres).
+# Derived dimensions are intentionally calculated in parameters.py.
+
+[card]
+body_width = 50.0
+total_height = 48.0
+tab_width = 4.0
+tab_height = 3.0
+thickness = 1.0
+
+[drum]
+positions = 64
+diameter = 85.0
+side_thickness = 2.15
+laser_kerf = 0.1
+axial_clearance = 1.0
+support_width = 35.0
+support_tab_width = 6.0
+support_y = 20.0
+flap_hole_diameter = 3.0
+flap_hole_center_radius = 40.0
+motor_axis_width = 3.0
+motor_axis_height = 6.0
+motor_axis_radius = 2.5
+shaft_axis_radius = 1.5
+
+[printed_spool]
+thickness = 2.0
+ring_width = 5.0
+center_hub_radius = 6.5
+shaft_pin_radius = 1.5
+shaft_pin_height = 5.0
+
+[motor]
+chassis_radius = 14.0
+chassis_height = 19.0
+shaft_offset = 8.0
+mount_outer_radius = 3.5
+mount_hole_radius = 2.1
+mount_center_offset = 17.5
+mount_bracket_height = 0.8
+shaft_collar_radius = 4.5
+shaft_collar_height = 1.5
+shaft_radius = 2.5
+shaft_height = 10.0
+shaft_flat_width = 3.0
+shaft_flat_height = 6.0
+backpack_width = 14.6
+backpack_extent = 18.0
+backpack_height = 16.0
+
+[holder]
+end_radius = 20.0
+axis_radius = 5.0
+length = 80.0
+width = 40.0
+end_tab_length = 10.0
+thickness = 2.5
+kerf = 0.2
+
+[enclosure_reference]
+left_width = 40.0
+right_width = 60.0
+upper_height = 60.0
+lower_height = 75.0
+reference_line_length = 41.5
+upper_reference_start = 1.751
+lower_reference_start = -2.11899
+
+[drum_enclosure]
+wall_thickness = 2.4
+front_thickness = 3.0
+radial_clearance = 2.0
+axial_clearance = 2.0
+window_clearance = 1.0
+window_corner_radius = 2.0
+outer_corner_radius = 4.0
+split_gap = 0.2
+motor_bore_diameter = 10.0
+shaft_bore_diameter = 3.4
+motor_mount_hole_diameter = 4.4
+rear_lug_radius = 3.8
+rear_lug_height = 6.0
+rear_lug_edge_overlap = 1.9
+rear_lug_inset = 8.0
+screw_clearance_diameter = 3.4
+screw_pilot_diameter = 2.6
+screw_head_diameter = 6.2
+screw_head_depth = 2.0
