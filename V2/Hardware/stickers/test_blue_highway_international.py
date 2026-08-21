@@ -26,6 +26,25 @@ from character_sets import load_presets
 
 
 class BlueHighwayInternationalTests(unittest.TestCase):
+    def test_fonts_directory_contains_only_the_production_font_and_its_inputs(self):
+        self.assertEqual(
+            {
+                path.name
+                for path in FONTS_DIR.iterdir()
+                if path.is_file()
+            },
+            {
+                "Blue Highway D.otf",
+                "BlueHighwayD-International.json",
+                "BlueHighwayD-International.otf",
+                "LICENSE-CC0.txt",
+                "LICENSE-OVERPASS-OFL.txt",
+                "OverpassMono-Medium.otf",
+                "README.md",
+                "build_blue_highway_international.py",
+            },
+        )
+
     def test_committed_hybrid_covers_both_physical_character_profiles(self):
         font = TTFont(DEFAULT_OUTPUT_FONT)
         cmap = font.getBestCmap() or {}
