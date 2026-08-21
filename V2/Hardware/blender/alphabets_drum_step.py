@@ -27,10 +27,17 @@ def controller_object() -> bpy.types.Object | None:
 def extend_simulation_range(scene: bpy.types.Scene, end_frame: int) -> None:
     """Keep the scene and Bullet cache ranges aligned for appended steps."""
 
-    scene.frame_end = max(scene.frame_end, end_frame)
-    if scene.rigidbody_world is not None:
-        point_cache = scene.rigidbody_world.point_cache
-        point_cache.frame_end = max(point_cache.frame_end, end_frame)
+    point_cache = (
+        scene.rigidbody_world.point_cache if scene.rigidbody_world is not None else None
+    )
+    target_end = max(
+        scene.frame_end,
+        end_frame,
+        point_cache.frame_end if point_cache is not None else end_frame,
+    )
+    scene.frame_end = target_end
+    if point_cache is not None:
+        point_cache.frame_end = target_end
 
 
 def ensure_controller_properties(controller: bpy.types.Object) -> None:

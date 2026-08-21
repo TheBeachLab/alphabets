@@ -24,6 +24,7 @@ check:
 check-steps: interactive
 	$(BLENDER) generated/alphabets-v2-interactive.blend --background --python validate_appended_steps.py -- --steps 20
 	$(BLENDER) generated/alphabets-v2-interactive.blend --background --python validate_appended_steps.py -- --steps 20 --single
+	$(BLENDER) generated/alphabets-v2-interactive.blend --background --python validate_appended_steps.py -- --steps 2 --stale-scene-end 1088
 
 open: interactive
 	open -a Blender generated/alphabets-v2-interactive.blend
