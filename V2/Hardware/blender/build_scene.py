@@ -94,7 +94,7 @@ def material(
 
 
 def atlas_material(atlas_path: Path) -> bpy.types.Material:
-    result = bpy.data.materials.new("StickerAtlas_BlackWhite")
+    result = bpy.data.materials.new("StickerAtlas_YellowReview")
     result.use_nodes = True
     nodes = result.node_tree.nodes
     links = result.node_tree.links
@@ -107,8 +107,14 @@ def atlas_material(atlas_path: Path) -> bpy.types.Material:
     image_node.interpolation = "Linear"
     uv_node = nodes.new("ShaderNodeUVMap")
     uv_node.uv_map = "AtlasUV"
+    review_colors = nodes.new("ShaderNodeValToRGB")
+    review_colors.name = "YellowCardReviewColors"
+    review_colors.label = "Black atlas -> yellow card; white glyph -> dark glyph"
+    review_colors.color_ramp.elements[0].color = (1.0, 0.62, 0.015, 1)
+    review_colors.color_ramp.elements[1].color = (0.012, 0.014, 0.018, 1)
     links.new(uv_node.outputs["UV"], image_node.inputs["Vector"])
-    links.new(image_node.outputs["Color"], shader.inputs["Base Color"])
+    links.new(image_node.outputs["Color"], review_colors.inputs["Fac"])
+    links.new(review_colors.outputs["Color"], shader.inputs["Base Color"])
     shader.inputs["Roughness"].default_value = 0.62
     return result
 
@@ -438,8 +444,8 @@ def build_cards(
         card.rigid_body.mass = 0.00105
         card.rigid_body.friction = 0.42
         card.rigid_body.restitution = 0.02
-        card.rigid_body.linear_damping = 0.12
-        card.rigid_body.angular_damping = 0.22
+        card.rigid_body.linear_damping = 0.28
+        card.rigid_body.angular_damping = 0.55
         card.rigid_body.use_margin = True
         card.rigid_body.collision_margin = 0.0001
         card.rigid_body.use_deactivation = False
@@ -516,23 +522,30 @@ def build_step_controller(
     controller[step_data["property"]] = 0
     controller.id_properties_ui(step_data["property"]).update(
         min=0,
-        soft_max=64,
+        max=64,
         step=1,
-        description="Increment by one to advance one character",
+        description="Completed character positions since reset",
     )
     controller["degrees_per_step"] = step_data["degrees_per_step"]
     controller["direction"] = step_data["direction"]
     controller["step_duration_frames"] = 24
     controller["settle_frames"] = 24
+    controller["steps_per_move"] = 1
     controller["step_busy"] = False
     controller["usage"] = (
-        "Use the Advance one character button in the Alphabets sidebar panel"
+        "Set Steps per move and use Advance in the Alphabets sidebar panel"
     )
     controller.id_properties_ui("step_duration_frames").update(
         min=6,
         max=120,
         step=1,
         description="Motor movement duration; 24 frames equals one second at 24 fps",
+    )
+    controller.id_properties_ui("steps_per_move").update(
+        min=1,
+        max=64,
+        step=1,
+        description="Number of complete character positions to advance",
     )
 
     for name in step_data["rotating_components"]:
@@ -587,6 +600,7 @@ def configure_scene(scene_data: dict[str, Any]) -> None:
     scene.gravity = (0, 0, -scene_data["simulation"]["gravity_m_s2"])
     scene.frame_start = 1
     scene.frame_end = scene_data["simulation"]["end_frame"]
+    scene.playback_loop_mode = "STOP_END_FRAME"
     scene.render.engine = "BLENDER_EEVEE"
     scene.render.resolution_x = 1200
     scene.render.resolution_y = 900
@@ -630,7 +644,7 @@ def main() -> int:
     adjustable_collection = collection("06_ADJUSTABLE_PAWL")
     controller_collection = collection("07_DRUM_STEP_CONTROLLER")
 
-    card_mat = material("Card_Black_0_5mm", (0.006, 0.007, 0.009, 1), roughness=0.7)
+    card_mat = material("Card_Yellow_0_5mm", (1.0, 0.62, 0.015, 1), roughness=0.58)
     floor_mat = material("Floor_Collider", (0.12, 0.15, 0.2, 0.28), roughness=0.8)
     pawl_mat = material("Pawl_Adjustable_Orange", (1.0, 0.16, 0.015, 1), roughness=0.38)
     sticker_mat = atlas_material(GENERATED_DIR / mapping_data["atlas"]["file"])

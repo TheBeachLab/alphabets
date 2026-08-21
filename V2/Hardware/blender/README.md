@@ -75,18 +75,31 @@ The sticker atlas is packed into the blend file, and its 3D viewports are saved
 in Material Preview. If a viewport is manually switched to Solid mode, press
 `Z` and select `Material Preview` to see the artwork again.
 
-## Advance exactly one character
+## Advance one or more characters
 
 The installed `Alphabets Drum Step` add-on exposes an `Alphabets` tab in the 3D
-View sidebar. `Advance one character` rotates the two drum disks, motor shaft,
+View sidebar. Set `Steps per move` to any value from 1 to 64, then use the
+`Advance N steps` button. Each position rotates the two drum disks, motor shaft,
 and all 64 hinge axes by exactly `-5.625` degrees around world X: anticlockwise
-when viewed from the motor at negative X.
+when viewed from the motor at negative X. Multi-step moves preserve a separate
+motor and settling phase for every character rather than jumping directly to
+the final angle.
 
-One click creates a 24-frame eased motor movement and then evaluates 24 settling
-frames. The button remains disabled until both phases finish. Cards remain
-independent rigid bodies. The scene uses 32 Bullet substeps per frame and 50
-solver iterations so a 0.7 mm finished card cannot tunnel through its neighbor
-during a normal step. `Reset simulation` returns to the blank position.
+Each step creates a 24-frame eased motor movement and then evaluates 24 settling
+frames. The button remains disabled until all requested steps finish and stops
+at position 64. Cards remain independent rigid bodies. The scene uses 32 Bullet
+substeps per frame and 50 solver iterations so a 0.7 mm finished card cannot
+tunnel through its neighbor during a normal step. `Reset simulation` returns to
+the blank position. Timeline playback is saved as `Stop at End Frame`; the same
+setting is available from Timeline > Playback > Loop if it is changed manually.
+
+The card substrate and sticker background use a bright yellow review material,
+with the sticker glyph rendered dark, so complete card faces, edges, and tabs
+remain visible against the structure. This is a Blender inspection aid, not a
+fabrication-material change.
+
+Cards use stronger linear and angular damping in the rigid-body review scene so
+they settle promptly instead of oscillating unrealistically around the hinge.
 
 A deterministic 0.05 mm center-of-mass tolerance toward the falling side keeps
 an upright card from returning to mathematically perfect equilibrium when it

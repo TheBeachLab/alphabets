@@ -1,4 +1,4 @@
-"""Blender add-on for one physically simulated Alphabets drum step."""
+"""Blender add-on for physically simulated Alphabets drum steps."""
 
 from __future__ import annotations
 
@@ -9,18 +9,38 @@ import bpy
 bl_info = {
     "name": "Alphabets Drum Step",
     "author": "Alphabets",
-    "version": (1, 0, 0),
+    "version": (1, 1, 0),
     "blender": (5, 2, 0),
     "location": "3D View > Sidebar > Alphabets",
-    "description": "Advance the 64-position drum by one smooth physical step",
+    "description": "Advance the 64-position drum by configurable physical steps",
     "category": "Animation",
 }
 
 CONTROLLER_NAME = "DrumStepController"
+TOTAL_STEPS = 64
 
 
 def controller_object() -> bpy.types.Object | None:
     return bpy.data.objects.get(CONTROLLER_NAME)
+
+
+def ensure_controller_properties(controller: bpy.types.Object) -> None:
+    """Add controls introduced after a blend file was originally generated."""
+
+    if "steps_per_move" not in controller:
+        controller["steps_per_move"] = 1
+    controller.id_properties_ui("steps_per_move").update(
+        min=1,
+        max=TOTAL_STEPS,
+        step=1,
+        description="Number of complete character positions to advance",
+    )
+    controller.id_properties_ui("step_count").update(
+        min=0,
+        max=TOTAL_STEPS,
+        step=1,
+        description="Completed character positions since reset",
+    )
 
 
 def insert_smooth_step(
@@ -59,10 +79,31 @@ def insert_smooth_step(
     return target_step, motor_end, settle_end
 
 
+def insert_smooth_steps(
+    controller: bpy.types.Object,
+    start_frame: int,
+    requested_steps: int,
+) -> tuple[int, int, int]:
+    """Insert up to ``requested_steps`` complete move-and-settle cycles."""
+
+    current_step = int(controller.get("step_count", 0))
+    remaining_steps = max(0, TOTAL_STEPS - current_step)
+    step_total = min(max(0, requested_steps), remaining_steps)
+    if step_total == 0:
+        return current_step, start_frame, start_frame
+
+    motor_end = start_frame
+    settle_end = start_frame
+    target_step = current_step
+    for _ in range(step_total):
+        target_step, motor_end, settle_end = insert_smooth_step(controller, settle_end)
+    return target_step, motor_end, settle_end
+
+
 class ALPHABETS_OT_advance_one(bpy.types.Operator):
     bl_idname = "alphabets.advance_one_character"
-    bl_label = "Advance one character"
-    bl_description = "Rotate the drum exactly 5.625 degrees and settle the cards"
+    bl_label = "Advance character steps"
+    bl_description = "Advance the selected number of positions, settling every step"
 
     _timer = None
     _settle_end = 0
@@ -70,7 +111,11 @@ class ALPHABETS_OT_advance_one(bpy.types.Operator):
     @classmethod
     def poll(cls, context: bpy.types.Context) -> bool:
         controller = controller_object()
-        return controller is not None and not bool(controller.get("step_busy", False))
+        return (
+            controller is not None
+            and not bool(controller.get("step_busy", False))
+            and int(controller.get("step_count", 0)) < TOTAL_STEPS
+        )
 
     def invoke(self, context: bpy.types.Context, event: bpy.types.Event):
         controller = controller_object()
@@ -78,9 +123,18 @@ class ALPHABETS_OT_advance_one(bpy.types.Operator):
             self.report({"ERROR"}, f"{CONTROLLER_NAME} is missing")
             return {"CANCELLED"}
 
+        ensure_controller_properties(controller)
         scene = context.scene
-        _, _, self._settle_end = insert_smooth_step(controller, scene.frame_current)
+        requested_steps = int(controller.get("steps_per_move", 1))
+        target_step, _, self._settle_end = insert_smooth_steps(
+            controller, scene.frame_current, requested_steps
+        )
+        if self._settle_end == scene.frame_current:
+            self.report({"INFO"}, "The drum is already at position 64")
+            return {"CANCELLED"}
+        scene.playback_loop_mode = "STOP_END_FRAME"
         scene.frame_end = max(scene.frame_end, self._settle_end)
+        self.report({"INFO"}, f"Advancing to position {target_step}")
         fps = scene.render.fps / scene.render.fps_base
         self._timer = context.window_manager.event_timer_add(
             1 / fps, window=context.window
@@ -128,6 +182,7 @@ class ALPHABETS_OT_reset_simulation(bpy.types.Operator):
         controller.rotation_euler.x = 0
         controller["step_count"] = 0
         controller["step_busy"] = False
+        controller["busy_until_frame"] = 1
         context.scene.frame_set(1)
         try:
             bpy.ops.ptcache.free_bake_all()
@@ -149,11 +204,17 @@ class ALPHABETS_PT_drum_step(bpy.types.Panel):
         if controller is None:
             layout.label(text="DrumStepController missing", icon="ERROR")
             return
-        layout.label(text=f"Completed steps: {int(controller['step_count'])}")
+        ensure_controller_properties(controller)
+        current_step = int(controller["step_count"])
+        requested_steps = int(controller["steps_per_move"])
+        actual_steps = min(requested_steps, max(0, TOTAL_STEPS - current_step))
+        layout.label(text=f"Position: {current_step} / {TOTAL_STEPS}")
+        layout.prop(controller, '["steps_per_move"]', text="Steps per move")
         layout.prop(controller, '["step_duration_frames"]', text="Motor frames")
         row = layout.row()
-        row.enabled = not bool(controller.get("step_busy", False))
-        row.operator(ALPHABETS_OT_advance_one.bl_idname, icon="PLAY")
+        row.enabled = not bool(controller.get("step_busy", False)) and actual_steps > 0
+        label = f"Advance {actual_steps} step" + ("s" if actual_steps != 1 else "")
+        row.operator(ALPHABETS_OT_advance_one.bl_idname, text=label, icon="PLAY")
         layout.operator(ALPHABETS_OT_reset_simulation.bl_idname, icon="LOOP_BACK")
 
 
