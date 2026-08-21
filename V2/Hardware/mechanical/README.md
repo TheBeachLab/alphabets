@@ -106,8 +106,10 @@ names fail immediately instead of silently changing the model.
 
 OCP CAD Viewer is the preferred interactive viewer: it inherits VS Code's
 theme, provides per-object selection and visibility, and renders this model
-through `view_vscode.py`. Install its isolated environment once, then open this
-mechanical directory in VS Code and run the file:
+through `view_vscode.py`. Run `view_enclosure_vscode.py` for the exploded
+enclosure, drum, flap and motor as 11 independent objects. Install its isolated
+environment once, then open this mechanical directory in VS Code and run the
+file:
 
 ```sh
 make setup-vscode
