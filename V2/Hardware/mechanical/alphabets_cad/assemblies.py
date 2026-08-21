@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 import cadquery as cq
@@ -122,6 +123,72 @@ def _orient_for_enclosure(shape: cq.Shape, axial_offset: float) -> cq.Shape:
     )
 
 
+def drum_stop_rotation_degrees(params: DesignParameters = DESIGN) -> float:
+    """Half a flap pitch, placing the two front pivots above and below centre."""
+
+    return 180.0 / params.drum.positions
+
+
+def _rotate_drum_to_stop(
+    shape: cq.Shape, params: DesignParameters = DESIGN
+) -> cq.Shape:
+    """Rotate a drum-mounted part around its physical axle to the card stop."""
+
+    return shape.rotate((0, 0, 0), (0, 0, 1), drum_stop_rotation_degrees(params))
+
+
+def mounted_card_components(
+    params: DesignParameters = DESIGN,
+) -> tuple[Component, ...]:
+    """All 64 flap cards in their stopped, gravity-supported reference poses.
+
+    The lower/front card falls vertically. Upper cards follow the support stack
+    from the rear to the front; the front upper card is held vertically by the
+    pawl. This is a clearance and enclosure-design reference, not a motion
+    simulation or a manufacturing part.
+    """
+
+    card = params.card
+    drum = params.drum
+    step_degrees = 360.0 / drum.positions
+    stop_degrees = drum_stop_rotation_degrees(params)
+    front_upper = drum.positions // 2 - 1
+    front_lower = drum.positions // 2
+    # Put the centre of the card's tab edge at the pivot before mapping it to
+    # the enclosure coordinate system: X is the axle, Y is depth and Z height.
+    card_at_pivot = (
+        flap_card(params)
+        .translate((-card.body_width / 2, -card.total_height, 0))
+        .rotate((0, 0, 0), (1, 0, 0), 90)
+    )
+
+    cards: list[Component] = []
+    for position in range(drum.positions):
+        angle_degrees = position * step_degrees + stop_degrees
+        angle_radians = math.radians(angle_degrees)
+        pivot_depth = drum.flap_hole_center_radius * math.cos(angle_radians)
+        pivot_height = drum.flap_hole_center_radius * math.sin(angle_radians)
+        # Every southern card falls with gravity. Northern cards form the
+        # rear-to-front support stack. At the stop, both front cards are exact
+        # verticals: the lower one falls, the upper one rests on the pawl.
+        if position in (front_upper, front_lower) or pivot_height < 0:
+            tilt_degrees = 0.0
+        else:
+            tilt_degrees = angle_degrees - 180.0
+        cards.append(
+            Component(
+                name=f"card_{position:02d}",
+                shape=(
+                    card_at_pivot.rotate((0, 0, 0), (1, 0, 0), tilt_degrees)
+                    .translate((0, pivot_depth, pivot_height))
+                    .clean()
+                ),
+                color=FLAP,
+            )
+        )
+    return tuple(cards)
+
+
 def enclosure_components(
     params: DesignParameters = DESIGN,
     *,
@@ -168,22 +235,12 @@ def enclosed_module_components(
     drum = tuple(
         Component(
             name=component.name,
-            shape=_orient_for_enclosure(component.shape, drum_offset),
+            shape=_orient_for_enclosure(
+                _rotate_drum_to_stop(component.shape, params), drum_offset
+            ),
             color=component.color,
         )
         for component in drum_components(params)
-    )
-
-    display_flap = (
-        flap_card(params)
-        .rotate((0, 0, 0), (1, 0, 0), 90)
-        .translate(
-            (
-                -params.card.body_width / 2,
-                -params.drum.radius,
-                -params.card.total_height / 2,
-            )
-        )
     )
     motor_offset = -params.enclosure_outer_width / 2
     motor_colors = {
@@ -195,7 +252,10 @@ def enclosed_module_components(
     motor = tuple(
         Component(
             name=name,
-            shape=_orient_for_enclosure(shape, motor_offset),
+            shape=_orient_for_enclosure(
+                _rotate_drum_to_stop(shape, params) if name == "motor_shaft" else shape,
+                motor_offset,
+            ),
             color=motor_colors[name],
         )
         for name, shape in motor_components(params).items()
@@ -203,7 +263,7 @@ def enclosed_module_components(
     return (
         *enclosure_components(params, exploded=exploded),
         *drum,
-        Component(name="display_flap", shape=display_flap, color=FLAP),
+        *mounted_card_components(params),
         *motor,
     )
 
