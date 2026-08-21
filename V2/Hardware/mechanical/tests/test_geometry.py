@@ -364,9 +364,9 @@ def test_stopped_drum_mounts_all_cards_radially_outward() -> None:
 
     step_degrees = 360 / DESIGN.drum.positions
     stop_degrees = drum_stop_rotation_degrees()
-    front_upper_position = DESIGN.drum.positions // 2 - 1
+    front_lower_position = DESIGN.drum.positions // 2
     for position in range(DESIGN.drum.positions):
-        card_number = (position - front_upper_position) % DESIGN.drum.positions
+        card_number = (front_lower_position - position) % DESIGN.drum.positions
         card = cards[f"card_{card_number:02d}"]
         angle = math.radians(180 - stop_degrees - position * step_degrees)
         radial_depth = math.cos(angle)
@@ -383,8 +383,9 @@ def test_stopped_drum_mounts_all_cards_radially_outward() -> None:
         assert cross == pytest.approx(0, abs=1e-6)
         assert dot > 0
 
-    assert cards["card_00"].Center().z > 0
-    assert cards["card_01"].Center().z < 0
+    assert cards["card_00"].Center().z < 0
+    assert cards["card_01"].Center().z > 0
+    assert cards["card_02"].Center().z > cards["card_01"].Center().z
 
 
 def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:

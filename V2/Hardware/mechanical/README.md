@@ -88,16 +88,22 @@ The enclosure view mounts all 64 cards in a radial startup pose. The drum is
 held at the card stop: half a 64-position pitch (2.8125°). The motor shaft is
 rotated 90° to match the slotted motor-side disc hole, while every tab hinge
 axis stays centred on its flap hole and every free edge points radially away
-from the drum. The physical sequence is circularly relabelled for artwork:
-the former upper-front `card_31` is now `card_00`, the former lower-front
-`card_32` is `card_01`, and numbering continues around the drum. These radial
-poses are intended as deterministic initial conditions for a later Blender
-gravity simulation, not final resting positions.
+from the drum. Numbering follows the observed direction of travel from the
+motor-side view: `card_00` is the lower-front card, `card_01` is the
+upper-front card, and `card_02` is the next card arriving as the drum turns
+anticlockwise. These radial poses are intended as deterministic initial
+conditions for a later Blender gravity simulation, not final resting
+positions.
 
 Each face sticker is a separate yellow viewer object named
 `sticker_00_front`, `sticker_00_back`, through `sticker_63_front` and
 `sticker_63_back`. The black substrate remains a separate `card_XX` object, so
 character artwork can later be assigned without losing the physical layers.
+With this numbering, character position `i` uses `card_i_front` for its lower
+half and `card_(i+1 mod 64)_back` for its upper half. Thus the blank uses
+`sticker_00_front` plus `sticker_01_back`, `A` uses `sticker_01_front` plus
+`sticker_02_back`, and the final degree sign wraps from `sticker_63_front` to
+`sticker_00_back`.
 
 Each card uses a 0.5 mm blank with one centred 45 × 45.5 × 0.1 mm sticker on
 each face. The paired sticker artwork is cut through its center so curves and

@@ -153,7 +153,7 @@ def mounted_card_components(
     drum = params.drum
     step_degrees = 360.0 / drum.positions
     stop_degrees = drum_stop_rotation_degrees(params)
-    front_upper_position = drum.positions // 2 - 1
+    front_lower_position = drum.positions // 2
 
     # Put the centre of the card's tab edge at the pivot before mapping it to
     # the enclosure coordinate system: X is the axle, Y is depth and Z height.
@@ -193,7 +193,10 @@ def mounted_card_components(
         # At zero tilt the free edge points down. Rotating by angle + 90 maps
         # that vector onto the radius through this pivot, pointing outwards.
         tilt_degrees = angle_degrees + 90.0
-        card_number = (position - front_upper_position) % drum.positions
+        # Number in the observed direction of travel from the motor-side view:
+        # card 00 is the lower-front card, card 01 the upper-front card, and
+        # card 02 is the next card arriving as the drum turns anticlockwise.
+        card_number = (front_lower_position - position) % drum.positions
 
         cards.append(
             Component(
