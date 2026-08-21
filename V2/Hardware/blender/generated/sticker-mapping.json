@@ -1,0 +1,2717 @@
+{
+  "schema_version": 1,
+  "character_set": {
+    "id": "international-64",
+    "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
+  },
+  "atlas": {
+    "file": "sticker-atlas.png",
+    "source_svg": "sticker-atlas.svg",
+    "columns": 16,
+    "rows": 4,
+    "width_px": 4096,
+    "height_px": 2071,
+    "cell_mm": [
+      45.0,
+      91.0
+    ],
+    "split_y_mm": 45.5
+  },
+  "numbering": {
+    "card_00": "lower front stop position",
+    "card_01": "upper front stop position",
+    "direction": "increasing in anticlockwise travel from motor-side view",
+    "lower_half_target": "sticker_i_front",
+    "upper_half_target": "sticker_(i+1 mod 64)_back"
+  },
+  "assignments": [
+    {
+      "target": "sticker_00_back",
+      "card": 0,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 63,
+      "character": "°",
+      "atlas_cell": {
+        "row": 3,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.125,
+        1.0,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_00_front",
+      "card": 0,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 0,
+      "character": " ",
+      "atlas_cell": {
+        "row": 0,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.75,
+        0.0625,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_01_back",
+      "card": 1,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 0,
+      "character": " ",
+      "atlas_cell": {
+        "row": 0,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.875,
+        0.0625,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_01_front",
+      "card": 1,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 1,
+      "character": "A",
+      "atlas_cell": {
+        "row": 0,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.75,
+        0.125,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_02_back",
+      "card": 2,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 1,
+      "character": "A",
+      "atlas_cell": {
+        "row": 0,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.875,
+        0.125,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_02_front",
+      "card": 2,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 2,
+      "character": "B",
+      "atlas_cell": {
+        "row": 0,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.75,
+        0.1875,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_03_back",
+      "card": 3,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 2,
+      "character": "B",
+      "atlas_cell": {
+        "row": 0,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.875,
+        0.1875,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_03_front",
+      "card": 3,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 3,
+      "character": "C",
+      "atlas_cell": {
+        "row": 0,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.75,
+        0.25,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_04_back",
+      "card": 4,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 3,
+      "character": "C",
+      "atlas_cell": {
+        "row": 0,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.875,
+        0.25,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_04_front",
+      "card": 4,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 4,
+      "character": "D",
+      "atlas_cell": {
+        "row": 0,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.75,
+        0.3125,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_05_back",
+      "card": 5,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 4,
+      "character": "D",
+      "atlas_cell": {
+        "row": 0,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.875,
+        0.3125,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_05_front",
+      "card": 5,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 5,
+      "character": "E",
+      "atlas_cell": {
+        "row": 0,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.75,
+        0.375,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_06_back",
+      "card": 6,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 5,
+      "character": "E",
+      "atlas_cell": {
+        "row": 0,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.875,
+        0.375,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_06_front",
+      "card": 6,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 6,
+      "character": "F",
+      "atlas_cell": {
+        "row": 0,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.75,
+        0.4375,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_07_back",
+      "card": 7,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 6,
+      "character": "F",
+      "atlas_cell": {
+        "row": 0,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.875,
+        0.4375,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_07_front",
+      "card": 7,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 7,
+      "character": "G",
+      "atlas_cell": {
+        "row": 0,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.75,
+        0.5,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_08_back",
+      "card": 8,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 7,
+      "character": "G",
+      "atlas_cell": {
+        "row": 0,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.875,
+        0.5,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_08_front",
+      "card": 8,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 8,
+      "character": "H",
+      "atlas_cell": {
+        "row": 0,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.75,
+        0.5625,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_09_back",
+      "card": 9,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 8,
+      "character": "H",
+      "atlas_cell": {
+        "row": 0,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.875,
+        0.5625,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_09_front",
+      "card": 9,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 9,
+      "character": "I",
+      "atlas_cell": {
+        "row": 0,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.75,
+        0.625,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_10_back",
+      "card": 10,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 9,
+      "character": "I",
+      "atlas_cell": {
+        "row": 0,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.875,
+        0.625,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_10_front",
+      "card": 10,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 10,
+      "character": "J",
+      "atlas_cell": {
+        "row": 0,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.75,
+        0.6875,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_11_back",
+      "card": 11,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 10,
+      "character": "J",
+      "atlas_cell": {
+        "row": 0,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.875,
+        0.6875,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_11_front",
+      "card": 11,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 11,
+      "character": "K",
+      "atlas_cell": {
+        "row": 0,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.75,
+        0.75,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_12_back",
+      "card": 12,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 11,
+      "character": "K",
+      "atlas_cell": {
+        "row": 0,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.875,
+        0.75,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_12_front",
+      "card": 12,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 12,
+      "character": "L",
+      "atlas_cell": {
+        "row": 0,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.75,
+        0.8125,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_13_back",
+      "card": 13,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 12,
+      "character": "L",
+      "atlas_cell": {
+        "row": 0,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.875,
+        0.8125,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_13_front",
+      "card": 13,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 13,
+      "character": "M",
+      "atlas_cell": {
+        "row": 0,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.75,
+        0.875,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_14_back",
+      "card": 14,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 13,
+      "character": "M",
+      "atlas_cell": {
+        "row": 0,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.875,
+        0.875,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_14_front",
+      "card": 14,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 14,
+      "character": "N",
+      "atlas_cell": {
+        "row": 0,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.75,
+        0.9375,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_15_back",
+      "card": 15,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 14,
+      "character": "N",
+      "atlas_cell": {
+        "row": 0,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.875,
+        0.9375,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_15_front",
+      "card": 15,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 15,
+      "character": "O",
+      "atlas_cell": {
+        "row": 0,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.75,
+        1.0,
+        0.875
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_16_back",
+      "card": 16,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 15,
+      "character": "O",
+      "atlas_cell": {
+        "row": 0,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.875,
+        1.0,
+        1.0
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_16_front",
+      "card": 16,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 16,
+      "character": "P",
+      "atlas_cell": {
+        "row": 1,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.5,
+        0.0625,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_17_back",
+      "card": 17,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 16,
+      "character": "P",
+      "atlas_cell": {
+        "row": 1,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.625,
+        0.0625,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_17_front",
+      "card": 17,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 17,
+      "character": "Q",
+      "atlas_cell": {
+        "row": 1,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.5,
+        0.125,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_18_back",
+      "card": 18,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 17,
+      "character": "Q",
+      "atlas_cell": {
+        "row": 1,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.625,
+        0.125,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_18_front",
+      "card": 18,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 18,
+      "character": "R",
+      "atlas_cell": {
+        "row": 1,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.5,
+        0.1875,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_19_back",
+      "card": 19,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 18,
+      "character": "R",
+      "atlas_cell": {
+        "row": 1,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.625,
+        0.1875,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_19_front",
+      "card": 19,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 19,
+      "character": "S",
+      "atlas_cell": {
+        "row": 1,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.5,
+        0.25,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_20_back",
+      "card": 20,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 19,
+      "character": "S",
+      "atlas_cell": {
+        "row": 1,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.625,
+        0.25,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_20_front",
+      "card": 20,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 20,
+      "character": "T",
+      "atlas_cell": {
+        "row": 1,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.5,
+        0.3125,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_21_back",
+      "card": 21,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 20,
+      "character": "T",
+      "atlas_cell": {
+        "row": 1,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.625,
+        0.3125,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_21_front",
+      "card": 21,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 21,
+      "character": "U",
+      "atlas_cell": {
+        "row": 1,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.5,
+        0.375,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_22_back",
+      "card": 22,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 21,
+      "character": "U",
+      "atlas_cell": {
+        "row": 1,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.625,
+        0.375,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_22_front",
+      "card": 22,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 22,
+      "character": "V",
+      "atlas_cell": {
+        "row": 1,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.5,
+        0.4375,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_23_back",
+      "card": 23,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 22,
+      "character": "V",
+      "atlas_cell": {
+        "row": 1,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.625,
+        0.4375,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_23_front",
+      "card": 23,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 23,
+      "character": "W",
+      "atlas_cell": {
+        "row": 1,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.5,
+        0.5,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_24_back",
+      "card": 24,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 23,
+      "character": "W",
+      "atlas_cell": {
+        "row": 1,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.625,
+        0.5,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_24_front",
+      "card": 24,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 24,
+      "character": "X",
+      "atlas_cell": {
+        "row": 1,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.5,
+        0.5625,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_25_back",
+      "card": 25,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 24,
+      "character": "X",
+      "atlas_cell": {
+        "row": 1,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.625,
+        0.5625,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_25_front",
+      "card": 25,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 25,
+      "character": "Y",
+      "atlas_cell": {
+        "row": 1,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.5,
+        0.625,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_26_back",
+      "card": 26,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 25,
+      "character": "Y",
+      "atlas_cell": {
+        "row": 1,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.625,
+        0.625,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_26_front",
+      "card": 26,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 26,
+      "character": "Z",
+      "atlas_cell": {
+        "row": 1,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.5,
+        0.6875,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_27_back",
+      "card": 27,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 26,
+      "character": "Z",
+      "atlas_cell": {
+        "row": 1,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.625,
+        0.6875,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_27_front",
+      "card": 27,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 27,
+      "character": "Ä",
+      "atlas_cell": {
+        "row": 1,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.5,
+        0.75,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_28_back",
+      "card": 28,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 27,
+      "character": "Ä",
+      "atlas_cell": {
+        "row": 1,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.625,
+        0.75,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_28_front",
+      "card": 28,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 28,
+      "character": "Ö",
+      "atlas_cell": {
+        "row": 1,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.5,
+        0.8125,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_29_back",
+      "card": 29,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 28,
+      "character": "Ö",
+      "atlas_cell": {
+        "row": 1,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.625,
+        0.8125,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_29_front",
+      "card": 29,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 29,
+      "character": "Ü",
+      "atlas_cell": {
+        "row": 1,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.5,
+        0.875,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_30_back",
+      "card": 30,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 29,
+      "character": "Ü",
+      "atlas_cell": {
+        "row": 1,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.625,
+        0.875,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_30_front",
+      "card": 30,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 30,
+      "character": "ẞ",
+      "atlas_cell": {
+        "row": 1,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.5,
+        0.9375,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_31_back",
+      "card": 31,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 30,
+      "character": "ẞ",
+      "atlas_cell": {
+        "row": 1,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.625,
+        0.9375,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_31_front",
+      "card": 31,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 31,
+      "character": "Ñ",
+      "atlas_cell": {
+        "row": 1,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.5,
+        1.0,
+        0.625
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_32_back",
+      "card": 32,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 31,
+      "character": "Ñ",
+      "atlas_cell": {
+        "row": 1,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.625,
+        1.0,
+        0.75
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_32_front",
+      "card": 32,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 32,
+      "character": "Ç",
+      "atlas_cell": {
+        "row": 2,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.25,
+        0.0625,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_33_back",
+      "card": 33,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 32,
+      "character": "Ç",
+      "atlas_cell": {
+        "row": 2,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.375,
+        0.0625,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_33_front",
+      "card": 33,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 33,
+      "character": "É",
+      "atlas_cell": {
+        "row": 2,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.25,
+        0.125,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_34_back",
+      "card": 34,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 33,
+      "character": "É",
+      "atlas_cell": {
+        "row": 2,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.375,
+        0.125,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_34_front",
+      "card": 34,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 34,
+      "character": "Å",
+      "atlas_cell": {
+        "row": 2,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.25,
+        0.1875,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_35_back",
+      "card": 35,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 34,
+      "character": "Å",
+      "atlas_cell": {
+        "row": 2,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.375,
+        0.1875,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_35_front",
+      "card": 35,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 35,
+      "character": "Æ",
+      "atlas_cell": {
+        "row": 2,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.25,
+        0.25,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_36_back",
+      "card": 36,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 35,
+      "character": "Æ",
+      "atlas_cell": {
+        "row": 2,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.375,
+        0.25,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_36_front",
+      "card": 36,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 36,
+      "character": "Ø",
+      "atlas_cell": {
+        "row": 2,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.25,
+        0.3125,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_37_back",
+      "card": 37,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 36,
+      "character": "Ø",
+      "atlas_cell": {
+        "row": 2,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.375,
+        0.3125,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_37_front",
+      "card": 37,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 37,
+      "character": "Ł",
+      "atlas_cell": {
+        "row": 2,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.25,
+        0.375,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_38_back",
+      "card": 38,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 37,
+      "character": "Ł",
+      "atlas_cell": {
+        "row": 2,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.375,
+        0.375,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_38_front",
+      "card": 38,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 38,
+      "character": "0",
+      "atlas_cell": {
+        "row": 2,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.25,
+        0.4375,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_39_back",
+      "card": 39,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 38,
+      "character": "0",
+      "atlas_cell": {
+        "row": 2,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.375,
+        0.4375,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_39_front",
+      "card": 39,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 39,
+      "character": "1",
+      "atlas_cell": {
+        "row": 2,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.25,
+        0.5,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_40_back",
+      "card": 40,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 39,
+      "character": "1",
+      "atlas_cell": {
+        "row": 2,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.375,
+        0.5,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_40_front",
+      "card": 40,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 40,
+      "character": "2",
+      "atlas_cell": {
+        "row": 2,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.25,
+        0.5625,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_41_back",
+      "card": 41,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 40,
+      "character": "2",
+      "atlas_cell": {
+        "row": 2,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.375,
+        0.5625,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_41_front",
+      "card": 41,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 41,
+      "character": "3",
+      "atlas_cell": {
+        "row": 2,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.25,
+        0.625,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_42_back",
+      "card": 42,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 41,
+      "character": "3",
+      "atlas_cell": {
+        "row": 2,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.375,
+        0.625,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_42_front",
+      "card": 42,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 42,
+      "character": "4",
+      "atlas_cell": {
+        "row": 2,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.25,
+        0.6875,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_43_back",
+      "card": 43,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 42,
+      "character": "4",
+      "atlas_cell": {
+        "row": 2,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.375,
+        0.6875,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_43_front",
+      "card": 43,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 43,
+      "character": "5",
+      "atlas_cell": {
+        "row": 2,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.25,
+        0.75,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_44_back",
+      "card": 44,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 43,
+      "character": "5",
+      "atlas_cell": {
+        "row": 2,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.375,
+        0.75,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_44_front",
+      "card": 44,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 44,
+      "character": "6",
+      "atlas_cell": {
+        "row": 2,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.25,
+        0.8125,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_45_back",
+      "card": 45,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 44,
+      "character": "6",
+      "atlas_cell": {
+        "row": 2,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.375,
+        0.8125,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_45_front",
+      "card": 45,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 45,
+      "character": "7",
+      "atlas_cell": {
+        "row": 2,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.25,
+        0.875,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_46_back",
+      "card": 46,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 45,
+      "character": "7",
+      "atlas_cell": {
+        "row": 2,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.375,
+        0.875,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_46_front",
+      "card": 46,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 46,
+      "character": "8",
+      "atlas_cell": {
+        "row": 2,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.25,
+        0.9375,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_47_back",
+      "card": 47,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 46,
+      "character": "8",
+      "atlas_cell": {
+        "row": 2,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.375,
+        0.9375,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_47_front",
+      "card": 47,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 47,
+      "character": "9",
+      "atlas_cell": {
+        "row": 2,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.25,
+        1.0,
+        0.375
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_48_back",
+      "card": 48,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 47,
+      "character": "9",
+      "atlas_cell": {
+        "row": 2,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.375,
+        1.0,
+        0.5
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_48_front",
+      "card": 48,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 48,
+      "character": ".",
+      "atlas_cell": {
+        "row": 3,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.0,
+        0.0625,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_49_back",
+      "card": 49,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 48,
+      "character": ".",
+      "atlas_cell": {
+        "row": 3,
+        "column": 0
+      },
+      "uv_box": [
+        0.0,
+        0.125,
+        0.0625,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_49_front",
+      "card": 49,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 49,
+      "character": ",",
+      "atlas_cell": {
+        "row": 3,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.0,
+        0.125,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_50_back",
+      "card": 50,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 49,
+      "character": ",",
+      "atlas_cell": {
+        "row": 3,
+        "column": 1
+      },
+      "uv_box": [
+        0.0625,
+        0.125,
+        0.125,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_50_front",
+      "card": 50,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 50,
+      "character": ":",
+      "atlas_cell": {
+        "row": 3,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.0,
+        0.1875,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_51_back",
+      "card": 51,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 50,
+      "character": ":",
+      "atlas_cell": {
+        "row": 3,
+        "column": 2
+      },
+      "uv_box": [
+        0.125,
+        0.125,
+        0.1875,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_51_front",
+      "card": 51,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 51,
+      "character": "!",
+      "atlas_cell": {
+        "row": 3,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.0,
+        0.25,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_52_back",
+      "card": 52,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 51,
+      "character": "!",
+      "atlas_cell": {
+        "row": 3,
+        "column": 3
+      },
+      "uv_box": [
+        0.1875,
+        0.125,
+        0.25,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_52_front",
+      "card": 52,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 52,
+      "character": "?",
+      "atlas_cell": {
+        "row": 3,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.0,
+        0.3125,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_53_back",
+      "card": 53,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 52,
+      "character": "?",
+      "atlas_cell": {
+        "row": 3,
+        "column": 4
+      },
+      "uv_box": [
+        0.25,
+        0.125,
+        0.3125,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_53_front",
+      "card": 53,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 53,
+      "character": "¡",
+      "atlas_cell": {
+        "row": 3,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.0,
+        0.375,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_54_back",
+      "card": 54,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 53,
+      "character": "¡",
+      "atlas_cell": {
+        "row": 3,
+        "column": 5
+      },
+      "uv_box": [
+        0.3125,
+        0.125,
+        0.375,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_54_front",
+      "card": 54,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 54,
+      "character": "¿",
+      "atlas_cell": {
+        "row": 3,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.0,
+        0.4375,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_55_back",
+      "card": 55,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 54,
+      "character": "¿",
+      "atlas_cell": {
+        "row": 3,
+        "column": 6
+      },
+      "uv_box": [
+        0.375,
+        0.125,
+        0.4375,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_55_front",
+      "card": 55,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 55,
+      "character": "-",
+      "atlas_cell": {
+        "row": 3,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.0,
+        0.5,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_56_back",
+      "card": 56,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 55,
+      "character": "-",
+      "atlas_cell": {
+        "row": 3,
+        "column": 7
+      },
+      "uv_box": [
+        0.4375,
+        0.125,
+        0.5,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_56_front",
+      "card": 56,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 56,
+      "character": "/",
+      "atlas_cell": {
+        "row": 3,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.0,
+        0.5625,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_57_back",
+      "card": 57,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 56,
+      "character": "/",
+      "atlas_cell": {
+        "row": 3,
+        "column": 8
+      },
+      "uv_box": [
+        0.5,
+        0.125,
+        0.5625,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_57_front",
+      "card": 57,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 57,
+      "character": "'",
+      "atlas_cell": {
+        "row": 3,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.0,
+        0.625,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_58_back",
+      "card": 58,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 57,
+      "character": "'",
+      "atlas_cell": {
+        "row": 3,
+        "column": 9
+      },
+      "uv_box": [
+        0.5625,
+        0.125,
+        0.625,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_58_front",
+      "card": 58,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 58,
+      "character": "&",
+      "atlas_cell": {
+        "row": 3,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.0,
+        0.6875,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_59_back",
+      "card": 59,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 58,
+      "character": "&",
+      "atlas_cell": {
+        "row": 3,
+        "column": 10
+      },
+      "uv_box": [
+        0.625,
+        0.125,
+        0.6875,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_59_front",
+      "card": 59,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 59,
+      "character": "@",
+      "atlas_cell": {
+        "row": 3,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.0,
+        0.75,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_60_back",
+      "card": 60,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 59,
+      "character": "@",
+      "atlas_cell": {
+        "row": 3,
+        "column": 11
+      },
+      "uv_box": [
+        0.6875,
+        0.125,
+        0.75,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_60_front",
+      "card": 60,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 60,
+      "character": "%",
+      "atlas_cell": {
+        "row": 3,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.0,
+        0.8125,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_61_back",
+      "card": 61,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 60,
+      "character": "%",
+      "atlas_cell": {
+        "row": 3,
+        "column": 12
+      },
+      "uv_box": [
+        0.75,
+        0.125,
+        0.8125,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_61_front",
+      "card": 61,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 61,
+      "character": "€",
+      "atlas_cell": {
+        "row": 3,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.0,
+        0.875,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_62_back",
+      "card": 62,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 61,
+      "character": "€",
+      "atlas_cell": {
+        "row": 3,
+        "column": 13
+      },
+      "uv_box": [
+        0.8125,
+        0.125,
+        0.875,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_62_front",
+      "card": 62,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 62,
+      "character": "$",
+      "atlas_cell": {
+        "row": 3,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.0,
+        0.9375,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_63_back",
+      "card": 63,
+      "face": "back",
+      "display_half": "upper",
+      "character_index": 62,
+      "character": "$",
+      "atlas_cell": {
+        "row": 3,
+        "column": 14
+      },
+      "uv_box": [
+        0.875,
+        0.125,
+        0.9375,
+        0.25
+      ],
+      "rotation_degrees": 180,
+      "center_cut_edge": "bottom",
+      "target_edge": "hinge"
+    },
+    {
+      "target": "sticker_63_front",
+      "card": 63,
+      "face": "front",
+      "display_half": "lower",
+      "character_index": 63,
+      "character": "°",
+      "atlas_cell": {
+        "row": 3,
+        "column": 15
+      },
+      "uv_box": [
+        0.9375,
+        0.0,
+        1.0,
+        0.125
+      ],
+      "rotation_degrees": 0,
+      "center_cut_edge": "top",
+      "target_edge": "hinge"
+    }
+  ]
+}

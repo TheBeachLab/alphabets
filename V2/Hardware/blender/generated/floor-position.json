@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "object": "CompressionFloor_Adjustable",
+  "geometry_version": 1,
+  "origin_world_mm": [
+    0.0,
+    -168.936729,
+    -62.283281
+  ],
+  "rotation_xyz_degrees": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale_xyz": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "origin_definition": "center of the 2 mm thick floor collider",
+  "cad_status": "captured from Blender; defines simulation floor only"
+}

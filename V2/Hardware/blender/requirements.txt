@@ -1,0 +1,2 @@
+-r ../mechanical/requirements.txt
+-r ../stickers/requirements.txt

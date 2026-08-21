@@ -1,0 +1,22 @@
+{
+  "schema_version": 2,
+  "object": "CardStopPawl_Adjustable",
+  "geometry_version": 2,
+  "support_edge_world_mm": [
+    0.0,
+    40.301818,
+    47.239874
+  ],
+  "rotation_xyz_degrees": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale_xyz": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "origin_definition": "center of the lower inner support edge",
+  "cad_status": "captured from Blender; not yet transferred to CadQuery"
+}
