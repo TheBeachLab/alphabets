@@ -5,7 +5,7 @@
 body_width = 50.0
 total_height = 48.0
 tab_width = 4.0
-tab_height = 3.0
+tab_height = 2.5
 thickness = 1.0
 
 [drum]
@@ -18,6 +18,9 @@ support_width = 35.0
 support_tab_width = 6.0
 support_y = 20.0
 flap_hole_diameter = 3.0
+# Radial clearance after the rectangular 1 mm-thick card tab is inscribed in
+# the circular pivot hole. This permits free rotation, not merely insertion.
+flap_rotation_clearance = 0.15
 flap_hole_center_radius = 40.0
 motor_axis_width = 3.0
 motor_axis_height = 6.0

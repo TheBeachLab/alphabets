@@ -120,7 +120,9 @@ def test_flap_card_matches_current_cutter_geometry() -> None:
     )
     assert card_points()[0] == (0.0, 0.0)
     assert card_points()[5] == (-DESIGN.card.tab_width, DESIGN.card.total_height)
-    assert DESIGN.card.tab_axis_height == pytest.approx(46.5)
+    assert DESIGN.card.tab_axis_height == pytest.approx(46.75)
+    assert DESIGN.card.tab_rotation_radius == pytest.approx(math.sqrt(1.25**2 + 0.5**2))
+    assert DESIGN.flap_tab_radial_clearance >= DESIGN.drum.flap_rotation_clearance
 
 
 @pytest.mark.parametrize("motor_side", [True, False])
@@ -256,6 +258,13 @@ def test_design_profile_rejects_unknown_dimension(tmp_path: Path) -> None:
     profile = tmp_path / "invalid.toml"
     profile.write_text("[drum]\nunknown_dimension = 1\n", encoding="utf-8")
     with pytest.raises(ValueError, match="unknown_dimension"):
+        load_design_profile(profile, base=DESIGN)
+
+
+def test_design_profile_rejects_a_tab_that_cannot_rotate(tmp_path: Path) -> None:
+    profile = tmp_path / "blocked-tab.toml"
+    profile.write_text("[card]\ntab_height = 3\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="required radial clearance"):
         load_design_profile(profile, base=DESIGN)
 
 

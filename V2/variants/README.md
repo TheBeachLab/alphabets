@@ -7,7 +7,7 @@ sticker sheet, card, drum spacing and enclosure source.
 | Variant | Character preset | Sticker / halves | Card | Drum inner / outer width | Enclosure |
 | --- | --- | --- | --- | --- | --- |
 | **V2 Prototipo** | `demo-64` | 55 × 86 / 55 × 43 mm | 55 × 43 mm, 55 × 40 visible | 56 / 60.3 mm | historical FreeCAD reference only |
-| **V2 Definitivo** | `international-64` | 50 × 96 / 50 × 48 mm | 50 × 48 mm, 50 × 45 visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
+| **V2 Definitivo** | `international-64` | 50 × 96 / 50 × 48 mm | 50 × 48 mm, 50 × 45.5 visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
 
 The 50 × 86 mm sticker is an abandoned transition, not a physical variant. Do
 not use it to make cards, drums or enclosures.

@@ -1,4 +1,5 @@
 import json
+import math
 import re
 import unittest
 import zipfile
@@ -31,14 +32,14 @@ class CardGeometryTests(unittest.TestCase):
             sticker["geometry_mm"]["card"][1],
         )
 
-    def test_tabs_are_preserved_and_drum_keeps_one_mm_clearance(self):
+    def test_tabs_rotate_in_the_drum_holes_and_keep_axial_clearance(self):
         card = self.manifest["card_mm"]
         drum = self.manifest["drum_mm"]
         self.assertEqual(card["body_width"], 50.0)
-        self.assertEqual(card["body_height"], 45.0)
+        self.assertEqual(card["body_height"], 45.5)
         self.assertEqual(card["total_height"], 48.0)
         self.assertEqual(card["tab_width"], 4.0)
-        self.assertEqual(card["tab_height"], 3.0)
+        self.assertEqual(card["tab_height"], 2.5)
         self.assertEqual(card["overall_width_with_tabs"], 58.0)
         self.assertEqual(drum["axial_clearance"], 1.0)
         self.assertEqual(drum["inner_width"], 51.0)
@@ -46,6 +47,9 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(drum["outer_width"], 55.3)
         self.assertEqual(drum["diameter"], 85.0)
         self.assertEqual(drum["positions"], 64)
+        self.assertEqual(drum["flap_hole_diameter"], 3.0)
+        self.assertAlmostEqual(drum["tab_rotation_radius"], math.hypot(1.25, 0.5))
+        self.assertGreaterEqual(drum["tab_radial_clearance"], 0.15)
 
     def test_svg_has_a_closed_58x48_mm_cut_path_with_visible_margin(self):
         root = ET.parse(CARDS_DIR / "card-50x48-cut.svg").getroot()
@@ -95,7 +99,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertRegex(source, r"axial_clearance\s*=\s*1\s*;")
         self.assertRegex(source, r"d\s*=\s*flap_width\s*\+\s*axial_clearance\s*;")
         self.assertRegex(source, r"sdiam\s*=\s*85\s*;")
-        self.assertRegex(source, r'e\s*=\s*2\.15\s*;')
+        self.assertRegex(source, r"e\s*=\s*2\.15\s*;")
         self.assertIn('part == "assembly"', source)
         dxf = REPO_ROOT / "V2/Hardware/structure/spool-50mm.dxf"
         self.assertGreater(dxf.stat().st_size, 100_000)
