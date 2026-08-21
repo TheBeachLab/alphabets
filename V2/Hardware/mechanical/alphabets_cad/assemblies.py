@@ -152,11 +152,11 @@ def mounted_card_components(
     drum = params.drum
     step_degrees = 360.0 / drum.positions
     stop_degrees = drum_stop_rotation_degrees(params)
-    # These are physical card identifiers, not a viewer-only numbering. At
-    # the stopped display, the established sequence puts 00 above the window
-    # and 63 below it; the remaining cards run from 00 around the rear to 63.
-    front_upper = 0
-    front_lower = drum.positions - 1
+    # These are physical card identifiers, not viewer-only numbering. The
+    # established stopped display places 31 above the window and 32 below it.
+    # Do not renumber the physical flap sequence to relocate this pair.
+    front_upper = drum.positions // 2 - 1
+    front_lower = drum.positions // 2
     # Put the centre of the card's tab edge at the pivot before mapping it to
     # the enclosure coordinate system: X is the axle, Y is depth and Z height.
     card_at_pivot = (
