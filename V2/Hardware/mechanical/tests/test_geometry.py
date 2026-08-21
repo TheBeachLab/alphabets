@@ -293,7 +293,7 @@ def test_stopped_drum_mounts_all_cards_with_front_pair_vertical() -> None:
     assert all(card.isValid() for card in cards.values())
 
     upper_front = cards["card_00"].BoundingBox()
-    lower_front = cards["card_01"].BoundingBox()
+    lower_front = cards["card_63"].BoundingBox()
     assert upper_front.xlen == pytest.approx(DESIGN.card.overall_width)
     assert lower_front.xlen == pytest.approx(DESIGN.card.overall_width)
     assert upper_front.zlen == pytest.approx(DESIGN.card.total_height)
@@ -393,7 +393,7 @@ def test_enclosure_assemblies_contain_two_shell_parts() -> None:
     components = enclosed_module_components(exploded=True)
     assert len(components) == 74
     assert all(component.shape.isValid() for component in components)
-    assert {"card_00", "card_01"} < {component.name for component in components}
+    assert {"card_00", "card_63"} < {component.name for component in components}
 
 
 def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
