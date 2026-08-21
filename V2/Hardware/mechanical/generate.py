@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from alphabets_cad.export import generate
+from alphabets_cad.parameters import DESIGN, load_design_profile
 
 MECHANICAL_DIR = Path(__file__).resolve().parent
 V2_DIR = MECHANICAL_DIR.parents[1]
@@ -31,6 +32,11 @@ def main() -> None:
         default="definitive",
         help="physical V2 variant; only Definitivo has a current enclosure source",
     )
+    parser.add_argument(
+        "--profile",
+        type=Path,
+        help="TOML profile with direct-dimension overrides",
+    )
     args = parser.parse_args()
     try:
         variant = load_variant(args.variant)
@@ -41,7 +47,8 @@ def main() -> None:
             f"{variant.name} has no validated enclosure generator; use its historical "
             f"reference at {variant.enclosure.source}"
         )
-    generate(args.output)
+    params = load_design_profile(args.profile, base=DESIGN) if args.profile else DESIGN
+    generate(args.output, params=params)
 
 
 if __name__ == "__main__":

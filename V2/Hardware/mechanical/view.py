@@ -1,11 +1,31 @@
 """CQ-editor entry point for the Alphabets V2 reference module."""
 
-from alphabets_cad.assemblies import module_reference_assembly
+from __future__ import annotations
 
-result = module_reference_assembly()
+import os
+from pathlib import Path
 
-# CQ-editor injects show_object when it executes this file. Keeping the guard
-# also makes the entry point importable by the command-line test suite.
+from alphabets_cad.assemblies import (
+    module_reference_assembly,
+    module_reference_components,
+)
+from alphabets_cad.parameters import DESIGN, load_design_profile
+
+# Select a partial TOML override with `make gui PROFILE=profiles/fit-check.toml`.
+# Blank means the committed design profile in `design.toml`.
+profile = os.environ.get("ALPHABETS_PROFILE")
+parameters = load_design_profile(Path(profile), base=DESIGN) if profile else DESIGN
+components = module_reference_components(parameters)
+objects = {component.name: component.shape for component in components}
+result = module_reference_assembly(parameters)
+
+# CQ-editor gets every part as its own selectable/visible object. `result` is
+# retained as the colored fabrication assembly for STEP export and automation.
 _show_object = globals().get("show_object")
 if callable(_show_object):
-    _show_object(result)
+    for component in components:
+        _show_object(
+            component.shape,
+            name=component.name,
+            options={"rgba": component.color.toTuple()},
+        )

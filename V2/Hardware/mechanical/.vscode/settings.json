@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.ocp-venv/bin/python",
+  "OcpCadViewer.view.theme": "browser",
+  "OcpCadViewer.view.glass": false,
+  "OcpCadViewer.view.axes": true,
+  "OcpCadViewer.view.grid_XY": true,
+  "OcpCadViewer.view.ortho": true,
+  "OcpCadViewer.advanced.autostart": true
+}

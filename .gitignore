@@ -4,4 +4,5 @@ V2/Firmware/*/build/
 __pycache__/
 *.py[cod]
 .venv/
+.ocp-venv/
 .pytest_cache/

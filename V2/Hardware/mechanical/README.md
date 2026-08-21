@@ -84,10 +84,40 @@ Open an exploded view of the enclosure, drum and motor with:
 make gui-enclosure
 ```
 
-The graphical entry point is `view.py`. CQ-editor adds the script directory to
-its Python import path, so the same file can also be opened directly from the
-editor. The assembly tree preserves the names and colours of the drum, supports
-and 28BYJ-48 motor reference components.
+`design.toml` is the committed source for every direct manufacturing dimension.
+Derived values — for example the drum's inner width and the enclosure's overall
+width — remain calculated by the model and cannot drift. `view.py` exposes the
+resolved `parameters`, each named shape in `objects`, and the export assembly in
+`result`. CQ-editor therefore shows the parts separately instead of one opaque
+assembly.
+
+For a fit or fabrication variant, create a small TOML file containing only the
+dimensions that change, then use the same profile for preview and export:
+
+```sh
+make gui PROFILE=profiles/fit-check.toml
+make generate PROFILE=profiles/fit-check.toml OUTPUT=generated/fit-check
+```
+
+The profile is applied over the committed design, and unknown section or field
+names fail immediately instead of silently changing the model.
+
+### VS Code viewer
+
+OCP CAD Viewer is the preferred interactive viewer: it inherits VS Code's
+theme, provides per-object selection and visibility, and renders this model
+through `view_vscode.py`. Install its isolated environment once, then open this
+mechanical directory in VS Code and run the file:
+
+```sh
+make setup-vscode
+code .
+```
+
+The `.vscode` settings select the dedicated interpreter and the viewer's
+`browser` theme. It uses the same optional `ALPHABETS_PROFILE` value as
+CQ-editor, so a selected profile changes both views and generated fabrication
+files consistently.
 
 The generated files are committed so a fabricator does not need CadQuery:
 
