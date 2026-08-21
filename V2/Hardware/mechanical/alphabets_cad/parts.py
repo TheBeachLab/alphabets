@@ -521,57 +521,17 @@ def _enclosure_half(
         .val()
     )
     result = _drum_enclosure_shell(params).intersect(clipping_box)
-
-    rear_y = params.enclosure_inner_depth / 2
-    lug_y = rear_y - enclosure.rear_lug_inset
-    lug_start_z = split_z if upper else -split_z - enclosure.rear_lug_height
-    lug_height = enclosure.rear_lug_height
-    for x in (
-        -params.enclosure_rear_lug_center_x,
-        params.enclosure_rear_lug_center_x,
-    ):
-        lug = (
-            cq.Workplane("XY", origin=(x, lug_y, lug_start_z))
-            .circle(enclosure.rear_lug_radius)
-            .extrude(lug_height)
-        )
-        result = result.fuse(lug.val())
-
-        hole_radius = (
-            enclosure.screw_clearance_diameter / 2
-            if upper
-            else enclosure.screw_pilot_diameter / 2
-        )
-        hole = cq.Solid.makeCylinder(
-            hole_radius,
-            lug_height + 2 * EPSILON,
-            cq.Vector(x, lug_y, lug_start_z - EPSILON),
-            cq.Vector(0, 0, 1),
-        )
-        result = result.cut(hole)
-        if upper:
-            counterbore = cq.Solid.makeCylinder(
-                enclosure.screw_head_diameter / 2,
-                enclosure.screw_head_depth + EPSILON,
-                cq.Vector(
-                    x,
-                    lug_y,
-                    lug_start_z + lug_height - enclosure.screw_head_depth,
-                ),
-                cq.Vector(0, 0, 1),
-            )
-            result = result.cut(counterbore)
     return result.clean()
 
 
 def drum_enclosure_upper(params: DesignParameters = DESIGN) -> cq.Shape:
-    """Upper printable shell with M3 clearance holes and head recesses."""
+    """Upper printable shell prepared for a future embedded-magnet joint."""
 
     return _enclosure_half(True, params)
 
 
 def drum_enclosure_lower(params: DesignParameters = DESIGN) -> cq.Shape:
-    """Lower printable cradle with nominal M3 self-tapping pilot holes."""
+    """Symmetric lower shell prepared for a future embedded-magnet joint."""
 
     return _enclosure_half(False, params)
 

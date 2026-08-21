@@ -105,6 +105,20 @@ def test_current_source_parameters_are_centralized_without_drift() -> None:
         assert match, name
         assert float(Fraction(match.group(1))) == pytest.approx(value)
 
+    card_envelope = json.loads(
+        (HARDWARE_DIR / "blender/generated/card-envelope.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert card_envelope["upper"]["distance_from_axis_mm"] == pytest.approx(
+        DESIGN.drum_enclosure.upper_card_envelope_height,
+        abs=1e-6,
+    )
+    assert card_envelope["drum_radius_mm"] == pytest.approx(
+        DESIGN.drum.radius,
+        abs=1e-5,
+    )
+
 
 def test_flap_card_matches_current_cutter_geometry() -> None:
     card = flap_card()
@@ -287,7 +301,8 @@ def test_design_profile_applies_direct_values_and_keeps_derived_values() -> None
     assert params.drum.axial_clearance == 1.5
     assert params.drum_enclosure.radial_clearance == 2.5
     assert params.drum_inner_width == pytest.approx(51.5)
-    assert params.enclosure_inner_height == pytest.approx(90.0)
+    assert params.enclosure_inner_height == pytest.approx(DESIGN.enclosure_inner_height)
+    assert params.enclosure_inner_depth == pytest.approx(90.0)
 
 
 def test_design_profile_rejects_unknown_dimension(tmp_path: Path) -> None:
@@ -399,10 +414,18 @@ def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
     lower_box = parts["enclosure_lower"].BoundingBox()
     assert upper_box.xlen == pytest.approx(DESIGN.enclosure_overall_width)
     assert lower_box.xlen == pytest.approx(DESIGN.enclosure_overall_width)
+    assert DESIGN.enclosure_overall_width == pytest.approx(DESIGN.enclosure_outer_width)
     assert upper_box.ylen == pytest.approx(DESIGN.enclosure_outer_depth)
     assert lower_box.ylen == pytest.approx(DESIGN.enclosure_outer_depth)
     assert upper_box.zmin == pytest.approx(enclosure.split_gap / 2)
     assert lower_box.zmax == pytest.approx(-enclosure.split_gap / 2)
+    assert upper_box.zmax == pytest.approx(DESIGN.enclosure_outer_height / 2)
+    assert lower_box.zmin == pytest.approx(-DESIGN.enclosure_outer_height / 2)
+    assert upper_box.zmax == pytest.approx(-lower_box.zmin)
+    assert DESIGN.enclosure_ceiling_z == pytest.approx(96.702228)
+    assert DESIGN.enclosure_floor_z == pytest.approx(-96.702228)
+    assert enclosure.card_ceiling_clearance == pytest.approx(10.0)
+    assert enclosure.closure_method == "embedded_magnets"
     assert parts["enclosure_upper"].intersect(
         parts["enclosure_lower"]
     ).Volume() == pytest.approx(0)
@@ -421,6 +444,43 @@ def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
     )
     for shape in parts.values():
         assert shape.intersect(rear_opening_probe).Volume() == pytest.approx(0)
+
+
+def test_enclosure_roof_respects_captured_card_envelope_and_clearance() -> None:
+    parts = drum_enclosure_parts()
+    enclosure = DESIGN.drum_enclosure
+    upper = parts["enclosure_upper"]
+    lower = parts["enclosure_lower"]
+
+    assert DESIGN.upper_card_protrusion_above_drum == pytest.approx(44.202228)
+    assert DESIGN.enclosure_ceiling_z - enclosure.upper_card_envelope_height == (
+        pytest.approx(enclosure.card_ceiling_clearance)
+    )
+
+    cavity_probe = (
+        cq.Workplane(
+            "XY",
+            origin=(0, 0, DESIGN.enclosure_ceiling_z - 0.5),
+        )
+        .box(1, 1, 0.5)
+        .val()
+    )
+    upper_roof_probe = (
+        cq.Workplane(
+            "XY",
+            origin=(
+                0,
+                0,
+                DESIGN.enclosure_ceiling_z + enclosure.wall_thickness / 2,
+            ),
+        )
+        .box(1, 1, enclosure.wall_thickness / 2)
+        .val()
+    )
+    lower_floor_probe = upper_roof_probe.mirror("XY")
+    assert upper.intersect(cavity_probe).Volume() == pytest.approx(0)
+    assert upper.intersect(upper_roof_probe).Volume() > 0
+    assert lower.intersect(lower_floor_probe).Volume() > 0
 
 
 def test_enclosure_window_and_drum_clearances_are_real_geometry() -> None:

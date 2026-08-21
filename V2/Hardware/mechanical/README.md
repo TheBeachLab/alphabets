@@ -39,17 +39,22 @@ clean, individual-cell language of Vestaboard modules. Its horizontal joint
 follows the drum axis and the visual split between flap halves. The rear is
 fully open for loading the drum, routing wires and servicing the mechanism.
 
-The enclosure body is 64.1 mm wide, 92 mm deep and 93.8 mm high. Two small
-rear screw lugs bring the local maximum width to 75.5 mm. The drum has 2 mm
-nominal radial and axial clearance, and the front opening is 52 × 50 mm with
-rounded corners. The motor-side wall includes the nominal 28BYJ-48 centre and
-mounting holes; the shaft side has a 3.4 mm axle bore.
+The card ceiling comes from the saved Blender rigid-body state captured in
+`../blender/generated/card-envelope.json`. The upper card envelope reaches
+86.702228 mm from the drum axis, or 44.202222 mm above the 42.5 mm drum radius.
+The parameter `card_ceiling_clearance` adds 10 mm, placing the interior ceiling
+at +96.702228 mm. The lower interior is symmetric at -96.702228 mm.
 
-Assembly uses two M3 × 12 mm screws from the upper rear lugs into 2.6 mm pilot
-holes in the lower lugs. Print both halves with the horizontal split plane on
-the bed. The upper and lower STL files use assembly coordinates, so rotate the
-lower half 180 degrees before slicing. Verify pilot fit, axle fit, the exact
-motor variant and flap clearance on one module before printing an array.
+The enclosure body is 64.1 mm wide, 92 mm deep and 198.204456 mm high. The
+front opening is 52 × 50 mm with rounded corners. The motor-side wall includes
+the nominal 28BYJ-48 centre and mounting holes; the shaft side has a 3.4 mm axle
+bore. The upper/lower joint is specified as embedded magnetic coupling. The
+shell has no screw lugs or joining-screw holes.
+
+Print both halves with the horizontal split plane on the bed. The upper and
+lower STL files use assembly coordinates, so rotate the lower half 180 degrees
+before slicing. Verify axle fit, the exact motor variant and flap clearance on
+one module before printing an array.
 
 ## Rebuild
 

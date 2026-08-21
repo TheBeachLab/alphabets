@@ -85,11 +85,7 @@ split_gap = 0.2
 motor_bore_diameter = 10.0
 shaft_bore_diameter = 3.4
 motor_mount_hole_diameter = 4.4
-rear_lug_radius = 3.8
-rear_lug_height = 6.0
-rear_lug_edge_overlap = 1.9
-rear_lug_inset = 8.0
-screw_clearance_diameter = 3.4
-screw_pilot_diameter = 2.6
-screw_head_diameter = 6.2
-screw_head_depth = 2.0
+# Captured from blender/generated/card-envelope.json at frame 1332.
+upper_card_envelope_height = 86.702228
+card_ceiling_clearance = 10.0
+closure_method = "embedded_magnets"

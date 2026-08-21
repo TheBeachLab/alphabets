@@ -320,7 +320,10 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
             "motor_reference": "V2/Hardware/structure/28byj48.scad",
             "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
             "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
-            "drum_enclosure": "native CadQuery design around the current V2 drum",
+            "drum_enclosure": (
+                "native CadQuery design sized from "
+                "V2/Hardware/blender/generated/card-envelope.json"
+            ),
         },
         "geometry": geometry_summary,
         "fabrication_status": {
@@ -330,8 +333,8 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
             "holder_side": "ported dormant legacy profile; physical validation required",
             "enclosure_sketch": "non-solid reference geometry",
             "drum_enclosure": (
-                "two printable halves; nominal clearances and M3 pilot fit require "
-                "physical validation"
+                "two symmetric printable halves sized from the captured card "
+                "envelope; embedded magnetic coupling requires physical validation"
             ),
         },
     }

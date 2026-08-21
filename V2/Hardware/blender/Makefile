@@ -2,7 +2,7 @@ PYTHON ?= ../mechanical/.venv/bin/python
 BLENDER ?= /Applications/Blender.app/Contents/MacOS/Blender
 UV ?= uv
 
-.PHONY: setup assets scene interactive check check-steps open clean
+.PHONY: setup assets scene interactive capture-envelope check check-steps open clean
 
 setup:
 	$(UV) pip install --python $(PYTHON) -r requirements.txt
@@ -15,6 +15,9 @@ scene: assets
 
 interactive: assets
 	$(BLENDER) --background --python build_scene.py -- --no-simulate --output generated/alphabets-v2-interactive.blend --preview generated/alphabets-v2-interactive.png
+
+capture-envelope:
+	$(BLENDER) generated/alphabets-v2-interactive.blend --background --python capture_card_envelope.py
 
 check:
 	$(PYTHON) -m ruff check .

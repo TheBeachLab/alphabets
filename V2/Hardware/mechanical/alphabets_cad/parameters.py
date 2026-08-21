@@ -153,14 +153,9 @@ class DrumEnclosureDimensions:
     motor_bore_diameter: float = 10.0
     shaft_bore_diameter: float = 3.4
     motor_mount_hole_diameter: float = 4.4
-    rear_lug_radius: float = 3.8
-    rear_lug_height: float = 6.0
-    rear_lug_edge_overlap: float = 1.9
-    rear_lug_inset: float = 8.0
-    screw_clearance_diameter: float = 3.4
-    screw_pilot_diameter: float = 2.6
-    screw_head_diameter: float = 6.2
-    screw_head_depth: float = 2.0
+    upper_card_envelope_height: float = 86.702228
+    card_ceiling_clearance: float = 10.0
+    closure_method: str = "embedded_magnets"
 
 
 @dataclass(frozen=True)
@@ -197,7 +192,24 @@ class DesignParameters:
 
     @property
     def enclosure_inner_height(self) -> float:
-        return self.drum.diameter + 2 * self.drum_enclosure.radial_clearance
+        return 2 * self.enclosure_inner_half_height
+
+    @property
+    def enclosure_inner_half_height(self) -> float:
+        enclosure = self.drum_enclosure
+        return enclosure.upper_card_envelope_height + enclosure.card_ceiling_clearance
+
+    @property
+    def upper_card_protrusion_above_drum(self) -> float:
+        return self.drum_enclosure.upper_card_envelope_height - self.drum.radius
+
+    @property
+    def enclosure_ceiling_z(self) -> float:
+        return self.enclosure_inner_half_height
+
+    @property
+    def enclosure_floor_z(self) -> float:
+        return -self.enclosure_inner_half_height
 
     @property
     def enclosure_outer_height(self) -> float:
@@ -226,18 +238,8 @@ class DesignParameters:
         return self.drum.flap_hole_diameter / 2 - self.card.tab_rotation_radius
 
     @property
-    def enclosure_rear_lug_center_x(self) -> float:
-        enclosure = self.drum_enclosure
-        return (
-            self.enclosure_outer_width / 2
-            + enclosure.rear_lug_radius
-            - enclosure.rear_lug_edge_overlap
-        )
-
-    @property
     def enclosure_overall_width(self) -> float:
-        enclosure = self.drum_enclosure
-        return 2 * (self.enclosure_rear_lug_center_x + enclosure.rear_lug_radius)
+        return self.enclosure_outer_width
 
     def as_dict(self) -> dict[str, Any]:
         result = asdict(self)
@@ -259,6 +261,12 @@ class DesignParameters:
                 "overall_width": self.enclosure_overall_width,
                 "inner_height": self.enclosure_inner_height,
                 "outer_height": self.enclosure_outer_height,
+                "inner_half_height": self.enclosure_inner_half_height,
+                "ceiling_z": self.enclosure_ceiling_z,
+                "floor_z": self.enclosure_floor_z,
+                "upper_card_protrusion_above_drum": (
+                    self.upper_card_protrusion_above_drum
+                ),
                 "inner_depth": self.enclosure_inner_depth,
                 "outer_depth": self.enclosure_outer_depth,
                 "window_width": self.enclosure_window_width,
@@ -318,6 +326,10 @@ def design_from_mapping(
             "card tab does not have the required radial clearance to rotate "
             "inside the drum flap hole"
         )
+    if result.drum_enclosure.upper_card_envelope_height < result.drum.radius:
+        raise ValueError("upper card envelope must reach beyond the drum radius")
+    if result.drum_enclosure.card_ceiling_clearance < 0:
+        raise ValueError("card ceiling clearance cannot be negative")
     return result
 
 

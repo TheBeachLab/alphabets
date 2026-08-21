@@ -2,7 +2,7 @@
   "cad_engine": "CadQuery 2.8.0 / OCCT",
   "fabrication_status": {
     "card_and_laser_cut_drum": "ported from current dimensional sources",
-    "drum_enclosure": "two printable halves; nominal clearances and M3 pilot fit require physical validation",
+    "drum_enclosure": "two symmetric printable halves sized from the captured card envelope; embedded magnetic coupling requires physical validation",
     "enclosure_sketch": "non-solid reference geometry",
     "holder_side": "ported dormant legacy profile; physical validation required",
     "motor": "clearance reference, not a manufacturing model",
@@ -53,67 +53,67 @@
       "bounds_mm": {
         "x": [
           -51.05,
-          37.75
+          32.05
         ],
         "y": [
           -86.657773,
           86.657773
         ],
         "z": [
-          -86.657773,
-          86.657773
+          -99.102228,
+          99.102228
         ]
       },
-      "component_volume_sum_mm3": 224806.401285,
+      "component_volume_sum_mm3": 288866.581403,
       "solid_count": 202,
       "valid": true,
-      "volume_mm3": 217937.601059
+      "volume_mm3": 284268.863554
     },
     "enclosure_assembly": {
       "bounds_mm": {
         "x": [
-          -37.75,
-          37.75
+          -32.05,
+          32.05
         ],
         "y": [
           -47.5,
           44.5
         ],
         "z": [
-          -46.9,
-          46.9
+          -99.102228,
+          99.102228
         ]
       },
-      "component_volume_sum_mm3": 74833.20479,
+      "component_volume_sum_mm3": 138893.384908,
       "solid_count": 2,
       "valid": true,
-      "volume_mm3": 74833.20479
+      "volume_mm3": 138893.384908
     },
     "enclosure_lower": {
       "bounds_mm": {
         "x": [
-          -37.75,
-          37.75
+          -32.05,
+          32.05
         ],
         "y": [
           -47.5,
           44.5
         ],
         "z": [
-          -46.9,
+          -99.102228,
           -0.1
         ]
       },
-      "component_volume_sum_mm3": 37445.157193,
+      "component_volume_sum_mm3": 69410.199714,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 37445.157193
+      "volume_mm3": 69410.199714
     },
     "enclosure_upper": {
       "bounds_mm": {
         "x": [
-          -37.75,
-          37.75
+          -32.05,
+          32.05
         ],
         "y": [
           -47.5,
@@ -121,13 +121,13 @@
         ],
         "z": [
           0.1,
-          46.9
+          99.102228
         ]
       },
-      "component_volume_sum_mm3": 37388.047597,
+      "component_volume_sum_mm3": 69483.185194,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 37388.047597
+      "volume_mm3": 69483.185194
     },
     "module_reference": {
       "bounds_mm": {
@@ -311,28 +311,27 @@
     },
     "drum_enclosure": {
       "axial_clearance": 2.0,
+      "card_ceiling_clearance": 10.0,
+      "ceiling_z": 96.702228,
+      "closure_method": "embedded_magnets",
+      "floor_z": -96.702228,
       "front_thickness": 3.0,
       "inner_depth": 89.0,
-      "inner_height": 89.0,
+      "inner_half_height": 96.702228,
+      "inner_height": 193.404456,
       "inner_width": 59.3,
       "motor_bore_diameter": 10.0,
       "motor_mount_hole_diameter": 4.4,
       "outer_corner_radius": 4.0,
       "outer_depth": 92.0,
-      "outer_height": 93.8,
+      "outer_height": 198.20445600000002,
       "outer_width": 64.1,
-      "overall_width": 75.49999999999999,
+      "overall_width": 64.1,
       "radial_clearance": 2.0,
-      "rear_lug_edge_overlap": 1.9,
-      "rear_lug_height": 6.0,
-      "rear_lug_inset": 8.0,
-      "rear_lug_radius": 3.8,
-      "screw_clearance_diameter": 3.4,
-      "screw_head_depth": 2.0,
-      "screw_head_diameter": 6.2,
-      "screw_pilot_diameter": 2.6,
       "shaft_bore_diameter": 3.4,
       "split_gap": 0.2,
+      "upper_card_envelope_height": 86.702228,
+      "upper_card_protrusion_above_drum": 44.202228000000005,
       "wall_thickness": 2.4,
       "window_clearance": 1.0,
       "window_corner_radius": 2.0,
@@ -386,7 +385,7 @@
   "schema_version": 1,
   "source_lineage": {
     "card": "V2/Hardware/cards/generate_card.py",
-    "drum_enclosure": "native CadQuery design around the current V2 drum",
+    "drum_enclosure": "native CadQuery design sized from V2/Hardware/blender/generated/card-envelope.json",
     "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
     "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
     "laser_cut_drum": "V2/Hardware/structure/spool.scad",

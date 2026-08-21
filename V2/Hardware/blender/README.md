@@ -118,3 +118,19 @@ After moving the pawl, save the blend file and capture the exact transform with:
 
 This writes `generated/pawl-position.json`. The captured value is simulation
 evidence only until it is reviewed and transferred into CadQuery dimensions.
+
+## Capture the card envelope for the enclosure
+
+After settling or stepping the cards to the position that must fit inside the
+enclosure, save `generated/alphabets-v2-interactive.blend` and run:
+
+```sh
+make capture-envelope
+```
+
+This measures every evaluated card and sticker vertex at the saved frame and
+writes `generated/card-envelope.json`, including the source blend hash, frame,
+step position, drum radius, and upper/lower extrema. The enclosure uses the
+captured upper distance from the drum axis and applies it symmetrically to both
+halves. The clearance above that envelope remains a separate CadQuery
+parameter, so changing it does not require editing the captured evidence.
