@@ -2,30 +2,30 @@
   "schema_version": 1,
   "generator": "generate_stickers.py",
   "character_set": {
-    "id": "international-64",
-    "name": "International 64",
-    "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
+    "id": "demo-64",
+    "name": "Demo 64",
+    "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,'°■£~© "
   },
-  "physical_variant": "definitive",
+  "physical_variant": "prototype",
   "colors": {
-    "preset": "white-black",
-    "background": "#FFFFFF",
-    "foreground": "#000000",
+    "preset": "black-white",
+    "background": "#000000",
+    "foreground": "#FFFFFF",
     "guide": "#FF00FF"
   },
   "geometry_mm": {
     "card": [
-      50.0,
-      96.0
+      55.0,
+      86.0
     ],
     "page": [
-      1278.0,
-      308.0
+      1388.0,
+      278.0
     ],
     "margin": 5.0,
     "column_gap": 8.0,
     "row_gap": 5.0,
-    "split_y": 48.0,
+    "split_y": 43.0,
     "glyph_padding": [
       3.0,
       4.0
@@ -37,15 +37,15 @@
   "typography": {
     "alignment": "common-transform-baseline-centered-bounds",
     "spacing": "monospaced",
-    "scale_x_mm_per_font_unit": 0.035859820700896494,
-    "scale_y_mm_per_font_unit": 0.03794739111686071,
-    "width_ratio": 0.9449877750611247,
+    "scale_x_mm_per_font_unit": 0.041280539174389216,
+    "scale_y_mm_per_font_unit": 0.04020618556701031,
+    "width_ratio": 1.026721102542501,
     "advance_range_mm": [
-      44.17929910350448,
-      44.17929910350448
+      50.857624262847516,
+      50.857624262847516
     ],
-    "max_visible_width_mm": 44.0,
-    "baseline_from_card_top_mm": 73.9370418283743,
+    "max_visible_width_mm": 49.0,
+    "baseline_from_card_top_mm": 67.64639175257733,
     "vertical_padding_min_mm": 4.0
   },
   "fonts": [
@@ -62,15 +62,15 @@
     {
       "sheet_position": 1,
       "drum_position": 0,
-      "character": " ",
+      "character": "A",
       "row": 1,
       "column": 1,
-      "font": null
+      "font": "Overpass Mono Medium Regular"
     },
     {
       "sheet_position": 2,
       "drum_position": 1,
-      "character": "A",
+      "character": "B",
       "row": 1,
       "column": 2,
       "font": "Overpass Mono Medium Regular"
@@ -78,7 +78,7 @@
     {
       "sheet_position": 3,
       "drum_position": 2,
-      "character": "B",
+      "character": "C",
       "row": 1,
       "column": 3,
       "font": "Overpass Mono Medium Regular"
@@ -86,7 +86,7 @@
     {
       "sheet_position": 4,
       "drum_position": 3,
-      "character": "C",
+      "character": "D",
       "row": 1,
       "column": 4,
       "font": "Overpass Mono Medium Regular"
@@ -94,7 +94,7 @@
     {
       "sheet_position": 5,
       "drum_position": 4,
-      "character": "D",
+      "character": "E",
       "row": 1,
       "column": 5,
       "font": "Overpass Mono Medium Regular"
@@ -102,7 +102,7 @@
     {
       "sheet_position": 6,
       "drum_position": 5,
-      "character": "E",
+      "character": "F",
       "row": 1,
       "column": 6,
       "font": "Overpass Mono Medium Regular"
@@ -110,7 +110,7 @@
     {
       "sheet_position": 7,
       "drum_position": 6,
-      "character": "F",
+      "character": "G",
       "row": 1,
       "column": 7,
       "font": "Overpass Mono Medium Regular"
@@ -118,7 +118,7 @@
     {
       "sheet_position": 8,
       "drum_position": 7,
-      "character": "G",
+      "character": "H",
       "row": 1,
       "column": 8,
       "font": "Overpass Mono Medium Regular"
@@ -126,7 +126,7 @@
     {
       "sheet_position": 9,
       "drum_position": 8,
-      "character": "H",
+      "character": "I",
       "row": 1,
       "column": 9,
       "font": "Overpass Mono Medium Regular"
@@ -134,7 +134,7 @@
     {
       "sheet_position": 10,
       "drum_position": 9,
-      "character": "I",
+      "character": "J",
       "row": 1,
       "column": 10,
       "font": "Overpass Mono Medium Regular"
@@ -142,7 +142,7 @@
     {
       "sheet_position": 11,
       "drum_position": 10,
-      "character": "J",
+      "character": "K",
       "row": 1,
       "column": 11,
       "font": "Overpass Mono Medium Regular"
@@ -150,7 +150,7 @@
     {
       "sheet_position": 12,
       "drum_position": 11,
-      "character": "K",
+      "character": "L",
       "row": 1,
       "column": 12,
       "font": "Overpass Mono Medium Regular"
@@ -158,7 +158,7 @@
     {
       "sheet_position": 13,
       "drum_position": 12,
-      "character": "L",
+      "character": "M",
       "row": 1,
       "column": 13,
       "font": "Overpass Mono Medium Regular"
@@ -166,7 +166,7 @@
     {
       "sheet_position": 14,
       "drum_position": 13,
-      "character": "M",
+      "character": "N",
       "row": 1,
       "column": 14,
       "font": "Overpass Mono Medium Regular"
@@ -174,7 +174,7 @@
     {
       "sheet_position": 15,
       "drum_position": 14,
-      "character": "N",
+      "character": "O",
       "row": 1,
       "column": 15,
       "font": "Overpass Mono Medium Regular"
@@ -182,7 +182,7 @@
     {
       "sheet_position": 16,
       "drum_position": 15,
-      "character": "O",
+      "character": "P",
       "row": 1,
       "column": 16,
       "font": "Overpass Mono Medium Regular"
@@ -190,7 +190,7 @@
     {
       "sheet_position": 17,
       "drum_position": 16,
-      "character": "P",
+      "character": "Q",
       "row": 1,
       "column": 17,
       "font": "Overpass Mono Medium Regular"
@@ -198,7 +198,7 @@
     {
       "sheet_position": 18,
       "drum_position": 17,
-      "character": "Q",
+      "character": "R",
       "row": 1,
       "column": 18,
       "font": "Overpass Mono Medium Regular"
@@ -206,7 +206,7 @@
     {
       "sheet_position": 19,
       "drum_position": 18,
-      "character": "R",
+      "character": "S",
       "row": 1,
       "column": 19,
       "font": "Overpass Mono Medium Regular"
@@ -214,7 +214,7 @@
     {
       "sheet_position": 20,
       "drum_position": 19,
-      "character": "S",
+      "character": "T",
       "row": 1,
       "column": 20,
       "font": "Overpass Mono Medium Regular"
@@ -222,7 +222,7 @@
     {
       "sheet_position": 21,
       "drum_position": 20,
-      "character": "T",
+      "character": "U",
       "row": 1,
       "column": 21,
       "font": "Overpass Mono Medium Regular"
@@ -230,7 +230,7 @@
     {
       "sheet_position": 22,
       "drum_position": 21,
-      "character": "U",
+      "character": "V",
       "row": 1,
       "column": 22,
       "font": "Overpass Mono Medium Regular"
@@ -238,7 +238,7 @@
     {
       "sheet_position": 23,
       "drum_position": 22,
-      "character": "V",
+      "character": "W",
       "row": 2,
       "column": 1,
       "font": "Overpass Mono Medium Regular"
@@ -246,7 +246,7 @@
     {
       "sheet_position": 24,
       "drum_position": 23,
-      "character": "W",
+      "character": "X",
       "row": 2,
       "column": 2,
       "font": "Overpass Mono Medium Regular"
@@ -254,7 +254,7 @@
     {
       "sheet_position": 25,
       "drum_position": 24,
-      "character": "X",
+      "character": "Y",
       "row": 2,
       "column": 3,
       "font": "Overpass Mono Medium Regular"
@@ -262,7 +262,7 @@
     {
       "sheet_position": 26,
       "drum_position": 25,
-      "character": "Y",
+      "character": "Z",
       "row": 2,
       "column": 4,
       "font": "Overpass Mono Medium Regular"
@@ -270,7 +270,7 @@
     {
       "sheet_position": 27,
       "drum_position": 26,
-      "character": "Z",
+      "character": ":",
       "row": 2,
       "column": 5,
       "font": "Overpass Mono Medium Regular"
@@ -278,7 +278,7 @@
     {
       "sheet_position": 28,
       "drum_position": 27,
-      "character": "Ä",
+      "character": ".",
       "row": 2,
       "column": 6,
       "font": "Overpass Mono Medium Regular"
@@ -286,7 +286,7 @@
     {
       "sheet_position": 29,
       "drum_position": 28,
-      "character": "Ö",
+      "character": "0",
       "row": 2,
       "column": 7,
       "font": "Overpass Mono Medium Regular"
@@ -294,7 +294,7 @@
     {
       "sheet_position": 30,
       "drum_position": 29,
-      "character": "Ü",
+      "character": "1",
       "row": 2,
       "column": 8,
       "font": "Overpass Mono Medium Regular"
@@ -302,7 +302,7 @@
     {
       "sheet_position": 31,
       "drum_position": 30,
-      "character": "ẞ",
+      "character": "2",
       "row": 2,
       "column": 9,
       "font": "Overpass Mono Medium Regular"
@@ -310,7 +310,7 @@
     {
       "sheet_position": 32,
       "drum_position": 31,
-      "character": "Ñ",
+      "character": "3",
       "row": 2,
       "column": 10,
       "font": "Overpass Mono Medium Regular"
@@ -318,7 +318,7 @@
     {
       "sheet_position": 33,
       "drum_position": 32,
-      "character": "Ç",
+      "character": "4",
       "row": 2,
       "column": 11,
       "font": "Overpass Mono Medium Regular"
@@ -326,7 +326,7 @@
     {
       "sheet_position": 34,
       "drum_position": 33,
-      "character": "É",
+      "character": "5",
       "row": 2,
       "column": 12,
       "font": "Overpass Mono Medium Regular"
@@ -334,7 +334,7 @@
     {
       "sheet_position": 35,
       "drum_position": 34,
-      "character": "Å",
+      "character": "6",
       "row": 2,
       "column": 13,
       "font": "Overpass Mono Medium Regular"
@@ -342,7 +342,7 @@
     {
       "sheet_position": 36,
       "drum_position": 35,
-      "character": "Æ",
+      "character": "7",
       "row": 2,
       "column": 14,
       "font": "Overpass Mono Medium Regular"
@@ -350,7 +350,7 @@
     {
       "sheet_position": 37,
       "drum_position": 36,
-      "character": "Ø",
+      "character": "8",
       "row": 2,
       "column": 15,
       "font": "Overpass Mono Medium Regular"
@@ -358,7 +358,7 @@
     {
       "sheet_position": 38,
       "drum_position": 37,
-      "character": "Ł",
+      "character": "9",
       "row": 2,
       "column": 16,
       "font": "Overpass Mono Medium Regular"
@@ -366,7 +366,7 @@
     {
       "sheet_position": 39,
       "drum_position": 38,
-      "character": "0",
+      "character": "$",
       "row": 2,
       "column": 17,
       "font": "Overpass Mono Medium Regular"
@@ -374,7 +374,7 @@
     {
       "sheet_position": 40,
       "drum_position": 39,
-      "character": "1",
+      "character": "€",
       "row": 2,
       "column": 18,
       "font": "Overpass Mono Medium Regular"
@@ -382,7 +382,7 @@
     {
       "sheet_position": 41,
       "drum_position": 40,
-      "character": "2",
+      "character": "&",
       "row": 2,
       "column": 19,
       "font": "Overpass Mono Medium Regular"
@@ -390,7 +390,7 @@
     {
       "sheet_position": 42,
       "drum_position": 41,
-      "character": "3",
+      "character": "@",
       "row": 2,
       "column": 20,
       "font": "Overpass Mono Medium Regular"
@@ -398,7 +398,7 @@
     {
       "sheet_position": 43,
       "drum_position": 42,
-      "character": "4",
+      "character": "%",
       "row": 2,
       "column": 21,
       "font": "Overpass Mono Medium Regular"
@@ -406,7 +406,7 @@
     {
       "sheet_position": 44,
       "drum_position": 43,
-      "character": "5",
+      "character": "×",
       "row": 2,
       "column": 22,
       "font": "Overpass Mono Medium Regular"
@@ -414,7 +414,7 @@
     {
       "sheet_position": 45,
       "drum_position": 44,
-      "character": "6",
+      "character": "/",
       "row": 3,
       "column": 1,
       "font": "Overpass Mono Medium Regular"
@@ -422,7 +422,7 @@
     {
       "sheet_position": 46,
       "drum_position": 45,
-      "character": "7",
+      "character": "·",
       "row": 3,
       "column": 2,
       "font": "Overpass Mono Medium Regular"
@@ -430,7 +430,7 @@
     {
       "sheet_position": 47,
       "drum_position": 46,
-      "character": "8",
+      "character": "#",
       "row": 3,
       "column": 3,
       "font": "Overpass Mono Medium Regular"
@@ -438,7 +438,7 @@
     {
       "sheet_position": 48,
       "drum_position": 47,
-      "character": "9",
+      "character": "=",
       "row": 3,
       "column": 4,
       "font": "Overpass Mono Medium Regular"
@@ -446,7 +446,7 @@
     {
       "sheet_position": 49,
       "drum_position": 48,
-      "character": ".",
+      "character": "*",
       "row": 3,
       "column": 5,
       "font": "Overpass Mono Medium Regular"
@@ -454,7 +454,7 @@
     {
       "sheet_position": 50,
       "drum_position": 49,
-      "character": ",",
+      "character": "+",
       "row": 3,
       "column": 6,
       "font": "Overpass Mono Medium Regular"
@@ -462,7 +462,7 @@
     {
       "sheet_position": 51,
       "drum_position": 50,
-      "character": ":",
+      "character": "-",
       "row": 3,
       "column": 7,
       "font": "Overpass Mono Medium Regular"
@@ -470,7 +470,7 @@
     {
       "sheet_position": 52,
       "drum_position": 51,
-      "character": "!",
+      "character": "±",
       "row": 3,
       "column": 8,
       "font": "Overpass Mono Medium Regular"
@@ -478,7 +478,7 @@
     {
       "sheet_position": 53,
       "drum_position": 52,
-      "character": "?",
+      "character": "(",
       "row": 3,
       "column": 9,
       "font": "Overpass Mono Medium Regular"
@@ -486,7 +486,7 @@
     {
       "sheet_position": 54,
       "drum_position": 53,
-      "character": "¡",
+      "character": ")",
       "row": 3,
       "column": 10,
       "font": "Overpass Mono Medium Regular"
@@ -494,7 +494,7 @@
     {
       "sheet_position": 55,
       "drum_position": 54,
-      "character": "¿",
+      "character": "<",
       "row": 3,
       "column": 11,
       "font": "Overpass Mono Medium Regular"
@@ -502,7 +502,7 @@
     {
       "sheet_position": 56,
       "drum_position": 55,
-      "character": "-",
+      "character": ">",
       "row": 3,
       "column": 12,
       "font": "Overpass Mono Medium Regular"
@@ -510,7 +510,7 @@
     {
       "sheet_position": 57,
       "drum_position": 56,
-      "character": "/",
+      "character": ",",
       "row": 3,
       "column": 13,
       "font": "Overpass Mono Medium Regular"
@@ -526,7 +526,7 @@
     {
       "sheet_position": 59,
       "drum_position": 58,
-      "character": "&",
+      "character": "°",
       "row": 3,
       "column": 15,
       "font": "Overpass Mono Medium Regular"
@@ -534,7 +534,7 @@
     {
       "sheet_position": 60,
       "drum_position": 59,
-      "character": "@",
+      "character": "■",
       "row": 3,
       "column": 16,
       "font": "Overpass Mono Medium Regular"
@@ -542,7 +542,7 @@
     {
       "sheet_position": 61,
       "drum_position": 60,
-      "character": "%",
+      "character": "£",
       "row": 3,
       "column": 17,
       "font": "Overpass Mono Medium Regular"
@@ -550,7 +550,7 @@
     {
       "sheet_position": 62,
       "drum_position": 61,
-      "character": "€",
+      "character": "~",
       "row": 3,
       "column": 18,
       "font": "Overpass Mono Medium Regular"
@@ -558,7 +558,7 @@
     {
       "sheet_position": 63,
       "drum_position": 62,
-      "character": "$",
+      "character": "©",
       "row": 3,
       "column": 19,
       "font": "Overpass Mono Medium Regular"
@@ -566,10 +566,10 @@
     {
       "sheet_position": 64,
       "drum_position": 63,
-      "character": "°",
+      "character": " ",
       "row": 3,
       "column": 20,
-      "font": "Overpass Mono Medium Regular"
+      "font": null
     }
   ]
 }

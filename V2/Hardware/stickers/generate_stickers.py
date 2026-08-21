@@ -35,6 +35,11 @@ from character_sets import (  # noqa: E402
     load_presets,
     resolve_character_set,
 )
+from physical_variants import (  # noqa: E402
+    PhysicalVariant,
+    PhysicalVariantError,
+    load_variant,
+)
 
 
 COLOR_PRESETS = {
@@ -631,6 +636,7 @@ def build_manifest(
     guide_color: str,
     include_guides: bool,
     omit_blank: bool,
+    physical_variant: PhysicalVariant | None = None,
 ) -> dict[str, Any]:
     page_width, page_height, rows = geometry.page_size(len(positions))
     typography = typography_layout(profile.characters, faces[0], geometry)
@@ -642,6 +648,7 @@ def build_manifest(
             "name": profile.name,
             "characters": profile.characters,
         },
+        "physical_variant": physical_variant.id if physical_variant else None,
         "colors": {
             "preset": color_preset,
             "background": background,
@@ -708,6 +715,11 @@ def load_profile(preset: str | None, settings: Path | None) -> CharacterSet:
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     source = parser.add_mutually_exclusive_group()
+    source.add_argument(
+        "--variant",
+        choices=("prototype", "definitive"),
+        help="matched V2 physical variant: character preset and sticker geometry",
+    )
     source.add_argument("--preset", help="character preset id (default: catalog default)")
     source.add_argument("--settings", type=Path, help="settings JSON with preset or custom characters")
     parser.add_argument("--color-preset", choices=sorted(COLOR_PRESETS), default=DEFAULT_COLOR_PRESET)
@@ -763,10 +775,39 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def option_was_supplied(argv: Sequence[str] | None, option: str) -> bool:
+    """Tell explicit dimension overrides apart from argparse defaults."""
+
+    arguments = tuple(sys.argv[1:] if argv is None else argv)
+    return any(argument == option or argument.startswith(f"{option}=") for argument in arguments)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     try:
-        profile = load_profile(args.preset, args.settings)
+        physical_variant = load_variant(args.variant) if args.variant else None
+        if physical_variant:
+            if (
+                option_was_supplied(argv, "--card-width")
+                and args.card_width != physical_variant.sticker.width_mm
+            ):
+                raise StickerError(
+                    f"{physical_variant.name} requires a {physical_variant.sticker.width_mm:g} mm sticker width"
+                )
+            if (
+                option_was_supplied(argv, "--card-height")
+                and args.card_height != physical_variant.sticker.height_mm
+            ):
+                raise StickerError(
+                    f"{physical_variant.name} requires a {physical_variant.sticker.height_mm:g} mm sticker height"
+                )
+            profile = load_profile(physical_variant.character_preset, None)
+            card_width = physical_variant.sticker.width_mm
+            card_height = physical_variant.sticker.height_mm
+        else:
+            profile = load_profile(args.preset, args.settings)
+            card_width = args.card_width
+            card_height = args.card_height
         background, foreground = resolve_colors(args.color_preset, args.background, args.foreground)
         guide_color = normalize_color(args.guide_color)
         faces = [FontFace.load(args.font, args.font_weight, args.font_width)]
@@ -774,12 +815,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             if character != " ":
                 select_face(character, faces)
         geometry = SheetGeometry(
-            card_width_mm=args.card_width,
-            card_height_mm=args.card_height,
+            card_width_mm=card_width,
+            card_height_mm=card_height,
             columns=args.columns,
             glyph_padding_x_mm=args.horizontal_padding,
             glyph_padding_y_mm=args.vertical_padding,
-            split_y_mm=args.card_height / 2,
+            split_y_mm=card_height / 2,
         )
         include_guides = args.include_guides
         svg, positions = build_svg(
@@ -803,10 +844,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         manifest = build_manifest(
             profile, faces, positions, geometry, args.color_preset, background,
             foreground, guide_color, include_guides, args.omit_blank,
+            physical_variant,
         )
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    except (StickerError, CharacterSetError, OSError, json.JSONDecodeError) as error:
+    except (
+        StickerError,
+        CharacterSetError,
+        PhysicalVariantError,
+        OSError,
+        json.JSONDecodeError,
+    ) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
     return 0

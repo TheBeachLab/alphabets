@@ -231,6 +231,42 @@ class StickerGeneratorTests(unittest.TestCase):
             self.assertEqual(data["typography"]["spacing"], "monospaced")
             self.assertEqual(len(data["positions"]), 64)
 
+    def test_variant_selects_its_matched_characters_and_geometry(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for variant, preset, card in (
+                ("prototype", "demo-64", [55.0, 86.0]),
+                ("definitive", "international-64", [50.0, 96.0]),
+            ):
+                with self.subTest(variant=variant):
+                    svg = root / f"{variant}.svg"
+                    result = main(
+                        ["--variant", variant, "--output-svg", str(svg)]
+                    )
+                    self.assertEqual(result, 0)
+                    data = json.loads(svg.with_suffix(".json").read_text(encoding="utf-8"))
+                    self.assertEqual(data["physical_variant"], variant)
+                    self.assertEqual(data["character_set"]["id"], preset)
+                    self.assertEqual(data["geometry_mm"]["card"], card)
+
+    def test_variant_rejects_incompatible_sticker_dimension(self):
+        with tempfile.TemporaryDirectory() as directory:
+            svg = Path(directory) / "sheet.svg"
+            self.assertEqual(
+                main(
+                    [
+                        "--variant",
+                        "definitive",
+                        "--card-width",
+                        "55",
+                        "--output-svg",
+                        str(svg),
+                    ]
+                ),
+                2,
+            )
+            self.assertFalse(svg.exists())
+
     def test_no_guides_writes_clean_artwork(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

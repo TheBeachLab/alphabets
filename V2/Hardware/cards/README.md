@@ -1,4 +1,8 @@
-# V2 card and drum width
+# V2 Definitivo card and drum width
+
+This directory is the **V2 Definitivo** 50 mm card route. The incompatible
+55 mm **V2 Prototipo** card remains preserved as `card.fcstd`; its complete
+physical contract is in [`../../variants/`](../../variants/README.md).
 
 The production card matches one half of the `50 × 96 mm` sticker:
 
@@ -34,7 +38,19 @@ root with:
   V2/Hardware/cards/generate_card.py
 ```
 
-The earlier `card.fcstd` remains available for the 55 mm hardware.
+The earlier `card.fcstd` remains available for the 55 mm prototype hardware.
+Generate either geometry explicitly with FreeCADCmd:
+
+```sh
+# Definitivo: 50 × 48 mm card.
+/Applications/FreeCAD.app/Contents/Resources/bin/FreeCADCmd \
+  V2/Hardware/cards/generate_card.py --pass '--variant definitive'
+
+# Prototipo: 55 × 43 mm card; choose a separate output directory.
+/Applications/FreeCAD.app/Contents/Resources/bin/FreeCADCmd \
+  V2/Hardware/cards/generate_card.py \
+  --pass '--variant prototype --output-dir /tmp/alphabets-v2-prototype-card'
+```
 
 ## Drum
 
