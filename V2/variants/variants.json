@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "default_variant": "definitive",
+  "variants": [
+    {
+      "id": "prototype",
+      "name": "V2 Prototipo",
+      "description": "Existing 55 mm demonstration hardware. Preserve it as a working reference; do not combine its parts with the definitive module.",
+      "character_preset": "demo-64",
+      "sticker_mm": {
+        "width": 55.0,
+        "height": 86.0,
+        "split_y": 43.0
+      },
+      "card_mm": {
+        "body_width": 55.0,
+        "visible_height": 40.0,
+        "total_height": 43.0,
+        "tab_width": 4.0,
+        "tab_height": 3.0,
+        "material_thickness": 1.0
+      },
+      "drum_mm": {
+        "positions": 64,
+        "diameter": 85.0,
+        "inner_width": 56.0,
+        "side_thickness": 2.15,
+        "outer_width": 60.3
+      },
+      "enclosure": {
+        "status": "legacy-reference",
+        "source": "V2/Hardware/structure/side_motor.FCStd",
+        "note": "Historical FreeCAD reference only; it is not a validated manufacturing enclosure."
+      },
+      "artifacts": {
+        "cards": ["V2/Hardware/cards/card.fcstd"],
+        "drum_source": "V2/Hardware/structure/spool.scad",
+        "sticker_reference": "V2/Hardware/stickers/cut-print/cutprint.svg",
+        "sticker_outputs": [
+          "V2/Hardware/stickers/generated/demo-64-black-white-55x86.svg"
+        ]
+      }
+    },
+    {
+      "id": "definitive",
+      "name": "V2 Definitivo",
+      "description": "International 50 mm manufacturing geometry with its matched card, drum and two-part CadQuery enclosure.",
+      "character_preset": "international-64",
+      "sticker_mm": {
+        "width": 50.0,
+        "height": 96.0,
+        "split_y": 48.0
+      },
+      "card_mm": {
+        "body_width": 50.0,
+        "visible_height": 45.0,
+        "total_height": 48.0,
+        "tab_width": 4.0,
+        "tab_height": 3.0,
+        "material_thickness": 1.0
+      },
+      "drum_mm": {
+        "positions": 64,
+        "diameter": 85.0,
+        "inner_width": 51.0,
+        "side_thickness": 2.15,
+        "outer_width": 55.3
+      },
+      "enclosure": {
+        "status": "manufacturing-source",
+        "source": "V2/Hardware/mechanical/alphabets_cad",
+        "note": "Current two-part, open-rear CadQuery enclosure. Physical fit remains a required fabrication check."
+      },
+      "artifacts": {
+        "cards": ["V2/Hardware/cards/card-50x48.fcstd"],
+        "drum_source": "V2/Hardware/mechanical/alphabets_cad",
+        "sticker_outputs": [
+          "V2/Hardware/stickers/generated/international-64-black-white-50x96.svg",
+          "V2/Hardware/stickers/generated/international-64-black-yellow-50x96.svg",
+          "V2/Hardware/stickers/generated/international-64-yellow-black-50x96.svg",
+          "V2/Hardware/stickers/generated/international-64-white-black-50x96.svg"
+        ]
+      }
+    }
+  ]
+}

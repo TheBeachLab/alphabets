@@ -3,6 +3,7 @@ UV ?= uv
 CQ_EDITOR ?= cq-editor
 PROFILE ?=
 OUTPUT ?= generated
+VARIANT ?= definitive
 OCP_ENV ?= .ocp-venv
 
 .PHONY: setup setup-vscode gui gui-enclosure generate lint test check verify-generated clean-generated
@@ -22,7 +23,7 @@ gui-enclosure:
 	ALPHABETS_PROFILE="$(PROFILE)" $(CQ_EDITOR) view_enclosure.py
 
 generate:
-	PYTHONPATH=. $(PYTHON) generate.py --output $(OUTPUT) $(if $(PROFILE),--profile $(PROFILE))
+	PYTHONPATH=. $(PYTHON) generate.py --output $(OUTPUT) --variant $(VARIANT) $(if $(PROFILE),--profile $(PROFILE))
 
 lint:
 	$(PYTHON) -m ruff check .
