@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from ocp_vscode import reset_show, set_defaults, show
+from ocp_vscode import reset_show, set_defaults, set_port, show
 
 from alphabets_cad.assemblies import module_reference_components
 from alphabets_cad.parameters import DESIGN, load_design_profile
@@ -15,6 +15,9 @@ parameters = load_design_profile(Path(profile), base=DESIGN) if profile else DES
 components = module_reference_components(parameters)
 objects = {component.name: component.shape for component in components}
 
+# The VS Code extension reports its local backend port, but does not always
+# propagate it to a freshly launched terminal. Its default is 3939.
+set_port(3939)
 reset_show()
 set_defaults(axes=True, grid=(True, False, False), ortho=True)
 show(
