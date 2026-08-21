@@ -6,6 +6,7 @@ OpenSCAD drum, 28BYJ-48 reference model, and dormant holder-side profile.
 
 from __future__ import annotations
 
+import math
 import tomllib
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field, fields, replace
@@ -18,7 +19,7 @@ class CardDimensions:
     body_width: float = 50.0
     total_height: float = 48.0
     tab_width: float = 4.0
-    tab_height: float = 3.0
+    tab_height: float = 2.5
     thickness: float = 1.0
 
     @property
@@ -35,6 +36,12 @@ class CardDimensions:
 
         return self.body_height + self.tab_height / 2
 
+    @property
+    def tab_rotation_radius(self) -> float:
+        """Corner radius of the tab's height-by-thickness pivot section."""
+
+        return math.hypot(self.tab_height / 2, self.thickness / 2)
+
 
 @dataclass(frozen=True)
 class DrumDimensions:
@@ -47,6 +54,7 @@ class DrumDimensions:
     support_tab_width: float = 6.0
     support_y: float = 20.0
     flap_hole_diameter: float = 3.0
+    flap_rotation_clearance: float = 0.15
     flap_hole_center_radius: float = 40.0
     motor_axis_width: float = 3.0
     motor_axis_height: float = 6.0
@@ -191,6 +199,12 @@ class DesignParameters:
         return self.card.total_height + 2 * self.drum_enclosure.window_clearance
 
     @property
+    def flap_tab_radial_clearance(self) -> float:
+        """Actual radial gap between a tab corner and its circular pivot hole."""
+
+        return self.drum.flap_hole_diameter / 2 - self.card.tab_rotation_radius
+
+    @property
     def enclosure_rear_lug_center_x(self) -> float:
         enclosure = self.drum_enclosure
         return (
@@ -209,8 +223,10 @@ class DesignParameters:
         result["card"]["body_height"] = self.card.body_height
         result["card"]["overall_width"] = self.card.overall_width
         result["card"]["tab_axis_height"] = self.card.tab_axis_height
+        result["card"]["tab_rotation_radius"] = self.card.tab_rotation_radius
         result["drum"]["inner_width"] = self.drum_inner_width
         result["drum"]["outer_width"] = self.drum_outer_width
+        result["drum"]["flap_tab_radial_clearance"] = self.flap_tab_radial_clearance
         result["drum_enclosure"].update(
             {
                 "inner_width": self.enclosure_inner_width,
@@ -271,7 +287,13 @@ def design_from_mapping(
             raise ValueError(f"Unknown parameter(s) in {section}: {names}")
         replacements[section] = replace(current, **values)
 
-    return replace(design, **replacements)
+    result = replace(design, **replacements)
+    if result.flap_tab_radial_clearance < result.drum.flap_rotation_clearance:
+        raise ValueError(
+            "card tab does not have the required radial clearance to rotate "
+            "inside the drum flap hole"
+        )
+    return result
 
 
 def load_design_profile(

@@ -53,10 +53,10 @@
       },
       "card_mm": {
         "body_width": 50.0,
-        "visible_height": 45.0,
+        "visible_height": 45.5,
         "total_height": 48.0,
         "tab_width": 4.0,
-        "tab_height": 3.0,
+        "tab_height": 2.5,
         "material_thickness": 1.0
       },
       "drum_mm": {

@@ -1,11 +1,12 @@
 {
+  "physical_variant": "definitive",
   "card_mm": {
     "body_width": 50.0,
-    "body_height": 45.0,
+    "body_height": 45.5,
     "total_height": 48.0,
     "overall_width_with_tabs": 58.0,
     "tab_width": 4.0,
-    "tab_height": 3.0,
+    "tab_height": 2.5,
     "material_thickness": 1.0
   },
   "matching_sticker_mm": [
@@ -18,7 +19,10 @@
     "side_thickness": 2.15,
     "outer_width": 55.3,
     "diameter": 85.0,
-    "positions": 64
+    "positions": 64,
+    "flap_hole_diameter": 3.0,
+    "tab_rotation_radius": 1.346291201783626,
+    "tab_radial_clearance": 0.15370879821637407
   },
   "cut": {
     "layer": "CUT",

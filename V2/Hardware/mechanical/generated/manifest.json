@@ -24,10 +24,10 @@
           1.0
         ]
       },
-      "component_volume_sum_mm3": 2424.0,
+      "component_volume_sum_mm3": 2420.0,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 2424.0
+      "volume_mm3": 2420.0
     },
     "drum_assembly": {
       "bounds_mm": {
@@ -56,18 +56,18 @@
           37.75
         ],
         "y": [
-          -61.652365,
+          -61.837603,
           44.5
         ],
         "z": [
-          -86.451818,
-          61.652365
+          -86.701818,
+          61.837603
         ]
       },
-      "component_volume_sum_mm3": 276294.401285,
+      "component_volume_sum_mm3": 276038.401285,
       "solid_count": 74,
       "valid": true,
-      "volume_mm3": 251527.633023
+      "volume_mm3": 251604.228786
     },
     "enclosure_assembly": {
       "bounds_mm": {
@@ -272,11 +272,12 @@
   },
   "parameters": {
     "card": {
-      "body_height": 45.0,
+      "body_height": 45.5,
       "body_width": 50.0,
       "overall_width": 58.0,
-      "tab_axis_height": 46.5,
-      "tab_height": 3.0,
+      "tab_axis_height": 46.75,
+      "tab_height": 2.5,
+      "tab_rotation_radius": 1.346291201783626,
       "tab_width": 4.0,
       "thickness": 1.0,
       "total_height": 48.0
@@ -286,6 +287,8 @@
       "diameter": 85.0,
       "flap_hole_center_radius": 40.0,
       "flap_hole_diameter": 3.0,
+      "flap_rotation_clearance": 0.15,
+      "flap_tab_radial_clearance": 0.15370879821637407,
       "inner_width": 51.0,
       "laser_kerf": 0.1,
       "motor_axis_height": 6.0,

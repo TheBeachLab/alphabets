@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 import shlex
 import sys
@@ -29,6 +30,8 @@ from physical_variants import PhysicalVariantError, load_variant  # noqa: E402
 DRUM_DIAMETER_MM = 85.0
 DRUM_SIDE_THICKNESS_MM = 2.15
 DRUM_POSITIONS = 64
+FLAP_HOLE_DIAMETER_MM = 3.0
+FLAP_ROTATION_CLEARANCE_MM = 0.15
 CUT_COLOR = "#FF00FF"
 CUT_WIDTH_MM = 0.15
 SVG_MARGIN_MM = 1.0
@@ -71,6 +74,14 @@ def validate_dimensions(args: argparse.Namespace) -> None:
             raise ValueError(f"{label} must be positive")
     if args.tab_height >= args.total_height:
         raise ValueError("tab height must be smaller than total height")
+    if args.variant == "definitive":
+        tab_corner_radius = math.hypot(args.tab_height / 2, args.thickness / 2)
+        usable_hole_radius = FLAP_HOLE_DIAMETER_MM / 2 - FLAP_ROTATION_CLEARANCE_MM
+        if tab_corner_radius > usable_hole_radius:
+            raise ValueError(
+                "definitive card tab cannot rotate in the 3 mm drum hole with "
+                "the required 0.15 mm radial clearance"
+            )
 
 
 def add_parameter_sheet(doc: App.Document, args: argparse.Namespace) -> None:
@@ -83,7 +94,11 @@ def add_parameter_sheet(doc: App.Document, args: argparse.Namespace) -> None:
         ("Tab height", args.tab_height, "tab_height"),
         ("Material thickness", args.thickness, "material_thickness"),
         ("Axial clearance", args.axial_clearance, "axial_clearance"),
-        ("Drum inner width", args.body_width + args.axial_clearance, "drum_inner_width"),
+        (
+            "Drum inner width",
+            args.body_width + args.axial_clearance,
+            "drum_inner_width",
+        ),
     ]
     for row, (label, value, alias) in enumerate(rows, start=1):
         sheet.set(f"A{row}", label)
@@ -142,9 +157,7 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
         args.total_height - args.tab_height,
         0,
     )
-    tab_band.setExpression(
-        "Length", "Parameters.body_width + 2 * Parameters.tab_width"
-    )
+    tab_band.setExpression("Length", "Parameters.body_width + 2 * Parameters.tab_width")
     tab_band.setExpression("Width", "Parameters.tab_height")
     tab_band.setExpression("Height", "Parameters.material_thickness")
     tab_band.setExpression("Placement.Base.x", "-Parameters.tab_width")
@@ -210,7 +223,9 @@ def build_svg(output: Path, args: argparse.Namespace) -> None:
     overall_width = args.body_width + 2 * args.tab_width
     canvas_width = overall_width + 2 * SVG_MARGIN_MM
     canvas_height = args.total_height + 2 * SVG_MARGIN_MM
-    title = f"V2 card {number(args.body_width)} x {number(args.total_height)} mm cut path"
+    title = (
+        f"V2 card {number(args.body_width)} x {number(args.total_height)} mm cut path"
+    )
     svg = "\n".join(
         [
             '<?xml version="1.0" encoding="UTF-8"?>',
@@ -239,9 +254,28 @@ def build_dxf(output: Path, args: argparse.Namespace) -> None:
         args.tab_height,
     )
     lines = [
-        "0", "SECTION", "2", "HEADER", "9", "$ACADVER", "1", "AC1015",
-        "0", "ENDSEC", "0", "SECTION", "2", "ENTITIES", "0", "LWPOLYLINE",
-        "8", "CUT", "90", str(len(points)), "70", "1",
+        "0",
+        "SECTION",
+        "2",
+        "HEADER",
+        "9",
+        "$ACADVER",
+        "1",
+        "AC1015",
+        "0",
+        "ENDSEC",
+        "0",
+        "SECTION",
+        "2",
+        "ENTITIES",
+        "0",
+        "LWPOLYLINE",
+        "8",
+        "CUT",
+        "90",
+        str(len(points)),
+        "70",
+        "1",
     ]
     for x, y in points:
         lines.extend(["10", number(x), "20", number(y)])
@@ -250,6 +284,7 @@ def build_dxf(output: Path, args: argparse.Namespace) -> None:
 
 
 def build_manifest(output: Path, args: argparse.Namespace) -> None:
+    tab_corner_radius = math.hypot(args.tab_height / 2, args.thickness / 2)
     data = {
         "physical_variant": args.variant,
         "card_mm": {
@@ -267,12 +302,13 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
             "axial_clearance": args.axial_clearance,
             "side_thickness": DRUM_SIDE_THICKNESS_MM,
             "outer_width": (
-                args.body_width
-                + args.axial_clearance
-                + 2 * DRUM_SIDE_THICKNESS_MM
+                args.body_width + args.axial_clearance + 2 * DRUM_SIDE_THICKNESS_MM
             ),
             "diameter": DRUM_DIAMETER_MM,
             "positions": DRUM_POSITIONS,
+            "flap_hole_diameter": FLAP_HOLE_DIAMETER_MM,
+            "tab_rotation_radius": tab_corner_radius,
+            "tab_radial_clearance": FLAP_HOLE_DIAMETER_MM / 2 - tab_corner_radius,
         },
         "cut": {
             "layer": "CUT",
@@ -286,14 +322,18 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--variant", choices=("prototype", "definitive"), default="definitive")
+    parser.add_argument(
+        "--variant", choices=("prototype", "definitive"), default="definitive"
+    )
     parser.add_argument("--body-width", type=float)
     parser.add_argument("--total-height", type=float)
     parser.add_argument("--tab-width", type=float)
     parser.add_argument("--tab-height", type=float)
     parser.add_argument("--thickness", type=float)
     parser.add_argument("--axial-clearance", type=float)
-    parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent)
+    parser.add_argument(
+        "--output-dir", type=Path, default=Path(__file__).resolve().parent
+    )
     parser.add_argument("--stem")
     script = Path(__file__).resolve()
     argv = []

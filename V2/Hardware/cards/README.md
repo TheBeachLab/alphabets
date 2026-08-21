@@ -6,9 +6,10 @@ physical contract is in [`../../variants/`](../../variants/README.md).
 
 The production card matches one half of the `50 × 96 mm` sticker:
 
-- visible body: `50 × 45 mm`;
+- visible body: `50 × 45.5 mm`;
 - total card: `50 × 48 mm`;
-- unchanged side tabs: `4 × 3 mm` each;
+- side tabs: `4 × 2.5 mm` each; their `1 mm` thickness is included in the
+  pivot fit, leaving at least `0.15 mm` radial clearance in the `3 mm` holes;
 - total width across the tabs: `58 mm`;
 - material thickness in the CAD preview: `1 mm`.
 
