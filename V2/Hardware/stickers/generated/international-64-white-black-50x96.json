@@ -36,26 +36,26 @@
   "omit_blank": false,
   "typography": {
     "alignment": "common-transform-baseline-centered-bounds",
-    "spacing": "monospaced",
-    "scale_x_mm_per_font_unit": 0.035859820700896494,
-    "scale_y_mm_per_font_unit": 0.03794739111686071,
-    "width_ratio": 0.9449877750611247,
+    "spacing": "proportional",
+    "scale_x_mm_per_font_unit": 0.056847545219638244,
+    "scale_y_mm_per_font_unit": 0.07388748950461797,
+    "width_ratio": 0.7693798449612402,
     "advance_range_mm": [
-      44.17929910350448,
-      44.17929910350448
+      9.493540051679586,
+      45.64857881136951
     ],
     "max_visible_width_mm": 44.0,
-    "baseline_from_card_top_mm": 73.9370418283743,
+    "baseline_from_card_top_mm": 74.78421494542401,
     "vertical_padding_min_mm": 4.0
   },
   "fonts": [
     {
       "role": "sheet",
-      "file": "OverpassMono-Medium.otf",
-      "family": "Overpass Mono Medium",
+      "file": "BlueHighwayD-International.otf",
+      "family": "Blue Highway D International",
       "style": "Regular",
       "variation": {},
-      "sha256": "3de6f0d0ecfb7119ef8baa5d866cbbffceb6a573242763500085e2ef78a1b796"
+      "sha256": "8cbe442d25882508e20aa9ec90e0f2836bca4c476add400c42ac49425b759f83"
     }
   ],
   "positions": [
@@ -73,7 +73,7 @@
       "character": "A",
       "row": 1,
       "column": 2,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 3,
@@ -81,7 +81,7 @@
       "character": "B",
       "row": 1,
       "column": 3,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 4,
@@ -89,7 +89,7 @@
       "character": "C",
       "row": 1,
       "column": 4,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 5,
@@ -97,7 +97,7 @@
       "character": "D",
       "row": 1,
       "column": 5,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 6,
@@ -105,7 +105,7 @@
       "character": "E",
       "row": 1,
       "column": 6,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 7,
@@ -113,7 +113,7 @@
       "character": "F",
       "row": 1,
       "column": 7,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 8,
@@ -121,7 +121,7 @@
       "character": "G",
       "row": 1,
       "column": 8,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 9,
@@ -129,7 +129,7 @@
       "character": "H",
       "row": 1,
       "column": 9,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 10,
@@ -137,7 +137,7 @@
       "character": "I",
       "row": 1,
       "column": 10,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 11,
@@ -145,7 +145,7 @@
       "character": "J",
       "row": 1,
       "column": 11,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 12,
@@ -153,7 +153,7 @@
       "character": "K",
       "row": 1,
       "column": 12,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 13,
@@ -161,7 +161,7 @@
       "character": "L",
       "row": 1,
       "column": 13,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 14,
@@ -169,7 +169,7 @@
       "character": "M",
       "row": 1,
       "column": 14,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 15,
@@ -177,7 +177,7 @@
       "character": "N",
       "row": 1,
       "column": 15,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 16,
@@ -185,7 +185,7 @@
       "character": "O",
       "row": 1,
       "column": 16,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 17,
@@ -193,7 +193,7 @@
       "character": "P",
       "row": 1,
       "column": 17,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 18,
@@ -201,7 +201,7 @@
       "character": "Q",
       "row": 1,
       "column": 18,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 19,
@@ -209,7 +209,7 @@
       "character": "R",
       "row": 1,
       "column": 19,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 20,
@@ -217,7 +217,7 @@
       "character": "S",
       "row": 1,
       "column": 20,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 21,
@@ -225,7 +225,7 @@
       "character": "T",
       "row": 1,
       "column": 21,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 22,
@@ -233,7 +233,7 @@
       "character": "U",
       "row": 1,
       "column": 22,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 23,
@@ -241,7 +241,7 @@
       "character": "V",
       "row": 2,
       "column": 1,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 24,
@@ -249,7 +249,7 @@
       "character": "W",
       "row": 2,
       "column": 2,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 25,
@@ -257,7 +257,7 @@
       "character": "X",
       "row": 2,
       "column": 3,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 26,
@@ -265,7 +265,7 @@
       "character": "Y",
       "row": 2,
       "column": 4,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 27,
@@ -273,7 +273,7 @@
       "character": "Z",
       "row": 2,
       "column": 5,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 28,
@@ -281,7 +281,7 @@
       "character": "Ä",
       "row": 2,
       "column": 6,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 29,
@@ -289,7 +289,7 @@
       "character": "Ö",
       "row": 2,
       "column": 7,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 30,
@@ -297,7 +297,7 @@
       "character": "Ü",
       "row": 2,
       "column": 8,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 31,
@@ -305,7 +305,7 @@
       "character": "ẞ",
       "row": 2,
       "column": 9,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 32,
@@ -313,7 +313,7 @@
       "character": "Ñ",
       "row": 2,
       "column": 10,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 33,
@@ -321,7 +321,7 @@
       "character": "Ç",
       "row": 2,
       "column": 11,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 34,
@@ -329,7 +329,7 @@
       "character": "É",
       "row": 2,
       "column": 12,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 35,
@@ -337,7 +337,7 @@
       "character": "Å",
       "row": 2,
       "column": 13,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 36,
@@ -345,7 +345,7 @@
       "character": "Æ",
       "row": 2,
       "column": 14,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 37,
@@ -353,7 +353,7 @@
       "character": "Ø",
       "row": 2,
       "column": 15,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 38,
@@ -361,7 +361,7 @@
       "character": "Ł",
       "row": 2,
       "column": 16,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 39,
@@ -369,7 +369,7 @@
       "character": "0",
       "row": 2,
       "column": 17,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 40,
@@ -377,7 +377,7 @@
       "character": "1",
       "row": 2,
       "column": 18,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 41,
@@ -385,7 +385,7 @@
       "character": "2",
       "row": 2,
       "column": 19,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 42,
@@ -393,7 +393,7 @@
       "character": "3",
       "row": 2,
       "column": 20,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 43,
@@ -401,7 +401,7 @@
       "character": "4",
       "row": 2,
       "column": 21,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 44,
@@ -409,7 +409,7 @@
       "character": "5",
       "row": 2,
       "column": 22,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 45,
@@ -417,7 +417,7 @@
       "character": "6",
       "row": 3,
       "column": 1,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 46,
@@ -425,7 +425,7 @@
       "character": "7",
       "row": 3,
       "column": 2,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 47,
@@ -433,7 +433,7 @@
       "character": "8",
       "row": 3,
       "column": 3,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 48,
@@ -441,7 +441,7 @@
       "character": "9",
       "row": 3,
       "column": 4,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 49,
@@ -449,7 +449,7 @@
       "character": ".",
       "row": 3,
       "column": 5,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 50,
@@ -457,7 +457,7 @@
       "character": ",",
       "row": 3,
       "column": 6,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 51,
@@ -465,7 +465,7 @@
       "character": ":",
       "row": 3,
       "column": 7,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 52,
@@ -473,7 +473,7 @@
       "character": "!",
       "row": 3,
       "column": 8,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 53,
@@ -481,7 +481,7 @@
       "character": "?",
       "row": 3,
       "column": 9,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 54,
@@ -489,7 +489,7 @@
       "character": "¡",
       "row": 3,
       "column": 10,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 55,
@@ -497,7 +497,7 @@
       "character": "¿",
       "row": 3,
       "column": 11,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 56,
@@ -505,7 +505,7 @@
       "character": "-",
       "row": 3,
       "column": 12,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 57,
@@ -513,7 +513,7 @@
       "character": "/",
       "row": 3,
       "column": 13,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 58,
@@ -521,7 +521,7 @@
       "character": "'",
       "row": 3,
       "column": 14,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 59,
@@ -529,7 +529,7 @@
       "character": "&",
       "row": 3,
       "column": 15,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 60,
@@ -537,7 +537,7 @@
       "character": "@",
       "row": 3,
       "column": 16,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 61,
@@ -545,7 +545,7 @@
       "character": "%",
       "row": 3,
       "column": 17,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 62,
@@ -553,7 +553,7 @@
       "character": "€",
       "row": 3,
       "column": 18,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 63,
@@ -561,7 +561,7 @@
       "character": "$",
       "row": 3,
       "column": 19,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     },
     {
       "sheet_position": 64,
@@ -569,7 +569,7 @@
       "character": "°",
       "row": 3,
       "column": 20,
-      "font": "Overpass Mono Medium Regular"
+      "font": "Blue Highway D International Regular"
     }
   ]
 }

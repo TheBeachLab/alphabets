@@ -77,7 +77,7 @@ class StickerGeneratorTests(unittest.TestCase):
                 ]
                 self.assertEqual(unsupported_characters, [])
         self.assertEqual(
-            self.faces[0].label, "Overpass Mono Medium Regular"
+            self.faces[0].label, "Blue Highway D International Regular"
         )
 
     def test_svg_has_64_cards_63_outlined_glyphs_and_no_text_elements(self):
@@ -112,7 +112,7 @@ class StickerGeneratorTests(unittest.TestCase):
         self.assertEqual(len(positions), 64)
         self.assertEqual(
             {position["font"] for position in positions if position["character"] != " "},
-            {"Overpass Mono Medium Regular"},
+            {"Blue Highway D International Regular"},
         )
 
     def test_special_characters_share_scale_baseline_and_card_center(self):
@@ -130,7 +130,7 @@ class StickerGeneratorTests(unittest.TestCase):
             {placement.baseline_y_mm for placement in placements},
             {layout.baseline_in_card_mm},
         )
-        self.assertTrue(layout.is_monospaced)
+        self.assertFalse(layout.is_monospaced)
         glyph_set = self.faces[0].glyph_set()
         for placement in placements:
             bounds_pen = BoundsPen(glyph_set)
@@ -222,13 +222,15 @@ class StickerGeneratorTests(unittest.TestCase):
             self.assertEqual(data["colors"]["guide"], "#FF00FF")
             self.assertEqual(data["geometry_mm"]["rows"], 3)
             self.assertEqual(len(data["fonts"]), 1)
-            self.assertEqual(data["fonts"][0]["family"], "Overpass Mono Medium")
+            self.assertEqual(
+                data["fonts"][0]["family"], "Blue Highway D International"
+            )
             self.assertEqual(data["fonts"][0]["variation"], {})
             self.assertEqual(
                 data["typography"]["alignment"],
                 "common-transform-baseline-centered-bounds",
             )
-            self.assertEqual(data["typography"]["spacing"], "monospaced")
+            self.assertEqual(data["typography"]["spacing"], "proportional")
             self.assertEqual(len(data["positions"]), 64)
 
     def test_variant_selects_its_matched_characters_and_geometry(self):

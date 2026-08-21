@@ -49,7 +49,7 @@ COLOR_PRESETS = {
     "white-black": ("#FFFFFF", "#000000"),
 }
 DEFAULT_COLOR_PRESET = "black-white"
-DEFAULT_FONT = STICKERS_DIR / "fonts" / "OverpassMono-Medium.otf"
+DEFAULT_FONT = STICKERS_DIR / "fonts" / "BlueHighwayD-International.otf"
 DEFAULT_FONT_WEIGHT: float | None = None
 DEFAULT_FONT_WIDTH: float | None = None
 HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")

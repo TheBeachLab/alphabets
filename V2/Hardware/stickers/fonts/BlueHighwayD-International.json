@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "output": "BlueHighwayD-International.otf",
+  "family": "Blue Highway D International",
+  "postscript_name": "BlueHighwayD-International",
+  "base": {
+    "file": "Blue Highway D.otf",
+    "sha256": "e09e56a5cc4846c87715945f575e743d5585fd5e8fbe99279967f09c8057d718"
+  },
+  "fallback": {
+    "file": "OverpassMono-Medium.otf",
+    "sha256": "3de6f0d0ecfb7119ef8baa5d866cbbffceb6a573242763500085e2ef78a1b796",
+    "characters": "■ẞ",
+    "scale_to_base_upm": 0.5
+  },
+  "output_sha256": "8cbe442d25882508e20aa9ec90e0f2836bca4c476add400c42ac49425b759f83"
+}
