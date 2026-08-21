@@ -93,9 +93,9 @@ tunnel through its neighbor during a normal step. `Reset simulation` returns to
 the blank position. Timeline playback is saved as `Stop at End Frame`; the same
 setting is available from Timeline > Playback > Loop if it is changed manually.
 
-The card substrate and sticker background use a bright yellow review material,
-with the sticker glyph rendered dark, so complete card faces, edges, and tabs
-remain visible against the structure. This is a Blender inspection aid, not a
+The card substrate remains black. Only the sticker background uses a bright
+yellow review material, with the sticker glyph rendered dark, so the stickers
+remain easy to distinguish. This is a Blender inspection aid, not a
 fabrication-material change.
 
 Cards use stronger linear and angular damping in the rigid-body review scene so

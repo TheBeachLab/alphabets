@@ -644,7 +644,7 @@ def main() -> int:
     adjustable_collection = collection("06_ADJUSTABLE_PAWL")
     controller_collection = collection("07_DRUM_STEP_CONTROLLER")
 
-    card_mat = material("Card_Yellow_0_5mm", (1.0, 0.62, 0.015, 1), roughness=0.58)
+    card_mat = material("Card_Black_0_5mm", (0.006, 0.007, 0.009, 1), roughness=0.7)
     floor_mat = material("Floor_Collider", (0.12, 0.15, 0.2, 0.28), roughness=0.8)
     pawl_mat = material("Pawl_Adjustable_Orange", (1.0, 0.16, 0.015, 1), roughness=0.38)
     sticker_mat = atlas_material(GENERATED_DIR / mapping_data["atlas"]["file"])
