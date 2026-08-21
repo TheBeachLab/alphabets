@@ -30,6 +30,7 @@ from alphabets_cad.parts import (
     enclosure_reference_edges,
     finished_flap_card,
     flap_card,
+    flap_sticker_layers,
     laser_cut_disc,
     legacy_holder_side,
     motor_components,
@@ -152,6 +153,12 @@ def test_finished_flap_card_includes_two_sticker_layers() -> None:
     )
     assert not card.isInside(cq.Vector(25, 1, -0.05), 1e-6)
     assert card.isInside(cq.Vector(25, 47, -0.05), 1e-6)
+    stickers = flap_sticker_layers()
+    assert tuple(stickers) == ("front", "back")
+    assert all(
+        sticker.BoundingBox().ymin == pytest.approx(DESIGN.card.sticker_y_offset)
+        for sticker in stickers.values()
+    )
 
 
 @pytest.mark.parametrize("motor_side", [True, False])
@@ -324,40 +331,60 @@ def test_cq_editor_entry_point_exposes_profile_and_objects(
     }
 
 
-def test_stopped_drum_mounts_all_cards_with_front_pair_vertical() -> None:
+def test_stopped_drum_mounts_all_cards_radially_outward() -> None:
     components = mounted_card_components()
-    cards = {component.name: component.shape for component in components}
+    cards = {
+        component.name: component.shape
+        for component in components
+        if component.name.startswith("card_")
+    }
+    stickers = {
+        component.name: component.shape
+        for component in components
+        if component.name.startswith("sticker_")
+    }
     assert drum_stop_rotation_degrees() == pytest.approx(360 / 64 / 2)
     assert set(cards) == {f"card_{position:02d}" for position in range(64)}
+    assert set(stickers) == {
+        f"sticker_{position:02d}_{face}"
+        for position in range(64)
+        for face in ("front", "back")
+    }
     assert all(card.isValid() for card in cards.values())
     assert all(
         component.color.toTuple()[:3] == pytest.approx((0.015, 0.015, 0.018))
         for component in components
+        if component.name.startswith("card_")
+    )
+    assert all(
+        component.color.toTuple()[:3] == pytest.approx((1.0, 0.8, 0.0))
+        for component in components
+        if component.name.startswith("sticker_")
     )
 
-    upper_front = cards["card_31"].BoundingBox()
-    lower_front = cards["card_32"].BoundingBox()
-    assert upper_front.xlen == pytest.approx(DESIGN.card.overall_width)
-    assert lower_front.xlen == pytest.approx(DESIGN.card.overall_width)
-    assert upper_front.zlen == pytest.approx(DESIGN.card.total_height)
-    assert lower_front.zlen == pytest.approx(DESIGN.card.total_height)
-    assert (upper_front.ymin + upper_front.ymax) / 2 == pytest.approx(
-        DESIGN.drum.flap_hole_center_radius
-        * math.cos(math.radians(drum_stop_rotation_degrees()))
-    )
-    assert (lower_front.ymin + lower_front.ymax) / 2 == pytest.approx(
-        DESIGN.drum.flap_hole_center_radius
-        * math.cos(math.radians(drum_stop_rotation_degrees()))
-    )
-    tab_axis_to_top = DESIGN.card.total_height - DESIGN.card.tab_axis_height
-    assert upper_front.zmax - tab_axis_to_top == pytest.approx(
-        DESIGN.drum.flap_hole_center_radius
-        * math.sin(math.radians(drum_stop_rotation_degrees()))
-    )
-    assert lower_front.zmax - tab_axis_to_top == pytest.approx(
-        -DESIGN.drum.flap_hole_center_radius
-        * math.sin(math.radians(drum_stop_rotation_degrees()))
-    )
+    step_degrees = 360 / DESIGN.drum.positions
+    stop_degrees = drum_stop_rotation_degrees()
+    front_upper_position = DESIGN.drum.positions // 2 - 1
+    for position in range(DESIGN.drum.positions):
+        card_number = (position - front_upper_position) % DESIGN.drum.positions
+        card = cards[f"card_{card_number:02d}"]
+        angle = math.radians(180 - stop_degrees - position * step_degrees)
+        radial_depth = math.cos(angle)
+        radial_height = math.sin(angle)
+        pivot_depth = DESIGN.drum.flap_hole_center_radius * radial_depth
+        pivot_height = DESIGN.drum.flap_hole_center_radius * radial_height
+        center = card.Center()
+        center_offset_depth = center.y - pivot_depth
+        center_offset_height = center.z - pivot_height
+        cross = (
+            radial_depth * center_offset_height - radial_height * center_offset_depth
+        )
+        dot = radial_depth * center_offset_depth + radial_height * center_offset_height
+        assert cross == pytest.approx(0, abs=1e-6)
+        assert dot > 0
+
+    assert cards["card_00"].Center().z > 0
+    assert cards["card_01"].Center().z < 0
 
 
 def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
@@ -437,7 +464,7 @@ def test_enclosure_assemblies_contain_two_shell_parts() -> None:
     assert module.toCompound().isValid()
 
     components = enclosed_module_components(exploded=True)
-    assert len(components) == 74
+    assert len(components) == 202
     assert all(component.shape.isValid() for component in components)
     assert {"card_00", "card_63"} < {component.name for component in components}
 
@@ -448,7 +475,10 @@ def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
     assert isinstance(result, cq.Assembly)
     assert result.name == "alphabets-v2-enclosed-module"
     assert result.toCompound().isValid()
-    assert len(namespace["objects"]) == 74
+    assert len(namespace["objects"]) == 202
+    assert "card_00" in namespace["objects"]
+    assert "sticker_00_front" in namespace["objects"]
+    assert "sticker_00_back" in namespace["objects"]
 
 
 def test_legacy_holder_and_enclosure_reference_are_preserved() -> None:

@@ -11,7 +11,8 @@ from .parameters import DESIGN, DesignParameters
 from .parts import (
     drum_enclosure_parts,
     drum_support,
-    finished_flap_card,
+    flap_card,
+    flap_sticker_layers,
     laser_cut_disc,
     motor_components,
 )
@@ -23,6 +24,7 @@ SHAFT = cq.Color(0.95, 0.72, 0.1)
 BACKPACK = cq.Color(0.08, 0.23, 0.75)
 ENCLOSURE = cq.Color(0.025, 0.025, 0.03)
 FLAP = cq.Color(0.015, 0.015, 0.018)
+STICKER = cq.Color(1.0, 0.8, 0.0)
 
 
 @dataclass(frozen=True)
@@ -140,35 +142,47 @@ def _rotate_drum_to_stop(
 def mounted_card_components(
     params: DesignParameters = DESIGN,
 ) -> tuple[Component, ...]:
-    """All 64 flap cards in their stopped, gravity-supported reference poses.
+    """All 64 flap cards in radial startup poses on the stopped drum.
 
-    The lower/front card falls vertically. Upper cards follow the support stack
-    from the rear to the front; the front upper card is held vertically by the
-    pawl. This is a clearance and enclosure-design reference, not a motion
-    simulation or a manufacturing part.
+    Every card points away from the drum axis while its tab axis remains centred
+    in the corresponding hole. This is the deterministic initial state for a
+    later gravity simulation, not the cards' final resting configuration.
     """
 
     card = params.card
     drum = params.drum
     step_degrees = 360.0 / drum.positions
     stop_degrees = drum_stop_rotation_degrees(params)
-    # These are physical card identifiers, not viewer-only numbering. The
-    # established stopped display places 31 above the window and 32 below it.
-    # Do not renumber the physical flap sequence to relocate this pair.
-    front_upper = drum.positions // 2 - 1
-    front_lower = drum.positions // 2
+    front_upper_position = drum.positions // 2 - 1
+
     # Put the centre of the card's tab edge at the pivot before mapping it to
     # the enclosure coordinate system: X is the axle, Y is depth and Z height.
-    card_at_pivot = (
-        finished_flap_card(params)
-        .translate((-card.body_width / 2, -card.tab_axis_height, 0))
-        .rotate((0, 0, 0), (1, 0, 0), 90)
-        # The card is extruded from z=0 to its material thickness. Once mapped
-        # into the enclosure that thickness lies on Y, so move it half a
-        # thickness to centre the tab through the flap-hole axis rather than
-        # leaving one face on it.
-        .translate((0, card.thickness / 2, 0))
-    )
+    def place_at_pivot(shape: cq.Shape) -> cq.Shape:
+        return (
+            shape.translate((-card.body_width / 2, -card.tab_axis_height, 0))
+            .rotate((0, 0, 0), (1, 0, 0), 90)
+            # The finished 0.7 mm stack is centred around the 0.5 mm blank's
+            # mid-plane, so this centres every layer through the hole axis.
+            .translate((0, card.thickness / 2, 0))
+        )
+
+    card_at_pivot = place_at_pivot(flap_card(params))
+    stickers_at_pivot = {
+        face: place_at_pivot(shape)
+        for face, shape in flap_sticker_layers(params).items()
+    }
+
+    def mount(
+        shape: cq.Shape,
+        tilt_degrees: float,
+        pivot_depth: float,
+        pivot_height: float,
+    ) -> cq.Shape:
+        return (
+            shape.rotate((0, 0, 0), (1, 0, 0), tilt_degrees)
+            .translate((0, pivot_depth, pivot_height))
+            .clean()
+        )
 
     cards: list[Component] = []
     for position in range(drum.positions):
@@ -176,23 +190,25 @@ def mounted_card_components(
         angle_radians = math.radians(angle_degrees)
         pivot_depth = drum.flap_hole_center_radius * math.cos(angle_radians)
         pivot_height = drum.flap_hole_center_radius * math.sin(angle_radians)
-        # Every southern card falls with gravity. Northern cards form the
-        # rear-to-front support stack. At the stop, both front cards are exact
-        # verticals: the lower one falls, the upper one rests on the pawl.
-        if position in (front_upper, front_lower) or pivot_height < 0:
-            tilt_degrees = 0.0
-        else:
-            tilt_degrees = angle_degrees - 180.0
+        # At zero tilt the free edge points down. Rotating by angle + 90 maps
+        # that vector onto the radius through this pivot, pointing outwards.
+        tilt_degrees = angle_degrees + 90.0
+        card_number = (position - front_upper_position) % drum.positions
+
         cards.append(
             Component(
-                name=f"card_{position:02d}",
-                shape=(
-                    card_at_pivot.rotate((0, 0, 0), (1, 0, 0), tilt_degrees)
-                    .translate((0, pivot_depth, pivot_height))
-                    .clean()
-                ),
+                name=f"card_{card_number:02d}",
+                shape=mount(card_at_pivot, tilt_degrees, pivot_depth, pivot_height),
                 color=FLAP,
             )
+        )
+        cards.extend(
+            Component(
+                name=f"sticker_{card_number:02d}_{face}",
+                shape=mount(shape, tilt_degrees, pivot_depth, pivot_height),
+                color=STICKER,
+            )
+            for face, shape in stickers_at_pivot.items()
         )
     return tuple(cards)
 

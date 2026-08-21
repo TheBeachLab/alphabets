@@ -57,11 +57,12 @@ def flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
     )
 
 
-def finished_flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
-    """Card with a centered sticker on each visible face, leaving bare margins."""
+def flap_sticker_layers(
+    params: DesignParameters = DESIGN,
+) -> dict[str, cq.Shape]:
+    """Separate front and back sticker solids in the card's local coordinates."""
 
     card = params.card
-    blank = flap_card(params)
     sticker = (
         cq.Workplane("XY")
         .box(
@@ -71,12 +72,20 @@ def finished_flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
             centered=(False, False, False),
         )
         .translate((card.sticker_side_margin, card.sticker_y_offset, 0))
+        .val()
     )
-    return (
-        blank.fuse(sticker.translate((0, 0, -card.sticker_face_thickness)).val())
-        .fuse(sticker.translate((0, 0, card.thickness)).val())
-        .clean()
-    )
+    return {
+        "front": sticker.translate((0, 0, -card.sticker_face_thickness)),
+        "back": sticker.translate((0, 0, card.thickness)),
+    }
+
+
+def finished_flap_card(params: DesignParameters = DESIGN) -> cq.Shape:
+    """Card with a centered sticker on each visible face, leaving bare margins."""
+
+    blank = flap_card(params)
+    stickers = flap_sticker_layers(params)
+    return blank.fuse(stickers["front"]).fuse(stickers["back"]).clean()
 
 
 def _flap_hole_centers(
