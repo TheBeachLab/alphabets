@@ -163,6 +163,11 @@ def mounted_card_components(
         flap_card(params)
         .translate((-card.body_width / 2, -card.tab_axis_height, 0))
         .rotate((0, 0, 0), (1, 0, 0), 90)
+        # The card is extruded from z=0 to its material thickness. Once mapped
+        # into the enclosure that thickness lies on Y, so move it half a
+        # thickness to centre the tab through the flap-hole axis rather than
+        # leaving one face on it.
+        .translate((0, card.thickness / 2, 0))
     )
 
     cards: list[Component] = []

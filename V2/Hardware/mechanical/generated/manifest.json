@@ -56,18 +56,18 @@
           37.75
         ],
         "y": [
-          -61.988144,
+          -61.652365,
           44.5
         ],
         "z": [
           -86.451818,
-          61.988144
+          61.652365
         ]
       },
       "component_volume_sum_mm3": 276294.401285,
       "solid_count": 74,
       "valid": true,
-      "volume_mm3": 251407.653193
+      "volume_mm3": 251623.141048
     },
     "enclosure_assembly": {
       "bounds_mm": {
