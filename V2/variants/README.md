@@ -6,11 +6,13 @@ sticker sheet, card, drum spacing and enclosure source.
 
 | Variant | Character preset | Sticker / halves | Card | Drum inner / outer width | Enclosure |
 | --- | --- | --- | --- | --- | --- |
-| **V2 Prototipo** | `demo-64` | 50 × 80 / 50 × 40 mm | 55 × 43 mm, 55 × 40 visible | 56 / 60.3 mm | historical FreeCAD reference only |
-| **V2 Definitivo** | `international-64` | 45 × 91 / 45 × 45.5 mm | 50 × 48 mm, 50 × 45.5 visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
+| **V2 Prototipo** | `demo-64` | 50 × 80 / 50 × 40 mm | 55 × 43 mm, all visible | 56 / 60.3 mm | historical FreeCAD reference only |
+| **V2 Definitivo** | `international-64` | 45 × 91 / 45 × 45.5 mm | 50 × 48 mm, all visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
 
-Both variants leave a 2.5 mm placement margin at each lateral edge. Stickers
-cover the visible face and stop before the bare pivot-tab band.
+Both variants leave a 2.5 mm placement margin at each lateral edge. The whole
+central card face remains visible, while the sticker ends where the lateral tab
+extensions begin: 3 mm before the prototype hinge edge and 2.5 mm before it on
+the definitive card.
 
 ## Sticker sheets
 
@@ -51,6 +53,6 @@ The definitive variant is the only current manufacturing route: its card,
 `V2/Hardware/mechanical/alphabets_cad/`. Its enclosure still needs a physical
 fit check before a production run.
 
-Both card substrates are 0.5 mm. A 0.1 mm sticker is applied to each visible
-face, making the covered area 0.7 mm thick; margins and pivot tabs remain bare
-at 0.5 mm.
+Both card substrates are 0.5 mm. A 0.1 mm sticker is applied to each face,
+making the covered area 0.7 mm thick; the visible strip next to the tabs,
+lateral margins and tab extensions remain bare at 0.5 mm.

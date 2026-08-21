@@ -272,7 +272,6 @@
   },
   "parameters": {
     "card": {
-      "body_height": 45.5,
       "body_width": 50.0,
       "finished_thickness": 0.7,
       "overall_width": 58.0,
@@ -283,9 +282,12 @@
       "tab_axis_height": 46.75,
       "tab_height": 2.5,
       "tab_rotation_radius": 1.2747548783981961,
+      "tab_start_height": 45.5,
       "tab_width": 4.0,
       "thickness": 0.5,
-      "total_height": 48.0
+      "total_height": 48.0,
+      "uncovered_hinge_strip": 2.5,
+      "visible_height": 48.0
     },
     "drum": {
       "axial_clearance": 1.0,

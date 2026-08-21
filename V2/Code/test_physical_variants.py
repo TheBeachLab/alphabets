@@ -35,10 +35,15 @@ class PhysicalVariantTests(unittest.TestCase):
                     variant.card.sticker_side_margin_mm(variant.sticker), 2.5
                 )
                 self.assertEqual(
-                    variant.sticker.height_mm, 2 * variant.card.visible_height_mm
+                    variant.card.visible_height_mm, variant.card.total_height_mm
                 )
                 self.assertEqual(
-                    variant.sticker.split_y_mm, variant.card.visible_height_mm
+                    variant.sticker.height_mm,
+                    2 * (variant.card.total_height_mm - variant.card.tab_height_mm),
+                )
+                self.assertEqual(
+                    variant.sticker.split_y_mm,
+                    variant.card.total_height_mm - variant.card.tab_height_mm,
                 )
                 self.assertEqual(variant.drum.positions, 64)
 

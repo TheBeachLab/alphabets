@@ -28,7 +28,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(self.manifest["matching_sticker_mm"], [45.0, 91.0])
         self.assertEqual(sticker["geometry_mm"]["card"], [45.0, 91.0])
         self.assertEqual(
-            self.manifest["card_mm"]["body_height"] * 2,
+            self.manifest["card_mm"]["tab_start_height"] * 2,
             sticker["geometry_mm"]["card"][1],
         )
 
@@ -37,13 +37,15 @@ class CardGeometryTests(unittest.TestCase):
         card = manifest["card_mm"]
         self.assertEqual(manifest["physical_variant"], "prototype")
         self.assertEqual(card["body_width"], 55.0)
-        self.assertEqual(card["body_height"], 40.0)
+        self.assertEqual(card["visible_height"], 43.0)
+        self.assertEqual(card["tab_start_height"], 40.0)
         self.assertEqual(card["total_height"], 43.0)
         self.assertEqual(card["overall_width_with_tabs"], 63.0)
         self.assertEqual(card["material_thickness"], 0.5)
         self.assertEqual(card["sticker_width"], 50.0)
         self.assertEqual(card["sticker_face_height"], 40.0)
         self.assertEqual(card["sticker_side_margin"], 2.5)
+        self.assertEqual(card["uncovered_hinge_strip"], 3.0)
         self.assertEqual(card["finished_thickness"], 0.7)
         self.assertEqual(manifest["matching_sticker_mm"], [50.0, 80.0])
 
@@ -51,7 +53,8 @@ class CardGeometryTests(unittest.TestCase):
         card = self.manifest["card_mm"]
         drum = self.manifest["drum_mm"]
         self.assertEqual(card["body_width"], 50.0)
-        self.assertEqual(card["body_height"], 45.5)
+        self.assertEqual(card["visible_height"], 48.0)
+        self.assertEqual(card["tab_start_height"], 45.5)
         self.assertEqual(card["total_height"], 48.0)
         self.assertEqual(card["tab_width"], 4.0)
         self.assertEqual(card["tab_height"], 2.5)
@@ -59,6 +62,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(card["sticker_width"], 45.0)
         self.assertEqual(card["sticker_face_height"], 45.5)
         self.assertEqual(card["sticker_side_margin"], 2.5)
+        self.assertEqual(card["uncovered_hinge_strip"], 2.5)
         self.assertEqual(card["sticker_face_thickness"], 0.1)
         self.assertEqual(card["finished_thickness"], 0.7)
         self.assertEqual(card["display_color_source"], "sticker")

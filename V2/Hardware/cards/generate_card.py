@@ -80,7 +80,7 @@ def validate_dimensions(args: argparse.Namespace) -> None:
     if args.sticker_width >= args.body_width:
         raise ValueError("sticker width must leave a lateral placement margin")
     if args.sticker_face_height != args.total_height - args.tab_height:
-        raise ValueError("sticker face height must match the visible card height")
+        raise ValueError("sticker face height must end where the lateral tabs begin")
     if args.variant == "definitive":
         tab_corner_radius = math.hypot(args.tab_height / 2, args.thickness / 2)
         usable_hole_radius = FLAP_HOLE_DIAMETER_MM / 2 - FLAP_ROTATION_CLEARANCE_MM
@@ -383,7 +383,8 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
         "physical_variant": args.variant,
         "card_mm": {
             "body_width": args.body_width,
-            "body_height": args.total_height - args.tab_height,
+            "visible_height": args.total_height,
+            "tab_start_height": args.total_height - args.tab_height,
             "total_height": args.total_height,
             "overall_width_with_tabs": args.body_width + 2 * args.tab_width,
             "tab_width": args.tab_width,
@@ -392,6 +393,7 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
             "sticker_width": args.sticker_width,
             "sticker_face_height": args.sticker_face_height,
             "sticker_side_margin": (args.body_width - args.sticker_width) / 2,
+            "uncovered_hinge_strip": args.total_height - args.sticker_face_height,
             "sticker_face_thickness": args.sticker_face_thickness,
             "finished_thickness": args.thickness + 2 * args.sticker_face_thickness,
             "display_color_source": "sticker",

@@ -26,7 +26,7 @@ class CardDimensions:
     sticker_face_thickness: float = 0.1
 
     @property
-    def body_height(self) -> float:
+    def tab_start_height(self) -> float:
         return self.total_height - self.tab_height
 
     @property
@@ -37,7 +37,7 @@ class CardDimensions:
     def tab_axis_height(self) -> float:
         """Height of the flap's hinge axis, centred through the tab strip."""
 
-        return self.body_height + self.tab_height / 2
+        return self.tab_start_height + self.tab_height / 2
 
     @property
     def tab_rotation_radius(self) -> float:
@@ -56,6 +56,12 @@ class CardDimensions:
         """Equal placement margin on each lateral edge of the card body."""
 
         return (self.body_width - self.sticker_width) / 2
+
+    @property
+    def uncovered_hinge_strip(self) -> float:
+        """Visible bare strip between the sticker and the card's hinge edge."""
+
+        return self.total_height - self.sticker_face_height
 
 
 @dataclass(frozen=True)
@@ -235,12 +241,14 @@ class DesignParameters:
 
     def as_dict(self) -> dict[str, Any]:
         result = asdict(self)
-        result["card"]["body_height"] = self.card.body_height
+        result["card"]["visible_height"] = self.card.total_height
+        result["card"]["tab_start_height"] = self.card.tab_start_height
         result["card"]["overall_width"] = self.card.overall_width
         result["card"]["tab_axis_height"] = self.card.tab_axis_height
         result["card"]["tab_rotation_radius"] = self.card.tab_rotation_radius
         result["card"]["finished_thickness"] = self.card.finished_thickness
         result["card"]["sticker_side_margin"] = self.card.sticker_side_margin
+        result["card"]["uncovered_hinge_strip"] = self.card.uncovered_hinge_strip
         result["drum"]["inner_width"] = self.drum_inner_width
         result["drum"]["outer_width"] = self.drum_outer_width
         result["drum"]["flap_tab_radial_clearance"] = self.flap_tab_radial_clearance

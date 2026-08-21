@@ -2,7 +2,8 @@
   "physical_variant": "definitive",
   "card_mm": {
     "body_width": 50.0,
-    "body_height": 45.5,
+    "visible_height": 48.0,
+    "tab_start_height": 45.5,
     "total_height": 48.0,
     "overall_width_with_tabs": 58.0,
     "tab_width": 4.0,
@@ -11,6 +12,7 @@
     "sticker_width": 45.0,
     "sticker_face_height": 45.5,
     "sticker_side_margin": 2.5,
+    "uncovered_hinge_strip": 2.5,
     "sticker_face_thickness": 0.1,
     "finished_thickness": 0.7,
     "display_color_source": "sticker",

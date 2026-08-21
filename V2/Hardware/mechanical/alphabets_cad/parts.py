@@ -35,12 +35,12 @@ def card_points(
     return (
         (0.0, 0.0),
         (card.body_width, 0.0),
-        (card.body_width, card.body_height),
-        (card.body_width + card.tab_width, card.body_height),
+        (card.body_width, card.tab_start_height),
+        (card.body_width + card.tab_width, card.tab_start_height),
         (card.body_width + card.tab_width, card.total_height),
         (-card.tab_width, card.total_height),
-        (-card.tab_width, card.body_height),
-        (0.0, card.body_height),
+        (-card.tab_width, card.tab_start_height),
+        (0.0, card.tab_start_height),
     )
 
 

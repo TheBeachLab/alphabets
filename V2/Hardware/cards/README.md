@@ -6,13 +6,14 @@ physical contract is in [`../../variants/`](../../variants/README.md).
 
 The production card uses one half of the `45 × 91 mm` sticker sheet:
 
-- visible body: `50 × 45.5 mm`;
+- visible body: the complete central `50 × 48 mm` surface;
 - total card: `50 × 48 mm`;
 - side tabs: `4 × 2.5 mm` each; their bare `0.5 mm` thickness is included in the
   pivot fit, leaving at least `0.15 mm` radial clearance in the `3 mm` holes;
 - total width across the tabs: `58 mm`;
 - black card substrate: `0.5 mm`;
-- sticker face: `45 × 45.5 mm`, centred with `2.5 mm` lateral margin;
+- sticker face: `45 × 45.5 mm`, centred with `2.5 mm` lateral margin and ending
+  where the lateral tabs begin;
 - one `0.1 mm` sticker on each face, for `0.7 mm` finished body thickness;
 - the visible colour comes from the sticker, not from the substrate model.
 

@@ -93,9 +93,11 @@ northern cards form the rear-to-front support stack, with the upper/front card
 shown vertical on the pawl.
 
 Each card uses a 0.5 mm blank with one centred 45 × 45.5 × 0.1 mm sticker on
-each face. The covered area is therefore 0.7 mm thick; the 2.5 mm lateral
-margins and pivot tabs remain 0.5 mm. Cards are shown black because their
-visible colour comes from the sticker.
+each face. The paired sticker artwork is cut through its center so curves and
+diagonals continue across the displayed halves. The covered area is 0.7 mm
+thick; the visible strip next to the tabs, 2.5 mm lateral margins and lateral
+tab extensions remain 0.5 mm. Cards are shown black because their visible
+colour comes from the sticker.
 
 `design.toml` is the committed source for every direct manufacturing dimension.
 Derived values — for example the drum's inner width and the enclosure's overall

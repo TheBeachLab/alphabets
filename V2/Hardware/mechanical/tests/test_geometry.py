@@ -114,19 +114,21 @@ def test_flap_card_matches_current_cutter_geometry() -> None:
     )
     assert card.Volume() == pytest.approx(
         (
-            DESIGN.card.body_width * DESIGN.card.body_height
-            + DESIGN.card.overall_width * DESIGN.card.tab_height
+            DESIGN.card.body_width * DESIGN.card.total_height
+            + 2 * DESIGN.card.tab_width * DESIGN.card.tab_height
         )
         * DESIGN.card.thickness
     )
     assert card_points()[0] == (0.0, 0.0)
     assert card_points()[5] == (-DESIGN.card.tab_width, DESIGN.card.total_height)
+    assert DESIGN.card.tab_start_height == pytest.approx(45.5)
     assert DESIGN.card.tab_axis_height == pytest.approx(46.75)
     assert DESIGN.card.tab_rotation_radius == pytest.approx(
         math.sqrt(1.25**2 + 0.25**2)
     )
     assert DESIGN.card.finished_thickness == pytest.approx(0.7)
     assert DESIGN.card.sticker_side_margin == pytest.approx(2.5)
+    assert DESIGN.card.uncovered_hinge_strip == pytest.approx(DESIGN.card.tab_height)
     assert DESIGN.flap_tab_radial_clearance >= DESIGN.drum.flap_rotation_clearance
 
 

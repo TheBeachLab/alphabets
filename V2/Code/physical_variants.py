@@ -159,20 +159,18 @@ def _validate_match(variant: PhysicalVariant) -> None:
         raise PhysicalVariantError(
             f"variant {variant.id!r} sticker must leave a lateral placement margin"
         )
-    if variant.sticker.height_mm != 2 * variant.card.visible_height_mm:
+    if variant.card.visible_height_mm != variant.card.total_height_mm:
         raise PhysicalVariantError(
-            f"variant {variant.id!r} sticker does not contain two visible faces"
+            f"variant {variant.id!r} visible face must span the full card height"
         )
-    if variant.sticker.split_y_mm != variant.card.visible_height_mm:
+    sticker_face_height = variant.card.total_height_mm - variant.card.tab_height_mm
+    if variant.sticker.height_mm != 2 * sticker_face_height:
         raise PhysicalVariantError(
-            f"variant {variant.id!r} split does not match visible card height"
+            f"variant {variant.id!r} sticker does not contain two sticker faces"
         )
-    if (
-        variant.card.visible_height_mm + variant.card.tab_height_mm
-        != variant.card.total_height_mm
-    ):
+    if variant.sticker.split_y_mm != sticker_face_height:
         raise PhysicalVariantError(
-            f"variant {variant.id!r} card height does not match tab band"
+            f"variant {variant.id!r} split does not match sticker face height"
         )
     expected_inner = variant.card.body_width_mm + 1.0
     if variant.drum.inner_width_mm != expected_inner:

@@ -33,10 +33,15 @@ python3 V2/Hardware/stickers/generate_stickers.py \
 
 `--variant` fixes the character preset, sticker width and sticker height, and
 records the variant in the JSON manifest. It refuses a conflicting width or
-height override. The historical prototype cut path measures about
-`51 × 40.1 mm`, consistent with the nominal `50 × 40 mm` face plus cutting
-tolerance; its `55 × 86 mm` artwork background is not the sticker's finished
-cut size.
+height override. The prototype sticker is nominally `50 × 80 mm`, split at
+40 mm. The body itself remains visible across its complete 43 mm height; the
+40 mm coordinate marks both the sticker edge and where the lateral tab
+extensions begin, not the end of the visible card face.
+
+In the preserved `cut-print/cutprint.svg`, each historical magenta cutter
+rectangle is about `51.0 × 40.1 mm` (`192.756 × 151.570` SVG px at 96 dpi).
+That is the cutter allowance around the nominal `50 × 40 mm` prototype
+sticker, not evidence of a 43 mm-high sticker.
 
 ## Generic legacy sheet
 
@@ -79,9 +84,10 @@ card; proportional advance widths do not change the card size. No glyph
 receives an individual scale or vertical offset.
 
 The matched **V2 Definitivo** geometry is `45 × 91 mm`: after the center cut it
-creates two `45 × 45.5 mm` stickers. Each is centred on the `50 × 45.5 mm`
-visible face, leaving `2.5 mm` at each side and no sticker on the pivot band.
-Generate it without changing the shared alignment with:
+creates two `45 × 45.5 mm` stickers. Each is centred laterally on the complete
+`50 × 48 mm` visible face and ends where the side tabs begin. The center cut
+goes through the continuous artwork so curves and diagonal strokes meet
+without a visual jump. Generate it without changing the shared alignment with:
 
 ```sh
 python3 V2/Hardware/stickers/generate_stickers.py \
