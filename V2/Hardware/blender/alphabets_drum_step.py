@@ -9,7 +9,7 @@ import bpy
 bl_info = {
     "name": "Alphabets Drum Step",
     "author": "Alphabets",
-    "version": (1, 1, 0),
+    "version": (1, 1, 1),
     "blender": (5, 2, 0),
     "location": "3D View > Sidebar > Alphabets",
     "description": "Advance the 64-position drum by configurable physical steps",
@@ -22,6 +22,15 @@ TOTAL_STEPS = 64
 
 def controller_object() -> bpy.types.Object | None:
     return bpy.data.objects.get(CONTROLLER_NAME)
+
+
+def extend_simulation_range(scene: bpy.types.Scene, end_frame: int) -> None:
+    """Keep the scene and Bullet cache ranges aligned for appended steps."""
+
+    scene.frame_end = max(scene.frame_end, end_frame)
+    if scene.rigidbody_world is not None:
+        point_cache = scene.rigidbody_world.point_cache
+        point_cache.frame_end = max(point_cache.frame_end, end_frame)
 
 
 def ensure_controller_properties(controller: bpy.types.Object) -> None:
@@ -133,7 +142,7 @@ class ALPHABETS_OT_advance_one(bpy.types.Operator):
             self.report({"INFO"}, "The drum is already at position 64")
             return {"CANCELLED"}
         scene.playback_loop_mode = "STOP_END_FRAME"
-        scene.frame_end = max(scene.frame_end, self._settle_end)
+        extend_simulation_range(scene, self._settle_end)
         self.report({"INFO"}, f"Advancing to position {target_step}")
         fps = scene.render.fps / scene.render.fps_base
         self._timer = context.window_manager.event_timer_add(

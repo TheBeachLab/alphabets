@@ -2,7 +2,7 @@ PYTHON ?= ../mechanical/.venv/bin/python
 BLENDER ?= /Applications/Blender.app/Contents/MacOS/Blender
 UV ?= uv
 
-.PHONY: setup assets scene interactive check open clean
+.PHONY: setup assets scene interactive check check-steps open clean
 
 setup:
 	$(UV) pip install --python $(PYTHON) -r requirements.txt
@@ -20,6 +20,10 @@ check:
 	$(PYTHON) -m ruff check .
 	$(PYTHON) -m ruff format --check .
 	$(PYTHON) -m pytest -q test_generate_assets.py
+
+check-steps: interactive
+	$(BLENDER) generated/alphabets-v2-interactive.blend --background --python validate_appended_steps.py -- --steps 20
+	$(BLENDER) generated/alphabets-v2-interactive.blend --background --python validate_appended_steps.py -- --steps 20 --single
 
 open: interactive
 	open -a Blender generated/alphabets-v2-interactive.blend

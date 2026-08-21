@@ -92,6 +92,9 @@ substeps per frame and 50 solver iterations so a 0.7 mm finished card cannot
 tunnel through its neighbor during a normal step. `Reset simulation` returns to
 the blank position. Timeline playback is saved as `Stop at End Frame`; the same
 setting is available from Timeline > Playback > Loop if it is changed manually.
+Every appended move extends both the visible frame range and Bullet's rigid-body
+cache range; these two endpoints must remain identical when stepping beyond the
+original frame 800 simulation.
 
 The card substrate remains black. Only the sticker background uses a bright
 yellow review material, with the sticker glyph rendered dark, so the stickers
