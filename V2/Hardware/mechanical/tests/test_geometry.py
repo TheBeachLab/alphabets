@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import runpy
 from fractions import Fraction
@@ -13,11 +14,13 @@ import pytest
 from alphabets_cad.assemblies import (
     _orient_for_enclosure,
     drum_component_shapes,
+    drum_stop_rotation_degrees,
     enclosed_module_assembly,
     enclosed_module_components,
     enclosure_assembly,
     module_reference_assembly,
     module_reference_components,
+    mounted_card_components,
 )
 from alphabets_cad.parameters import DESIGN, load_design_profile
 from alphabets_cad.parts import (
@@ -282,6 +285,25 @@ def test_cq_editor_entry_point_exposes_profile_and_objects(
     }
 
 
+def test_stopped_drum_mounts_all_cards_with_front_pair_vertical() -> None:
+    cards = {component.name: component.shape for component in mounted_card_components()}
+    assert drum_stop_rotation_degrees() == pytest.approx(360 / 64 / 2)
+    assert set(cards) == {f"card_{position:02d}" for position in range(64)}
+    assert all(card.isValid() for card in cards.values())
+
+    upper_front = cards["card_31"].BoundingBox()
+    lower_front = cards["card_32"].BoundingBox()
+    assert upper_front.xlen == pytest.approx(DESIGN.card.overall_width)
+    assert lower_front.xlen == pytest.approx(DESIGN.card.overall_width)
+    assert upper_front.zlen == pytest.approx(DESIGN.card.total_height)
+    assert lower_front.zlen == pytest.approx(DESIGN.card.total_height)
+    assert upper_front.ymax == pytest.approx(lower_front.ymax)
+    assert upper_front.ymax == pytest.approx(
+        -DESIGN.drum.flap_hole_center_radius
+        * math.cos(math.radians(drum_stop_rotation_degrees()))
+    )
+
+
 def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
     parts = drum_enclosure_parts()
     assert tuple(parts) == ("enclosure_upper", "enclosure_lower")
@@ -359,8 +381,9 @@ def test_enclosure_assemblies_contain_two_shell_parts() -> None:
     assert module.toCompound().isValid()
 
     components = enclosed_module_components(exploded=True)
-    assert len(components) == 11
+    assert len(components) == 74
     assert all(component.shape.isValid() for component in components)
+    assert {"card_31", "card_32"} < {component.name for component in components}
 
 
 def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
@@ -369,7 +392,7 @@ def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
     assert isinstance(result, cq.Assembly)
     assert result.name == "alphabets-v2-enclosed-module"
     assert result.toCompound().isValid()
-    assert len(namespace["objects"]) == 11
+    assert len(namespace["objects"]) == 74
 
 
 def test_legacy_holder_and_enclosure_reference_are_preserved() -> None:
