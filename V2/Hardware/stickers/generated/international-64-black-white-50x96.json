@@ -6,6 +6,7 @@
     "name": "International 64",
     "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
   },
+  "physical_variant": "definitive",
   "colors": {
     "preset": "black-white",
     "background": "#000000",

@@ -9,6 +9,17 @@ The canonical machine-readable definitions are in
 [`character_sets.json`](character_sets.json). They are validated and consumed
 through [`character_sets.py`](character_sets.py).
 
+## Physical compatibility
+
+The alphabet is not interchangeable independently of the physical hardware.
+`demo-64` belongs to **V2 Prototipo** (55 mm cards) and `international-64`
+belongs to **V2 Definitivo** (50 mm cards). Their matched sticker, card, drum
+and enclosure contracts are in [`../variants/`](../variants/README.md).
+
+Do not select a preset for a drum that was printed with the other sequence.
+Likewise, a Custom 64 setting requires a separately manufactured set of
+matched flaps; it is not a software-only conversion of either existing drum.
+
 ## International 64
 
 `international-64` is the default preset. Position 0 is the blank flap, so a

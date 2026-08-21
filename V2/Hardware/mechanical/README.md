@@ -1,4 +1,10 @@
-# Alphabets V2 mechanical CAD
+# Alphabets V2 Definitivo mechanical CAD
+
+This CadQuery model is the manufacturing source for **V2 Definitivo** only:
+the 50 mm card, 51 mm internal drum width and its two-piece, open-rear
+enclosure. The 55 mm **V2 Prototipo** has a different drum width and only a
+historical enclosure reference; it must not be generated from this model.
+The complete split is recorded in [`../../variants/`](../../variants/README.md).
 
 CadQuery is the editable source of truth for the current V2 mechanical
 geometry. It centralizes the dimensions that were previously split across
@@ -60,6 +66,9 @@ To use an existing environment:
 ```sh
 make check PYTHON=/path/to/python
 ```
+
+`generate.py --variant prototype` deliberately stops before writing files,
+because the old enclosure is not a validated parametric manufacturing source.
 
 ## Graphical editing
 

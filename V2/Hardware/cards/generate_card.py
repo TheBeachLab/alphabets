@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the 50 x 48 mm V2 split-flap card and cutter files.
+"""Generate a variant-locked V2 split-flap card and cutter files.
 
 Run this script with FreeCADCmd, not the system Python interpreter.
 """
@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import shlex
 import sys
 from xml.sax.saxutils import escape
 
@@ -16,12 +17,15 @@ import FreeCAD as App
 import Part
 
 
-DEFAULT_BODY_WIDTH_MM = 50.0
-DEFAULT_TOTAL_HEIGHT_MM = 48.0
-DEFAULT_TAB_WIDTH_MM = 4.0
-DEFAULT_TAB_HEIGHT_MM = 3.0
-DEFAULT_THICKNESS_MM = 1.0
-DEFAULT_AXIAL_CLEARANCE_MM = 1.0
+CARDS_DIR = Path(__file__).resolve().parent
+V2_DIR = CARDS_DIR.parents[1]
+CODE_DIR = V2_DIR / "Code"
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from physical_variants import PhysicalVariantError, load_variant  # noqa: E402
+
+
 DRUM_DIAMETER_MM = 85.0
 DRUM_SIDE_THICKNESS_MM = 2.15
 DRUM_POSITIONS = 64
@@ -91,12 +95,16 @@ def add_parameter_sheet(doc: App.Document, args: argparse.Namespace) -> None:
 
 
 def build_fcstd(output: Path, args: argparse.Namespace) -> None:
-    doc = App.newDocument("V2Card50x48")
-    doc.Label = "V2 card 50 x 48 mm"
+    stem = f"V2Card{number(args.body_width)}x{number(args.total_height)}"
+    doc = App.newDocument(stem)
+    doc.Label = f"{args.variant_name} card {number(args.body_width)} x {number(args.total_height)} mm"
     doc.CreatedBy = "Beach Lab"
     doc.License = "MIT"
     doc.LicenseURL = "https://opensource.org/license/mit"
-    doc.Comment = "Matched to the 50 x 96 mm V2 sticker and 51 mm drum."
+    doc.Comment = (
+        f"Matched to the {number(args.body_width)} x {number(args.total_height * 2)} mm "
+        f"{args.variant_name} sticker and {number(args.body_width + args.axial_clearance)} mm drum."
+    )
     add_parameter_sheet(doc, args)
 
     points = card_points(
@@ -145,7 +153,7 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
     )
 
     solid = doc.addObject("Part::MultiFuse", "Card")
-    solid.Label = "Card 50 x 48"
+    solid.Label = f"Card {number(args.body_width)} x {number(args.total_height)}"
     solid.Shapes = [body, tab_band]
     solid.Refine = True
     for name, label, value, expression in (
@@ -243,6 +251,7 @@ def build_dxf(output: Path, args: argparse.Namespace) -> None:
 
 def build_manifest(output: Path, args: argparse.Namespace) -> None:
     data = {
+        "physical_variant": args.variant,
         "card_mm": {
             "body_width": args.body_width,
             "body_height": args.total_height - args.tab_height,
@@ -277,30 +286,55 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--body-width", type=float, default=DEFAULT_BODY_WIDTH_MM)
-    parser.add_argument("--total-height", type=float, default=DEFAULT_TOTAL_HEIGHT_MM)
-    parser.add_argument("--tab-width", type=float, default=DEFAULT_TAB_WIDTH_MM)
-    parser.add_argument("--tab-height", type=float, default=DEFAULT_TAB_HEIGHT_MM)
-    parser.add_argument("--thickness", type=float, default=DEFAULT_THICKNESS_MM)
-    parser.add_argument("--axial-clearance", type=float, default=DEFAULT_AXIAL_CLEARANCE_MM)
+    parser.add_argument("--variant", choices=("prototype", "definitive"), default="definitive")
+    parser.add_argument("--body-width", type=float)
+    parser.add_argument("--total-height", type=float)
+    parser.add_argument("--tab-width", type=float)
+    parser.add_argument("--tab-height", type=float)
+    parser.add_argument("--thickness", type=float)
+    parser.add_argument("--axial-clearance", type=float)
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent)
-    parser.add_argument("--stem", default="card-50x48")
+    parser.add_argument("--stem")
     script = Path(__file__).resolve()
     argv = []
-    for argument in sys.argv[1:]:
-        if argument == "--pass":
+    for raw_argument in sys.argv[1:]:
+        if raw_argument == "--pass":
             continue
-        try:
-            if Path(argument).resolve() == script:
-                continue
-        except OSError:
-            pass
-        argv.append(argument)
-    return parser.parse_args(argv)
+        for argument in shlex.split(raw_argument):
+            try:
+                if Path(argument).resolve() == script:
+                    continue
+            except OSError:
+                pass
+            argv.append(argument)
+    args = parser.parse_args(argv)
+    variant = load_variant(args.variant)
+    values = {
+        "body_width": variant.card.body_width_mm,
+        "total_height": variant.card.total_height_mm,
+        "tab_width": variant.card.tab_width_mm,
+        "tab_height": variant.card.tab_height_mm,
+        "thickness": variant.card.material_thickness_mm,
+        "axial_clearance": variant.drum.inner_width_mm - variant.card.body_width_mm,
+    }
+    for field, expected in values.items():
+        supplied = getattr(args, field)
+        if supplied is not None and supplied != expected:
+            parser.error(
+                f"{variant.name} requires --{field.replace('_', '-')} {expected:g}"
+            )
+        setattr(args, field, expected)
+    args.variant_name = variant.name
+    if args.stem is None:
+        args.stem = f"card-{number(args.body_width)}x{number(args.total_height)}"
+    return args
 
 
 def main() -> int:
-    args = parse_args()
+    try:
+        args = parse_args()
+    except PhysicalVariantError as error:
+        raise SystemExit(f"error: {error}") from error
     validate_dimensions(args)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     build_fcstd(args.output_dir / f"{args.stem}.fcstd", args)
