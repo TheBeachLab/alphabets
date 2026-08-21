@@ -43,6 +43,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -64,6 +65,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -85,6 +87,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -106,6 +109,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -127,6 +131,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -148,6 +153,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -169,6 +175,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -190,6 +197,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -211,6 +219,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -232,6 +241,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -253,6 +263,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -274,6 +285,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -295,6 +307,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -316,6 +329,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -337,6 +351,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -358,6 +373,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -379,6 +395,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -400,6 +417,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -421,6 +439,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -442,6 +461,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -463,6 +483,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -484,6 +505,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -505,6 +527,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -526,6 +549,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -547,6 +571,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -568,6 +593,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -589,6 +615,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -610,6 +637,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -631,6 +659,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -652,6 +681,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -673,6 +703,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -694,6 +725,7 @@
         0.875
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -715,6 +747,7 @@
         1.0
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -736,6 +769,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -757,6 +791,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -778,6 +813,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -799,6 +835,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -820,6 +857,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -841,6 +879,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -862,6 +901,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -883,6 +923,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -904,6 +945,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -925,6 +967,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -946,6 +989,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -967,6 +1011,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -988,6 +1033,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1009,6 +1055,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1030,6 +1077,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1051,6 +1099,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1072,6 +1121,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1093,6 +1143,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1114,6 +1165,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1135,6 +1187,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1156,6 +1209,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1177,6 +1231,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1198,6 +1253,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1219,6 +1275,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1240,6 +1297,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1261,6 +1319,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1282,6 +1341,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1303,6 +1363,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1324,6 +1385,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1345,6 +1407,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1366,6 +1429,7 @@
         0.625
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1387,6 +1451,7 @@
         0.75
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1408,6 +1473,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1429,6 +1495,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1450,6 +1517,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1471,6 +1539,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1492,6 +1561,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1513,6 +1583,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1534,6 +1605,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1555,6 +1627,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1576,6 +1649,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1597,6 +1671,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1618,6 +1693,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1639,6 +1715,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1660,6 +1737,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1681,6 +1759,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1702,6 +1781,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1723,6 +1803,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1744,6 +1825,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1765,6 +1847,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1786,6 +1869,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1807,6 +1891,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1828,6 +1913,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1849,6 +1935,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1870,6 +1957,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1891,6 +1979,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1912,6 +2001,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1933,6 +2023,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1954,6 +2045,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -1975,6 +2067,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -1996,6 +2089,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2017,6 +2111,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2038,6 +2133,7 @@
         0.375
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2059,6 +2155,7 @@
         0.5
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2080,6 +2177,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2101,6 +2199,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2122,6 +2221,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2143,6 +2243,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2164,6 +2265,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2185,6 +2287,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2206,6 +2309,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2227,6 +2331,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2248,6 +2353,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2269,6 +2375,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2290,6 +2397,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2311,6 +2419,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2332,6 +2441,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2353,6 +2463,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2374,6 +2485,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2395,6 +2507,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2416,6 +2529,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2437,6 +2551,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2458,6 +2573,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2479,6 +2595,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2500,6 +2617,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2521,6 +2639,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2542,6 +2661,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2563,6 +2683,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2584,6 +2705,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2605,6 +2727,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2626,6 +2749,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2647,6 +2771,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2668,6 +2793,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     },
@@ -2689,6 +2815,7 @@
         0.25
       ],
       "rotation_degrees": 180,
+      "horizontal_flip": false,
       "center_cut_edge": "bottom",
       "target_edge": "hinge"
     },
@@ -2710,6 +2837,7 @@
         0.125
       ],
       "rotation_degrees": 0,
+      "horizontal_flip": true,
       "center_cut_edge": "top",
       "target_edge": "hinge"
     }

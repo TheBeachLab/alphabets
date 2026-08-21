@@ -82,6 +82,7 @@ def build_sticker_mapping() -> dict[str, Any]:
                         _round(split_v),
                     ],
                     "rotation_degrees": 0,
+                    "horizontal_flip": True,
                     "center_cut_edge": "top",
                     "target_edge": "hinge",
                 },
@@ -102,6 +103,7 @@ def build_sticker_mapping() -> dict[str, Any]:
                     # The upper artwork is applied upside down on the reverse
                     # face. It becomes upright after the flap turns over.
                     "rotation_degrees": 180,
+                    "horizontal_flip": False,
                     "center_cut_edge": "bottom",
                     "target_edge": "hinge",
                 },

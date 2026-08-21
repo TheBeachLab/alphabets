@@ -175,6 +175,7 @@ def sticker_mesh(
     face: str,
     uv_box: list[float],
     rotation_degrees: int,
+    horizontal_flip: bool,
     center_mm: tuple[float, float],
 ) -> bpy.types.Mesh:
     half_width = card["sticker_width"] * MM / 2
@@ -200,6 +201,8 @@ def sticker_mesh(
         coordinates = ((u1, v1), (u0, v1), (u0, v0), (u1, v0))
     else:
         raise ValueError(f"unsupported sticker rotation: {rotation_degrees}")
+    if horizontal_flip:
+        coordinates = tuple((u0 + u1 - u, v) for u, v in coordinates)
     uv_layer = mesh.uv_layers.new(name="AtlasUV")
     for loop, uv in zip(mesh.loops, coordinates, strict=True):
         uv_layer.data[loop.index].uv = uv
@@ -458,6 +461,7 @@ def build_cards(
                 face,
                 assignment["uv_box"],
                 assignment["rotation_degrees"],
+                assignment["horizontal_flip"],
                 center_mm,
             )
             sticker = bpy.data.objects.new(sticker_name, mesh)
@@ -470,6 +474,7 @@ def build_cards(
             sticker["character_index"] = assignment["character_index"]
             sticker["display_half"] = assignment["display_half"]
             sticker["rotation_degrees"] = assignment["rotation_degrees"]
+            sticker["horizontal_flip"] = assignment["horizontal_flip"]
 
         bpy.ops.object.empty_add(
             type="PLAIN_AXES",

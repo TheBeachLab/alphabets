@@ -16,6 +16,8 @@ The generated scene contains one active rigid body and one hinge constraint per
 card. Every front/back sticker is a separately named child object, but all 128
 faces share one texture atlas. `generated/sticker-mapping.json` records the
 character, card face, atlas coordinates, and required rotation.
+Lower/front artwork is horizontally flipped in UV space so it reads correctly
+after the flap turns into the lower display position.
 
 The simulation deliberately models assembly in two phases:
 

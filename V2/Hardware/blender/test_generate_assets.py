@@ -43,9 +43,11 @@ def test_upper_and_lower_halves_keep_the_cut_edge_at_the_hinge() -> None:
     assert front["display_half"] == "lower"
     assert front["center_cut_edge"] == "top"
     assert front["rotation_degrees"] == 0
+    assert front["horizontal_flip"] is True
     assert back["display_half"] == "upper"
     assert back["center_cut_edge"] == "bottom"
     assert back["rotation_degrees"] == 180
+    assert back["horizontal_flip"] is False
     assert front["target_edge"] == back["target_edge"] == "hinge"
 
 
