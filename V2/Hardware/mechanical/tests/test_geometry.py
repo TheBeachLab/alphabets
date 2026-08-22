@@ -13,6 +13,8 @@ import pytest
 
 from alphabets_cad.assemblies import (
     _orient_for_enclosure,
+    captured_card_components,
+    captured_enclosure_design_components,
     drum_component_shapes,
     drum_stop_rotation_degrees,
     enclosed_module_assembly,
@@ -41,6 +43,7 @@ MECHANICAL_DIR = Path(__file__).resolve().parents[1]
 HARDWARE_DIR = MECHANICAL_DIR.parent
 REPO_ROOT = MECHANICAL_DIR.parents[2]
 GENERATED = MECHANICAL_DIR / "generated"
+CARD_CAPTURE = HARDWARE_DIR / "blender/generated/cards-position-capture.json"
 
 
 def assert_bounds(
@@ -386,6 +389,58 @@ def test_stopped_drum_mounts_all_cards_radially_outward() -> None:
     assert cards["card_00"].Center().z < 0
     assert cards["card_01"].Center().z > 0
     assert cards["card_02"].Center().z > cards["card_01"].Center().z
+
+
+def test_blender_capture_maps_every_card_and_sticker_into_cadquery() -> None:
+    capture = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
+    components = captured_card_components(CARD_CAPTURE)
+    shapes = {component.name: component.shape for component in components}
+    assert len(components) == 64 * 3
+    assert set(shapes) == {
+        *(f"card_{number:02d}" for number in range(64)),
+        *(
+            f"sticker_{number:02d}_{face}"
+            for number in range(64)
+            for face in ("front", "back")
+        ),
+    }
+    assert all(shape.isValid() for shape in shapes.values())
+
+    for card_capture in capture["cards"]:
+        number = card_capture["card_number"]
+        box = shapes[f"card_{number:02d}"].BoundingBox()
+        expected = card_capture["bounds_world_mm"]
+        actual = (box.xmin, box.ymin, box.zmin, box.xmax, box.ymax, box.zmax)
+        wanted = (*expected["minimum"], *expected["maximum"])
+        assert actual == pytest.approx(wanted, abs=2e-5)
+
+
+def test_capture_design_view_excludes_old_enclosure_and_keeps_references() -> None:
+    components = captured_enclosure_design_components(CARD_CAPTURE)
+    names = {component.name for component in components}
+    assert "enclosure_upper" not in names
+    assert "enclosure_lower" not in names
+    assert {
+        "motor_side",
+        "shaft_side",
+        "support_front",
+        "support_back",
+        "motor_shaft",
+        "card_00",
+        "card_63",
+        "capture_floor_reference",
+        "capture_pawl_reference",
+        "capture_southern_cards_envelope",
+        "capture_all_cards_envelope",
+    } < names
+
+    floor = next(
+        component.shape
+        for component in components
+        if component.name == "capture_floor_reference"
+    ).BoundingBox()
+    assert floor.zmax == pytest.approx(-75, abs=1e-5)
+    assert floor.ymax == pytest.approx(40.301815, abs=1e-5)
 
 
 def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:

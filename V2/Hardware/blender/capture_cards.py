@@ -8,7 +8,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import bpy
-from mathutils import Vector
 
 BLENDER_DIR = Path(__file__).resolve().parent
 GENERATED_DIR = BLENDER_DIR / "generated"
@@ -24,7 +23,7 @@ def rounded(values: list[float] | tuple[float, ...]) -> list[float]:
 def object_capture(obj: bpy.types.Object, depsgraph: bpy.types.Depsgraph) -> dict:
     evaluated = obj.evaluated_get(depsgraph)
     matrix = evaluated.matrix_world.copy()
-    bounds = [matrix @ Vector(corner) for corner in evaluated.bound_box]
+    bounds = [matrix @ vertex.co for vertex in evaluated.data.vertices]
     quaternion = matrix.to_quaternion()
     return {
         "name": obj.name,
@@ -105,7 +104,8 @@ def main() -> int:
     }
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     JSON_PATH.write_text(json.dumps(data, indent=2) + "\n")
-    bpy.ops.wm.save_as_mainfile(filepath=str(BLEND_PATH), copy=True)
+    if Path(bpy.data.filepath).resolve() != BLEND_PATH.resolve():
+        bpy.ops.wm.save_as_mainfile(filepath=str(BLEND_PATH), copy=True)
     print(
         json.dumps(
             {
