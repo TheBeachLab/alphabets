@@ -5,13 +5,19 @@
     "displayed_characters": true,
     "spoken_message": true,
     "electronics_absent": true,
+    "motors_present_without_cables": true,
     "textures_packed": true,
     "no_render_generated": true,
+    "camera_present": true,
+    "packed_hdri_present": true,
     "complete_mechanisms": true,
     "captured_display_pair": true,
     "captured_card_transforms": true,
     "two_display_halves_per_module": true,
-    "remaining_stickers_use_yellow_atlas": true
+    "all_stickers_use_production_yellow_atlas": true,
+    "uppercase_w_and_o": true,
+    "screws_use_cad_positions": true,
+    "magnets_use_cad_pockets": true
   },
   "collection_counts": {
     "00_MODULE_ROOTS": 10,
@@ -20,7 +26,10 @@
     "03_CARDS_CAPTURED": 640,
     "04_STICKERS": 1280,
     "05_PAWL_DEFINITIVE": 10,
-    "06_M3_SCREWS": 60
+    "06_M3_SCREWS": 160,
+    "07_MOTORS_NO_CABLES": 40,
+    "08_MAGNETS": 60,
+    "09_CAMERA_AND_HDRI": 1
   },
   "displayed_characters": "HALLOWELT!",
   "spoken_message": "HALLO WELT!",
@@ -28,6 +37,10 @@
   "unpacked_images": [],
   "maximum_card_transform_error": 2.0851426696388842e-07,
   "display_sticker_count": 20,
-  "yellow_atlas_sticker_count": 1260,
+  "yellow_atlas_sticker_count": 1280,
+  "maximum_magnet_position_error_mm": 6.466735470667118e-06,
+  "hdri_images": [
+    "studio.exr"
+  ],
   "blend": "/Users/Papi/Repositories/.worktrees/alphabets-captured-enclosure-b6dbf188/V2/Hardware/blender/generated/hello-wall/alphabets-hallo-welt-5x2.blend"
 }

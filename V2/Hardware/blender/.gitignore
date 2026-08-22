@@ -3,3 +3,4 @@ __pycache__/
 .ruff_cache/
 generated/*.blend1
 generated/**/*.blend1
+generated/hello-wall/components/

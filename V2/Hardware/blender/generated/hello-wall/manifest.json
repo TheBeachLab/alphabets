@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "title": "German hello world",
   "spoken_message": "HALLO WELT!",
   "display_rows": [
@@ -12,6 +12,7 @@
     "module_count": 10
   },
   "electronics_included": false,
+  "motor_included": true,
   "scene_kind": "technical assembly; no render generated",
   "mechanism_source": "generated/cards-position-capture.json",
   "per_module": {
@@ -20,7 +21,10 @@
     "cards": 64,
     "stickers": 128,
     "definitive_pawls": 1,
-    "m3_screw_objects": 6
+    "motor_components": 4,
+    "m3_screws": 4,
+    "m3_screw_objects": 16,
+    "magnets": 6
   },
   "display_pair": {
     "lower": "sticker_37_front",
@@ -40,204 +44,471 @@
     ],
     "finish": "gloss black",
     "font": "Hardware/stickers/fonts/BlueHighwayD-International.otf",
-    "texture_size_px": [
-      512,
-      1024
-    ],
-    "split_v": 0.5,
     "all_128_faces_mapped": true,
-    "base_atlas": "generated/sticker-atlas.png"
+    "base_atlas": "generated/sticker-atlas.png",
+    "typography": "production atlas with independent X/Y fit"
   },
+  "fasteners": [
+    {
+      "name": "pawl",
+      "axis": "Y",
+      "nominal": "M3",
+      "head_diameter_mm": 6.0,
+      "head_depth_mm": 1.0,
+      "head_center_mm": [
+        0,
+        41.801812976,
+        72.313832998
+      ],
+      "slot_center_mm": [
+        0,
+        42.311812976,
+        72.313832998
+      ],
+      "shaft_diameter_mm": 3.0,
+      "shaft_depth_mm": 8.999998301,
+      "shaft_center_mm": [
+        0.0,
+        36.801813826,
+        72.313832998
+      ]
+    },
+    {
+      "name": "axle",
+      "axis": "X",
+      "nominal": "M3",
+      "head_diameter_mm": 6.0,
+      "head_depth_mm": 2.0,
+      "head_center_mm": [
+        32.005600139,
+        0,
+        0
+      ],
+      "slot_center_mm": [
+        33.015600139,
+        0,
+        0
+      ],
+      "shaft_diameter_mm": 3.0,
+      "shaft_depth_mm": 5.505600139,
+      "shaft_center_mm": [
+        28.252800069,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "motor_negative_y",
+      "axis": "X",
+      "nominal": "M3",
+      "head_diameter_mm": 6.2,
+      "head_depth_mm": 2.0,
+      "head_center_mm": [
+        -34.805784541,
+        -17.5,
+        -8.0
+      ],
+      "slot_center_mm": [
+        -35.815784541,
+        -17.5,
+        -8.0
+      ],
+      "shaft_diameter_mm": 3.0,
+      "shaft_depth_mm": 5.655784541,
+      "shaft_center_mm": [
+        -30.97789227,
+        -17.5,
+        -8.0
+      ]
+    },
+    {
+      "name": "motor_positive_y",
+      "axis": "X",
+      "nominal": "M3",
+      "head_diameter_mm": 6.2,
+      "head_depth_mm": 2.0,
+      "head_center_mm": [
+        -34.805784541,
+        17.5,
+        -8.0
+      ],
+      "slot_center_mm": [
+        -35.815784541,
+        17.5,
+        -8.0
+      ],
+      "shaft_diameter_mm": 3.0,
+      "shaft_depth_mm": 5.655784541,
+      "shaft_center_mm": [
+        -30.97789227,
+        17.5,
+        -8.0
+      ]
+    }
+  ],
+  "magnets": {
+    "diameter_mm": 3.0,
+    "thickness_mm": 1.0,
+    "pocket_diameter_mm": 3.4,
+    "placements": [
+      {
+        "name": "split_upper_left",
+        "center_mm": [
+          -35.005784541,
+          -14.224281371,
+          12.6
+        ]
+      },
+      {
+        "name": "split_lower_left",
+        "center_mm": [
+          -35.005784541,
+          -14.224281371,
+          11.4
+        ]
+      },
+      {
+        "name": "split_upper_right",
+        "center_mm": [
+          35.005600139,
+          -14.224281371,
+          12.6
+        ]
+      },
+      {
+        "name": "split_lower_right",
+        "center_mm": [
+          35.005600139,
+          -14.224281371,
+          11.4
+        ]
+      },
+      {
+        "name": "stack_top_alpha",
+        "center_mm": [
+          0,
+          -14.224281371,
+          75.813832998
+        ]
+      },
+      {
+        "name": "stack_bottom",
+        "center_mm": [
+          0,
+          -14.224281371,
+          -82.49999553
+        ]
+      }
+    ]
+  },
+  "motor_components": [
+    {
+      "name": "motor_body",
+      "file": "components/motor_body.stl"
+    },
+    {
+      "name": "motor_collar",
+      "file": "components/motor_collar.stl"
+    },
+    {
+      "name": "motor_backpack",
+      "file": "components/motor_backpack.stl"
+    },
+    {
+      "name": "motor_shaft",
+      "file": "components/motor_shaft.stl"
+    }
+  ],
   "modules": [
     {
       "row": 1,
       "column": 1,
       "character": "H",
-      "texture": "textures/H.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.5,
+            0.75,
+            0.5625,
+            0.875
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 8
+        },
+        "upper": {
+          "uv_box": [
+            0.5,
+            0.875,
+            0.5625,
+            1.0
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 8
+        }
+      }
     },
     {
       "row": 1,
       "column": 2,
       "character": "A",
-      "texture": "textures/A.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.0625,
+            0.75,
+            0.125,
+            0.875
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 1
+        },
+        "upper": {
+          "uv_box": [
+            0.0625,
+            0.875,
+            0.125,
+            1.0
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 1
+        }
+      }
     },
     {
       "row": 1,
       "column": 3,
       "character": "L",
-      "texture": "textures/L.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.75,
+            0.75,
+            0.8125,
+            0.875
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 12
+        },
+        "upper": {
+          "uv_box": [
+            0.75,
+            0.875,
+            0.8125,
+            1.0
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 12
+        }
+      }
     },
     {
       "row": 1,
       "column": 4,
       "character": "L",
-      "texture": "textures/L.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.75,
+            0.75,
+            0.8125,
+            0.875
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 12
+        },
+        "upper": {
+          "uv_box": [
+            0.75,
+            0.875,
+            0.8125,
+            1.0
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 12
+        }
+      }
     },
     {
       "row": 1,
       "column": 5,
       "character": "O",
-      "texture": "textures/O.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.9375,
+            0.75,
+            1.0,
+            0.875
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 15
+        },
+        "upper": {
+          "uv_box": [
+            0.9375,
+            0.875,
+            1.0,
+            1.0
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 15
+        }
+      }
     },
     {
       "row": 2,
       "column": 1,
       "character": "W",
-      "texture": "textures/W.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.4375,
+            0.5,
+            0.5,
+            0.625
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 23
+        },
+        "upper": {
+          "uv_box": [
+            0.4375,
+            0.625,
+            0.5,
+            0.75
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 23
+        }
+      }
     },
     {
       "row": 2,
       "column": 2,
       "character": "E",
-      "texture": "textures/E.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.3125,
+            0.75,
+            0.375,
+            0.875
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 5
+        },
+        "upper": {
+          "uv_box": [
+            0.3125,
+            0.875,
+            0.375,
+            1.0
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 5
+        }
+      }
     },
     {
       "row": 2,
       "column": 3,
       "character": "L",
-      "texture": "textures/L.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.75,
+            0.75,
+            0.8125,
+            0.875
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 12
+        },
+        "upper": {
+          "uv_box": [
+            0.75,
+            0.875,
+            0.8125,
+            1.0
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 12
+        }
+      }
     },
     {
       "row": 2,
       "column": 4,
       "character": "T",
-      "texture": "textures/T.png"
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.25,
+            0.5,
+            0.3125,
+            0.625
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 20
+        },
+        "upper": {
+          "uv_box": [
+            0.25,
+            0.625,
+            0.3125,
+            0.75
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 20
+        }
+      }
     },
     {
       "row": 2,
       "column": 5,
       "character": "!",
-      "texture": "textures/exclamation.png"
-    }
-  ],
-  "textures": [
-    {
-      "character": "H",
-      "file": "textures/H.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 776,
-      "glyph_bounds_px": [
-        0,
-        188,
-        430,
-        745
-      ],
-      "continuous_split_v": 0.5
-    },
-    {
-      "character": "A",
-      "file": "textures/A.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 808,
-      "glyph_bounds_px": [
-        0,
-        196,
-        429,
-        776
-      ],
-      "continuous_split_v": 0.5
-    },
-    {
-      "character": "L",
-      "file": "textures/L.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 900,
-      "glyph_bounds_px": [
-        0,
-        218,
-        400,
-        864
-      ],
-      "continuous_split_v": 0.5
-    },
-    {
-      "character": "O",
-      "file": "textures/O.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 700,
-      "glyph_bounds_px": [
-        0,
-        162,
-        429,
-        679
-      ],
-      "continuous_split_v": 0.5
-    },
-    {
-      "character": "W",
-      "file": "textures/W.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 536,
-      "glyph_bounds_px": [
-        0,
-        130,
-        430,
-        515
-      ],
-      "continuous_split_v": 0.5
-    },
-    {
-      "character": "E",
-      "file": "textures/E.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 900,
-      "glyph_bounds_px": [
-        0,
-        218,
-        410,
-        864
-      ],
-      "continuous_split_v": 0.5
-    },
-    {
-      "character": "T",
-      "file": "textures/T.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 876,
-      "glyph_bounds_px": [
-        0,
-        212,
-        429,
-        841
-      ],
-      "continuous_split_v": 0.5
-    },
-    {
-      "character": "!",
-      "file": "textures/exclamation.png",
-      "size_px": [
-        512,
-        1024
-      ],
-      "font_size_px": 900,
-      "glyph_bounds_px": [
-        0,
-        218,
-        208,
-        864
-      ],
-      "continuous_split_v": 0.5
+      "production_atlas_uv": {
+        "lower": {
+          "uv_box": [
+            0.1875,
+            0.0,
+            0.25,
+            0.125
+          ],
+          "rotation_degrees": 0,
+          "horizontal_flip": true,
+          "character_index": 51
+        },
+        "upper": {
+          "uv_box": [
+            0.1875,
+            0.125,
+            0.25,
+            0.25
+          ],
+          "rotation_degrees": 180,
+          "horizontal_flip": false,
+          "character_index": 51
+        }
+      }
     }
   ]
 }

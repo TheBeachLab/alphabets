@@ -130,9 +130,14 @@ dimensions and docking pitch. The top row reads `HALLO` and the lower row reads
 eleventh module on the space.
 
 Every module contains both enclosure halves, both drum discs and both drum
-supports, all 64 captured cards, all 128 sticker faces, the definitive pawl and
-the M3 pawl/axle screws. It deliberately has no motor, PCB, cables, backpack or
-other electronics. Sticker backgrounds use a low-roughness gloss-black
-material with yellow Blue Highway lettering on all 128 faces. At captured
-display position 37, the requested full glyph is mapped continuously across
-`sticker_38_back` above and `sticker_37_front` below.
+supports, all 64 captured cards, all 128 sticker faces, the definitive pawl,
+the complete motor reference, four M3 screws and six 3 × 1 mm magnets seated in
+their CAD pockets. PCBs and cables remain excluded. Sticker backgrounds use a
+low-roughness gloss-black material with yellow Blue Highway lettering from the
+production atlas, so every displayed glyph shares its scale and baseline. At
+captured display position 37, the requested full glyph is mapped continuously
+across `sticker_38_back` above and `sticker_37_front` below.
+
+The file also includes a front orthographic render camera and Blender's packed
+`studio.exr` HDRI. The build prepares these resources but does not render an
+image.

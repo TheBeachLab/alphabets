@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import bpy
-from mathutils import Matrix
+from mathutils import Matrix, Vector
 
 BLENDER_DIR = Path(__file__).resolve().parent
 V2_DIR = BLENDER_DIR.parents[1]
@@ -59,30 +59,6 @@ def material(
     )
     if metallic_input is not None:
         metallic_input.default_value = metallic
-    return result
-
-
-def texture_filename(character: str) -> str:
-    return "exclamation.png" if character == "!" else f"{character}.png"
-
-
-def character_material(character: str) -> bpy.types.Material:
-    result = bpy.data.materials.new(f"Sticker_GlossBlack_Yellow_{character}")
-    result.use_nodes = True
-    nodes = result.node_tree.nodes
-    links = result.node_tree.links
-    shader = nodes.get("Principled BSDF")
-    image_node = nodes.new("ShaderNodeTexImage")
-    image_node.image = bpy.data.images.load(
-        str(OUTPUT_DIR / "textures" / texture_filename(character)),
-        check_existing=True,
-    )
-    image_node.image.pack()
-    links.new(image_node.outputs["Color"], shader.inputs["Base Color"])
-    shader.inputs["Roughness"].default_value = 0.08
-    coat = shader.inputs.get("Coat Weight") or shader.inputs.get("Clearcoat")
-    if coat is not None:
-        coat.default_value = 0.45
     return result
 
 
@@ -165,14 +141,18 @@ def clone_mesh_object(
     return obj
 
 
-def remap_display_uv(mesh: bpy.types.Mesh, display_half: str) -> None:
+def remap_display_uv(mesh: bpy.types.Mesh, assignment: dict[str, Any]) -> None:
     uv_layer = mesh.uv_layers.active or mesh.uv_layers.new(name="DisplayUV")
-    if display_half == "lower":
-        coordinates = ((1, 0), (0, 0), (0, 0.5), (1, 0.5))
-    elif display_half == "upper":
-        coordinates = ((1, 1), (0, 1), (0, 0.5), (1, 0.5))
+    u0, v0, u1, v1 = assignment["uv_box"]
+    rotation = assignment["rotation_degrees"]
+    if rotation == 0:
+        coordinates = ((u0, v0), (u1, v0), (u1, v1), (u0, v1))
+    elif rotation == 180:
+        coordinates = ((u1, v1), (u0, v1), (u0, v0), (u1, v0))
     else:
-        raise ValueError(display_half)
+        raise ValueError(f"unsupported sticker rotation: {rotation}")
+    if assignment["horizontal_flip"]:
+        coordinates = tuple((u0 + u1 - u, v) for u, v in coordinates)
     if len(uv_layer.data) != 4:
         raise RuntimeError(f"unexpected sticker UV loop count: {len(uv_layer.data)}")
     for loop, uv in zip(mesh.loops, coordinates, strict=True):
@@ -238,6 +218,7 @@ def configure_scene() -> None:
     scene["display_rows"] = list(ROWS)
     scene["spoken_message"] = "HALLO WELT!"
     scene["electronics_included"] = False
+    scene["motor_included"] = True
     scene["source_capture"] = str(CAPTURE_PATH.relative_to(V2_DIR))
     scene["display_lower_sticker"] = DISPLAY_LOWER_STICKER
     scene["display_upper_sticker"] = DISPLAY_UPPER_STICKER
@@ -250,10 +231,59 @@ def configure_viewports() -> None:
             if area.type != "VIEW_3D":
                 continue
             area.spaces.active.shading.type = "MATERIAL"
-            area.spaces.active.shading.use_scene_world = False
+            area.spaces.active.shading.use_scene_world = True
             region = area.spaces.active.region_3d
             region.view_distance = 0.46
             region.view_location = (0, -0.012, -0.003)
+
+
+def configure_camera_and_hdri(
+    target: bpy.types.Collection,
+    limits: dict[str, float],
+) -> None:
+    resources = Path("/Applications/Blender.app/Contents/Resources")
+    candidates = sorted(resources.glob("*/datafiles/studiolights/world/studio.exr"))
+    if not candidates:
+        raise FileNotFoundError("Blender studio.exr HDRI")
+
+    world = bpy.data.worlds.get("Alphabets_Studio_HDRI") or bpy.data.worlds.new(
+        "Alphabets_Studio_HDRI"
+    )
+    world.use_nodes = True
+    nodes = world.node_tree.nodes
+    nodes.clear()
+    output = nodes.new("ShaderNodeOutputWorld")
+    background = nodes.new("ShaderNodeBackground")
+    environment = nodes.new("ShaderNodeTexEnvironment")
+    environment.name = "Packed_Blender_Studio_HDRI"
+    environment.image = bpy.data.images.load(str(candidates[-1]), check_existing=True)
+    environment.image.pack()
+    background.inputs["Strength"].default_value = 0.65
+    world.node_tree.links.new(environment.outputs["Color"], background.inputs["Color"])
+    world.node_tree.links.new(
+        background.outputs["Background"], output.inputs["Surface"]
+    )
+    bpy.context.scene.world = world
+
+    camera_data = bpy.data.cameras.new("Camera_HALLO_WELT_Front")
+    camera_data.type = "ORTHO"
+    camera_data.ortho_scale = 0.37
+    camera = bpy.data.objects.new("Camera_HALLO_WELT_Front", camera_data)
+    target.objects.link(camera)
+    center_y = (limits["back_y"] + limits["front_y"]) * MM / 2
+    camera.location = (0, 1.2, -0.003)
+    direction = Vector((0, center_y, -0.003)) - camera.location
+    camera.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+    camera["purpose"] = "front render camera; no render generated by build"
+    bpy.context.scene.camera = camera
+    scene = bpy.context.scene
+    scene.render.engine = "BLENDER_EEVEE"
+    scene.render.resolution_x = 1920
+    scene.render.resolution_y = 1080
+    scene.render.resolution_percentage = 100
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.film_transparent = False
+    scene["hdri"] = "Blender studio.exr (packed)"
 
 
 def build_screws(
@@ -261,27 +291,48 @@ def build_screws(
     prefix: str,
     root: bpy.types.Object,
     target: bpy.types.Collection,
-    meshes: dict[str, bpy.types.Mesh],
-    limits: dict[str, float],
+    meshes: dict[str, dict[str, bpy.types.Mesh]],
+    fasteners: list[dict[str, Any]],
 ) -> None:
-    pawl_z = (limits["inner_top_z"] + limits["outer_top_z"]) / 2
-    screw_specs = (
-        ("PawlShaft", "pawl_shaft", (0, limits["front_y"] - 3.5, pawl_z)),
-        ("PawlHead", "pawl_head", (0, limits["front_y"] + 1.5, pawl_z)),
-        ("PawlSlotH", "slot_h", (0, limits["front_y"] + 2.01, pawl_z)),
-        ("PawlSlotV", "slot_v", (0, limits["front_y"] + 2.01, pawl_z)),
-        ("AxleShaft", "axle_shaft", (limits["outer_x_max"] - 10.5, 0, 0)),
-        ("AxleHead", "axle_head", (limits["outer_x_max"] - 1.0, 0, 0)),
-    )
-    for label, mesh_name, position in screw_specs:
-        obj = clone_mesh_object(
-            name=f"ScrewM3_{label}_{prefix}",
-            mesh=meshes[mesh_name],
-            local_matrix=translation_mm(*position),
+    for fastener in fasteners:
+        label = str(fastener["name"])
+        for part, position_key in (
+            ("shaft", "shaft_center_mm"),
+            ("head", "head_center_mm"),
+            ("slot_a", "slot_center_mm"),
+            ("slot_b", "slot_center_mm"),
+        ):
+            obj = clone_mesh_object(
+                name=f"ScrewM3_{label}_{part}_{prefix}",
+                mesh=meshes[label][part],
+                local_matrix=translation_mm(*fastener[position_key]),
+                parent=root,
+                target=target,
+            )
+            obj["fastener"] = "M3"
+            obj["fastener_role"] = label
+            obj["cad_derived_position"] = True
+
+
+def build_magnets(
+    *,
+    prefix: str,
+    root: bpy.types.Object,
+    target: bpy.types.Collection,
+    mesh: bpy.types.Mesh,
+    placements: list[dict[str, Any]],
+) -> None:
+    for placement in placements:
+        magnet = clone_mesh_object(
+            name=f"Magnet_{placement['name']}_{prefix}",
+            mesh=mesh,
+            local_matrix=translation_mm(*placement["center_mm"]),
             parent=root,
             target=target,
         )
-        obj["fastener"] = "M3"
+        magnet["diameter_mm"] = 3.0
+        magnet["thickness_mm"] = 1.0
+        magnet["located_from_cad_pocket"] = True
 
 
 def main() -> int:
@@ -291,6 +342,7 @@ def main() -> int:
     bpy.ops.wm.open_mainfile(filepath=str(SOURCE_BLEND))
     capture = load_json(CAPTURE_PATH)
     enclosure_manifest = load_json(MECHANICAL_OUTPUT / "manifest.json")
+    hello_manifest = load_json(OUTPUT_DIR / "manifest.json")
     limits = enclosure_manifest["limits_mm"]
 
     card_mesh = bpy.data.objects["card_00"].data
@@ -302,7 +354,10 @@ def main() -> int:
         for face in ("front", "back")
     }
     sticker_properties = {
-        name: {key: bpy.data.objects[name][key] for key in bpy.data.objects[name]}
+        name: {
+            key: bpy.data.objects[name][key]
+            for key in tuple(bpy.data.objects[name].keys())
+        }
         for name in sticker_templates
     }
     source_atlas_material = bpy.data.materials["StickerAtlas_BlackWhite"]
@@ -326,6 +381,9 @@ def main() -> int:
         "stickers": collection("04_STICKERS"),
         "pawl": collection("05_PAWL_DEFINITIVE"),
         "screws": collection("06_M3_SCREWS"),
+        "motors": collection("07_MOTORS_NO_CABLES"),
+        "magnets": collection("08_MAGNETS"),
+        "camera": collection("09_CAMERA_AND_HDRI"),
     }
 
     materials = {
@@ -340,6 +398,18 @@ def main() -> int:
             "M3_Screw_Steel", (0.32, 0.35, 0.4, 1), metallic=0.9, roughness=0.18
         ),
         "slot": material("Screw_Slot_Dark", (0.005, 0.006, 0.008, 1), roughness=0.5),
+        "motor": material(
+            "Motor_Steel", (0.42, 0.44, 0.47, 1), metallic=0.72, roughness=0.24
+        ),
+        "backpack": material(
+            "Motor_Backpack_Blue", (0.025, 0.12, 0.5, 1), roughness=0.32
+        ),
+        "shaft": material(
+            "Motor_Shaft_Steel", (0.55, 0.58, 0.62, 1), metallic=0.86, roughness=0.18
+        ),
+        "magnet": material(
+            "Magnet_Nickel", (0.58, 0.61, 0.66, 1), metallic=0.95, roughness=0.14
+        ),
     }
     assign_material(card_mesh, materials["card"])
     for sticker_mesh in sticker_templates.values():
@@ -362,18 +432,58 @@ def main() -> int:
     for mesh in (enclosure_upper, enclosure_lower, pawl_mesh):
         assign_material(mesh, materials["enclosure"])
 
-    screw_meshes = {
-        "pawl_shaft": primitive_cylinder_mesh("M3PawlShaft", 1.5, 8.0, "Y"),
-        "pawl_head": primitive_cylinder_mesh("M3PawlHead", 3.0, 1.0, "Y"),
-        "slot_h": primitive_box_mesh("PawlHeadSlotH", (3.8, 0.12, 0.45)),
-        "slot_v": primitive_box_mesh("PawlHeadSlotV", (0.45, 0.12, 3.8)),
-        "axle_shaft": primitive_cylinder_mesh("M3AxleShaft", 1.5, 21.0, "X"),
-        "axle_head": primitive_cylinder_mesh("M3AxleHead", 3.0, 2.0, "X"),
-    }
-    for name, mesh in screw_meshes.items():
+    motor_meshes = {}
+    for component in hello_manifest["motor_components"]:
+        name = component["name"]
+        mesh = imported_stl_mesh(OUTPUT_DIR / component["file"], name)
         assign_material(
-            mesh, materials["slot"] if name.startswith("slot") else materials["steel"]
+            mesh,
+            materials["backpack"]
+            if name == "motor_backpack"
+            else materials["shaft"]
+            if name == "motor_shaft"
+            else materials["motor"],
         )
+        motor_meshes[name] = mesh
+
+    screw_meshes = {}
+    for fastener in hello_manifest["fasteners"]:
+        name = fastener["name"]
+        axis = fastener["axis"]
+        slot_dimensions = (
+            ((0.12, 3.8, 0.45), (0.12, 0.45, 3.8))
+            if axis == "X"
+            else ((3.8, 0.12, 0.45), (0.45, 0.12, 3.8))
+        )
+        screw_meshes[name] = {
+            "shaft": primitive_cylinder_mesh(
+                f"M3_{name}_shaft",
+                fastener["shaft_diameter_mm"] / 2,
+                fastener["shaft_depth_mm"],
+                axis,
+            ),
+            "head": primitive_cylinder_mesh(
+                f"M3_{name}_head",
+                fastener["head_diameter_mm"] / 2,
+                fastener["head_depth_mm"],
+                axis,
+            ),
+            "slot_a": primitive_box_mesh(f"M3_{name}_slot_a", slot_dimensions[0]),
+            "slot_b": primitive_box_mesh(f"M3_{name}_slot_b", slot_dimensions[1]),
+        }
+        for part, mesh in screw_meshes[name].items():
+            assign_material(
+                mesh,
+                materials["slot"] if part.startswith("slot") else materials["steel"],
+            )
+
+    magnet_mesh = primitive_cylinder_mesh(
+        "Magnet_3x1",
+        hello_manifest["magnets"]["diameter_mm"] / 2,
+        hello_manifest["magnets"]["thickness_mm"],
+        "Z",
+    )
+    assign_material(magnet_mesh, materials["magnet"])
 
     capture_matrices = {
         f"card_{int(item['card_number']):02d}": Matrix(item["matrix_world"])
@@ -381,14 +491,14 @@ def main() -> int:
     }
     pitch_x = enclosure_manifest["parameters"]["minimum_same_orientation_pitch"]
     pitch_z = limits["outer_top_z"] - limits["outer_bottom_z"]
-    character_materials = {
-        character: character_material(character)
-        for character in dict.fromkeys("".join(ROWS))
+    module_manifest = {
+        (item["row"], item["column"]): item for item in hello_manifest["modules"]
     }
 
     for row, text in enumerate(ROWS, start=1):
         center_z = pitch_z / 2 if row == 1 else -pitch_z / 2
         for column_index, character in enumerate(text, start=1):
+            module_data = module_manifest[(row, column_index)]
             prefix = (
                 f"R{row}C{column_index}_{'EXCL' if character == '!' else character}"
             )
@@ -403,6 +513,7 @@ def main() -> int:
             root["character"] = character
             root["complete_mechanism"] = True
             root["electronics_included"] = False
+            root["motor_included"] = True
 
             for label, mesh in (("Upper", enclosure_upper), ("Lower", enclosure_lower)):
                 obj = clone_mesh_object(
@@ -426,6 +537,18 @@ def main() -> int:
                 obj["capture_rotation_degrees"] = capture["controller"][
                     "rotation_x_degrees"
                 ]
+
+            for source_name, mesh in motor_meshes.items():
+                motor = clone_mesh_object(
+                    name=f"Motor_{source_name}_{prefix}",
+                    mesh=mesh,
+                    local_matrix=Matrix.Identity(4),
+                    parent=root,
+                    target=collections["motors"],
+                )
+                motor["cad_component"] = source_name
+                motor["electronics"] = False
+                motor["cables_included"] = False
 
             for number in range(64):
                 card_name = f"card_{number:02d}"
@@ -454,8 +577,11 @@ def main() -> int:
                         sticker_mesh.name = (
                             f"DisplayStickerMesh_{display_half}_{prefix}"
                         )
-                        assign_material(sticker_mesh, character_materials[character])
-                        remap_display_uv(sticker_mesh, display_half)
+                        assign_material(sticker_mesh, materials["sticker"])
+                        remap_display_uv(
+                            sticker_mesh,
+                            module_data["production_atlas_uv"][display_half],
+                        )
                     sticker = clone_mesh_object(
                         name=f"Sticker_{number:02d}_{face}_{prefix}",
                         mesh=sticker_mesh,
@@ -471,6 +597,7 @@ def main() -> int:
                         sticker["display_character"] = character
                         sticker["display_half"] = display_half
                         sticker["letter_color"] = "yellow"
+                        sticker["typography"] = "production atlas shared scale"
 
             pawl = clone_mesh_object(
                 name=f"PawlDefinitive_{prefix}",
@@ -486,22 +613,26 @@ def main() -> int:
                 root=root,
                 target=collections["screws"],
                 meshes=screw_meshes,
-                limits=limits,
+                fasteners=hello_manifest["fasteners"],
+            )
+            build_magnets(
+                prefix=prefix,
+                root=root,
+                target=collections["magnets"],
+                mesh=magnet_mesh,
+                placements=hello_manifest["magnets"]["placements"],
             )
 
-    forbidden_exact = {
-        "motor_body",
-        "motor_collar",
-        "motor_backpack",
-        "motor_shaft",
-        "electronics_card_envelope",
-    }
+    forbidden_tokens = ("electronics_card", "pcb", "cable")
     leaked = sorted(
-        obj.name for obj in bpy.context.scene.objects if obj.name in forbidden_exact
+        obj.name
+        for obj in bpy.context.scene.objects
+        if any(token in obj.name.lower() for token in forbidden_tokens)
     )
     if leaked:
         raise RuntimeError(f"electronics leaked into the scene: {leaked}")
 
+    configure_camera_and_hdri(collections["camera"], limits)
     configure_viewports()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.object.select_all(action="DESELECT")
