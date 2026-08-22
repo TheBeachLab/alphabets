@@ -72,7 +72,13 @@ def test_scene_numbering_starts_lower_then_upper_then_incoming() -> None:
         "property": "step_count",
         "degrees_per_step": -5.625,
         "direction": "anticlockwise from motor side at negative X",
-        "rotating_components": ["motor_side", "shaft_side", "motor_shaft"],
+        "rotating_components": [
+            "motor_side",
+            "shaft_side",
+            "support_front",
+            "support_back",
+            "motor_shaft",
+        ],
     }
     assert "enclosure" not in scene
     assert scene["manual_floor"] == {
@@ -80,6 +86,9 @@ def test_scene_numbering_starts_lower_then_upper_then_incoming() -> None:
         "size_mm": 250,
         "thickness_mm": 2,
         "initial_top_z_mm": -95,
+        "long_run_top_z_mm": -75,
+        "long_run_end_frame": 1_000_000,
+        "long_run_ready_frame": 360,
     }
     release_order = scene["simulation"]["release_order"]
     assert len(release_order) == len(set(release_order)) == 64

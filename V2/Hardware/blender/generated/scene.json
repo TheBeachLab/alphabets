@@ -27,6 +27,8 @@
     "rotating_components": [
       "motor_side",
       "shaft_side",
+      "support_front",
+      "support_back",
       "motor_shaft"
     ]
   },
@@ -34,7 +36,10 @@
     "geometry_version": 1,
     "size_mm": 250,
     "thickness_mm": 2,
-    "initial_top_z_mm": -95
+    "initial_top_z_mm": -95,
+    "long_run_top_z_mm": -75,
+    "long_run_end_frame": 1000000,
+    "long_run_ready_frame": 360
   },
   "pawl": {
     "name": "CardStopPawl_Adjustable",

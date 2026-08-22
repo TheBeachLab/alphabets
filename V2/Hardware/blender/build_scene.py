@@ -34,6 +34,7 @@ def parse_args() -> argparse.Namespace:
         default=GENERATED_DIR / "alphabets-v2-gravity.png",
     )
     parser.add_argument("--no-simulate", action="store_true")
+    parser.add_argument("--long-run", action="store_true")
     return parser.parse_args(arguments)
 
 
@@ -332,6 +333,9 @@ def build_floor(
     scene_data: dict[str, Any],
     helpers_collection: bpy.types.Collection,
     floor_material: bpy.types.Material,
+    pawl: bpy.types.Object,
+    *,
+    long_run: bool,
 ) -> bpy.types.Object:
     floor_data = scene_data["manual_floor"]
     thickness = floor_data["thickness_mm"] * MM
@@ -364,7 +368,10 @@ def build_floor(
         floor["position_source"] = "scene manifest initial position"
     floor.data.materials.append(floor_material)
     add_rigid_body(floor, "PASSIVE", "BOX")
-    floor.rigid_body.kinematic = True
+    floor.rigid_body.kinematic = not long_run
+    if long_run:
+        floor.rigid_body.use_margin = True
+        floor.rigid_body.collision_margin = 0.0005
     floor.rigid_body.friction = 0.48
     floor["purpose"] = (
         "Manually positioned compacting plane for discovering the enclosure volume"
@@ -373,6 +380,13 @@ def build_floor(
     floor["geometry_version"] = floor_data["geometry_version"]
     floor["interactive_mode"] = "move on Z while timeline playback is running"
     floor["initial_top_z_mm"] = floor_data["initial_top_z_mm"]
+    if long_run:
+        top_z = floor_data["long_run_top_z_mm"] * MM
+        final_y = pawl.location.y - size / 2
+        floor.location = (floor.location.x, final_y, top_z - thickness / 2)
+        floor["long_run"] = True
+        floor["final_front_edge_y_mm"] = round((final_y + size / 2) / MM, 6)
+        floor["final_top_z_mm"] = floor_data["long_run_top_z_mm"]
     return floor
 
 
@@ -385,6 +399,7 @@ def build_cards(
     helpers_collection: bpy.types.Collection,
     card_material: bpy.types.Material,
     sticker_material: bpy.types.Material,
+    long_run: bool,
 ) -> None:
     card_dimensions = scene_data["card"]
     outline = card_outline(card_dimensions)
@@ -412,15 +427,19 @@ def build_cards(
     )
     anchor.hide_render = True
     anchor.hide_set(True)
-    add_rigid_body(anchor, "PASSIVE", "BOX")
+    add_rigid_body(anchor, "ACTIVE", "BOX")
+    anchor.rigid_body.kinematic = True
+    anchor.rigid_body.mass = 10
 
     for pose in scene_data["card_poses"]:
         number = pose["card"]
+        is_southern = number == 0 or number >= 33
         name = f"card_{number:02d}"
         card = bpy.data.objects.new(name, source_mesh.copy())
         cards_collection.objects.link(card)
         card.data.materials.append(card_material)
-        tilt = math.radians(pose["tilt_degrees"])
+        tilt_degrees = 5 if long_run and is_southern else pose["tilt_degrees"]
+        tilt = math.radians(tilt_degrees)
         pivot = tuple(value * MM for value in pose["pivot_mm"])
         center_x = center_mm[0] * MM
         center_z = center_mm[1] * MM
@@ -516,23 +535,30 @@ def build_step_controller(
     controller[step_data["property"]] = 0
     controller.id_properties_ui(step_data["property"]).update(
         min=0,
-        soft_max=64,
+        soft_max=1_000_000,
         step=1,
-        description="Increment by one to advance one character",
+        description="Total completed positions across any number of revolutions",
     )
     controller["degrees_per_step"] = step_data["degrees_per_step"]
     controller["direction"] = step_data["direction"]
-    controller["step_duration_frames"] = 24
-    controller["settle_frames"] = 24
+    controller["step_duration_frames"] = 96
+    controller["settle_frames"] = 96
+    controller["steps_per_move"] = 1
     controller["step_busy"] = False
     controller["usage"] = (
-        "Use the Advance one character button in the Alphabets sidebar panel"
+        "Use Advance steps in the Alphabets sidebar after READY_TO_ROTATE"
     )
     controller.id_properties_ui("step_duration_frames").update(
         min=6,
         max=120,
         step=1,
-        description="Motor movement duration; 24 frames equals one second at 24 fps",
+        description="Motor movement duration; 96 frames equals four seconds at 24 fps",
+    )
+    controller.id_properties_ui("steps_per_move").update(
+        min=1,
+        max=256,
+        step=1,
+        description="Complete character positions to advance in this operation",
     )
 
     for name in step_data["rotating_components"]:
@@ -636,8 +662,14 @@ def main() -> int:
     sticker_mat = atlas_material(GENERATED_DIR / mapping_data["atlas"]["file"])
 
     import_structure(scene_data, structure_collection)
-    build_floor(scene_data, helpers_collection, floor_mat)
-    build_adjustable_pawl(scene_data, adjustable_collection, pawl_mat)
+    pawl = build_adjustable_pawl(scene_data, adjustable_collection, pawl_mat)
+    build_floor(
+        scene_data,
+        helpers_collection,
+        floor_mat,
+        pawl,
+        long_run=args.long_run,
+    )
     build_cards(
         scene_data,
         mapping_data,
@@ -647,12 +679,24 @@ def main() -> int:
         helpers_collection,
         card_mat,
         sticker_mat,
+        long_run=args.long_run,
     )
     step_controller = build_step_controller(
         scene_data, controller_collection, constraints_collection
     )
     setup_camera_and_lighting()
     configure_interactive_viewports()
+
+    if args.long_run:
+        ready_frame = scene_data["manual_floor"]["long_run_ready_frame"]
+        scene = bpy.context.scene
+        scene.frame_end = scene_data["manual_floor"]["long_run_end_frame"]
+        scene.playback_loop_mode = "STOP_END_FRAME"
+        scene.timeline_markers.new("READY_TO_ROTATE", frame=ready_frame)
+        scene["long_run_note"] = (
+            f"Play once to frame {ready_frame}, then use the Alphabets panel to "
+            "advance any number of drum steps without a timeline loop."
+        )
 
     scene = bpy.context.scene
     scene.frame_set(1)
@@ -673,8 +717,9 @@ def main() -> int:
     bpy.ops.render.render(write_still=True)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.object.select_all(action="DESELECT")
-    step_controller.select_set(True)
-    bpy.context.view_layer.objects.active = step_controller
+    selected_object = step_controller
+    selected_object.select_set(True)
+    bpy.context.view_layer.objects.active = selected_object
     bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(filepath=str(args.output.resolve()))
     return 0
