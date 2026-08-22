@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a static 5 x 2 HALLO/WELT! product scene in Blender."""
+"""Build ten complete captured Alphabets mechanisms as a 5 x 2 Blender wall."""
 
 from __future__ import annotations
 
@@ -11,13 +11,19 @@ from pathlib import Path
 from typing import Any
 
 import bpy
-from mathutils import Vector
+from mathutils import Matrix
 
 BLENDER_DIR = Path(__file__).resolve().parent
 V2_DIR = BLENDER_DIR.parents[1]
 OUTPUT_DIR = BLENDER_DIR / "generated/hello-wall"
+SOURCE_BLEND = BLENDER_DIR / "generated/alphabets-v2-card-positions.blend"
+CAPTURE_PATH = BLENDER_DIR / "generated/cards-position-capture.json"
 MECHANICAL_OUTPUT = V2_DIR / "Hardware/mechanical/generated/captured-enclosure"
 MM = 0.001
+ROWS = ("HALLO", "WELT!")
+DRUM_PARTS = ("motor_side", "shaft_side", "support_front", "support_back")
+DISPLAY_LOWER_STICKER = "sticker_37_front"
+DISPLAY_UPPER_STICKER = "sticker_38_back"
 
 
 def parse_args() -> argparse.Namespace:
@@ -28,11 +34,6 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=OUTPUT_DIR / "alphabets-hallo-welt-5x2.blend",
     )
-    parser.add_argument(
-        "--preview",
-        type=Path,
-        default=OUTPUT_DIR / "alphabets-hallo-welt-5x2.png",
-    )
     return parser.parse_args(arguments)
 
 
@@ -40,44 +41,14 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def clear_scene() -> None:
-    bpy.ops.object.select_all(action="SELECT")
-    bpy.ops.object.delete(use_global=False)
-    for datablocks in (
-        bpy.data.meshes,
-        bpy.data.curves,
-        bpy.data.materials,
-        bpy.data.images,
-        bpy.data.cameras,
-        bpy.data.lights,
-    ):
-        for datablock in list(datablocks):
-            datablocks.remove(datablock)
-    for child in list(bpy.context.scene.collection.children):
-        bpy.context.scene.collection.children.unlink(child)
-        bpy.data.collections.remove(child)
-
-
-def child_collection(name: str, parent: bpy.types.Collection) -> bpy.types.Collection:
-    result = bpy.data.collections.new(name)
-    parent.children.link(result)
-    return result
-
-
-def move_to_collection(obj: bpy.types.Object, target: bpy.types.Collection) -> None:
-    for source in list(obj.users_collection):
-        source.objects.unlink(obj)
-    target.objects.link(obj)
-
-
-def principled_material(
+def material(
     name: str,
     color: tuple[float, float, float, float],
     *,
     metallic: float = 0,
     roughness: float = 0.4,
 ) -> bpy.types.Material:
-    result = bpy.data.materials.new(name)
+    result = bpy.data.materials.get(name) or bpy.data.materials.new(name)
     result.diffuse_color = color
     result.use_nodes = True
     shader = result.node_tree.nodes.get("Principled BSDF")
@@ -91,342 +62,186 @@ def principled_material(
     return result
 
 
-def sticker_material(character: str, texture_path: Path) -> bpy.types.Material:
+def texture_filename(character: str) -> str:
+    return "exclamation.png" if character == "!" else f"{character}.png"
+
+
+def character_material(character: str) -> bpy.types.Material:
     result = bpy.data.materials.new(f"Sticker_GlossBlack_Yellow_{character}")
     result.use_nodes = True
     nodes = result.node_tree.nodes
     links = result.node_tree.links
     shader = nodes.get("Principled BSDF")
     image_node = nodes.new("ShaderNodeTexImage")
-    image_node.name = f"Texture_{character}"
-    image_node.image = bpy.data.images.load(str(texture_path), check_existing=True)
+    image_node.image = bpy.data.images.load(
+        str(OUTPUT_DIR / "textures" / texture_filename(character)),
+        check_existing=True,
+    )
     image_node.image.pack()
-    image_node.interpolation = "Linear"
     links.new(image_node.outputs["Color"], shader.inputs["Base Color"])
     shader.inputs["Roughness"].default_value = 0.08
     coat = shader.inputs.get("Coat Weight") or shader.inputs.get("Clearcoat")
     if coat is not None:
         coat.default_value = 0.45
-    emission_color = shader.inputs.get("Emission Color") or shader.inputs.get(
-        "Emission"
-    )
-    emission_strength = shader.inputs.get("Emission Strength")
-    if emission_color is not None:
-        links.new(image_node.outputs["Color"], emission_color)
-    if emission_strength is not None:
-        emission_strength.default_value = 0.0
     return result
 
 
-def import_stl_mesh(path: Path, name: str) -> bpy.types.Mesh:
+def yellow_atlas_material(image: bpy.types.Image) -> bpy.types.Material:
+    result = bpy.data.materials.new("StickerAtlas_GlossBlack_Yellow")
+    result.use_nodes = True
+    nodes = result.node_tree.nodes
+    links = result.node_tree.links
+    shader = nodes.get("Principled BSDF")
+    image_node = nodes.new("ShaderNodeTexImage")
+    image_node.name = "International64_BlackYellow_Atlas"
+    image_node.image = image
+    grayscale = nodes.new("ShaderNodeRGBToBW")
+    ramp = nodes.new("ShaderNodeValToRGB")
+    ramp.color_ramp.elements[0].position = 0.08
+    ramp.color_ramp.elements[0].color = (0.001, 0.001, 0.002, 1)
+    ramp.color_ramp.elements[1].position = 0.72
+    ramp.color_ramp.elements[1].color = (1.0, 0.62, 0.0, 1)
+    links.new(image_node.outputs["Color"], grayscale.inputs["Color"])
+    links.new(grayscale.outputs["Val"], ramp.inputs["Fac"])
+    links.new(ramp.outputs["Color"], shader.inputs["Base Color"])
+    shader.inputs["Roughness"].default_value = 0.08
+    coat = shader.inputs.get("Coat Weight") or shader.inputs.get("Clearcoat")
+    if coat is not None:
+        coat.default_value = 0.45
+    return result
+
+
+def assign_material(mesh: bpy.types.Mesh, value: bpy.types.Material) -> None:
+    mesh.materials.clear()
+    mesh.materials.append(value)
+
+
+def collection(name: str) -> bpy.types.Collection:
+    result = bpy.data.collections.new(name)
+    bpy.context.scene.collection.children.link(result)
+    return result
+
+
+def clear_loaded_scene() -> None:
+    for obj in list(bpy.data.objects):
+        bpy.data.objects.remove(obj, do_unlink=True)
+    for child in list(bpy.context.scene.collection.children):
+        bpy.context.scene.collection.children.unlink(child)
+    for existing in list(bpy.data.collections):
+        bpy.data.collections.remove(existing)
+
+
+def imported_stl_mesh(path: Path, name: str) -> bpy.types.Mesh:
     before = set(bpy.context.scene.objects)
     bpy.ops.wm.stl_import(filepath=str(path), global_scale=MM)
     created = list(set(bpy.context.scene.objects) - before)
     if len(created) != 1:
         raise RuntimeError(f"expected one object from {path}, got {len(created)}")
     obj = created[0]
+    obj.name = name
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    obj.select_set(False)
     mesh = obj.data
-    mesh.name = f"{name}_LinkedMesh"
+    mesh.name = f"{name}_CAD_Mesh"
     bpy.data.objects.remove(obj, do_unlink=True)
     return mesh
 
 
-def mesh_instance(
+def clone_mesh_object(
+    *,
     name: str,
     mesh: bpy.types.Mesh,
-    target: bpy.types.Collection,
+    local_matrix: Matrix,
     parent: bpy.types.Object,
+    target: bpy.types.Collection,
 ) -> bpy.types.Object:
     obj = bpy.data.objects.new(name, mesh)
     target.objects.link(obj)
     obj.parent = parent
+    obj.matrix_parent_inverse = Matrix.Identity(4)
+    obj.matrix_basis = local_matrix
     return obj
 
 
-def add_bevel(obj: bpy.types.Object, width_mm: float, segments: int = 3) -> None:
-    modifier = obj.modifiers.new("Manufactured edge bevel", "BEVEL")
-    modifier.width = width_mm * MM
-    modifier.segments = segments
+def remap_display_uv(mesh: bpy.types.Mesh, display_half: str) -> None:
+    uv_layer = mesh.uv_layers.active or mesh.uv_layers.new(name="DisplayUV")
+    if display_half == "lower":
+        coordinates = ((1, 0), (0, 0), (0, 0.5), (1, 0.5))
+    elif display_half == "upper":
+        coordinates = ((1, 1), (0, 1), (0, 0.5), (1, 0.5))
+    else:
+        raise ValueError(display_half)
+    if len(uv_layer.data) != 4:
+        raise RuntimeError(f"unexpected sticker UV loop count: {len(uv_layer.data)}")
+    for loop, uv in zip(mesh.loops, coordinates, strict=True):
+        uv_layer.data[loop.index].uv = uv
 
 
-def box_object(
-    name: str,
-    dimensions_mm: tuple[float, float, float],
-    location_mm: tuple[float, float, float],
-    target: bpy.types.Collection,
-    material: bpy.types.Material,
-    parent: bpy.types.Object | None = None,
-    bevel_mm: float = 0,
-) -> bpy.types.Object:
-    bpy.ops.mesh.primitive_cube_add(size=1)
-    obj = bpy.context.object
-    obj.name = name
-    obj.dimensions = tuple(value * MM for value in dimensions_mm)
-    obj.location = tuple(value * MM for value in location_mm)
-    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    move_to_collection(obj, target)
-    obj.data.materials.append(material)
-    if parent is not None:
-        obj.parent = parent
-    if bevel_mm:
-        add_bevel(obj, bevel_mm)
-    return obj
-
-
-def cylinder_object(
+def primitive_cylinder_mesh(
     name: str,
     radius_mm: float,
     depth_mm: float,
-    location_mm: tuple[float, float, float],
     axis: str,
-    target: bpy.types.Collection,
-    material: bpy.types.Material,
-    parent: bpy.types.Object,
-) -> bpy.types.Object:
-    rotation = {
+) -> bpy.types.Mesh:
+    rotations = {
         "X": (0, math.pi / 2, 0),
         "Y": (math.pi / 2, 0, 0),
         "Z": (0, 0, 0),
-    }[axis]
+    }
     bpy.ops.mesh.primitive_cylinder_add(
         vertices=48,
         radius=radius_mm * MM,
         depth=depth_mm * MM,
-        location=tuple(value * MM for value in location_mm),
-        rotation=rotation,
+        rotation=rotations[axis],
     )
     obj = bpy.context.object
     obj.name = name
-    move_to_collection(obj, target)
-    obj.data.materials.append(material)
-    obj.parent = parent
-    add_bevel(obj, min(0.3, depth_mm / 4), segments=3)
-    for polygon in obj.data.polygons:
-        polygon.use_smooth = True
-    return obj
-
-
-def sticker_mesh(
-    name: str, width_mm: float, height_mm: float, uv_v: tuple[float, float]
-) -> bpy.types.Mesh:
-    half_width = width_mm * MM / 2
-    half_height = height_mm * MM / 2
-    vertices = [
-        (-half_width, 0, -half_height),
-        (-half_width, 0, half_height),
-        (half_width, 0, half_height),
-        (half_width, 0, -half_height),
-    ]
-    mesh = bpy.data.meshes.new(name)
-    mesh.from_pydata(vertices, [], [(0, 1, 2, 3)])
-    mesh.update()
-    v0, v1 = uv_v
-    # A camera on the enclosure's +Y/front side sees Blender world X reversed.
-    # Flip U once so the artwork remains readable from the physical front.
-    coordinates = ((1, v0), (1, v1), (0, v1), (0, v0))
-    uv_layer = mesh.uv_layers.new(name="StickerUV")
-    for loop, uv in zip(mesh.loops, coordinates, strict=True):
-        uv_layer.data[loop.index].uv = uv
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    mesh = obj.data
+    mesh.name = f"{name}_Mesh"
+    bpy.data.objects.remove(obj, do_unlink=True)
     return mesh
 
 
-def point_at(obj: bpy.types.Object, target: tuple[float, float, float]) -> None:
-    direction = Vector(target) - obj.location
-    obj.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+def primitive_box_mesh(
+    name: str,
+    dimensions_mm: tuple[float, float, float],
+) -> bpy.types.Mesh:
+    bpy.ops.mesh.primitive_cube_add(size=1)
+    obj = bpy.context.object
+    obj.name = name
+    obj.dimensions = tuple(value * MM for value in dimensions_mm)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    mesh = obj.data
+    mesh.name = f"{name}_Mesh"
+    bpy.data.objects.remove(obj, do_unlink=True)
+    return mesh
 
 
-def build_module(
-    *,
-    row: int,
-    column: int,
-    character: str,
-    center_x_mm: float,
-    center_z_mm: float,
-    limits: dict[str, float],
-    upper_mesh: bpy.types.Mesh,
-    lower_mesh: bpy.types.Mesh,
-    pawl_mesh: bpy.types.Mesh,
-    materials: dict[str, bpy.types.Material],
-    collections: dict[str, bpy.types.Collection],
-    texture_path: Path,
-) -> bpy.types.Object:
-    prefix = f"R{row}C{column}_{character.replace('!', 'EXCL')}"
-    bpy.ops.object.empty_add(
-        type="PLAIN_AXES",
-        location=(center_x_mm * MM, 0, center_z_mm * MM),
-    )
-    root = bpy.context.object
-    root.name = f"Module_{prefix}"
-    move_to_collection(root, collections["roots"])
-    root["row"] = row
-    root["column"] = column
-    root["character"] = character
-    root["electronics_included"] = False
-
-    upper = mesh_instance(
-        f"EnclosureUpper_{prefix}", upper_mesh, collections["enclosures"], root
-    )
-    lower = mesh_instance(
-        f"EnclosureLower_{prefix}", lower_mesh, collections["enclosures"], root
-    )
-    pawl = mesh_instance(f"Pawl_{prefix}", pawl_mesh, collections["enclosures"], root)
-    for obj in (upper, lower, pawl):
-        obj["cad_geometry"] = True
-
-    card_y = limits["front_y"] - 0.5
-    for half, z in (("upper", 24.0), ("lower", -24.0)):
-        card = box_object(
-            f"Card_{prefix}_{half}",
-            (50.0, 0.7, 48.0),
-            (0, card_y, z),
-            collections["cards"],
-            materials["card"],
-            root,
-            bevel_mm=0.35,
-        )
-        card["display_half"] = half
-
-    sticker_mat = sticker_material(character, texture_path)
-    sticker_y = limits["front_y"] - 0.08
-    sticker_gap = 0.5
-    half_height = 45.5
-    for half, z, uv_v in (
-        ("upper", sticker_gap / 2 + half_height / 2, (0.5, 1.0)),
-        ("lower", -sticker_gap / 2 - half_height / 2, (0.0, 0.5)),
-    ):
-        mesh = sticker_mesh(f"StickerMesh_{prefix}_{half}", 45.0, half_height, uv_v)
-        sticker = bpy.data.objects.new(f"Sticker_{prefix}_{half}", mesh)
-        collections["stickers"].objects.link(sticker)
-        sticker.parent = root
-        sticker.location = (0, sticker_y * MM, z * MM)
-        sticker.data.materials.append(sticker_mat)
-        sticker["character"] = character
-        sticker["display_half"] = half
-        sticker["finish"] = "gloss black with yellow lettering"
-
-    pawl_axis_z = (limits["inner_top_z"] + limits["outer_top_z"]) / 2
-    pawl_outer_y = limits["front_y"] + 2.0
-    cylinder_object(
-        f"ScrewPawlShaft_M3_{prefix}",
-        1.5,
-        8.0,
-        (0, limits["front_y"] - 4.0, pawl_axis_z),
-        "Y",
-        collections["screws"],
-        materials["steel"],
-        root,
-    )
-    cylinder_object(
-        f"ScrewPawlHead_M3_{prefix}",
-        3.0,
-        1.8,
-        (0, pawl_outer_y - 0.9, pawl_axis_z),
-        "Y",
-        collections["screws"],
-        materials["steel"],
-        root,
-    )
-    for slot_name, dimensions in (
-        ("horizontal", (3.8, 0.12, 0.45)),
-        ("vertical", (0.45, 0.12, 3.8)),
-    ):
-        box_object(
-            f"ScrewPawlSlot_{slot_name}_{prefix}",
-            dimensions,
-            (0, pawl_outer_y + 0.02, pawl_axis_z),
-            collections["screws"],
-            materials["slot"],
-            root,
-        )
-
-    shaft_recess_x = limits["outer_x_max"] - 6.0
-    cylinder_object(
-        f"ScrewAxleShaft_M3_{prefix}",
-        1.5,
-        21.0,
-        (shaft_recess_x - 12.5, 0, 0),
-        "X",
-        collections["screws"],
-        materials["steel"],
-        root,
-    )
-    cylinder_object(
-        f"ScrewAxleHead_M3_{prefix}",
-        3.0,
-        2.0,
-        (shaft_recess_x - 1.0, 0, 0),
-        "X",
-        collections["screws"],
-        materials["steel"],
-        root,
-    )
-    return root
+def translation_mm(x: float, y: float, z: float) -> Matrix:
+    return Matrix.Translation((x * MM, y * MM, z * MM))
 
 
 def configure_scene() -> None:
     scene = bpy.context.scene
+    scene.name = "ALPHABETS_HALLO_WELT_TECHNICAL"
     scene.unit_settings.system = "METRIC"
     scene.unit_settings.scale_length = 1
     scene.unit_settings.length_unit = "MILLIMETERS"
-    try:
-        scene.render.engine = "BLENDER_EEVEE_NEXT"
-    except TypeError:
-        scene.render.engine = "BLENDER_EEVEE"
-    scene.render.resolution_x = 1600
-    scene.render.resolution_y = 1200
-    scene.render.resolution_percentage = 100
-    scene.render.image_settings.file_format = "PNG"
-    scene.render.film_transparent = False
-    scene.world.use_nodes = True
-    background = scene.world.node_tree.nodes.get("Background")
-    background.inputs["Color"].default_value = (0.004, 0.005, 0.008, 1)
-    background.inputs["Strength"].default_value = 0.03
-    scene.view_settings.exposure = -0.7
-    try:
-        scene.view_settings.look = "AgX - Medium High Contrast"
-    except TypeError:
-        pass
-    scene["title"] = "HALLO / WELT! - 5 x 2 Alphabets modules"
-    scene["display_rows"] = ["HALLO", "WELT!"]
+    scene.frame_start = 1
+    scene.frame_end = 1
+    scene["title"] = "HALLO / WELT! - ten complete Alphabets mechanisms"
+    scene["display_rows"] = list(ROWS)
     scene["spoken_message"] = "HALLO WELT!"
     scene["electronics_included"] = False
-    scene["fabrication_source"] = "CadQuery captured enclosure STL"
-
-
-def setup_studio(
-    collections: dict[str, bpy.types.Collection],
-    background_material: bpy.types.Material,
-) -> None:
-    box_object(
-        "StudioBackdrop",
-        (560, 5, 420),
-        (0, -82, 0),
-        collections["studio"],
-        background_material,
-    )
-
-    bpy.ops.object.camera_add(location=(0, 1.15, 0.01))
-    camera = bpy.context.object
-    camera.name = "Camera_HALLO_WELT_Front"
-    camera.data.type = "ORTHO"
-    camera.data.ortho_scale = 0.39
-    point_at(camera, (0, 0, 0))
-    move_to_collection(camera, collections["camera"])
-    bpy.context.scene.camera = camera
-
-    for name, location, energy, size in (
-        ("Key_Softbox", (-0.24, 0.32, 0.26), 42, 0.28),
-        ("Fill_Softbox", (0.28, 0.24, 0.08), 24, 0.24),
-        ("Top_Rim", (0.0, 0.05, 0.38), 32, 0.20),
-    ):
-        bpy.ops.object.light_add(type="AREA", location=location)
-        light = bpy.context.object
-        light.name = name
-        light.data.energy = energy
-        light.data.shape = "DISK"
-        light.data.size = size
-        point_at(light, (0, 0, 0))
-        move_to_collection(light, collections["lights"])
+    scene["source_capture"] = str(CAPTURE_PATH.relative_to(V2_DIR))
+    scene["display_lower_sticker"] = DISPLAY_LOWER_STICKER
+    scene["display_upper_sticker"] = DISPLAY_UPPER_STICKER
+    scene["render_generated"] = False
 
 
 def configure_viewports() -> None:
@@ -434,113 +249,264 @@ def configure_viewports() -> None:
         for area in screen.areas:
             if area.type != "VIEW_3D":
                 continue
-            shading = area.spaces.active.shading
-            shading.type = "MATERIAL"
-            shading.use_scene_world = True
+            area.spaces.active.shading.type = "MATERIAL"
+            area.spaces.active.shading.use_scene_world = False
+            region = area.spaces.active.region_3d
+            region.view_distance = 0.46
+            region.view_location = (0, -0.012, -0.003)
+
+
+def build_screws(
+    *,
+    prefix: str,
+    root: bpy.types.Object,
+    target: bpy.types.Collection,
+    meshes: dict[str, bpy.types.Mesh],
+    limits: dict[str, float],
+) -> None:
+    pawl_z = (limits["inner_top_z"] + limits["outer_top_z"]) / 2
+    screw_specs = (
+        ("PawlShaft", "pawl_shaft", (0, limits["front_y"] - 3.5, pawl_z)),
+        ("PawlHead", "pawl_head", (0, limits["front_y"] + 1.5, pawl_z)),
+        ("PawlSlotH", "slot_h", (0, limits["front_y"] + 2.01, pawl_z)),
+        ("PawlSlotV", "slot_v", (0, limits["front_y"] + 2.01, pawl_z)),
+        ("AxleShaft", "axle_shaft", (limits["outer_x_max"] - 10.5, 0, 0)),
+        ("AxleHead", "axle_head", (limits["outer_x_max"] - 1.0, 0, 0)),
+    )
+    for label, mesh_name, position in screw_specs:
+        obj = clone_mesh_object(
+            name=f"ScrewM3_{label}_{prefix}",
+            mesh=meshes[mesh_name],
+            local_matrix=translation_mm(*position),
+            parent=root,
+            target=target,
+        )
+        obj["fastener"] = "M3"
 
 
 def main() -> int:
     args = parse_args()
-    manifest = load_json(OUTPUT_DIR / "manifest.json")
+    if not SOURCE_BLEND.exists():
+        raise FileNotFoundError(SOURCE_BLEND)
+    bpy.ops.wm.open_mainfile(filepath=str(SOURCE_BLEND))
+    capture = load_json(CAPTURE_PATH)
     enclosure_manifest = load_json(MECHANICAL_OUTPUT / "manifest.json")
     limits = enclosure_manifest["limits_mm"]
-    clear_scene()
+
+    card_mesh = bpy.data.objects["card_00"].data
+    sticker_templates = {
+        f"sticker_{number:02d}_{face}": bpy.data.objects[
+            f"sticker_{number:02d}_{face}"
+        ].data
+        for number in range(64)
+        for face in ("front", "back")
+    }
+    sticker_properties = {
+        name: {key: bpy.data.objects[name][key] for key in bpy.data.objects[name]}
+        for name in sticker_templates
+    }
+    source_atlas_material = bpy.data.materials["StickerAtlas_BlackWhite"]
+    source_atlas_image = next(
+        node.image
+        for node in source_atlas_material.node_tree.nodes
+        if node.type == "TEX_IMAGE" and node.image is not None
+    )
+    drum_templates = {
+        name: (bpy.data.objects[name].data, bpy.data.objects[name].matrix_world.copy())
+        for name in DRUM_PARTS
+    }
+    clear_loaded_scene()
     configure_scene()
 
-    root_collection = bpy.data.collections.new("ALPHABETS_HALLO_WELT_5x2")
-    bpy.context.scene.collection.children.link(root_collection)
+    root_collection = collection("00_MODULE_ROOTS")
     collections = {
-        "roots": child_collection("00_MODULE_ROOTS", root_collection),
-        "enclosures": child_collection("01_ENCLOSURES_CAD", root_collection),
-        "cards": child_collection("02_CARDS", root_collection),
-        "stickers": child_collection("03_STICKERS_GLOSS_BLACK_YELLOW", root_collection),
-        "screws": child_collection("04_M3_SCREWS", root_collection),
-        "studio": child_collection("05_STUDIO", root_collection),
-        "lights": child_collection("06_LIGHTS", root_collection),
-        "camera": child_collection("07_CAMERA", root_collection),
+        "enclosure": collection("01_ENCLOSURE_CAD"),
+        "drum": collection("02_DRUM_CAD"),
+        "cards": collection("03_CARDS_CAPTURED"),
+        "stickers": collection("04_STICKERS"),
+        "pawl": collection("05_PAWL_DEFINITIVE"),
+        "screws": collection("06_M3_SCREWS"),
     }
 
     materials = {
-        "enclosure": principled_material(
-            "Enclosure_Graphite", (0.018, 0.022, 0.03, 1), roughness=0.24
+        "enclosure": material(
+            "Enclosure_Opaque_Graphite", (0.025, 0.03, 0.04, 1), roughness=0.3
         ),
-        "card": principled_material(
-            "Card_Black_0_7mm", (0.003, 0.004, 0.006, 1), roughness=0.58
+        "drum": material("Drum_Dark_Acrylic", (0.09, 0.1, 0.12, 1), roughness=0.4),
+        "support": material("Drum_Support", (0.16, 0.17, 0.19, 1), roughness=0.42),
+        "card": material("Card_Black_0_5mm", (0.004, 0.005, 0.007, 1), roughness=0.62),
+        "sticker": yellow_atlas_material(source_atlas_image),
+        "steel": material(
+            "M3_Screw_Steel", (0.32, 0.35, 0.4, 1), metallic=0.9, roughness=0.18
         ),
-        "steel": principled_material(
-            "M3_Screw_Steel", (0.32, 0.36, 0.42, 1), metallic=0.92, roughness=0.18
-        ),
-        "slot": principled_material(
-            "Screw_Slot_Dark", (0.008, 0.009, 0.012, 1), roughness=0.5
-        ),
-        "background": principled_material(
-            "Studio_Black", (0.002, 0.003, 0.006, 1), roughness=0.32
-        ),
+        "slot": material("Screw_Slot_Dark", (0.005, 0.006, 0.008, 1), roughness=0.5),
     }
-    upper_mesh = import_stl_mesh(
-        MECHANICAL_OUTPUT / "print/captured-enclosure-upper.stl",
-        "EnclosureUpper",
+    assign_material(card_mesh, materials["card"])
+    for sticker_mesh in sticker_templates.values():
+        assign_material(sticker_mesh, materials["sticker"])
+    for name, (mesh, _) in drum_templates.items():
+        assign_material(
+            mesh, materials["drum"] if "side" in name else materials["support"]
+        )
+
+    enclosure_upper = imported_stl_mesh(
+        MECHANICAL_OUTPUT / "print/captured-enclosure-upper.stl", "EnclosureUpper"
     )
-    lower_mesh = import_stl_mesh(
-        MECHANICAL_OUTPUT / "print/captured-enclosure-lower.stl",
-        "EnclosureLower",
+    enclosure_lower = imported_stl_mesh(
+        MECHANICAL_OUTPUT / "print/captured-enclosure-lower.stl", "EnclosureLower"
     )
-    pawl_mesh = import_stl_mesh(
+    pawl_mesh = imported_stl_mesh(
         MECHANICAL_OUTPUT / "print/captured-enclosure-pawl-definitive.stl",
         "PawlDefinitive",
     )
-    for mesh in (upper_mesh, lower_mesh, pawl_mesh):
-        mesh.materials.append(materials["enclosure"])
+    for mesh in (enclosure_upper, enclosure_lower, pawl_mesh):
+        assign_material(mesh, materials["enclosure"])
 
-    column_pitch = enclosure_manifest["parameters"]["minimum_same_orientation_pitch"]
-    row_pitch = limits["outer_top_z"] - limits["outer_bottom_z"]
-    rows = manifest["display_rows"]
-    roots = []
-    for row_index, row in enumerate(rows, start=1):
-        center_z = row_pitch / 2 if row_index == 1 else -row_pitch / 2
-        for column_index, character in enumerate(row, start=1):
-            # Front viewing from +Y reverses Blender world X on screen.
-            center_x = (3 - column_index) * column_pitch
-            roots.append(
-                build_module(
-                    row=row_index,
-                    column=column_index,
-                    character=character,
-                    center_x_mm=center_x,
-                    center_z_mm=center_z,
-                    limits=limits,
-                    upper_mesh=upper_mesh,
-                    lower_mesh=lower_mesh,
-                    pawl_mesh=pawl_mesh,
-                    materials=materials,
-                    collections=collections,
-                    texture_path=OUTPUT_DIR
-                    / manifest["modules"][(row_index - 1) * 5 + column_index - 1][
-                        "texture"
-                    ],
+    screw_meshes = {
+        "pawl_shaft": primitive_cylinder_mesh("M3PawlShaft", 1.5, 8.0, "Y"),
+        "pawl_head": primitive_cylinder_mesh("M3PawlHead", 3.0, 1.0, "Y"),
+        "slot_h": primitive_box_mesh("PawlHeadSlotH", (3.8, 0.12, 0.45)),
+        "slot_v": primitive_box_mesh("PawlHeadSlotV", (0.45, 0.12, 3.8)),
+        "axle_shaft": primitive_cylinder_mesh("M3AxleShaft", 1.5, 21.0, "X"),
+        "axle_head": primitive_cylinder_mesh("M3AxleHead", 3.0, 2.0, "X"),
+    }
+    for name, mesh in screw_meshes.items():
+        assign_material(
+            mesh, materials["slot"] if name.startswith("slot") else materials["steel"]
+        )
+
+    capture_matrices = {
+        f"card_{int(item['card_number']):02d}": Matrix(item["matrix_world"])
+        for item in capture["cards"]
+    }
+    pitch_x = enclosure_manifest["parameters"]["minimum_same_orientation_pitch"]
+    pitch_z = limits["outer_top_z"] - limits["outer_bottom_z"]
+    character_materials = {
+        character: character_material(character)
+        for character in dict.fromkeys("".join(ROWS))
+    }
+
+    for row, text in enumerate(ROWS, start=1):
+        center_z = pitch_z / 2 if row == 1 else -pitch_z / 2
+        for column_index, character in enumerate(text, start=1):
+            prefix = (
+                f"R{row}C{column_index}_{'EXCL' if character == '!' else character}"
+            )
+            center_x = (3 - column_index) * pitch_x
+            root = bpy.data.objects.new(f"Module_{prefix}", None)
+            root.empty_display_type = "PLAIN_AXES"
+            root.empty_display_size = 0.012
+            root.location = (center_x * MM, 0, center_z * MM)
+            root_collection.objects.link(root)
+            root["row"] = row
+            root["column"] = column_index
+            root["character"] = character
+            root["complete_mechanism"] = True
+            root["electronics_included"] = False
+
+            for label, mesh in (("Upper", enclosure_upper), ("Lower", enclosure_lower)):
+                obj = clone_mesh_object(
+                    name=f"Enclosure{label}_{prefix}",
+                    mesh=mesh,
+                    local_matrix=Matrix.Identity(4),
+                    parent=root,
+                    target=collections["enclosure"],
                 )
+                obj["cad_geometry"] = True
+
+            for source_name, (mesh, world_matrix) in drum_templates.items():
+                obj = clone_mesh_object(
+                    name=f"Drum_{source_name}_{prefix}",
+                    mesh=mesh,
+                    local_matrix=world_matrix,
+                    parent=root,
+                    target=collections["drum"],
+                )
+                obj["cad_component"] = source_name
+                obj["capture_rotation_degrees"] = capture["controller"][
+                    "rotation_x_degrees"
+                ]
+
+            for number in range(64):
+                card_name = f"card_{number:02d}"
+                matrix = capture_matrices[card_name]
+                card = clone_mesh_object(
+                    name=f"Card_{number:02d}_{prefix}",
+                    mesh=card_mesh,
+                    local_matrix=matrix,
+                    parent=root,
+                    target=collections["cards"],
+                )
+                card["card_number"] = number
+                card["captured_pose"] = True
+
+                for face in ("front", "back"):
+                    source_sticker = f"sticker_{number:02d}_{face}"
+                    base_mesh = sticker_templates[source_sticker]
+                    display_half = None
+                    if source_sticker == DISPLAY_LOWER_STICKER:
+                        display_half = "lower"
+                    elif source_sticker == DISPLAY_UPPER_STICKER:
+                        display_half = "upper"
+                    sticker_mesh = base_mesh
+                    if display_half is not None:
+                        sticker_mesh = base_mesh.copy()
+                        sticker_mesh.name = (
+                            f"DisplayStickerMesh_{display_half}_{prefix}"
+                        )
+                        assign_material(sticker_mesh, character_materials[character])
+                        remap_display_uv(sticker_mesh, display_half)
+                    sticker = clone_mesh_object(
+                        name=f"Sticker_{number:02d}_{face}_{prefix}",
+                        mesh=sticker_mesh,
+                        local_matrix=matrix,
+                        parent=root,
+                        target=collections["stickers"],
+                    )
+                    sticker["source_sticker"] = source_sticker
+                    sticker["finish"] = "gloss black"
+                    for key, value in sticker_properties[source_sticker].items():
+                        sticker[f"atlas_{key}"] = value
+                    if display_half is not None:
+                        sticker["display_character"] = character
+                        sticker["display_half"] = display_half
+                        sticker["letter_color"] = "yellow"
+
+            pawl = clone_mesh_object(
+                name=f"PawlDefinitive_{prefix}",
+                mesh=pawl_mesh,
+                local_matrix=Matrix.Identity(4),
+                parent=root,
+                target=collections["pawl"],
+            )
+            pawl["replaceable"] = True
+            pawl["fastener"] = "M3 self-tapping"
+            build_screws(
+                prefix=prefix,
+                root=root,
+                target=collections["screws"],
+                meshes=screw_meshes,
+                limits=limits,
             )
 
-    forbidden = ("motor", "electronic", "pcb", "backpack", "cable")
-    forbidden_objects = [
-        obj.name
-        for obj in bpy.context.scene.objects
-        if any(x in obj.name.lower() for x in forbidden)
-    ]
-    if forbidden_objects:
-        raise RuntimeError(f"electronics leaked into scene: {forbidden_objects}")
-    if len(roots) != 10:
-        raise RuntimeError(f"expected ten modules, got {len(roots)}")
+    forbidden_exact = {
+        "motor_body",
+        "motor_collar",
+        "motor_backpack",
+        "motor_shaft",
+        "electronics_card_envelope",
+    }
+    leaked = sorted(
+        obj.name for obj in bpy.context.scene.objects if obj.name in forbidden_exact
+    )
+    if leaked:
+        raise RuntimeError(f"electronics leaked into the scene: {leaked}")
 
-    setup_studio(collections, materials["background"])
     configure_viewports()
-    args.preview.parent.mkdir(parents=True, exist_ok=True)
-    bpy.context.scene.render.filepath = str(args.preview.resolve())
-    bpy.ops.render.render(write_still=True)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.object.select_all(action="DESELECT")
-    roots[0].select_set(True)
-    bpy.context.view_layer.objects.active = roots[0]
+    bpy.context.view_layer.objects.active = bpy.data.objects["Module_R1C1_H"]
+    bpy.data.objects["Module_R1C1_H"].select_set(True)
     bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(filepath=str(args.output.resolve()))
     return 0

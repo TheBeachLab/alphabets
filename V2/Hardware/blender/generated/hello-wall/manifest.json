@@ -12,6 +12,21 @@
     "module_count": 10
   },
   "electronics_included": false,
+  "scene_kind": "technical assembly; no render generated",
+  "mechanism_source": "generated/cards-position-capture.json",
+  "per_module": {
+    "enclosure_halves": 2,
+    "drum_components": 4,
+    "cards": 64,
+    "stickers": 128,
+    "definitive_pawls": 1,
+    "m3_screw_objects": 6
+  },
+  "display_pair": {
+    "lower": "sticker_37_front",
+    "upper": "sticker_38_back",
+    "reason": "captured controller display position 37"
+  },
   "stickers": {
     "background_rgb": [
       2,
@@ -29,7 +44,9 @@
       512,
       1024
     ],
-    "split_v": 0.5
+    "split_v": 0.5,
+    "all_128_faces_mapped": true,
+    "base_atlas": "generated/sticker-atlas.png"
   },
   "modules": [
     {

@@ -75,6 +75,21 @@ def build_manifest() -> dict[str, object]:
         "display_rows": list(ROWS),
         "layout": {"rows": 2, "columns": 5, "module_count": 10},
         "electronics_included": False,
+        "scene_kind": "technical assembly; no render generated",
+        "mechanism_source": "generated/cards-position-capture.json",
+        "per_module": {
+            "enclosure_halves": 2,
+            "drum_components": 4,
+            "cards": 64,
+            "stickers": 128,
+            "definitive_pawls": 1,
+            "m3_screw_objects": 6,
+        },
+        "display_pair": {
+            "lower": "sticker_37_front",
+            "upper": "sticker_38_back",
+            "reason": "captured controller display position 37",
+        },
         "stickers": {
             "background_rgb": list(BACKGROUND_RGB),
             "letter_rgb": list(LETTER_RGB),
@@ -82,6 +97,8 @@ def build_manifest() -> dict[str, object]:
             "font": str(FONT_PATH.relative_to(V2_DIR)),
             "texture_size_px": list(TEXTURE_SIZE),
             "split_v": 0.5,
+            "all_128_faces_mapped": True,
+            "base_atlas": "generated/sticker-atlas.png",
         },
         "modules": modules,
     }

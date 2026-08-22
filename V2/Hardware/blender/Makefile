@@ -23,7 +23,7 @@ hello-wall-assets:
 	$(PYTHON) generate_hello_wall_assets.py
 
 hello-wall: hello-wall-assets
-	$(BLENDER) --background --python build_hello_wall.py -- --output generated/hello-wall/alphabets-hallo-welt-5x2.blend --preview generated/hello-wall/alphabets-hallo-welt-5x2.png
+	$(BLENDER) --background --python build_hello_wall.py -- --output generated/hello-wall/alphabets-hallo-welt-5x2.blend
 	$(BLENDER) generated/hello-wall/alphabets-hallo-welt-5x2.blend --background --python validate_hello_wall.py
 
 check:
