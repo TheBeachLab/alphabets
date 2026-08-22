@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 # Blender gravity scene
 
 This directory turns the definitive CadQuery geometry into a Blender rigid-body
@@ -100,6 +102,11 @@ The card substrate remains black. Only the sticker background uses a bright
 yellow review material, with the sticker glyph rendered dark, so the stickers
 remain easy to distinguish. This is a Blender inspection aid, not a
 fabrication-material change.
+
+Each generated `.blend` stores its MIT licence and The Beach Lab attribution in
+the scene's custom properties and embeds the complete licence text in a text
+block named `LICENSE`. Those records remain inside the document when the blend
+file is shared on its own.
 
 Cards use stronger linear and angular damping in the rigid-body review scene so
 they settle promptly instead of oscillating unrealistically around the hinge.

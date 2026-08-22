@@ -1,3 +1,4 @@
+// SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 // SPDX-License-Identifier: MIT
 // FLIP-FLAP
 // Arduino code for Maker Faire Rome
@@ -162,4 +163,3 @@ void loop() {
 
 
 }
-

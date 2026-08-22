@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 Please find attached an old version of fab modules with a kokopelli version that you can read/write .cad files straight away with no conversion required.
 
 USAGE

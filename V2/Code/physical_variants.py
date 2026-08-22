@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 """Validated physical profiles for the two incompatible V2 hardware sets."""
 

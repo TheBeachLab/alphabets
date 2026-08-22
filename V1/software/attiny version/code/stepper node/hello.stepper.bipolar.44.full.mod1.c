@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2010, 2012 Massachusetts Institute of Technology
+// SPDX-License-Identifier: LicenseRef-MIT-CBA-Experimental-Personal
 //
 //
 // hello.stepper.bipolar.44.full.mod1.c

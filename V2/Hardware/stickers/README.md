@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 # V2 sticker generator
 
 `generate_stickers.py` builds a complete vector sticker sheet from the same

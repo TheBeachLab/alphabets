@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2017 Miles McCoo
+# SPDX-FileCopyrightText: 2018 Julian Loiacono
+# SPDX-FileCopyrightText: 2019 Antoine Pintout
+# SPDX-FileCopyrightText: 2021-2024 mitxela
+# SPDX-License-Identifier: Apache-2.0
 import pcbnew
 import math
 from math import pi

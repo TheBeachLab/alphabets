@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 import json
 import sys
@@ -36,11 +37,17 @@ class BlueHighwayInternationalTests(unittest.TestCase):
             },
             {
                 "Blue Highway D.otf",
+                "Blue Highway D.otf.license",
                 "BlueHighwayD-International.json",
+                "BlueHighwayD-International.json.license",
                 "BlueHighwayD-International.otf",
+                "BlueHighwayD-International.otf.license",
                 "LICENSE-CC0.txt",
+                "LICENSE-CC0.txt.license",
                 "LICENSE-OVERPASS-OFL.txt",
+                "LICENSE-OVERPASS-OFL.txt.license",
                 "OverpassMono-Medium.otf",
+                "OverpassMono-Medium.otf.license",
                 "README.md",
                 "build_blue_highway_international.py",
             },

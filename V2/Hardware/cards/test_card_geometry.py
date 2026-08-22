@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 import json
 import math
@@ -120,6 +121,18 @@ class CardGeometryTests(unittest.TestCase):
         self.assertIn('alias="finished_thickness"', document)
         self.assertIn('name="StickerColor"', document)
         self.assertIn('value="#000000"', document)
+        self.assertIn('name="CreatedBy"', document)
+        self.assertIn('name="Company"', document)
+        self.assertGreaterEqual(document.count('value="The Beach Lab"'), 2)
+        self.assertIn('name="License"', document)
+        self.assertIn('value="MIT"', document)
+        self.assertIn('name="LicenseURL"', document)
+        self.assertIn(
+            'value="https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"',
+            document,
+        )
+        self.assertIn("SPDX-FileCopyrightText: 2014-2026 The Beach Lab", document)
+        self.assertIn("SPDX-License-" "Identifier: MIT", document)
         self.assertIn(
             'expression="Parameters.total_height - Parameters.sticker_face_height"',
             document,

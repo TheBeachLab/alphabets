@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 # V2 sticker typeface
 
 The production typeface is `BlueHighwayD-International.otf`, the default used

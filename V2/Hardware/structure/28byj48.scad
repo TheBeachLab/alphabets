@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2015-2016 Scott Bezek and the splitflap contributors
+// SPDX-License-Identifier: Apache-2.0
 /*
    Copyright 2015-2016 Scott Bezek and the splitflap contributors
 
@@ -118,4 +120,3 @@ module Stepper28BYJ48() {
 }
 
 Stepper28BYJ48();
-

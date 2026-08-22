@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 """Create the adaptive-radius, tapered fabrication PCB from routed copper."""
 

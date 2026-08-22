@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 # V2 Definitivo card and drum width
 
 This directory is the **V2 Definitivo** 50 mm card route. The incompatible
@@ -29,6 +31,11 @@ DXF and STEP together with the matching drum and validates their shared
 dimensions automatically.
 
 ## Preserved FreeCAD files
+
+The FreeCAD document properties record The Beach Lab as creator and company,
+identify the licence as MIT, link to the repository licence, and repeat the SPDX
+copyright and licence identifiers in the document comment. This metadata stays
+inside an `.fcstd` or `.FCBak` file when it is shared separately.
 
 - `card-50x48.fcstd`: editable FreeCAD model and dimensional parameter sheet;
 - `card-50x48-cut.svg`: exact vector cutter outline in millimetres;

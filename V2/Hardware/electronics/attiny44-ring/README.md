@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 # Alphabets V2 ATtiny44 SPI-ring module
 
 This directory contains the editable KiCad 10 design for one Alphabets V2

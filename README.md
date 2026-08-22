@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 # Alphabets
 
 ![Alphabets split-flap strip in a fashion storefront at blue hour](hero-fashion-window.jpg)
@@ -39,9 +41,10 @@ The parametric mechanical source and fabrication exports are in
 Except where a file or directory states otherwise, Alphabets' original source
 code, firmware, electronics designs, mechanical designs, documentation, and
 generated project artifacts are licensed under the [MIT License](LICENSE).
-Copyright (c) 2014 [The Beach Lab](https://beachlab.org).
+Copyright (c) 2014-2026 [The Beach Lab](https://beachlab.org).
 
-First-party source files carry an SPDX license identifier where appropriate.
-Binary and structured design formats inherit this repository-level declaration;
-legacy and bundled third-party sources retain their existing notices and
-licenses.
+Every commentable file carries a copyright and SPDX license header. Files that
+cannot safely contain comments use an adjacent `.license` file. Blender and
+FreeCAD documents additionally embed the same copyright, license identifier,
+and license URL in their native metadata. Legacy and bundled third-party
+sources retain their actual notices and licenses.

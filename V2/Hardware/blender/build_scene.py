@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 """Build the Alphabets V2 rigid-body scene inside Blender."""
 
@@ -13,6 +14,8 @@ from typing import Any
 
 import bpy
 from mathutils import Vector
+
+from license_metadata import apply_blend_license_metadata
 
 BLENDER_DIR = Path(__file__).resolve().parent
 GENERATED_DIR = BLENDER_DIR / "generated"
@@ -690,6 +693,7 @@ def main() -> int:
     bpy.ops.object.select_all(action="DESELECT")
     step_controller.select_set(True)
     bpy.context.view_layer.objects.active = step_controller
+    apply_blend_license_metadata(scene)
     bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(filepath=str(args.output.resolve()))
     return 0

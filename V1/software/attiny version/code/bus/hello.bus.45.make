@@ -1,4 +1,5 @@
-# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2010 Massachusetts Institute of Technology
+# SPDX-License-Identifier: LicenseRef-MIT-CBA-Experimental-Personal
 PROJECT=hello.bus.45
 SOURCES=$(PROJECT).c
 MMCU=attiny45

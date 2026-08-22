@@ -1,3 +1,4 @@
+// SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 // SPDX-License-Identifier: MIT
 #ifndef ALPHABETS_V2_PROTOCOL_CORE_H
 #define ALPHABETS_V2_PROTOCOL_CORE_H

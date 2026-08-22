@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+# SPDX-License-Identifier: MIT
 # Preserve formatting emitted by the manufacturing and preview exporters.
 *.step -whitespace
 *.svg -whitespace

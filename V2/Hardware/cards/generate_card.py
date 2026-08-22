@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 """Generate a variant-locked V2 split-flap card and cutter files.
 
@@ -134,10 +135,13 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
     stem = f"V2Card{number(args.body_width)}x{number(args.total_height)}"
     doc = App.newDocument(stem)
     doc.Label = f"{args.variant_name} card {number(args.body_width)} x {number(args.total_height)} mm"
-    doc.CreatedBy = "Beach Lab"
+    doc.CreatedBy = "The Beach Lab"
+    doc.Company = "The Beach Lab"
     doc.License = "MIT"
-    doc.LicenseURL = "https://opensource.org/license/mit"
+    doc.LicenseURL = "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
     doc.Comment = (
+        "SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>. "
+        "SPDX-License-" "Identifier: MIT. "
         f"Matched to the {number(args.body_width)} x {number(args.total_height * 2)} mm "
         f"{args.variant_name} sticker and {number(args.body_width + args.axial_clearance)} mm drum."
     )

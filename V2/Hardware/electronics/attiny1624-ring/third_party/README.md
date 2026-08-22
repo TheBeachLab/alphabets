@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
+<!-- SPDX-License-Identifier: MIT -->
 # Vendored KiCad geometry helpers
 
 - `kicad_round_tracks/` is the Python geometry core from

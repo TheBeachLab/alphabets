@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2017 Miles McCoo
+# SPDX-FileCopyrightText: 2018 Julian Loiacono
+# SPDX-FileCopyrightText: 2019 Antoine Pintout
+# SPDX-FileCopyrightText: 2021-2024 mitxela
+# SPDX-License-Identifier: Apache-2.0
 # Original example Copyright [2017] [Miles McCoo]
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

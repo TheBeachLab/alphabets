@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 """CQ-editor entry point for the Alphabets V2 reference module."""
 
