@@ -1,4 +1,6 @@
 {
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
   "schema_version": 1,
   "positions": 64,
   "default_preset": "international-64",
@@ -7,21 +9,21 @@
       "id": "demo-64",
       "name": "Demo 64",
       "description": "Original 64-position demo drum used by the first ten V2 modules.",
-      "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,\u0027°■£~© ",
+      "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,'°■£~© ",
       "uppercase_input": true,
       "aliases": {
         "✕": "×",
         "–": "-",
         "—": "-",
-        "‘": "\u0027",
-        "’": "\u0027"
+        "‘": "'",
+        "’": "'"
       }
     },
     {
       "id": "international-64",
       "name": "International 64",
       "description": "International uppercase set with complete German support and practical Latin-script coverage.",
-      "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/\u0027&@%€$°",
+      "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°",
       "uppercase_input": true,
       "aliases": {
         "ß": "ẞ",
@@ -73,11 +75,11 @@
         "Ż": "Z",
         "–": "-",
         "—": "-",
-        "‘": "\u0027",
-        "’": "\u0027",
-        "“": "\u0027",
-        "”": "\u0027",
-        "„": "\u0027"
+        "‘": "'",
+        "’": "'",
+        "“": "'",
+        "”": "'",
+        "„": "'"
       }
     }
   ]

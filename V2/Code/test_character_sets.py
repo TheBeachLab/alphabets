@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 import json
-from pathlib import Path
 import tempfile
 import unittest
+from pathlib import Path
 
 from character_sets import (
     CharacterSetError,
@@ -12,9 +12,9 @@ from character_sets import (
     resolve_character_set,
     validate_characters,
 )
+from json_license_metadata import JSON_LICENSE_METADATA
 
-
-INTERNATIONAL_64 = " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ" "0123456789.,:!?¡¿-/'&@%€$°"
+INTERNATIONAL_64 = " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
 DEMO_64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,\u0027°■£~© "
 
 
@@ -24,6 +24,10 @@ class CharacterSetTests(unittest.TestCase):
 
     def test_catalog_has_expected_default_and_presets(self):
         catalog = load_catalog()
+        self.assertEqual(
+            {key: catalog[key] for key in JSON_LICENSE_METADATA},
+            JSON_LICENSE_METADATA,
+        )
         self.assertEqual(catalog["default_preset"], "international-64")
         self.assertEqual(set(self.presets), {"demo-64", "international-64"})
 
@@ -67,6 +71,7 @@ class CharacterSetTests(unittest.TestCase):
         custom_characters = INTERNATIONAL_64[-1] + INTERNATIONAL_64[:-1]
         selected = resolve_character_set(
             {
+                **JSON_LICENSE_METADATA,
                 "settings_version": 1,
                 "character_set": {"name": "My drum", "custom": custom_characters},
             }
@@ -79,6 +84,7 @@ class CharacterSetTests(unittest.TestCase):
         with self.assertRaisesRegex(CharacterSetError, "exactly one"):
             resolve_character_set(
                 {
+                    **JSON_LICENSE_METADATA,
                     "settings_version": 1,
                     "character_set": {
                         "preset": "international-64",
@@ -89,12 +95,27 @@ class CharacterSetTests(unittest.TestCase):
 
     def test_settings_version_is_required(self):
         with self.assertRaisesRegex(CharacterSetError, "settings_version"):
-            resolve_character_set({"character_set": {"preset": "international-64"}})
+            resolve_character_set(
+                {
+                    **JSON_LICENSE_METADATA,
+                    "character_set": {"preset": "international-64"},
+                }
+            )
+
+    def test_settings_license_metadata_is_required(self):
+        with self.assertRaisesRegex(CharacterSetError, "SPDX-FileCopyrightText"):
+            resolve_character_set(
+                {
+                    "settings_version": 1,
+                    "character_set": {"preset": "international-64"},
+                }
+            )
 
     def test_unknown_and_wrong_typed_settings_fail(self):
         with self.assertRaisesRegex(CharacterSetError, "unknown settings"):
             resolve_character_set(
                 {
+                    **JSON_LICENSE_METADATA,
                     "settings_version": 1,
                     "character_set": {"preset": "international-64"},
                     "extra": True,
@@ -103,6 +124,7 @@ class CharacterSetTests(unittest.TestCase):
         with self.assertRaisesRegex(CharacterSetError, "must be a boolean"):
             resolve_character_set(
                 {
+                    **JSON_LICENSE_METADATA,
                     "settings_version": 1,
                     "character_set": {
                         "custom": INTERNATIONAL_64,

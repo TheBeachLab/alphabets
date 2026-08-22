@@ -30,16 +30,11 @@ from character_sets import load_presets
 class BlueHighwayInternationalTests(unittest.TestCase):
     def test_fonts_directory_contains_only_the_production_font_and_its_inputs(self):
         self.assertEqual(
-            {
-                path.name
-                for path in FONTS_DIR.iterdir()
-                if path.is_file()
-            },
+            {path.name for path in FONTS_DIR.iterdir() if path.is_file()},
             {
                 "Blue Highway D.otf",
                 "Blue Highway D.otf.license",
                 "BlueHighwayD-International.json",
-                "BlueHighwayD-International.json.license",
                 "BlueHighwayD-International.otf",
                 "BlueHighwayD-International.otf.license",
                 "LICENSE-CC0.txt",
@@ -105,5 +100,6 @@ class BlueHighwayInternationalTests(unittest.TestCase):
                     encoding="utf-8"
                 )
             )
+            self.assertEqual(committed["SPDX-License-Identifier"], "MIT")
             self.assertEqual(manifest["fallback"]["characters"], "■ẞ")
             self.assertEqual(manifest["output_sha256"], committed["output_sha256"])

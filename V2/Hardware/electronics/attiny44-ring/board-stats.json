@@ -1,4 +1,6 @@
 {
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
   "metadata": {
     "date": "2026-08-18T14:54:10",
     "generator": "KiCad 10.0.5",

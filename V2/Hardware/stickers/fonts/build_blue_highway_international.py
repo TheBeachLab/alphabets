@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +19,16 @@ from fontTools.ttLib import TTFont
 
 FONTS_DIR = Path(__file__).resolve().parent
 V2_DIR = FONTS_DIR.parents[2]
+CODE_DIR = V2_DIR / "Code"
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from json_license_metadata import (  # noqa: E402
+    LicenseMetadataError,
+    validate_json_license,
+    write_licensed_json,
+)
+
 DEFAULT_BASE_FONT = FONTS_DIR / "Blue Highway D.otf"
 DEFAULT_FALLBACK_FONT = FONTS_DIR / "OverpassMono-Medium.otf"
 DEFAULT_OUTPUT_FONT = FONTS_DIR / "BlueHighwayD-International.otf"
@@ -43,6 +54,10 @@ def required_characters(catalog_path: Path) -> str:
         raise HybridFontError(
             f"cannot read character catalog: {catalog_path}"
         ) from error
+    try:
+        validate_json_license(catalog, "character catalog")
+    except LicenseMetadataError as error:
+        raise HybridFontError(str(error)) from error
     presets = catalog.get("presets")
     if not isinstance(presets, list):
         raise HybridFontError("character catalog has no presets")
@@ -63,7 +78,8 @@ def _make_cff_mutable(font: TTFont) -> Any:
     charstrings = top_dict.CharStrings
     if charstrings.charStringsAreIndexed:
         charstrings.charStrings = {
-            glyph_name: charstrings[glyph_name] for glyph_name in charstrings.charStrings
+            glyph_name: charstrings[glyph_name]
+            for glyph_name in charstrings.charStrings
         }
         charstrings.charStringsAreIndexed = 0
         charstrings.private = top_dict.Private
@@ -235,10 +251,7 @@ def main() -> int:
         print(f"error: {error}")
         return 2
     args.manifest.parent.mkdir(parents=True, exist_ok=True)
-    args.manifest.write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    write_licensed_json(args.manifest, manifest)
     return 0
 
 

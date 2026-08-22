@@ -18,10 +18,15 @@ from mathutils import Vector
 from license_metadata import apply_blend_license_metadata
 
 BLENDER_DIR = Path(__file__).resolve().parent
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
 GENERATED_DIR = BLENDER_DIR / "generated"
 PAWL_CAPTURE_PATH = GENERATED_DIR / "pawl-position.json"
 FLOOR_CAPTURE_PATH = GENERATED_DIR / "floor-position.json"
 MM = 0.001
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from json_license_metadata import validate_json_license
 
 
 def parse_args() -> argparse.Namespace:
@@ -42,7 +47,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8"))
+    validate_json_license(data, str(path))
+    return data
 
 
 def clear_scene() -> None:

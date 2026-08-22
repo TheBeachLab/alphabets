@@ -1,4 +1,6 @@
 {
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
   "schema_version": 1,
   "captured_at": "2026-08-21T23:43:42.100610+00:00",
   "source_blend": "/Users/Papi/Repositories/alphabets/V2/Hardware/blender/generated/alphabets-v2-interactive.blend",

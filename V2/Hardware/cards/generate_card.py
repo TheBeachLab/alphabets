@@ -9,16 +9,14 @@ Run this script with FreeCADCmd, not the system Python interpreter.
 from __future__ import annotations
 
 import argparse
-import json
 import math
-from pathlib import Path
 import shlex
 import sys
+from pathlib import Path
 from xml.sax.saxutils import escape
 
 import FreeCAD as App
 import Part
-
 
 CARDS_DIR = Path(__file__).resolve().parent
 V2_DIR = CARDS_DIR.parents[1]
@@ -26,8 +24,8 @@ CODE_DIR = V2_DIR / "Code"
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
+from json_license_metadata import write_licensed_json  # noqa: E402
 from physical_variants import PhysicalVariantError, load_variant  # noqa: E402
-
 
 DRUM_DIAMETER_MM = 85.0
 DRUM_SIDE_THICKNESS_MM = 2.15
@@ -141,7 +139,8 @@ def build_fcstd(output: Path, args: argparse.Namespace) -> None:
     doc.LicenseURL = "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
     doc.Comment = (
         "SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>. "
-        "SPDX-License-" "Identifier: MIT. "
+        "SPDX-License-"
+        "Identifier: MIT. "
         f"Matched to the {number(args.body_width)} x {number(args.total_height * 2)} mm "
         f"{args.variant_name} sticker and {number(args.body_width + args.axial_clearance)} mm drum."
     )
@@ -432,7 +431,7 @@ def build_manifest(output: Path, args: argparse.Namespace) -> None:
             "svg_margin_mm": SVG_MARGIN_MM,
         },
     }
-    output.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    write_licensed_json(output, data)
 
 
 def parse_args() -> argparse.Namespace:

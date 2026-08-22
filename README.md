@@ -43,8 +43,9 @@ code, firmware, electronics designs, mechanical designs, documentation, and
 generated project artifacts are licensed under the [MIT License](LICENSE).
 Copyright (c) 2014-2026 [The Beach Lab](https://beachlab.org).
 
-Every commentable file carries a copyright and SPDX license header. Files that
-cannot safely contain comments use an adjacent `.license` file. Blender and
-FreeCAD documents additionally embed the same copyright, license identifier,
-and license URL in their native metadata. Legacy and bundled third-party
-sources retain their actual notices and licenses.
+Every commentable file carries a copyright and SPDX license header. JSON files
+embed the same fields as data so the declaration travels with the document.
+Other files that cannot safely contain comments use an adjacent `.license`
+file. Blender and FreeCAD documents additionally embed the copyright, license
+identifier, and license URL in their native metadata. Legacy and bundled
+third-party sources retain their actual notices and licenses.

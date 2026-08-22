@@ -17,9 +17,10 @@ BLENDER_DIR = Path(__file__).resolve().parent
 V2_DIR = BLENDER_DIR.parents[1]
 MECHANICAL_DIR = V2_DIR / "Hardware" / "mechanical"
 STICKERS_DIR = V2_DIR / "Hardware" / "stickers"
+CODE_DIR = V2_DIR / "Code"
 GENERATED_DIR = BLENDER_DIR / "generated"
 
-for source_dir in (MECHANICAL_DIR, STICKERS_DIR):
+for source_dir in (CODE_DIR, MECHANICAL_DIR, STICKERS_DIR):
     if str(source_dir) not in sys.path:
         sys.path.insert(0, str(source_dir))
 
@@ -38,6 +39,7 @@ from generate_stickers import (
     build_svg,
     load_profile,
 )
+from json_license_metadata import JSON_LICENSE_METADATA
 
 ATLAS_COLUMNS = 16
 ATLAS_ROWS = 4
@@ -113,6 +115,7 @@ def build_sticker_mapping() -> dict[str, Any]:
         )
 
     return {
+        **JSON_LICENSE_METADATA,
         "schema_version": 1,
         "character_set": {
             "id": profile.id,
@@ -125,7 +128,10 @@ def build_sticker_mapping() -> dict[str, Any]:
             "rows": ATLAS_ROWS,
             "width_px": ATLAS_WIDTH_PX,
             "height_px": ATLAS_HEIGHT_PX,
-            "cell_mm": [DESIGN.card.sticker_width, 2 * DESIGN.card.sticker_face_height],
+            "cell_mm": [
+                DESIGN.card.sticker_width,
+                2 * DESIGN.card.sticker_face_height,
+            ],
             "split_y_mm": DESIGN.card.sticker_face_height,
         },
         "numbering": {
@@ -178,6 +184,7 @@ def build_scene_manifest(static_components: list[dict[str, Any]]) -> dict[str, A
     card_01_finished_front_y = _round(card_01_hole[1] + card.finished_thickness / 2)
 
     return {
+        **JSON_LICENSE_METADATA,
         "schema_version": 1,
         "units": "millimetres",
         "card": {
@@ -214,7 +221,11 @@ def build_scene_manifest(static_components: list[dict[str, Any]]) -> dict[str, A
         "pawl": {
             "name": "CardStopPawl_Adjustable",
             "geometry_version": 2,
-            "support_edge_initial_mm": [0, card_01_finished_front_y, support_height],
+            "support_edge_initial_mm": [
+                0,
+                card_01_finished_front_y,
+                support_height,
+            ],
             "width_mm": 6,
             "height_mm": 8,
             "thickness_mm": 1,

@@ -1,14 +1,28 @@
 {
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "message_protocol.schema.json",
   "title": "Alphabets V2 message protocol packet",
   "oneOf": [
-    { "$ref": "#/$defs/displayDescribe" },
-    { "$ref": "#/$defs/displayDescription" },
-    { "$ref": "#/$defs/displayShow" },
-    { "$ref": "#/$defs/displayAccepted" },
-    { "$ref": "#/$defs/displayReady" },
-    { "$ref": "#/$defs/displayError" }
+    {
+      "$ref": "#/$defs/displayDescribe"
+    },
+    {
+      "$ref": "#/$defs/displayDescription"
+    },
+    {
+      "$ref": "#/$defs/displayShow"
+    },
+    {
+      "$ref": "#/$defs/displayAccepted"
+    },
+    {
+      "$ref": "#/$defs/displayReady"
+    },
+    {
+      "$ref": "#/$defs/displayError"
+    }
   ],
   "$defs": {
     "id": {
@@ -21,27 +35,49 @@
       "additionalProperties": false,
       "properties": {
         "wrap": {
-          "enum": ["word", "character", "none"],
+          "enum": [
+            "word",
+            "character",
+            "none"
+          ],
           "default": "word"
         },
         "horizontal": {
-          "enum": ["left", "center", "right"],
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
           "default": "center"
         },
         "vertical": {
-          "enum": ["top", "middle", "bottom"],
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
           "default": "middle"
         }
       }
     },
     "displayDescribe": {
       "type": "object",
-      "required": ["v", "id", "type"],
+      "required": [
+        "v",
+        "id",
+        "type"
+      ],
       "additionalProperties": false,
       "properties": {
-        "v": { "const": 1 },
-        "id": { "$ref": "#/$defs/id" },
-        "type": { "const": "display.describe" }
+        "v": {
+          "const": 1
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "const": "display.describe"
+        }
       }
     },
     "displayDescription": {
@@ -56,23 +92,52 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "v": { "const": 1 },
-        "id": { "$ref": "#/$defs/id" },
-        "type": { "const": "display.description" },
+        "v": {
+          "const": 1
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "const": "display.description"
+        },
         "display": {
           "type": "object",
-          "required": ["rows", "columns", "cells", "layout_revision"],
+          "required": [
+            "rows",
+            "columns",
+            "cells",
+            "layout_revision"
+          ],
           "additionalProperties": false,
           "properties": {
-            "rows": { "type": "integer", "minimum": 1, "maximum": 255 },
-            "columns": { "type": "integer", "minimum": 1, "maximum": 255 },
-            "cells": { "type": "integer", "minimum": 1, "maximum": 255 },
-            "layout_revision": { "type": "integer", "minimum": 0 }
+            "rows": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "columns": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "cells": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "layout_revision": {
+              "type": "integer",
+              "minimum": 0
+            }
           }
         },
         "modules": {
           "type": "object",
-          "required": ["discovered", "state"],
+          "required": [
+            "discovered",
+            "state"
+          ],
           "additionalProperties": false,
           "properties": {
             "discovered": {
@@ -81,16 +146,26 @@
               "maximum": 255
             },
             "state": {
-              "enum": ["ready", "topology_fault", "return_path_fault"]
+              "enum": [
+                "ready",
+                "topology_fault",
+                "return_path_fault"
+              ]
             }
           }
         },
         "character_set": {
           "type": "object",
-          "required": ["id", "characters"],
+          "required": [
+            "id",
+            "characters"
+          ],
           "additionalProperties": false,
           "properties": {
-            "id": { "type": "string", "minLength": 1 },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
             "characters": {
               "type": "string",
               "minLength": 64,
@@ -102,52 +177,112 @@
     },
     "displayShow": {
       "type": "object",
-      "required": ["v", "id", "type", "text"],
+      "required": [
+        "v",
+        "id",
+        "type",
+        "text"
+      ],
       "additionalProperties": false,
       "properties": {
-        "v": { "const": 1 },
-        "id": { "$ref": "#/$defs/id" },
-        "type": { "const": "display.show" },
-        "text": { "type": "string", "maxLength": 1024 },
-        "layout_revision": { "type": "integer", "minimum": 0 },
-        "layout": { "$ref": "#/$defs/layout" }
+        "v": {
+          "const": 1
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "const": "display.show"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "layout_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "layout": {
+          "$ref": "#/$defs/layout"
+        }
       }
     },
     "displayAccepted": {
       "type": "object",
-      "required": ["v", "id", "type", "layout_revision", "rendered"],
+      "required": [
+        "v",
+        "id",
+        "type",
+        "layout_revision",
+        "rendered"
+      ],
       "additionalProperties": false,
       "properties": {
-        "v": { "const": 1 },
-        "id": { "$ref": "#/$defs/id" },
-        "type": { "const": "display.accepted" },
-        "layout_revision": { "type": "integer", "minimum": 0 },
+        "v": {
+          "const": 1
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "const": "display.accepted"
+        },
+        "layout_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
         "rendered": {
           "type": "array",
           "minItems": 1,
           "maxItems": 255,
-          "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
         }
       }
     },
     "displayReady": {
       "type": "object",
-      "required": ["v", "id", "type"],
+      "required": [
+        "v",
+        "id",
+        "type"
+      ],
       "additionalProperties": false,
       "properties": {
-        "v": { "const": 1 },
-        "id": { "$ref": "#/$defs/id" },
-        "type": { "const": "display.ready" }
+        "v": {
+          "const": 1
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "const": "display.ready"
+        }
       }
     },
     "displayError": {
       "type": "object",
-      "required": ["v", "id", "type", "code", "message"],
+      "required": [
+        "v",
+        "id",
+        "type",
+        "code",
+        "message"
+      ],
       "additionalProperties": false,
       "properties": {
-        "v": { "const": 1 },
-        "id": { "$ref": "#/$defs/id" },
-        "type": { "const": "display.error" },
+        "v": {
+          "const": 1
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "const": "display.error"
+        },
         "code": {
           "enum": [
             "invalid_packet",
@@ -161,7 +296,10 @@
             "motion_timeout"
           ]
         },
-        "message": { "type": "string", "minLength": 1 },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
         "details": {
           "type": "object",
           "additionalProperties": true,
@@ -169,7 +307,11 @@
             "cells": {
               "type": "array",
               "uniqueItems": true,
-              "items": { "type": "integer", "minimum": 0, "maximum": 254 }
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 254
+              }
             }
           }
         }

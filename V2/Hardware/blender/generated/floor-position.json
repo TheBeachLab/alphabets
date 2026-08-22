@@ -1,4 +1,6 @@
 {
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
   "schema_version": 1,
   "object": "CompressionFloor_Adjustable",
   "geometry_version": 1,

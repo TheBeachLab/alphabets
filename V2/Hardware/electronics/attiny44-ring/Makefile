@@ -39,6 +39,7 @@ check:
 fabrication:
 	mkdir -p fabrication/gerbers
 	$(KICAD_CLI) pcb export stats --output board-stats.json --format json --units mm $(PROJECT).kicad_pcb
+	$(KICAD_PYTHON) ../../../Code/json_license_metadata.py board-stats.json
 	$(KICAD_CLI) pcb export gerbers --output fabrication/gerbers --layers F.Cu,F.Mask,F.Silkscreen,Edge.Cuts $(PROJECT).kicad_pcb
 	$(KICAD_CLI) pcb export drill --output fabrication/gerbers --format excellon --excellon-units mm --excellon-separate-th --generate-map --map-format svg --generate-report --report-path fabrication/drill-report.txt $(PROJECT).kicad_pcb
 	$(KICAD_CLI) pcb export pos --output fabrication/$(PROJECT)-positions.csv --side front --format csv --units mm $(PROJECT).kicad_pcb

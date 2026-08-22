@@ -4,13 +4,19 @@
 
 from __future__ import annotations
 
-import json
 import re
+import sys
 from collections.abc import Iterable
 from pathlib import Path
 
 import cadquery as cq
 from cadquery.occ_impl.exporters.dxf import DxfDocument
+
+CODE_DIR = Path(__file__).resolve().parents[3] / "Code"
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from json_license_metadata import write_licensed_json
 
 from .assemblies import (
     drum_assembly,
@@ -340,7 +346,4 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
             ),
         },
     }
-    (output_root / "manifest.json").write_text(
-        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+    write_licensed_json(output_root / "manifest.json", manifest, sort_keys=True)

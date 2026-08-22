@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+# SPDX-License-Identifier: MIT
+
+version = 1
+
+[[annotations]]
+path = ["**/*.json"]
+precedence = "override"
+SPDX-FileCopyrightText = "2014-2026 The Beach Lab <https://beachlab.org>"
+SPDX-License-Identifier = "MIT"

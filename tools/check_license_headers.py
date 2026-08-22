@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -49,6 +50,8 @@ HEADER_LINE_LIMIT = 25
 COPYRIGHT_MARKER = "SPDX-FileCopyrightText:"
 SPDX_LICENSE_PREFIX = "SPDX-License-"
 LICENCE_MARKER = f"{SPDX_LICENSE_PREFIX}Identifier:"
+JSON_COPYRIGHT_KEY = "SPDX-FileCopyrightText"
+JSON_LICENCE_KEY = "SPDX-License-Identifier"
 
 
 def tracked_files() -> list[Path]:
@@ -74,6 +77,20 @@ def has_adjacent_declaration(path: Path, tracked: set[Path]) -> bool:
     return sidecar in tracked and has_spdx_declaration(sidecar)
 
 
+def has_embedded_json_declaration(path: Path) -> bool:
+    try:
+        data = json.loads((ROOT / path).read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(data, dict)
+        and isinstance(data.get(JSON_COPYRIGHT_KEY), str)
+        and bool(data[JSON_COPYRIGHT_KEY].strip())
+        and isinstance(data.get(JSON_LICENCE_KEY), str)
+        and bool(data[JSON_LICENCE_KEY].strip())
+    )
+
+
 def requires_inline_declaration(path: Path) -> bool:
     return not path.name.endswith(".license") and (
         path.name in COMMENTABLE_NAMES or path.suffix.lower() in COMMENTABLE_SUFFIXES
@@ -86,7 +103,11 @@ def main() -> int:
     missing = [
         path
         for path in paths
-        if not has_spdx_declaration(path)
+        if not (
+            has_embedded_json_declaration(path)
+            if path.suffix.lower() == ".json"
+            else has_spdx_declaration(path)
+        )
         and (
             requires_inline_declaration(path)
             or not has_adjacent_declaration(path, tracked)
@@ -98,6 +119,9 @@ def main() -> int:
         if path.name.endswith(".license")
         and Path(str(path)[: -len(".license")]) not in tracked
     ]
+    external_json_sidecars = [
+        path for path in paths if path.name.endswith(".json.license")
+    ]
     if missing:
         print("Tracked files without copyright and SPDX declarations:", file=sys.stderr)
         for path in missing:
@@ -106,13 +130,21 @@ def main() -> int:
         print("Orphaned .license sidecars:", file=sys.stderr)
         for path in orphaned:
             print(f"  {path}", file=sys.stderr)
-    if missing or orphaned:
+    if external_json_sidecars:
+        print(
+            "JSON files must embed metadata instead of using sidecars:", file=sys.stderr
+        )
+        for path in external_json_sidecars:
+            print(f"  {path}", file=sys.stderr)
+    if missing or orphaned or external_json_sidecars:
         return 1
 
     inline_count = sum(requires_inline_declaration(path) for path in paths)
+    json_count = sum(path.suffix.lower() == ".json" for path in paths)
     print(
         f"All {len(paths)} tracked files have copyright and SPDX declarations; "
-        f"all {inline_count} commentable files use inline headers."
+        f"all {inline_count} commentable files use inline headers and all "
+        f"{json_count} JSON files embed metadata."
     )
     return 0
 

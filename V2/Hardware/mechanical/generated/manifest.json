@@ -1,4 +1,6 @@
 {
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
   "cad_engine": "CadQuery 2.8.0 / OCCT",
   "fabrication_status": {
     "card_and_laser_cut_drum": "ported from current dimensional sources",

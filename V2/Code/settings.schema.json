@@ -1,11 +1,24 @@
 {
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "settings.schema.json",
   "title": "Alphabets V2 settings",
   "type": "object",
-  "required": ["settings_version", "character_set"],
+  "required": [
+    "SPDX-FileCopyrightText",
+    "SPDX-License-Identifier",
+    "settings_version",
+    "character_set"
+  ],
   "additionalProperties": false,
   "properties": {
+    "SPDX-FileCopyrightText": {
+      "const": "2014-2026 The Beach Lab <https://beachlab.org>"
+    },
+    "SPDX-License-Identifier": {
+      "const": "MIT"
+    },
     "settings_version": {
       "const": 1
     },
@@ -13,17 +26,24 @@
       "oneOf": [
         {
           "type": "object",
-          "required": ["preset"],
+          "required": [
+            "preset"
+          ],
           "additionalProperties": false,
           "properties": {
             "preset": {
-              "enum": ["demo-64", "international-64"]
+              "enum": [
+                "demo-64",
+                "international-64"
+              ]
             }
           }
         },
         {
           "type": "object",
-          "required": ["custom"],
+          "required": [
+            "custom"
+          ],
           "additionalProperties": false,
           "properties": {
             "name": {

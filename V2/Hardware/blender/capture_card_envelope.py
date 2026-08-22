@@ -17,8 +17,13 @@ from typing import Any
 import bpy
 
 BLENDER_DIR = Path(__file__).resolve().parent
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
 GENERATED_DIR = BLENDER_DIR / "generated"
 MM_PER_M = 1000.0
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from json_license_metadata import JSON_LICENSE_METADATA
 
 
 def parse_args() -> argparse.Namespace:
@@ -76,6 +81,7 @@ def main() -> int:
     upper_height_mm = extrema["upper"]["distance_from_axis_mm"]
     lower_height_mm = extrema["lower"]["distance_from_axis_mm"]
     result = {
+        **JSON_LICENSE_METADATA,
         "schema_version": 1,
         "captured_at": datetime.now(UTC).isoformat(),
         "source_blend": str(source_path),

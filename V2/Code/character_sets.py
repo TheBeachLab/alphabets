@@ -6,13 +6,18 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
 import json
-from pathlib import Path
 import sys
 import unicodedata
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Mapping, Sequence
 
+from json_license_metadata import (
+    JSON_LICENSE_METADATA,
+    LicenseMetadataError,
+    validate_json_license,
+)
 
 CHARACTER_SET_PATH = Path(__file__).with_name("character_sets.json")
 
@@ -128,6 +133,10 @@ def load_catalog(path: Path = CHARACTER_SET_PATH) -> dict[str, Any]:
     with path.open(encoding="utf-8") as handle:
         catalog = json.load(handle)
 
+    try:
+        validate_json_license(catalog, "character-set catalog")
+    except LicenseMetadataError as error:
+        raise CharacterSetError(str(error)) from error
     if catalog.get("schema_version") != 1:
         raise CharacterSetError("unsupported character-set catalog schema")
     if catalog.get("positions") != 64:
@@ -162,11 +171,19 @@ def resolve_character_set(
 ) -> CharacterSet:
     """Resolve either a named preset or a custom 64-character settings value."""
 
-    unexpected_settings = set(settings) - {"settings_version", "character_set"}
+    unexpected_settings = set(settings) - {
+        *JSON_LICENSE_METADATA,
+        "settings_version",
+        "character_set",
+    }
     if unexpected_settings:
         raise CharacterSetError(
             f"unknown settings keys: {sorted(unexpected_settings)!r}"
         )
+    try:
+        validate_json_license(settings, "settings")
+    except LicenseMetadataError as error:
+        raise CharacterSetError(str(error)) from error
     if settings.get("settings_version") != 1:
         raise CharacterSetError("settings_version must be 1")
 

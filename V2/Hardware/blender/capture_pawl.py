@@ -7,13 +7,19 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 from pathlib import Path
 
 import bpy
 
 BLENDER_DIR = Path(__file__).resolve().parent
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
 OUTPUT = BLENDER_DIR / "generated" / "pawl-position.json"
 OBJECT_NAME = "CardStopPawl_Adjustable"
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from json_license_metadata import JSON_LICENSE_METADATA
 
 
 def main() -> int:
@@ -22,6 +28,7 @@ def main() -> int:
     location = matrix.translation
     rotation = matrix.to_euler("XYZ")
     result = {
+        **JSON_LICENSE_METADATA,
         "schema_version": 2,
         "object": OBJECT_NAME,
         "geometry_version": pawl["geometry_version"],

@@ -1,15 +1,14 @@
 # SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 import json
-from pathlib import Path
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
 import xml.etree.ElementTree as ET
+from pathlib import Path
+from unittest.mock import patch
 
 from fontTools.pens.boundsPen import BoundsPen
-
 
 STICKERS_DIR = Path(__file__).resolve().parent
 if str(STICKERS_DIR) not in sys.path:
@@ -30,11 +29,10 @@ from generate_stickers import (  # noqa: E402
     main,
     normalize_color,
     resolve_colors,
-    select_face,
     typography_layout,
     write_pdf,
 )
-
+from json_license_metadata import JSON_LICENSE_METADATA
 
 SVG = "{http://www.w3.org/2000/svg}"
 
@@ -78,9 +76,7 @@ class StickerGeneratorTests(unittest.TestCase):
                     if character != " " and not self.faces[0].has(character)
                 ]
                 self.assertEqual(unsupported_characters, [])
-        self.assertEqual(
-            self.faces[0].label, "Blue Highway D International Regular"
-        )
+        self.assertEqual(self.faces[0].label, "Blue Highway D International Regular")
 
     def test_svg_has_64_cards_63_outlined_glyphs_and_no_text_elements(self):
         svg, positions = build_svg(
@@ -104,30 +100,34 @@ class StickerGeneratorTests(unittest.TestCase):
         self.assertEqual(len(glyph_groups), 63)
         self.assertEqual(len(glyph_paths), 63)
         self.assertEqual(glyphs.attrib["fill-rule"], "nonzero")
-        self.assertTrue(
-            all("clip-path" in group.attrib for group in glyph_groups)
-        )
+        self.assertTrue(all("clip-path" in group.attrib for group in glyph_groups))
         self.assertTrue(all("clip-path" not in path.attrib for path in glyph_paths))
         self.assertEqual(root.findall(f".//{SVG}text"), [])
         self.assertIsNone(root.find(f"{SVG}g[@id='split-lines']"))
         self.assertEqual(root.attrib["viewBox"], "0 0 1388 278")
         self.assertEqual(len(positions), 64)
         self.assertEqual(
-            {position["font"] for position in positions if position["character"] != " "},
+            {
+                position["font"]
+                for position in positions
+                if position["character"] != " "
+            },
             {"Blue Highway D International Regular"},
         )
 
     def test_special_characters_share_scale_baseline_and_card_center(self):
         geometry = SheetGeometry(columns=22)
-        layout = typography_layout(
-            self.profile.characters, self.faces[0], geometry
-        )
+        layout = typography_layout(self.profile.characters, self.faces[0], geometry)
         placements = [
             glyph_placement(character, self.faces[0], 0, 0, geometry, layout)
             for character in "AÄẞ@€?."
         ]
-        self.assertEqual({placement.scale_x for placement in placements}, {layout.scale_x})
-        self.assertEqual({placement.scale_y for placement in placements}, {layout.scale_y})
+        self.assertEqual(
+            {placement.scale_x for placement in placements}, {layout.scale_x}
+        )
+        self.assertEqual(
+            {placement.scale_y for placement in placements}, {layout.scale_y}
+        )
         self.assertEqual(
             {placement.baseline_y_mm for placement in placements},
             {layout.baseline_in_card_mm},
@@ -169,9 +169,7 @@ class StickerGeneratorTests(unittest.TestCase):
         self.assertFalse(layout.is_monospaced)
         glyph_set = face.glyph_set()
         for character in "ABMW":
-            placement = glyph_placement(
-                character, face, 0, 0, geometry, layout
-            )
+            placement = glyph_placement(character, face, 0, 0, geometry, layout)
             bounds_pen = BoundsPen(glyph_set)
             glyph_set[placement.glyph_name].draw(bounds_pen)
             self.assertIsNotNone(bounds_pen.bounds)
@@ -218,15 +216,19 @@ class StickerGeneratorTests(unittest.TestCase):
             self.assertEqual(len(print_guides.findall(f"{SVG}rect")), 64)
             self.assertEqual(len(print_guides.findall(f"{SVG}path")), 64)
             data = json.loads(manifest.read_text(encoding="utf-8"))
-            self.assertEqual(data["character_set"]["characters"], self.profile.characters)
+            self.assertEqual(
+                {key: data[key] for key in JSON_LICENSE_METADATA},
+                JSON_LICENSE_METADATA,
+            )
+            self.assertEqual(
+                data["character_set"]["characters"], self.profile.characters
+            )
             self.assertEqual(data["colors"]["background"], "#000000")
             self.assertEqual(data["colors"]["foreground"], "#FFCC00")
             self.assertEqual(data["colors"]["guide"], "#FF00FF")
             self.assertEqual(data["geometry_mm"]["rows"], 3)
             self.assertEqual(len(data["fonts"]), 1)
-            self.assertEqual(
-                data["fonts"][0]["family"], "Blue Highway D International"
-            )
+            self.assertEqual(data["fonts"][0]["family"], "Blue Highway D International")
             self.assertEqual(data["fonts"][0]["variation"], {})
             self.assertEqual(
                 data["typography"]["alignment"],
@@ -244,11 +246,11 @@ class StickerGeneratorTests(unittest.TestCase):
             ):
                 with self.subTest(variant=variant):
                     svg = root / f"{variant}.svg"
-                    result = main(
-                        ["--variant", variant, "--output-svg", str(svg)]
-                    )
+                    result = main(["--variant", variant, "--output-svg", str(svg)])
                     self.assertEqual(result, 0)
-                    data = json.loads(svg.with_suffix(".json").read_text(encoding="utf-8"))
+                    data = json.loads(
+                        svg.with_suffix(".json").read_text(encoding="utf-8")
+                    )
                     self.assertEqual(data["physical_variant"], variant)
                     self.assertEqual(data["character_set"]["id"], preset)
                     self.assertEqual(data["geometry_mm"]["card"], card)
@@ -339,6 +341,7 @@ class StickerGeneratorTests(unittest.TestCase):
             settings.write_text(
                 json.dumps(
                     {
+                        **JSON_LICENSE_METADATA,
                         "settings_version": 1,
                         "character_set": {"name": "Rotated", "custom": custom},
                     },

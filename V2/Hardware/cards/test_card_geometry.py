@@ -8,10 +8,10 @@ import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-
 CARDS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = CARDS_DIR.parents[2]
 SVG = "{http://www.w3.org/2000/svg}"
+SPDX_LICENSE_PROPERTY = "SPDX-License-Identifier"
 
 
 class CardGeometryTests(unittest.TestCase):
@@ -19,6 +19,11 @@ class CardGeometryTests(unittest.TestCase):
         self.manifest = json.loads(
             (CARDS_DIR / "card-50x48.json").read_text(encoding="utf-8")
         )
+        self.assertEqual(
+            self.manifest["SPDX-FileCopyrightText"],
+            "2014-2026 The Beach Lab <https://beachlab.org>",
+        )
+        self.assertEqual(self.manifest["SPDX-License-Identifier"], "MIT")
 
     def test_card_matches_the_45x91_sticker_halves(self):
         sticker = json.loads(
@@ -132,7 +137,7 @@ class CardGeometryTests(unittest.TestCase):
             document,
         )
         self.assertIn("SPDX-FileCopyrightText: 2014-2026 The Beach Lab", document)
-        self.assertIn("SPDX-License-" "Identifier: MIT", document)
+        self.assertIn(f"{SPDX_LICENSE_PROPERTY}: MIT", document)
         self.assertIn(
             'expression="Parameters.total_height - Parameters.sticker_face_height"',
             document,

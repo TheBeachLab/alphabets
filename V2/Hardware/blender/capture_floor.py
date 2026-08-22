@@ -7,19 +7,26 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 from pathlib import Path
 
 import bpy
 
 BLENDER_DIR = Path(__file__).resolve().parent
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
 OUTPUT = BLENDER_DIR / "generated" / "floor-position.json"
 OBJECT_NAME = "CompressionFloor_Adjustable"
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from json_license_metadata import JSON_LICENSE_METADATA
 
 
 def main() -> int:
     floor = bpy.data.objects[OBJECT_NAME]
     matrix = floor.matrix_world
     result = {
+        **JSON_LICENSE_METADATA,
         "schema_version": 1,
         "object": OBJECT_NAME,
         "geometry_version": floor.get("geometry_version", 1),

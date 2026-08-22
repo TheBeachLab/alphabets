@@ -556,6 +556,10 @@ def test_legacy_holder_and_enclosure_reference_are_preserved() -> None:
 
 def test_generated_manufacturing_files_are_readable() -> None:
     manifest = json.loads((GENERATED / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["SPDX-FileCopyrightText"] == (
+        "2014-2026 The Beach Lab <https://beachlab.org>"
+    )
+    assert manifest["SPDX-License-Identifier"] == "MIT"
     assert manifest["units"] == "mm"
     assert manifest["parameters"]["drum"]["positions"] == 64
     assert manifest["geometry"]["drum_assembly"]["valid"] is True

@@ -9,6 +9,18 @@ from generate_assets import (
     build_sticker_mapping,
 )
 
+EXPECTED_JSON_LICENSE_METADATA = {
+    "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+    "SPDX-License-Identifier": "MIT",
+}
+
+
+def test_generated_json_objects_embed_license_metadata() -> None:
+    for document in (build_sticker_mapping(), build_scene_manifest([])):
+        assert {key: document[key] for key in EXPECTED_JSON_LICENSE_METADATA} == dict(
+            EXPECTED_JSON_LICENSE_METADATA
+        )
+
 
 def test_provisional_enclosure_is_excluded_from_blender_scene() -> None:
     assert EXCLUDED_STATIC_COMPONENTS == {"enclosure_lower", "enclosure_upper"}

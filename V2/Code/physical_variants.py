@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from json_license_metadata import LicenseMetadataError, validate_json_license
+
 V2_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_CATALOG_PATH = V2_DIR / "variants" / "variants.json"
 
@@ -198,6 +200,10 @@ def load_variants(path: Path | None = None) -> dict[str, PhysicalVariant]:
         raise PhysicalVariantError(
             f"invalid physical variant catalog: {catalog_path}"
         ) from error
+    try:
+        validate_json_license(data, "physical variant catalog")
+    except LicenseMetadataError as error:
+        raise PhysicalVariantError(str(error)) from error
     if data.get("schema_version") != 1:
         raise PhysicalVariantError("unsupported physical variant catalog schema")
     entries = data.get("variants")

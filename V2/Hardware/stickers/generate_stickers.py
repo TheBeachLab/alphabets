@@ -6,13 +6,13 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
 import hashlib
 import json
 import math
-from pathlib import Path
 import re
 import sys
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Sequence
 
 from fontTools.pens.basePen import BasePen
@@ -22,7 +22,6 @@ from fontTools.ttLib import TTFont
 from reportlab.lib.colors import HexColor
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
-
 
 STICKERS_DIR = Path(__file__).resolve().parent
 V2_DIR = STICKERS_DIR.parents[1]
@@ -37,12 +36,12 @@ from character_sets import (  # noqa: E402
     load_presets,
     resolve_character_set,
 )
+from json_license_metadata import write_licensed_json  # noqa: E402
 from physical_variants import (  # noqa: E402
     PhysicalVariant,
     PhysicalVariantError,
     load_variant,
 )
-
 
 COLOR_PRESETS = {
     "black-white": ("#000000", "#FFFFFF"),
@@ -273,16 +272,14 @@ def typography_layout(
     horizontal_scale = (
         geometry.card_width_mm - 2 * geometry.glyph_padding_x_mm
     ) / max_visible_width
-    vertical_scale = (
-        geometry.card_height_mm - 2 * geometry.glyph_padding_y_mm
-    ) / (y_max - y_min)
+    vertical_scale = (geometry.card_height_mm - 2 * geometry.glyph_padding_y_mm) / (
+        y_max - y_min
+    )
     cap_scale = geometry.cap_height_mm / face.cap_height
     scale_x = horizontal_scale
     scale_y = min(vertical_scale, cap_scale)
 
-    baseline = (
-        geometry.card_height_mm / 2 + (y_max + y_min) * scale_y / 2
-    )
+    baseline = geometry.card_height_mm / 2 + (y_max + y_min) * scale_y / 2
     return TypographyLayout(
         scale_x=scale_x,
         scale_y=scale_y,
@@ -318,11 +315,7 @@ def glyph_placement(
     scale_x = typography.scale_x
     scale_y = typography.scale_y
     visible_width_mm = (x_max - x_min) * scale_x
-    x_mm = (
-        card_x
-        + (geometry.card_width_mm - visible_width_mm) / 2
-        - x_min * scale_x
-    )
+    x_mm = card_x + (geometry.card_width_mm - visible_width_mm) / 2 - x_min * scale_x
     baseline_y_mm = card_y + typography.baseline_in_card_mm
 
     visible_left = x_mm + x_min * scale_x
@@ -336,8 +329,7 @@ def glyph_placement(
         <= card_x + geometry.card_width_mm - geometry.glyph_padding_x_mm + tolerance
         and card_y + geometry.glyph_padding_y_mm - tolerance <= visible_top
         and visible_bottom
-        <= card_y + geometry.card_height_mm - geometry.glyph_padding_y_mm
-        + tolerance
+        <= card_y + geometry.card_height_mm - geometry.glyph_padding_y_mm + tolerance
     ):
         raise StickerError(f"glyph {character!r} exceeds its safe card limits")
 
@@ -355,12 +347,8 @@ def glyph_placement(
 
 def card_origin(index: int, geometry: SheetGeometry) -> tuple[float, float, int, int]:
     row, column = divmod(index, geometry.columns)
-    x = geometry.margin_mm + column * (
-        geometry.card_width_mm + geometry.column_gap_mm
-    )
-    y = geometry.margin_mm + row * (
-        geometry.card_height_mm + geometry.row_gap_mm
-    )
+    x = geometry.margin_mm + column * (geometry.card_width_mm + geometry.column_gap_mm)
+    y = geometry.margin_mm + row * (geometry.card_height_mm + geometry.row_gap_mm)
     return x, y, row, column
 
 
@@ -387,7 +375,11 @@ def build_svg(
     include_guides: bool,
     omit_blank: bool,
 ) -> tuple[str, list[dict[str, Any]]]:
-    characters = [character for character in profile.characters if not (omit_blank and character == " ")]
+    characters = [
+        character
+        for character in profile.characters
+        if not (omit_blank and character == " ")
+    ]
     page_width, page_height, _ = geometry.page_size(len(characters))
     face = faces[0]
     typography = typography_layout(profile.characters, face, geometry)
@@ -398,7 +390,7 @@ def build_svg(
             f'height="{number(page_height)}mm" viewBox="0 0 {number(page_width)} '
             f'{number(page_height)}">'
         ),
-        f'  <title>{xml_escape(profile.name)} sticker sheet</title>',
+        f"  <title>{xml_escape(profile.name)} sticker sheet</title>",
         "  <defs>",
     ]
     for sheet_index in range(len(characters)):
@@ -409,10 +401,12 @@ def build_svg(
             f'width="{number(geometry.card_width_mm)}" '
             f'height="{number(geometry.card_height_mm)}"/></clipPath>'
         )
-    lines.extend([
-        "  </defs>",
-        "  <g id=\"backgrounds\">",
-    ])
+    lines.extend(
+        [
+            "  </defs>",
+            '  <g id="backgrounds">',
+        ]
+    )
     positions: list[dict[str, Any]] = []
     placements: list[GlyphPlacement | None] = []
 
@@ -426,9 +420,7 @@ def build_svg(
         placement = None
         font_label = None
         if character != " ":
-            placement = glyph_placement(
-                character, face, x, y, geometry, typography
-            )
+            placement = glyph_placement(character, face, x, y, geometry, typography)
             font_label = face.label
         placements.append(placement)
         positions.append(
@@ -442,19 +434,15 @@ def build_svg(
             }
         )
     lines.append("  </g>")
-    lines.append(
-        f'  <g id="glyphs" fill="{foreground}" fill-rule="nonzero">'
-    )
+    lines.append(f'  <g id="glyphs" fill="{foreground}" fill-rule="nonzero">')
     for sheet_index, placement in enumerate(placements):
         if placement is None:
             continue
-        lines.append(
-            f'    <g clip-path="url(#clip-card-{sheet_index + 1:02d})">'
-        )
+        lines.append(f'    <g clip-path="url(#clip-card-{sheet_index + 1:02d})">')
         lines.append(
             f'      <path id="glyph-{sheet_index + 1:02d}" data-character="{xml_escape(placement.character)}" '
             f'd="{placement.path_data}" transform="translate({number(placement.x_mm)} '
-            f'{number(placement.baseline_y_mm)}) scale({number(placement.scale_x)} '
+            f"{number(placement.baseline_y_mm)}) scale({number(placement.scale_x)} "
             f'-{number(placement.scale_y)})"/>'
         )
         lines.append("    </g>")
@@ -501,7 +489,7 @@ def build_cut_svg(
             f'height="{number(page_height)}mm" viewBox="0 0 {number(page_width)} '
             f'{number(page_height)}">'
         ),
-        f'  <title>{xml_escape(profile.name)} cut paths</title>',
+        f"  <title>{xml_escape(profile.name)} cut paths</title>",
         f'  <g id="cut-guides" fill="none" stroke="{guide_color}" '
         f'stroke-width="{number(geometry.guide_width_mm)}">',
     ]
@@ -540,9 +528,7 @@ class CanvasPathPen(BasePen):
         point3: tuple[float, float],
     ) -> None:
         flattened = [
-            coordinate
-            for point in (point1, point2, point3)
-            for coordinate in point
+            coordinate for point in (point1, point2, point3) for coordinate in point
         ]
         self.path.curveTo(*flattened)
 
@@ -564,7 +550,11 @@ def write_pdf(
     include_guides: bool,
     omit_blank: bool,
 ) -> None:
-    characters = [character for character in profile.characters if not (omit_blank and character == " ")]
+    characters = [
+        character
+        for character in profile.characters
+        if not (omit_blank and character == " ")
+    ]
     page_width, page_height, _ = geometry.page_size(len(characters))
     face = faces[0]
     typography = typography_layout(profile.characters, face, geometry)
@@ -582,16 +572,21 @@ def write_pdf(
     for index in range(len(characters)):
         x, y_top, _, _ = card_origin(index, geometry)
         y = page_height - y_top - geometry.card_height_mm
-        pdf.rect(x * mm, y * mm, geometry.card_width_mm * mm, geometry.card_height_mm * mm, fill=1, stroke=0)
+        pdf.rect(
+            x * mm,
+            y * mm,
+            geometry.card_width_mm * mm,
+            geometry.card_height_mm * mm,
+            fill=1,
+            stroke=0,
+        )
 
     pdf.setFillColor(HexColor(foreground))
     for index, character in enumerate(characters):
         if character == " ":
             continue
         x, y_top, _, _ = card_origin(index, geometry)
-        placement = glyph_placement(
-            character, face, x, y_top, geometry, typography
-        )
+        placement = glyph_placement(character, face, x, y_top, geometry, typography)
         glyph_set = face.glyph_set()
         pdf_path = pdf.beginPath()
         glyph_set[placement.glyph_name].draw(CanvasPathPen(glyph_set, pdf_path))
@@ -619,9 +614,18 @@ def write_pdf(
         for index in range(len(characters)):
             x, y_top, _, _ = card_origin(index, geometry)
             y = page_height - y_top - geometry.card_height_mm
-            pdf.rect(x * mm, y * mm, geometry.card_width_mm * mm, geometry.card_height_mm * mm, fill=0, stroke=1)
+            pdf.rect(
+                x * mm,
+                y * mm,
+                geometry.card_width_mm * mm,
+                geometry.card_height_mm * mm,
+                fill=0,
+                stroke=1,
+            )
             split_y = page_height - y_top - geometry.split_y_mm
-            pdf.line(x * mm, split_y * mm, (x + geometry.card_width_mm) * mm, split_y * mm)
+            pdf.line(
+                x * mm, split_y * mm, (x + geometry.card_width_mm) * mm, split_y * mm
+            )
 
     pdf.showPage()
     pdf.save()
@@ -722,12 +726,22 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         choices=("prototype", "definitive"),
         help="matched V2 physical variant: character preset and sticker geometry",
     )
-    source.add_argument("--preset", help="character preset id (default: catalog default)")
-    source.add_argument("--settings", type=Path, help="settings JSON with preset or custom characters")
-    parser.add_argument("--color-preset", choices=sorted(COLOR_PRESETS), default=DEFAULT_COLOR_PRESET)
+    source.add_argument(
+        "--preset", help="character preset id (default: catalog default)"
+    )
+    source.add_argument(
+        "--settings", type=Path, help="settings JSON with preset or custom characters"
+    )
+    parser.add_argument(
+        "--color-preset", choices=sorted(COLOR_PRESETS), default=DEFAULT_COLOR_PRESET
+    )
     parser.add_argument("--background", help="background override in #RRGGBB notation")
-    parser.add_argument("--foreground", help="letter-color override in #RRGGBB notation")
-    parser.add_argument("--guide-color", default="#FF00FF", help="cut-guide color in #RRGGBB notation")
+    parser.add_argument(
+        "--foreground", help="letter-color override in #RRGGBB notation"
+    )
+    parser.add_argument(
+        "--guide-color", default="#FF00FF", help="cut-guide color in #RRGGBB notation"
+    )
     parser.add_argument(
         "--font",
         type=Path,
@@ -751,7 +765,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--card-height", type=float, default=86.0)
     parser.add_argument("--horizontal-padding", type=float, default=3.0)
     parser.add_argument("--vertical-padding", type=float, default=4.0)
-    parser.add_argument("--omit-blank", action="store_true", help="omit the blank drum position")
+    parser.add_argument(
+        "--omit-blank", action="store_true", help="omit the blank drum position"
+    )
     guide_mode = parser.add_mutually_exclusive_group()
     guide_mode.add_argument(
         "--guides",
@@ -781,7 +797,10 @@ def option_was_supplied(argv: Sequence[str] | None, option: str) -> bool:
     """Tell explicit dimension overrides apart from argparse defaults."""
 
     arguments = tuple(sys.argv[1:] if argv is None else argv)
-    return any(argument == option or argument.startswith(f"{option}=") for argument in arguments)
+    return any(
+        argument == option or argument.startswith(f"{option}=")
+        for argument in arguments
+    )
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -810,7 +829,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             profile = load_profile(args.preset, args.settings)
             card_width = args.card_width
             card_height = args.card_height
-        background, foreground = resolve_colors(args.color_preset, args.background, args.foreground)
+        background, foreground = resolve_colors(
+            args.color_preset, args.background, args.foreground
+        )
         guide_color = normalize_color(args.guide_color)
         faces = [FontFace.load(args.font, args.font_weight, args.font_width)]
         for character in profile.characters:
@@ -826,8 +847,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         include_guides = args.include_guides
         svg, positions = build_svg(
-            profile, faces, geometry, background, foreground, guide_color,
-            include_guides, args.omit_blank,
+            profile,
+            faces,
+            geometry,
+            background,
+            foreground,
+            guide_color,
+            include_guides,
+            args.omit_blank,
         )
         args.output_svg.parent.mkdir(parents=True, exist_ok=True)
         args.output_svg.write_text(svg, encoding="utf-8")
@@ -839,17 +866,32 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         if args.output_pdf:
             write_pdf(
-                args.output_pdf, profile, faces, geometry, background, foreground,
-                guide_color, include_guides, args.omit_blank,
+                args.output_pdf,
+                profile,
+                faces,
+                geometry,
+                background,
+                foreground,
+                guide_color,
+                include_guides,
+                args.omit_blank,
             )
         manifest_path = args.manifest or args.output_svg.with_suffix(".json")
         manifest = build_manifest(
-            profile, faces, positions, geometry, args.color_preset, background,
-            foreground, guide_color, include_guides, args.omit_blank,
+            profile,
+            faces,
+            positions,
+            geometry,
+            args.color_preset,
+            background,
+            foreground,
+            guide_color,
+            include_guides,
+            args.omit_blank,
             physical_variant,
         )
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
-        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        write_licensed_json(manifest_path, manifest)
     except (
         StickerError,
         CharacterSetError,
