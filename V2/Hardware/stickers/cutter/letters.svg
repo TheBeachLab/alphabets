@@ -18,7 +18,15 @@
    sodipodi:docname="letters.svg"
    inkscape:export-filename="/home/irix/Repositories/Beach Lab/BeachLab_alphabets/V2/Hardware/letters.png"
    inkscape:export-xdpi="600.01703"
-   inkscape:export-ydpi="600.01703"><metadata
+   inkscape:export-ydpi="600.01703">
+  <!-- alphabets-license
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+SPDX-License-Identifier: MIT
+-->
+  <metadata id="alphabets-license">
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab &lt;https://beachlab.org&gt;
+SPDX-License-Identifier: MIT
+</metadata><metadata
      id="metadata8"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs

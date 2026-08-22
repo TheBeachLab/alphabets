@@ -1,3 +1,7 @@
+G04 ALPHABETS_LICENSE_BEGIN*
+G04 SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>*
+G04 SPDX-License-Identifier: MIT*
+G04 ALPHABETS_LICENSE_END*
 %TF.GenerationSoftware,KiCad,Pcbnew,10.0.5*%
 %TF.CreationDate,2026-08-18T14:54:11+02:00*%
 %TF.ProjectId,attiny44-ring,61747469-6e79-4343-942d-72696e672e6b,2.0*%

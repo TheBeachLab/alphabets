@@ -8,7 +8,9 @@ from pathlib import Path
 from json_license_metadata import (
     JSON_LICENSE_METADATA,
     LicenseMetadataError,
+    validate_gerber_job_license,
     validate_json_license,
+    with_gerber_job_license,
     with_json_license,
     write_licensed_json,
 )
@@ -38,6 +40,21 @@ class JsonLicenseMetadataTests(unittest.TestCase):
             write_licensed_json(path, {"schema_version": 1})
             data = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(data, {**JSON_LICENSE_METADATA, "schema_version": 1})
+
+    def test_gerber_job_uses_schema_defined_comment(self):
+        source = {"Header": {"Comment": "Fabrication notes"}, "GeneralSpecs": {}}
+        licensed = with_gerber_job_license(source)
+        self.assertNotIn("SPDX-License-Identifier", licensed)
+        self.assertIn("Fabrication notes", licensed["Header"]["Comment"])
+        validate_gerber_job_license(licensed)
+
+    def test_gerber_job_writer_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "board.gbrjob"
+            write_licensed_json(path, {"Header": {}, "GeneralSpecs": {}})
+            first = path.read_text(encoding="utf-8")
+            write_licensed_json(path, json.loads(first))
+            self.assertEqual(path.read_text(encoding="utf-8"), first)
 
 
 if __name__ == "__main__":

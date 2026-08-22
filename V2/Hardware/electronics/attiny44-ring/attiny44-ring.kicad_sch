@@ -13,6 +13,8 @@
 		(comment 2 "External 28BYJ-48 driver board logic inputs: IN1..IN4")
 		(comment 3 "One CHAIN_RING and one AVR ISP use 2x3 2.54 mm SMD headers")
 		(comment 4 "All discrete SMD passives use 1206 packages")
+		(comment 8 "SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>")
+		(comment 9 "SPDX-License-Identifier: MIT")
 	)
 	(lib_symbols
 		(symbol "attiny44-ring:ATTINY44A"

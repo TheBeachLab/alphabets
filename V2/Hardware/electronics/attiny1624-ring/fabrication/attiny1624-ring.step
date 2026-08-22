@@ -1,4 +1,8 @@
 ISO-10303-21;
+/* ALPHABETS_LICENSE_BEGIN */
+/* SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> */
+/* SPDX-License-Identifier: MIT */
+/* ALPHABETS_LICENSE_END */
 HEADER;
 FILE_DESCRIPTION(('KiCad electronic assembly'),'2;1');
 FILE_NAME('attiny1624-ring.step','2026-08-19T04:56:45',('Pcbnew'),(

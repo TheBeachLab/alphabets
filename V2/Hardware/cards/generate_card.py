@@ -24,6 +24,7 @@ CODE_DIR = V2_DIR / "Code"
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
+from artifact_license_metadata import embed_artifact_license  # noqa: E402
 from json_license_metadata import write_licensed_json  # noqa: E402
 from physical_variants import PhysicalVariantError, load_variant  # noqa: E402
 
@@ -349,6 +350,7 @@ def build_svg(output: Path, args: argparse.Namespace) -> None:
         ]
     )
     output.write_text(svg, encoding="utf-8")
+    embed_artifact_license(output)
 
 
 def build_dxf(output: Path, args: argparse.Namespace) -> None:
@@ -386,6 +388,7 @@ def build_dxf(output: Path, args: argparse.Namespace) -> None:
         lines.extend(["10", number(x), "20", number(y)])
     lines.extend(["0", "ENDSEC", "0", "EOF", ""])
     output.write_text("\n".join(lines), encoding="ascii")
+    embed_artifact_license(output)
 
 
 def build_manifest(output: Path, args: argparse.Namespace) -> None:

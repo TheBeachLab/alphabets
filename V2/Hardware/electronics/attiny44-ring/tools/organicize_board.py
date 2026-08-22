@@ -15,6 +15,11 @@ from pathlib import Path
 
 import pcbnew
 
+CODE_DIR = Path(__file__).resolve().parents[4] / "Code"
+sys.path.insert(0, str(CODE_DIR))
+
+from kicad_license_metadata import embed_kicad_license  # noqa: E402
+
 
 THIRD_PARTY = Path(__file__).resolve().parent.parent / "third_party"
 sys.path.insert(0, str(THIRD_PARTY))
@@ -378,6 +383,7 @@ def organicize(board_path: Path, kicad_cli: Path) -> None:
         teardrops = _add_teardrops(board)
         _set_project_width_defaults(board)
         pcbnew.SaveBoard(str(board_path), board)
+        embed_kicad_license(board_path)
 
         final_report = workspace / "final-drc.rpt"
         categories = _drc_categories(kicad_cli, board_path, final_report)

@@ -5,7 +5,8 @@
       "Application": "Pcbnew",
       "Version": "10.0.5"
     },
-    "CreationDate": "2026-08-18T14:54:11+02:00"
+    "CreationDate": "2026-08-18T14:54:11+02:00",
+    "Comment": "ALPHABETS_LICENSE_BEGIN\nSPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>\nSPDX-License-Identifier: MIT\nALPHABETS_LICENSE_END"
   },
   "GeneralSpecs": {
     "ProjectId": {

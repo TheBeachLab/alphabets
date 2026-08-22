@@ -30,6 +30,7 @@ from alphabets_cad.assemblies import (
     enclosed_module_components,
 )
 from alphabets_cad.parameters import DESIGN
+from artifact_license_metadata import embed_artifact_license
 from generate_stickers import (
     DEFAULT_FONT,
     DEFAULT_FONT_WEIGHT,
@@ -275,6 +276,7 @@ def write_atlas() -> None:
     svg_path = GENERATED_DIR / "sticker-atlas.svg"
     png_path = GENERATED_DIR / "sticker-atlas.png"
     svg_path.write_text(svg, encoding="utf-8")
+    embed_artifact_license(svg_path)
     magick = shutil.which("magick")
     if magick is None:
         raise RuntimeError("ImageMagick 'magick' is required to rasterize the atlas")
@@ -292,6 +294,7 @@ def write_atlas() -> None:
         ],
         check=True,
     )
+    embed_artifact_license(png_path)
 
 
 def export_static_meshes() -> list[dict[str, Any]]:
@@ -312,6 +315,7 @@ def export_static_meshes() -> list[dict[str, Any]]:
             tolerance=0.05,
             angularTolerance=0.1,
         )
+        embed_artifact_license(path)
         components.append(
             {
                 "name": component.name,

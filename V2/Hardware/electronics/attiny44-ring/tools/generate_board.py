@@ -7,9 +7,19 @@ from __future__ import annotations
 
 import argparse
 import os
+import sys
 from pathlib import Path
 
 import pcbnew
+
+CODE_DIR = Path(__file__).resolve().parents[4] / "Code"
+sys.path.insert(0, str(CODE_DIR))
+
+from kicad_license_metadata import (  # noqa: E402
+    SPDX_COPYRIGHT_COMMENT,
+    SPDX_LICENSE_COMMENT,
+    embed_kicad_license,
+)
 
 
 MM = pcbnew.FromMM
@@ -182,6 +192,8 @@ def generate(output: Path, dsn_output: Path, footprint_root: Path) -> None:
     board.GetTitleBlock().SetRevision("2.0")
     board.GetTitleBlock().SetCompany("TheBeachLab / Alphabets")
     board.GetTitleBlock().SetComment(0, "Single-sided F.Cu; 16-20 mil organic tracks; 0.4 mm isolation")
+    board.GetTitleBlock().SetComment(7, SPDX_COPYRIGHT_COMMENT)
+    board.GetTitleBlock().SetComment(8, SPDX_LICENSE_COMMENT)
 
     default_class = board.GetAllNetClasses()["Default"]
     default_class.SetClearance(MM(ISOLATION))
@@ -276,6 +288,7 @@ def generate(output: Path, dsn_output: Path, footprint_root: Path) -> None:
     board.BuildListOfNets()
     if not pcbnew.SaveBoard(str(output), board):
         raise RuntimeError(f"Could not save {output}")
+    embed_kicad_license(output)
     if not pcbnew.ExportSpecctraDSN(board, str(dsn_output)):
         raise RuntimeError(f"Could not export {dsn_output}")
 

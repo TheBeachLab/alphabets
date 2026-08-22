@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="720mm" height="364mm" viewBox="0 0 720 364">
+  <!-- alphabets-license
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+SPDX-License-Identifier: MIT
+-->
+  <metadata id="alphabets-license">
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab &lt;https://beachlab.org&gt;
+SPDX-License-Identifier: MIT
+</metadata>
   <title>International 64 sticker sheet</title>
   <defs>
     <clipPath id="clip-card-01" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="45" height="91"/></clipPath>

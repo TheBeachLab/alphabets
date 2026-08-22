@@ -6,9 +6,15 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 import pcbnew
+
+CODE_DIR = Path(__file__).resolve().parents[4] / "Code"
+sys.path.insert(0, str(CODE_DIR))
+
+from kicad_license_metadata import embed_kicad_license  # noqa: E402
 
 
 def main() -> None:
@@ -22,6 +28,7 @@ def main() -> None:
         raise RuntimeError(f"Could not import {args.session}")
     if not pcbnew.SaveBoard(str(args.board), board):
         raise RuntimeError(f"Could not save {args.board}")
+    embed_kicad_license(args.board)
 
 
 if __name__ == "__main__":

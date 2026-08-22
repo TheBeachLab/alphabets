@@ -29,6 +29,10 @@ CODE_DIR = V2_DIR / "Code"
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
+from artifact_license_metadata import (  # noqa: E402
+    DEFAULT_LICENSE_TEXT,
+    embed_artifact_license,
+)
 from character_sets import (  # noqa: E402
     CharacterSet,
     CharacterSetError,
@@ -567,6 +571,7 @@ def write_pdf(
     )
     pdf.setTitle(f"{profile.name} sticker sheet")
     pdf.setAuthor("Alphabets sticker generator")
+    pdf.setSubject(DEFAULT_LICENSE_TEXT)
 
     pdf.setFillColor(HexColor(background))
     for index in range(len(characters)):
@@ -858,12 +863,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         args.output_svg.parent.mkdir(parents=True, exist_ok=True)
         args.output_svg.write_text(svg, encoding="utf-8")
+        embed_artifact_license(args.output_svg)
         if args.output_cut_svg:
             args.output_cut_svg.parent.mkdir(parents=True, exist_ok=True)
             args.output_cut_svg.write_text(
                 build_cut_svg(profile, geometry, guide_color, args.omit_blank),
                 encoding="utf-8",
             )
+            embed_artifact_license(args.output_cut_svg)
         if args.output_pdf:
             write_pdf(
                 args.output_pdf,

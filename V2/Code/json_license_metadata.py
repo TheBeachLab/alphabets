@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,15 @@ JSON_LICENSE_METADATA = {
     "SPDX-FileCopyrightText": SPDX_FILE_COPYRIGHT_TEXT,
     "SPDX-License-Identifier": SPDX_LICENSE_IDENTIFIER,
 }
+GERBER_JOB_LICENSE_BEGIN = "ALPHABETS_LICENSE_BEGIN"
+GERBER_JOB_LICENSE_END = "ALPHABETS_LICENSE_END"
+GERBER_JOB_LICENSE_COMMENT = "\n".join(
+    (
+        GERBER_JOB_LICENSE_BEGIN,
+        *(f"{key}: {value}" for key, value in JSON_LICENSE_METADATA.items()),
+        GERBER_JOB_LICENSE_END,
+    )
+)
 
 
 class LicenseMetadataError(ValueError):
@@ -42,6 +52,43 @@ def with_json_license(data: Mapping[str, Any]) -> dict[str, Any]:
     return {**JSON_LICENSE_METADATA, **data}
 
 
+def with_gerber_job_license(data: Mapping[str, Any]) -> dict[str, Any]:
+    """Embed SPDX data in the schema-defined Gerber Job Header.Comment field."""
+    header_value = data.get("Header")
+    if not isinstance(header_value, Mapping):
+        raise LicenseMetadataError("Gerber Job Header must be an object")
+    header = dict(header_value)
+    comment = header.get("Comment", "")
+    if not isinstance(comment, str):
+        raise LicenseMetadataError("Gerber Job Header.Comment must be a string")
+    comment = re.sub(
+        rf"(?:\n\n)?{GERBER_JOB_LICENSE_BEGIN}\n.*?\n{GERBER_JOB_LICENSE_END}",
+        "",
+        comment,
+        flags=re.DOTALL,
+    ).rstrip()
+    header["Comment"] = (
+        f"{comment}\n\n{GERBER_JOB_LICENSE_COMMENT}"
+        if comment
+        else GERBER_JOB_LICENSE_COMMENT
+    )
+    return {**data, "Header": header}
+
+
+def validate_gerber_job_license(data: Mapping[str, Any]) -> None:
+    """Require canonical SPDX data inside Gerber Job Header.Comment."""
+    header = data.get("Header")
+    comment = header.get("Comment") if isinstance(header, Mapping) else None
+    if not isinstance(comment, str):
+        raise LicenseMetadataError("Gerber Job Header.Comment must contain SPDX data")
+    for key, expected in JSON_LICENSE_METADATA.items():
+        declaration = f"{key}: {expected}"
+        if declaration not in comment:
+            raise LicenseMetadataError(
+                f"Gerber Job Header.Comment must contain {declaration!r}"
+            )
+
+
 def write_licensed_json(
     path: Path,
     data: Mapping[str, Any],
@@ -50,9 +97,14 @@ def write_licensed_json(
     sort_keys: bool = False,
 ) -> None:
     """Write a deterministic JSON object with embedded licence metadata."""
+    licensed_data = (
+        with_gerber_job_license(data)
+        if path.suffix.lower() == ".gbrjob"
+        else with_json_license(data)
+    )
     path.write_text(
         json.dumps(
-            with_json_license(data),
+            licensed_data,
             ensure_ascii=ensure_ascii,
             indent=2,
             sort_keys=sort_keys,

@@ -1,2 +1,4 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+# SPDX-License-Identifier: MIT
 fonttools>=4.61,<5
 reportlab>=4.4,<5

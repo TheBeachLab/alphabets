@@ -1,5 +1,17 @@
 (kicad_symbol_lib (version 20251024) (generator kicad_symbol_editor)
   (symbol "ATTINY44A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "U" (at 0 22.86 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -81,6 +93,18 @@
     )
   )
   (symbol "C" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "C" (at 1.524 2.032 90) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -126,6 +150,18 @@
     )
   )
   (symbol "CONN2" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "J" (at 0 5.08 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -159,6 +195,18 @@
     )
   )
   (symbol "CONN3" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "J" (at 0 6.35 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -196,6 +244,18 @@
     )
   )
   (symbol "CONN5" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "J" (at 0 8.89 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -241,6 +301,18 @@
     )
   )
   (symbol "CONN6" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "J" (at 0 10.16 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -290,6 +362,18 @@
     )
   )
   (symbol "CP" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "C" (at 1.778 2.032 90) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -335,6 +419,18 @@
     )
   )
   (symbol "ISP6" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "J" (at 0 7.62 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -384,6 +480,18 @@
     )
   )
   (symbol "R" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "R" (at 0 2.032 90) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -417,6 +525,18 @@
     )
   )
   (symbol "TESTPOINT" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "TP" (at 0 5.08 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -446,6 +566,18 @@
     )
   )
   (symbol "ULN2003A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "U" (at 0 22.86 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )
@@ -535,6 +667,18 @@
     )
   )
   (symbol "CONN4" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+		(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "SPDX-License-Identifier" "MIT"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
     (property "Reference" "J" (at 0 8.89 0) (show_name)
       (effects (font (size 1.27 1.27)))
     )

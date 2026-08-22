@@ -1,4 +1,7 @@
 (footprint "R_1206_3216Metric_CompactCrossover"
+	(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>")
+	(property "SPDX-License-Identifier" "MIT")
+	(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE")
 	(version 20260206)
 	(generator "Codex")
 	(layer "F.Cu")

@@ -1,4 +1,8 @@
 ISO-10303-21;
+/* ALPHABETS_LICENSE_BEGIN */
+/* SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> */
+/* SPDX-License-Identifier: MIT */
+/* ALPHABETS_LICENSE_END */
 HEADER;
 FILE_DESCRIPTION(('Open CASCADE Model'),'2;1');
 FILE_NAME('Open CASCADE Shape Model','1970-01-01T00:00:00',('Author'),(

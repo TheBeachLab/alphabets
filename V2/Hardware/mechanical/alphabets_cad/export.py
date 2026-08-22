@@ -16,6 +16,7 @@ CODE_DIR = Path(__file__).resolve().parents[3] / "Code"
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
+from artifact_license_metadata import embed_artifact_license
 from json_license_metadata import write_licensed_json
 
 from .assemblies import (
@@ -94,6 +95,7 @@ def _normalize_step(path: Path) -> None:
 def _export_step(model: cq.Shape | cq.Assembly, path: Path) -> None:
     model.export(str(path))
     _normalize_step(path)
+    embed_artifact_license(path)
 
 
 def _bottom_faces(shape: cq.Shape) -> cq.Compound:
@@ -125,6 +127,7 @@ def _export_dxf(
         document.add_shape(_bottom_faces(shape), layer=layer)
     document.document.saveas(path)
     _normalize_dxf(path)
+    embed_artifact_license(path)
 
 
 def _export_reference_dxf(path: Path, shape: cq.Shape) -> None:
@@ -137,6 +140,7 @@ def _export_reference_dxf(path: Path, shape: cq.Shape) -> None:
     document.add_shape(shape, layer="REFERENCE")
     document.document.saveas(path)
     _normalize_dxf(path)
+    embed_artifact_license(path)
 
 
 def _shape_summary(shape: cq.Shape) -> dict[str, object]:
@@ -277,6 +281,8 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
         tolerance=0.08,
         angularTolerance=0.125,
     )
+    for path in directories["print"].glob("*.stl"):
+        embed_artifact_license(path)
 
     cq.exporters.export(
         module.toCompound(),
@@ -294,6 +300,7 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
         },
     )
     _strip_trailing_whitespace(directories["preview"] / "module-reference.svg")
+    embed_artifact_license(directories["preview"] / "module-reference.svg")
 
     for name, model in (
         ("enclosure-module", enclosed_module),
@@ -315,6 +322,7 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
             },
         )
         _strip_trailing_whitespace(directories["preview"] / f"{name}.svg")
+        embed_artifact_license(directories["preview"] / f"{name}.svg")
 
     manifest = {
         "schema_version": 1,

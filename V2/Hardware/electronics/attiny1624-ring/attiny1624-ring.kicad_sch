@@ -13,6 +13,8 @@
 		(comment 2 "ATtiny1624 hardware SPI ring and external 28BYJ-48 driver inputs")
 		(comment 3 "Microchip-compatible 2x3 UPDI header plus powered HOME sensor input")
 		(comment 4 "All discrete SMD passives use 1206 packages")
+		(comment 8 "SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>")
+		(comment 9 "SPDX-License-Identifier: MIT")
 	)
 	(lib_symbols
 		(symbol "attiny1624-ring:ATTINY1624"

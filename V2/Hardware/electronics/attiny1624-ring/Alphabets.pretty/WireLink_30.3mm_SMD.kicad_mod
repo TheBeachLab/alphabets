@@ -1,4 +1,7 @@
 (footprint "WireLink_30.3mm_SMD"
+	(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>")
+	(property "SPDX-License-Identifier" "MIT")
+	(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE")
   (version 20240108)
   (generator "alphabets")
   (layer "F.Cu")

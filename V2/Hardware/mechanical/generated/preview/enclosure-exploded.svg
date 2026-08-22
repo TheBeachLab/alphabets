@@ -6,6 +6,14 @@
    height="700.0"
 
 >
+  <!-- alphabets-license
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+SPDX-License-Identifier: MIT
+-->
+  <metadata id="alphabets-license">
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab &lt;https://beachlab.org&gt;
+SPDX-License-Identifier: MIT
+</metadata>
     <g transform="scale(2.1570040328643088, -2.1570040328643088)   translate(86.55995611896039,-136.12597974332718)" stroke-width="0.35"  fill="none">
        <!-- hidden lines -->
        <g  stroke="rgb(160,160,160)" fill="none" stroke-dasharray="0.35,0.35" >

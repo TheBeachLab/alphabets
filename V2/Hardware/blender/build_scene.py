@@ -702,7 +702,9 @@ def main() -> int:
     bpy.context.view_layer.objects.active = step_controller
     apply_blend_license_metadata(scene)
     bpy.ops.file.pack_all()
-    bpy.ops.wm.save_as_mainfile(filepath=str(args.output.resolve()))
+    # Keep custom SPDX properties inspectable without Blender so the repository
+    # auditor can verify that the standalone document carries its licence.
+    bpy.ops.wm.save_as_mainfile(filepath=str(args.output.resolve()), compress=False)
     return 0
 
 

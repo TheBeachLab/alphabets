@@ -1,4 +1,7 @@
 (kicad_pcb
+	(property "SPDX-FileCopyrightText" "2014-2026 The Beach Lab <https://beachlab.org>")
+	(property "SPDX-License-Identifier" "MIT")
+	(property "LicenseURL" "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE")
 	(version 20260206)
 	(generator "pcbnew")
 	(generator_version "10.0")
@@ -12,6 +15,8 @@
 		(rev "2.0")
 		(company "TheBeachLab / Alphabets")
 		(comment 1 "Single-sided F.Cu; 16-20 mil organic tracks; 0.4 mm isolation")
+		(comment 8 "SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>")
+		(comment 9 "SPDX-License-Identifier: MIT")
 	)
 	(layers
 		(0 "F.Cu" signal)

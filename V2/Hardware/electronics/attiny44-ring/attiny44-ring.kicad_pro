@@ -355,7 +355,11 @@
     ]
   },
   "sheets": [],
-  "text_variables": {},
+  "text_variables": {
+    "SPDX_FILE_COPYRIGHT_TEXT": "2014-2026 The Beach Lab <https://beachlab.org>",
+    "SPDX_LICENSE_IDENTIFIER": "MIT",
+    "LICENSE_URL": "https://github.com/TheBeachLab/alphabets/blob/master/LICENSE"
+  },
   "tuning_profiles": {
     "meta": {
       "version": 0

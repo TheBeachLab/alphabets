@@ -7,8 +7,18 @@ from __future__ import annotations
 
 import argparse
 import copy
+import sys
 import uuid
 from pathlib import Path
+
+CODE_DIR = Path(__file__).resolve().parents[4] / "Code"
+sys.path.insert(0, str(CODE_DIR))
+
+from kicad_license_metadata import (  # noqa: E402
+    SPDX_COPYRIGHT_COMMENT,
+    SPDX_LICENSE_COMMENT,
+    embed_kicad_license,
+)
 
 from kiutils.items.common import Effects, Font, Position, Property, Stroke, TitleBlock
 from kiutils.items.schitems import (
@@ -139,6 +149,8 @@ def generate(symbol_path: Path, output_path: Path) -> None:
             2: "ATtiny1624 hardware SPI ring and external 28BYJ-48 driver inputs",
             3: "Microchip-compatible 2x3 UPDI header plus powered HOME sensor input",
             4: "All discrete SMD passives use 1206 packages",
+            8: SPDX_COPYRIGHT_COMMENT,
+            9: SPDX_LICENSE_COMMENT,
         },
     )
     schematic.sheetInstances = [HierarchicalSheetInstance(instancePath="/", page="1")]
@@ -216,6 +228,8 @@ def generate(symbol_path: Path, output_path: Path) -> None:
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     schematic.to_file(str(output_path), encoding="utf-8")
+    embed_kicad_license(symbol_path)
+    embed_kicad_license(output_path)
 
 
 def main() -> None:
