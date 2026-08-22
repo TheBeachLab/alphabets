@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Alphabets New Spool
 $fn=(50);
 

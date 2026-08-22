@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Manufacturing dimensions shared by every CadQuery part.
 
 All dimensions are millimetres. Values reproduce the current V2 card,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Generate a variant-locked V2 split-flap card and cutter files.
 
 Run this script with FreeCADCmd, not the system Python interpreter.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 # Example only: a reversible fit-check variant.
 # All omitted dimensions inherit from ../design.toml.
 

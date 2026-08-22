@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """CQ-editor entry point for the printable rear-open enclosure."""
 
 from __future__ import annotations

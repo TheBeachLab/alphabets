@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Blender add-on for physically simulated Alphabets drum steps."""
 
 from __future__ import annotations

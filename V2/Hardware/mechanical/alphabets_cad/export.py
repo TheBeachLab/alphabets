@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Deterministic manufacturing exports for the CadQuery model."""
 
 from __future__ import annotations

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 require 'serialport'
 
 port_str = `ls /dev/tty.usbmodem*`.chomp

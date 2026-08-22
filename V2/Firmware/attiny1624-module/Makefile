@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 TARGET := alphabets-v2-attiny1624-module
 MCU ?= attiny1624
 F_CPU ?= 20000000UL

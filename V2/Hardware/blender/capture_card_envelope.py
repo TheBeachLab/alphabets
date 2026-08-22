@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Capture the settled card envelope from the currently loaded Blender file."""
 
 from __future__ import annotations

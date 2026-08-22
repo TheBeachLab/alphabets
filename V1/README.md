@@ -41,7 +41,8 @@ The goal of the Flip-Flap project is to create a cheap and modular Open Source M
 
 ## License
 
-The Flip-Flap project is licensed open source hardware and software under [MIT](http://opensource.org/licenses/MIT) license.
+The Flip-Flap project is licensed as open source hardware and software under
+the repository's [MIT License](../LICENSE).
 
 ## Who has done it beforehand?
 

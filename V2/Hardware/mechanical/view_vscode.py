@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """OCP CAD Viewer entry point for the Alphabets V2 reference module."""
 
 from __future__ import annotations

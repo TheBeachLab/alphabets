@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 PROJECT := attiny1624-ring
 KICAD_CLI ?= kicad-cli
 KICAD_PYTHON ?= python3

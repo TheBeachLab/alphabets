@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Check the electrical and mechanical invariants of the ATtiny1624 module PCB."""
 
 from __future__ import annotations

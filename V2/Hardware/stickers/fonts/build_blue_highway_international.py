@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Build the Blue Highway D font completed with required Overpass glyphs."""
 
 from __future__ import annotations

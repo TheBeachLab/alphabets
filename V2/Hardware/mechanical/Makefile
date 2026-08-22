@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 PYTHON ?= .venv/bin/python
 UV ?= uv
 CQ_EDITOR ?= cq-editor

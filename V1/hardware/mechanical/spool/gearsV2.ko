@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 from math import sqrt, atan2, sin, cos, pi, radians
 import operator
 

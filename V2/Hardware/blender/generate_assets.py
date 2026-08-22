@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Generate deterministic CadQuery meshes, texture atlas, and Blender metadata."""
 
 from __future__ import annotations

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Create the adaptive-radius, tapered fabrication PCB from routed copper."""
 
 from __future__ import annotations

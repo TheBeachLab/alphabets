@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 nc=6;
 nr=2;
 ms=70;
@@ -30,4 +31,3 @@ square([e,l3]);
     }
     
 inset();
-    

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Validate appended drum steps beyond the initial rigid-body cache range."""
 
 from __future__ import annotations

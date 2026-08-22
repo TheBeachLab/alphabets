@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 #include <avr/eeprom.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>

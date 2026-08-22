@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Build the Alphabets V2 rigid-body scene inside Blender."""
 
 from __future__ import annotations

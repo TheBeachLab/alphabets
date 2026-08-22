@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 PYTHON ?= ../mechanical/.venv/bin/python
 BLENDER ?= /Applications/Blender.app/Contents/MacOS/Blender
 UV ?= uv

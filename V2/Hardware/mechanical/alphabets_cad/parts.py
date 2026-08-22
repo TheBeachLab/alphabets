@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """CadQuery solids reconstructed from the current mechanical sources."""
 
 from __future__ import annotations

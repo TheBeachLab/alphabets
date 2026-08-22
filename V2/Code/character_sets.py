@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Canonical 64-position character-set configuration for Alphabets V2."""
 
 from __future__ import annotations

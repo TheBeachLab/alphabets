@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 #include <AccelStepper.h>
 
 boolean calibrated = false;
@@ -82,4 +83,3 @@ void loop()
   }  
 
 }
-

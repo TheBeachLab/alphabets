@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Parametric mechanical source for the Alphabets V2 module."""
 
 from .assemblies import (

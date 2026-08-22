@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Validated physical profiles for the two incompatible V2 hardware sets."""
 
 from __future__ import annotations

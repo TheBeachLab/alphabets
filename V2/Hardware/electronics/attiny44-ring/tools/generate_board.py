@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Generate the placed, single-sided Alphabets V2 ATtiny44 PCB."""
 
 from __future__ import annotations

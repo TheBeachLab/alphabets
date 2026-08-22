@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 #include "protocol_core.h"
 
 static bool flag_is_set(const volatile module_state_t *state, uint8_t flag)

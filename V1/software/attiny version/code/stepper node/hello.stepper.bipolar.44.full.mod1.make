@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 PROJECT=hello.stepper.bipolar.44.full.mod1
 SOURCES=$(PROJECT).c
 MMCU=attiny44

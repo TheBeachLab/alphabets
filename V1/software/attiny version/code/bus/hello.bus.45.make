@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 PROJECT=hello.bus.45
 SOURCES=$(PROJECT).c
 MMCU=attiny45

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 require 'serialport'
 require 'gmail'
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 #ifndef ALPHABETS_V2_PROTOCOL_CORE_H
 #define ALPHABETS_V2_PROTOCOL_CORE_H
 

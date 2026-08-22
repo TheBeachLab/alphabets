@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Generate the millable Alphabets V2 ATtiny1624 ring schematic."""
 
 from __future__ import annotations

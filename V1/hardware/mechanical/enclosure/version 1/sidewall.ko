@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 from koko.lib.shapes import *
 
 cad.mm_per_unit=1

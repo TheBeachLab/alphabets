@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Validate one smooth drum step against card-to-card tunnelling."""
 
 from __future__ import annotations

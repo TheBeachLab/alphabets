@@ -33,3 +33,15 @@ The parametric mechanical source and fabrication exports are in
 * Custom colors: Request custom colored modules and custom characters.
 * Web based interface: Control your modules interactively with your web browser.
 * Twitter interface: Create a twitter account for your installation and let the crowd interactively tweet to your modules.
+
+## License
+
+Except where a file or directory states otherwise, Alphabets' original source
+code, firmware, electronics designs, mechanical designs, documentation, and
+generated project artifacts are licensed under the [MIT License](LICENSE).
+Copyright (c) 2014 [The Beach Lab](https://beachlab.org).
+
+First-party source files carry an SPDX license identifier where appropriate.
+Binary and structured design formats inherit this repository-level declaration;
+legacy and bundled third-party sources retain their existing notices and
+licenses.

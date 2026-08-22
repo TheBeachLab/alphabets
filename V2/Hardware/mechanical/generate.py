@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Generate every manufacturing and review artifact."""
 
 from __future__ import annotations

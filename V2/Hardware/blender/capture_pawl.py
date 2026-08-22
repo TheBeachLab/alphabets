@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Capture the manually adjusted Blender pawl transform in millimetres."""
 
 from __future__ import annotations

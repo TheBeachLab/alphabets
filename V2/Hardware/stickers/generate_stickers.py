@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Generate manufacturing-ready sticker sheets from a 64-character profile."""
 
 from __future__ import annotations

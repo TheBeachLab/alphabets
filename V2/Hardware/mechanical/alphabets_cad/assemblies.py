@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Named CadQuery assemblies for fabrication exchange and visual review."""
 
 from __future__ import annotations

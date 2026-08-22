@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """Import a Freerouting Specctra session into the generated KiCad PCB."""
 
 from __future__ import annotations

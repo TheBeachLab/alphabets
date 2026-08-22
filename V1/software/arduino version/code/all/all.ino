@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // FLIP-FLAP
 // Arduino code for Maker Faire Rome
 // October 2014
@@ -161,5 +162,4 @@ void loop() {
 
 
 }
-
 
