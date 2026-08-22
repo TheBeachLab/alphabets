@@ -69,9 +69,9 @@ def has_spdx_declaration(path: Path) -> bool:
     return COPYRIGHT_MARKER in header and LICENCE_MARKER in header
 
 
-def has_adjacent_declaration(path: Path) -> bool:
+def has_adjacent_declaration(path: Path, tracked: set[Path]) -> bool:
     sidecar = Path(f"{path}.license")
-    return (ROOT / sidecar).is_file() and has_spdx_declaration(sidecar)
+    return sidecar in tracked and has_spdx_declaration(sidecar)
 
 
 def requires_inline_declaration(path: Path) -> bool:
@@ -87,7 +87,10 @@ def main() -> int:
         path
         for path in paths
         if not has_spdx_declaration(path)
-        and (requires_inline_declaration(path) or not has_adjacent_declaration(path))
+        and (
+            requires_inline_declaration(path)
+            or not has_adjacent_declaration(path, tracked)
+        )
     ]
     orphaned = [
         path
