@@ -113,3 +113,23 @@ After moving the pawl, save the blend file and capture the exact transform with:
 
 This writes `generated/pawl-position.json`. The captured value is simulation
 evidence only until it is reviewed and transferred into CadQuery dimensions.
+
+## Static 5 × 2 HALLO / WELT! wall
+
+Build the presentation scene with:
+
+```sh
+make hello-wall
+```
+
+The result is `generated/hello-wall/alphabets-hallo-welt-5x2.blend`, accompanied
+by a rendered PNG and a JSON manifest. Its ten modules preserve the current
+CadQuery enclosure dimensions and docking pitch. The top row reads `HALLO` and
+the lower row reads `WELT!`, representing the spoken phrase `HALLO WELT!`
+without spending an eleventh module on the space.
+
+The scene contains enclosure halves, definitive pawls, paired display cards,
+continuous split sticker artwork and M3 pawl/axle screws. It deliberately has
+no motors, PCBs, cables, backpacks or other electronics. Sticker backgrounds
+use a low-roughness gloss-black material with yellow Blue Highway lettering;
+each full glyph is mapped continuously across its upper and lower sticker.

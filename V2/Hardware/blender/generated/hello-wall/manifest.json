@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "title": "German hello world",
+  "spoken_message": "HALLO WELT!",
+  "display_rows": [
+    "HALLO",
+    "WELT!"
+  ],
+  "layout": {
+    "rows": 2,
+    "columns": 5,
+    "module_count": 10
+  },
+  "electronics_included": false,
+  "stickers": {
+    "background_rgb": [
+      2,
+      3,
+      4
+    ],
+    "letter_rgb": [
+      255,
+      204,
+      0
+    ],
+    "finish": "gloss black",
+    "font": "Hardware/stickers/fonts/BlueHighwayD-International.otf",
+    "texture_size_px": [
+      512,
+      1024
+    ],
+    "split_v": 0.5
+  },
+  "modules": [
+    {
+      "row": 1,
+      "column": 1,
+      "character": "H",
+      "texture": "textures/H.png"
+    },
+    {
+      "row": 1,
+      "column": 2,
+      "character": "A",
+      "texture": "textures/A.png"
+    },
+    {
+      "row": 1,
+      "column": 3,
+      "character": "L",
+      "texture": "textures/L.png"
+    },
+    {
+      "row": 1,
+      "column": 4,
+      "character": "L",
+      "texture": "textures/L.png"
+    },
+    {
+      "row": 1,
+      "column": 5,
+      "character": "O",
+      "texture": "textures/O.png"
+    },
+    {
+      "row": 2,
+      "column": 1,
+      "character": "W",
+      "texture": "textures/W.png"
+    },
+    {
+      "row": 2,
+      "column": 2,
+      "character": "E",
+      "texture": "textures/E.png"
+    },
+    {
+      "row": 2,
+      "column": 3,
+      "character": "L",
+      "texture": "textures/L.png"
+    },
+    {
+      "row": 2,
+      "column": 4,
+      "character": "T",
+      "texture": "textures/T.png"
+    },
+    {
+      "row": 2,
+      "column": 5,
+      "character": "!",
+      "texture": "textures/exclamation.png"
+    }
+  ],
+  "textures": [
+    {
+      "character": "H",
+      "file": "textures/H.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 776,
+      "glyph_bounds_px": [
+        0,
+        188,
+        430,
+        745
+      ],
+      "continuous_split_v": 0.5
+    },
+    {
+      "character": "A",
+      "file": "textures/A.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 808,
+      "glyph_bounds_px": [
+        0,
+        196,
+        429,
+        776
+      ],
+      "continuous_split_v": 0.5
+    },
+    {
+      "character": "L",
+      "file": "textures/L.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 900,
+      "glyph_bounds_px": [
+        0,
+        218,
+        400,
+        864
+      ],
+      "continuous_split_v": 0.5
+    },
+    {
+      "character": "O",
+      "file": "textures/O.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 700,
+      "glyph_bounds_px": [
+        0,
+        162,
+        429,
+        679
+      ],
+      "continuous_split_v": 0.5
+    },
+    {
+      "character": "W",
+      "file": "textures/W.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 536,
+      "glyph_bounds_px": [
+        0,
+        130,
+        430,
+        515
+      ],
+      "continuous_split_v": 0.5
+    },
+    {
+      "character": "E",
+      "file": "textures/E.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 900,
+      "glyph_bounds_px": [
+        0,
+        218,
+        410,
+        864
+      ],
+      "continuous_split_v": 0.5
+    },
+    {
+      "character": "T",
+      "file": "textures/T.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 876,
+      "glyph_bounds_px": [
+        0,
+        212,
+        429,
+        841
+      ],
+      "continuous_split_v": 0.5
+    },
+    {
+      "character": "!",
+      "file": "textures/exclamation.png",
+      "size_px": [
+        512,
+        1024
+      ],
+      "font_size_px": 900,
+      "glyph_bounds_px": [
+        0,
+        218,
+        208,
+        864
+      ],
+      "continuous_split_v": 0.5
+    }
+  ]
+}
