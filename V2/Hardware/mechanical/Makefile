@@ -6,7 +6,7 @@ OUTPUT ?= generated
 VARIANT ?= definitive
 OCP_ENV ?= .ocp-venv
 
-.PHONY: setup setup-vscode gui gui-enclosure generate lint test check verify-generated clean-generated
+.PHONY: setup setup-vscode gui gui-enclosure generate generate-captured-enclosure lint test check verify-generated clean-generated
 
 setup:
 	$(UV) venv --python 3.12 .venv
@@ -25,6 +25,9 @@ gui-enclosure:
 generate:
 	PYTHONPATH=. $(PYTHON) generate.py --output $(OUTPUT) --variant $(VARIANT) $(if $(PROFILE),--profile $(PROFILE))
 
+generate-captured-enclosure:
+	PYTHONPATH=. $(PYTHON) export_captured_enclosure.py $(if $(PROFILE),--profile $(PROFILE))
+
 lint:
 	$(PYTHON) -m ruff check .
 	$(PYTHON) -m ruff format --check .
@@ -32,7 +35,7 @@ lint:
 test:
 	PYTHONPATH=. $(PYTHON) -m pytest -q
 
-check: generate lint test
+check: generate generate-captured-enclosure lint test
 
 verify-generated: check
 	git diff --exit-code -- generated

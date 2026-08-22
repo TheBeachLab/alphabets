@@ -10,6 +10,7 @@ kerf      = 0.1;  // for Full Spectrum Gen5 laser
 motorside = 1;    // 1 for motor side, 0 for shaft
 flap_width = 50;  // visible card body width mm
 axial_clearance = 1; // total clearance between card body and drum sides mm
+shaft_axis_radius = 1.7; // 3.4 mm clearance hole for an M3 screw axle
 d         = flap_width + axial_clearance; // distance between drum sides mm
 w         = 35;   // support width mm
 tabw      = 6;    // tab width mm
@@ -34,7 +35,7 @@ module axis() {
             circle(2.5);
         }
     else
-        circle(1.5);
+        circle(shaft_axis_radius);
 }
 
 // define slots

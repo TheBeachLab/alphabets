@@ -44,10 +44,10 @@
           55.3
         ]
       },
-      "component_volume_sum_mm3": 30113.407648,
+      "component_volume_sum_mm3": 30109.084816,
       "solid_count": 4,
       "valid": true,
-      "volume_mm3": 30086.059648
+      "volume_mm3": 30081.736816
     },
     "enclosed_module": {
       "bounds_mm": {
@@ -64,10 +64,10 @@
           86.657773
         ]
       },
-      "component_volume_sum_mm3": 224806.401285,
+      "component_volume_sum_mm3": 224802.078453,
       "solid_count": 202,
       "valid": true,
-      "volume_mm3": 217937.601059
+      "volume_mm3": 217933.278228
     },
     "enclosure_assembly": {
       "bounds_mm": {
@@ -144,10 +144,10 @@
           55.3
         ]
       },
-      "component_volume_sum_mm3": 46325.196495,
+      "component_volume_sum_mm3": 46320.873663,
       "solid_count": 8,
       "valid": true,
-      "volume_mm3": 43074.053621
+      "volume_mm3": 43069.730789
     },
     "motor_disc": {
       "bounds_mm": {
@@ -244,10 +244,10 @@
           2.15
         ]
       },
-      "component_volume_sum_mm3": 11115.078181,
+      "component_volume_sum_mm3": 11110.755349,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 11115.078181
+      "volume_mm3": 11110.755349
     },
     "support": {
       "bounds_mm": {
@@ -303,25 +303,63 @@
       "motor_axis_width": 3.0,
       "outer_width": 55.3,
       "positions": 64,
-      "shaft_axis_radius": 1.5,
+      "shaft_axis_radius": 1.7,
       "side_thickness": 2.15,
       "support_tab_width": 6.0,
       "support_width": 35.0,
       "support_y": 20.0
     },
     "drum_enclosure": {
+      "alignment_base_size": 8.0,
+      "alignment_clearance": 0.2,
+      "alignment_end_inset": 20.0,
+      "alignment_height": 3.0,
+      "alignment_top_size": 2.0,
       "axial_clearance": 2.0,
+      "boss_end_chamfer": 1.5,
+      "capture_card_clearance": 2.0,
+      "capture_outer_corner_radius": 10.0,
+      "capture_split_height": 12.0,
+      "capture_top_clearance": 2.0,
+      "capture_wall_thickness": 8.0,
+      "docking_clearance": 0.3,
+      "docking_recess_depth": 6.0,
+      "electronics_card_center_y": 0.0,
+      "electronics_card_center_z": -50.0,
+      "electronics_card_clearance": 0.5,
+      "electronics_card_height": 35.0,
+      "electronics_card_width": 50.0,
+      "floor_thickness": 8.0,
+      "front_inner_chamfer": 4.0,
       "front_thickness": 3.0,
       "inner_depth": 89.0,
       "inner_height": 89.0,
       "inner_width": 59.3,
+      "magnet_depth_clearance": 0.2,
+      "magnet_diameter": 3.0,
+      "magnet_radial_clearance": 0.2,
+      "magnet_thickness": 1.0,
       "motor_bore_diameter": 10.0,
+      "motor_cable_clearance": 1.0,
+      "motor_electronics_corner_radius": 8.0,
+      "motor_inset_depth": 6.0,
+      "motor_mount_boss_radius": 4.5,
+      "motor_mount_disc_clearance": 0.5,
       "motor_mount_hole_diameter": 4.4,
       "outer_corner_radius": 4.0,
       "outer_depth": 92.0,
       "outer_height": 93.8,
       "outer_width": 64.1,
       "overall_width": 75.49999999999999,
+      "pawl_head_recess_depth": 1.0,
+      "pawl_head_recess_diameter": 6.0,
+      "pawl_mount_land_margin": 2.0,
+      "pawl_mount_width": 10.0,
+      "pawl_outer_chamfer": 1.0,
+      "pawl_pilot_depth": 8.0,
+      "pawl_thickness_addition": 1.0,
+      "pawl_tip_radius": 2.0,
+      "prototype_pawl_extension": 5.0,
       "radial_clearance": 2.0,
       "rear_lug_edge_overlap": 1.9,
       "rear_lug_height": 6.0,
@@ -332,7 +370,20 @@
       "screw_head_diameter": 6.2,
       "screw_pilot_diameter": 2.6,
       "shaft_bore_diameter": 3.4,
+      "shaft_head_recess_depth": 2.0,
+      "shaft_head_recess_diameter": 6.0,
+      "shaft_support_axial_clearance": 0.5,
+      "shaft_support_boss_radius": 4.5,
+      "side_feature_chamfer": 6.0,
       "split_gap": 0.2,
+      "stack_alignment_x_inset": 14.0,
+      "stack_alignment_y_inset": 20.0,
+      "top_mark_chamfer": 0.2,
+      "top_mark_character": "\u03b1",
+      "top_mark_depth": 0.2,
+      "top_mark_font_size": 90.0,
+      "top_mark_rotation": 180.0,
+      "top_mark_split_gap": 2.0,
       "wall_thickness": 2.4,
       "window_clearance": 1.0,
       "window_corner_radius": 2.0,

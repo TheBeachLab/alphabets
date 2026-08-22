@@ -12,6 +12,10 @@ import cadquery as cq
 
 from .parameters import DESIGN, DesignParameters
 from .parts import (
+    _captured_electronics_card_envelope,
+    captured_drum_enclosure_parts,
+    captured_enclosure_limits,
+    captured_pawl_parts,
     drum_enclosure_parts,
     drum_support,
     flap_card,
@@ -26,10 +30,12 @@ MOTOR = cq.Color(0.65, 0.65, 0.68)
 SHAFT = cq.Color(0.95, 0.72, 0.1)
 BACKPACK = cq.Color(0.08, 0.23, 0.75)
 ENCLOSURE = cq.Color(0.025, 0.025, 0.03)
+CAPTURED_ENCLOSURE = cq.Color(0.08, 0.1, 0.14, 1.0)
+PAWL = cq.Color(0.28, 0.31, 0.36, 1.0)
 FLAP = cq.Color(0.015, 0.015, 0.018)
 STICKER = cq.Color(1.0, 0.8, 0.0)
-CAPTURE_FLOOR = cq.Color(0.12, 0.45, 0.8, 0.22)
 CAPTURE_ENVELOPE = cq.Color(0.15, 0.8, 0.65, 0.55)
+ELECTRONICS = cq.Color(0.08, 0.55, 0.2, 0.75)
 
 
 @dataclass(frozen=True)
@@ -334,35 +340,9 @@ def _bounds_frame(
 
 
 def _capture_reference_components(data: dict[str, Any]) -> tuple[Component, ...]:
-    floor_bounds = data["floor"]["bounds_world_mm"]
-    card_bounds = data["all_cards_bounds_world_mm"]
-    floor_minimum = (
-        card_bounds["minimum"][0] - 5,
-        card_bounds["minimum"][1] - 5,
-        floor_bounds["maximum"][2] - 0.5,
-    )
-    floor_maximum = (
-        card_bounds["maximum"][0] + 5,
-        floor_bounds["maximum"][1],
-        floor_bounds["maximum"][2],
-    )
-    floor_lengths = [floor_maximum[axis] - floor_minimum[axis] for axis in range(3)]
-    floor_center = [
-        (floor_maximum[axis] + floor_minimum[axis]) / 2 for axis in range(3)
-    ]
-    floor = cq.Workplane("XY").box(*floor_lengths).translate(tuple(floor_center)).val()
-    pawl_bounds = data["pawl"]["bounds_world_mm"]
-    pawl_lengths = [
-        pawl_bounds["maximum"][axis] - pawl_bounds["minimum"][axis] for axis in range(3)
-    ]
-    pawl_center = [
-        (pawl_bounds["maximum"][axis] + pawl_bounds["minimum"][axis]) / 2
-        for axis in range(3)
-    ]
-    pawl = cq.Workplane("XY").box(*pawl_lengths).translate(tuple(pawl_center)).val()
+    """Card envelopes retained for fit review without Blender floor/pawl solids."""
+
     return (
-        Component("capture_floor_reference", floor, CAPTURE_FLOOR),
-        Component("capture_pawl_reference", pawl, SUPPORT),
         _bounds_frame(
             "capture_southern_cards_envelope",
             data["southern_cards_bounds_world_mm"],
@@ -380,7 +360,7 @@ def captured_enclosure_design_components(
     capture_path: Path,
     params: DesignParameters = DESIGN,
 ) -> tuple[Component, ...]:
-    """Captured mechanism and references, intentionally without an enclosure."""
+    """Captured mechanism inside its fitted two-part enclosure."""
 
     data = load_card_capture(capture_path)
     capture_rotation = float(data["controller"]["rotation_x_degrees"])
@@ -396,7 +376,10 @@ def captured_enclosure_design_components(
         for component in drum_components(params)
     )
 
-    motor_offset = -params.enclosure_outer_width / 2
+    motor_offset = (
+        captured_enclosure_limits(data, params).outer_x_min
+        + params.drum_enclosure.motor_inset_depth
+    )
     motor_colors = {
         "motor_body": MOTOR,
         "motor_collar": MOTOR,
@@ -418,10 +401,29 @@ def captured_enclosure_design_components(
         )
         for name, shape in motor_components(params).items()
     )
+    enclosure = tuple(
+        Component(name=name, shape=shape, color=CAPTURED_ENCLOSURE)
+        for name, shape in captured_drum_enclosure_parts(data, params).items()
+    )
+    pawls = tuple(
+        Component(name=name, shape=shape, color=PAWL)
+        for name, shape in captured_pawl_parts(data, params).items()
+    )
+    electronics = Component(
+        name="electronics_card_envelope",
+        shape=_captured_electronics_card_envelope(
+            captured_enclosure_limits(data, params),
+            params,
+        ),
+        color=ELECTRONICS,
+    )
     return (
+        *enclosure,
+        *pawls,
         *drum,
         *_captured_card_components_from_data(data, params),
         *motor,
+        electronics,
         *_capture_reference_components(data),
     )
 

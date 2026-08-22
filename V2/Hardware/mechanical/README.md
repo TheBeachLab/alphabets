@@ -21,7 +21,7 @@ manufacturing exports without GUI interaction.
 | 28BYJ-48 motor | `../structure/28byj48.scad` | Clearance reference only |
 | Holder side and inset | dormant `side()` and active `inset()` in `../structure/spool-holder.scad` | Legacy reference; validate physically |
 | Enclosure sketch | `Sketch` in `../structure/side_motor.FCStd` | Exact non-solid reference geometry |
-| Two-part drum enclosure | Native CadQuery design around the current V2 drum | Printable prototype; validate fits physically |
+| Two-part drum enclosure | Native CadQuery design around the current V2 drum and settled Blender capture | Printable prototype; validate fits physically |
 
 `../structure/connector.scad` is an empty placeholder, so it contains no
 mechanical geometry to reconstruct.
@@ -32,9 +32,9 @@ part. Its meshes remain in `../structure/` as historical reference. The
 CadQuery drum uses the current 50 mm flap width, 51 mm internal spacing and
 55.3 mm assembled outer width.
 
-## Two-part drum enclosure
+## Earlier drum-only enclosure reference
 
-The printable enclosure is a compact upper/lower clamshell inspired by the
+The earlier enclosure is a compact upper/lower clamshell inspired by the
 clean, individual-cell language of Vestaboard modules. Its horizontal joint
 follows the drum axis and the visual split between flap halves. The rear is
 fully open for loading the drum, routing wires and servicing the mechanism.
@@ -50,6 +50,99 @@ holes in the lower lugs. Print both halves with the horizontal split plane on
 the bed. The upper and lower STL files use assembly coordinates, so rotate the
 lower half 180 degrees before slicing. Verify pilot fit, axle fit, the exact
 motor variant and flap clearance on one module before printing an array.
+
+### Enclosure fitted to the settled cards
+
+The current enclosure design review uses Blender frame `27464`, controller position `37`,
+from `../blender/generated/cards-position-capture.json`. Unlike the earlier
+drum-only shell, this revision derives its asymmetric cavity from the actual
+card envelope, the saved compression floor and the fixed pawl. The floor top
+is authoritative at `Z = -75 mm`; the four cards that Bullet left slightly
+below that plane do not increase the enclosure height.
+
+The captured enclosure body is approximately 78.01 mm wide, 109.05 mm deep and
+159.31 mm high. Its 8 mm walls grow outward from the captured cavity and use a
+10 mm external corner radius. It is a hollow tube with no front or rear wall
+and no screw lugs. A 4 mm chamfer runs around the inner edge of the front rim,
+stopping at a flat 14 mm-wide land for the pawl. The outside front edge remains
+square. The viewer renders the enclosure fully opaque.
+
+The front pawl is a separate 2 mm-thick part seated flush against the front
+edge of the upper wall. Its isosceles blade uses the full 10 mm screw-pad width
+and ends in a broader 2 mm-radius rounded tip. Its outward face has a 1 mm
+chamfer around the external profile, while the screw bore remains cylindrical.
+A straight 6 mm diameter × 1 mm deep counterbore receives the M3 screw head.
+The screw passes through its 3.4 mm clearance hole and self-taps into a 2.6 mm
+pilot extending 8 mm into the upper enclosure. The
+definitive pawl retains the captured rounded-tip support height; the alternative
+prototype pawl extends 5 mm farther down to compensate for the 43 mm card in
+place of the definitive 48 mm card. Both export separately, while the viewer
+shows the definitive pawl by default.
+
+The lower half replaces the fragile printed shaft with a 2.6 mm M3
+self-tapping pilot in a 9 mm boss. A user-supplied M3 screw becomes the axle
+through the shaft-side disc's 3.4 mm clearance hole, and the boss stops 0.5 mm
+before the acrylic disc. Its head sits in a straight 6 mm diameter × 2 mm deep
+counterbore on the recessed outside face. The horizontal split is 12 mm above
+the drum axis, so
+this support stays entirely in the lower half. Four 3 mm-high truncated
+pyramids with 45 degree sides align both halves; their upper sockets include
+0.2 mm clearance. Four additional downward-facing pyramids on the enclosure
+base engage four matching sockets in the top of the module below, using the
+same 3 mm height, 45 degree sides and 0.2 mm socket clearance.
+Their 8 mm bases are inset to the tangent of the enclosure's 10 mm corner
+radius, so no stacking pivot starts on the rounded area.
+
+The motor is inset 6 mm into a cleared mounting pocket and is retained by two
+2.6 mm M3 self-tapping pilots in internal bosses. The blue backpack envelope
+has an extra 1 mm cable clearance. A 50 × 35 mm electronics-card envelope sits
+below the motor in the same side recess. Both fit inside one approximately
+55.7 × 76.6 mm
+rounded rectangle with an 8 mm inner corner radius and one continuous 6 mm
+lead-in. The opposite outside wall has a matching
+6 mm motor chassis recess, so both sides retain 2 mm of the original 8 mm wall.
+Both lateral recesses expand through
+6 mm-long, 45 degree lead-ins toward the outside; the remaining 2 mm motor bore
+uses the same supportless transition while screw pilots stay cylindrical. The
+three internal mounting bosses taper continuously from the inside wall to
+their free ends; no exposed cylindrical segment remains. Their M3 pilot bores
+remain straight and unchanged. These
+features do not produce zero-gap docking: the current motor still needs
+approximately 7.3 mm between enclosure bodies, for a minimum pitch of about
+85.31 mm.
+
+The previous front `ALPHABETS` relief is replaced by a large lowercase `α` on
+the upper face, rotated to read toward the enclosure front. It is split
+horizontally by a 2 mm material band, like the two halves of a split-flap
+character, and recessed 0.2 mm through a nominal 0.2 mm lead-in. The outline
+uses the existing `Overpass Mono Medium` font asset from the sticker workflow.
+Each lateral wall also carries one centred pair of straight cylindrical magnet
+inserts at the split, halfway between the front and rear alignment frustums:
+3.4 mm diameter × 1.2 mm deep for nominal 3 × 1 mm magnets. The extra 0.4 mm
+diameter and 0.2 mm depth compensate for undersized FDM holes. These are
+joined by one identically compensated insert at the centre of the top `α` and
+one aligned insert in the module base, producing a light magnetic click when
+modules are stacked vertically. All magnet locations are derived review
+dimensions, not
+hand-entered constants; changing the capture or clearance parameters rebuilds
+the solids.
+
+Generate its separate STEP, STL, SVG and manifest files with:
+
+```sh
+make generate-captured-enclosure
+```
+
+The same command also exports
+`generated/captured-enclosure/print/captured-enclosure-bambu-a1-mini-four-part-plate.stl`.
+This single STL contains the upper enclosure, lower enclosure and both pawls
+inside the A1 mini's 180 × 180 × 180 mm build volume. The enclosure halves sit
+on their front rims, as required by the supportless side chamfers; both pawls
+sit on their flat rear faces so the screw-head counterbores face upward. The
+two enclosure halves retain their assembled alignment on the plate, separated
+by only 2 mm at the split. The resulting narrow layout is centred laterally and
+reduces carriage travel. Both pawls nest inside the open area of the lower half
+rather than extending the occupied footprint.
 
 ## Rebuild
 
@@ -135,8 +228,12 @@ names fail immediately instead of silently changing the model.
 
 OCP CAD Viewer is the preferred interactive viewer: it inherits VS Code's
 theme, provides per-object selection and visibility, and renders this model
-through `view_vscode.py`. Run `view_enclosure_vscode.py` for the exploded
-enclosure, drum, flap and motor as 11 independent objects. Install its isolated
+through `view_vscode.py`. Run `view_enclosure_vscode.py` for the captured
+two-part enclosure, settled 64-card mechanism, stickers, motor and envelope
+references grouped as `enclosure`, `pua_definitiva`, `pua_prototipo`, `tambor`,
+`cards`, `stickers`, `motor` and `envelopes`. The prototype pawl starts hidden;
+the Blender floor and orange pawl reference solids are not displayed. Install
+its isolated
 environment once, then open this mechanical directory in VS Code and run the
 file:
 
@@ -158,6 +255,8 @@ The generated files are committed so a fabricator does not need CadQuery:
 - `generated/preview/*.svg`: assembled and exploded review projections;
 - `generated/manifest.json`: dimensions, provenance, bounding boxes and
   validation status.
+- `generated/captured-enclosure/`: capture-fitted upper/lower STL and STEP,
+  assembly STEP, review SVG and a manifest tied to frame `27464`.
 
 `make verify-generated` regenerates everything, executes the geometry tests
 and fails if the committed outputs are stale.

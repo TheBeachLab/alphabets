@@ -13,10 +13,18 @@ from .assemblies import (
     mounted_card_components,
 )
 from .parameters import DESIGN, DesignParameters, load_design_profile
+from .parts import (
+    captured_drum_enclosure_parts,
+    captured_enclosure_limits,
+    captured_pawl_parts,
+)
 
 __all__ = [
     "DESIGN",
     "DesignParameters",
+    "captured_drum_enclosure_parts",
+    "captured_enclosure_limits",
+    "captured_pawl_parts",
     "drum_assembly",
     "drum_components",
     "drum_stop_rotation_degrees",
