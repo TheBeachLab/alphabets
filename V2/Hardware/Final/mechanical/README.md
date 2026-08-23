@@ -34,38 +34,16 @@ part. Its meshes remain in `../../Prototype/structure/` as historical reference.
 CadQuery drum uses the current 50 mm flap width, 51 mm internal spacing and
 55.3 mm assembled outer width.
 
-## Earlier drum-only enclosure reference
-
-The earlier enclosure is a compact upper/lower clamshell inspired by the
-clean, individual-cell language of Vestaboard modules. Its horizontal joint
-follows the drum axis and the visual split between flap halves. The rear is
-fully open for loading the drum, routing wires and servicing the mechanism.
-
-The card ceiling comes from the saved Blender rigid-body state captured in
-`../blender/generated/card-envelope.json`. The upper card envelope reaches
-86.702228 mm from the drum axis, or 44.202222 mm above the 42.5 mm drum radius.
-The parameter `card_ceiling_clearance` adds 10 mm, placing the interior ceiling
-at +96.702228 mm. The lower interior is symmetric at -96.702228 mm.
-
-The enclosure body is 64.1 mm wide, 92 mm deep and 198.204456 mm high. The
-front opening is 52 × 50 mm with rounded corners. The motor-side wall includes
-the nominal 28BYJ-48 centre and mounting holes; the shaft side has a 3.4 mm axle
-bore. The upper/lower joint is specified as embedded magnetic coupling. The
-shell has no screw lugs or joining-screw holes.
-
-Print both halves with the horizontal split plane on the bed. The upper and
-lower STL files use assembly coordinates, so rotate the lower half 180 degrees
-before slicing. Verify axle fit, the exact motor variant and flap clearance on
-one module before printing an array.
-
-### Enclosure fitted to the settled cards
+## Current printed enclosure
 
 The current enclosure design review uses Blender frame `27464`, controller position `37`,
-from `../blender/generated/cards-position-capture.json`. Unlike the earlier
-drum-only shell, this revision derives its asymmetric cavity from the actual
-card envelope, the saved compression floor and the fixed pawl. The floor top
-is authoritative at `Z = -75 mm`; the four cards that Bullet left slightly
-below that plane do not increase the enclosure height.
+from `../blender/generated/cards-position-capture.json`. This is the sole
+current enclosure pipeline and the model shown by `view_enclosure_vscode.py`.
+The latest physical print was confirmed against this viewer on 2026-08-23.
+It derives its asymmetric cavity from the actual card envelope, the saved
+compression floor and the fixed pawl. The floor top is authoritative at
+`Z = -75 mm`; the four cards that Bullet left slightly below that plane do not
+increase the enclosure height.
 
 The captured enclosure body is approximately 78.01 mm wide, 109.05 mm deep and
 159.31 mm high. Its 8 mm walls grow outward from the captured cavity and use a
@@ -167,8 +145,10 @@ To use an existing environment:
 make check PYTHON=/path/to/python
 ```
 
-`generate.py --variant prototype` deliberately stops before writing files,
-because the old enclosure is not a validated parametric manufacturing source.
+`generate.py` rebuilds the shared card, drum, motor, and reference artifacts.
+The current enclosure is rebuilt separately by `generate-captured-enclosure`.
+`generate.py --variant prototype` deliberately stops before writing files
+because the prototype is not a validated parametric manufacturing route.
 
 ## Graphical editing
 
@@ -178,22 +158,15 @@ Open the complete reference module in CQ-editor from this directory:
 make gui
 ```
 
-Open an exploded view of the enclosure, drum and motor with:
+Open the capture-fitted enclosure and settled mechanism with:
 
 ```sh
 make gui-enclosure
 ```
 
-The enclosure view mounts all 64 cards in a radial startup pose. The drum is
-held at the card stop: half a 64-position pitch (2.8125°). The motor shaft is
-rotated 90° to match the slotted motor-side disc hole, while every tab hinge
-axis stays centred on its flap hole and every free edge points radially away
-from the drum. Numbering follows the observed direction of travel from the
-motor-side view: `card_00` is the lower-front card, `card_01` is the
-upper-front card, and `card_02` is the next card arriving as the drum turns
-anticlockwise. These radial poses are intended as deterministic initial
-conditions for a later Blender gravity simulation, not final resting
-positions.
+The enclosure view uses the same saved settled positions and enclosure
+components as the OCP viewer and fabrication exporter. It shows the definitive
+pawl by default and keeps the prototype pawl available as a separate object.
 
 Each face sticker is a separate yellow viewer object named
 `sticker_00_front`, `sticker_00_back`, through `sticker_63_front` and
@@ -257,13 +230,14 @@ both views and generated fabrication files consistently.
 The generated files are committed so a fabricator does not need CadQuery:
 
 - `generated/cut/*.dxf`: millimetre cutter profiles;
-- `generated/print/*.stl`: spool sides and both printable enclosure halves;
-- `generated/step/*.step`: individual parts and complete reference assemblies;
-- `generated/preview/*.svg`: assembled and exploded review projections;
+- `generated/print/*.stl`: printable spool sides;
+- `generated/step/*.step`: drum, card, motor, and reference assemblies;
+- `generated/preview/*.svg`: shared mechanical review projections;
 - `generated/manifest.json`: dimensions, provenance, bounding boxes and
   validation status.
-- `generated/captured-enclosure/`: capture-fitted upper/lower STL and STEP,
-  assembly STEP, review SVG and a manifest tied to frame `27464`.
+- `generated/captured-enclosure/`: the sole current enclosure source outputs:
+  capture-fitted upper/lower and pawl STL/STEP files, the A1 Mini print plate,
+  assembly STEP, review SVG, and a manifest tied to frame `27464`.
 
 `make verify-generated` regenerates everything, executes the geometry tests
 and fails if the committed outputs are stale.

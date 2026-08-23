@@ -14,14 +14,10 @@ import ezdxf
 import pytest
 
 from alphabets_cad.assemblies import (
-    _orient_for_enclosure,
     captured_card_components,
     captured_enclosure_design_components,
     drum_component_shapes,
     drum_stop_rotation_degrees,
-    enclosed_module_assembly,
-    enclosed_module_components,
-    enclosure_assembly,
     module_reference_assembly,
     module_reference_components,
     mounted_card_components,
@@ -53,7 +49,6 @@ from alphabets_cad.parts import (
     captured_enclosure_limits,
     captured_pawl_parts,
     card_points,
-    drum_enclosure_parts,
     drum_support,
     enclosure_reference_edges,
     finished_flap_card,
@@ -138,9 +133,7 @@ def test_current_source_parameters_are_centralized_without_drift() -> None:
         assert float(Fraction(match.group(1))) == pytest.approx(value)
 
     card_envelope = json.loads(
-        (FINAL_DIR / "blender/generated/card-envelope.json").read_text(
-            encoding="utf-8"
-        )
+        (FINAL_DIR / "blender/generated/card-envelope.json").read_text(encoding="utf-8")
     )
     assert card_envelope["upper"]["distance_from_axis_mm"] == pytest.approx(
         DESIGN.drum_enclosure.upper_card_envelope_height,
@@ -1032,140 +1025,14 @@ def test_captured_enclosure_clears_mechanism_and_ignores_floor_solver_outliers()
     assert below_floor_cards == {25, 26, 27, 28}
 
 
-def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
-    parts = drum_enclosure_parts()
-    assert tuple(parts) == ("enclosure_upper", "enclosure_lower")
-    assert all(shape.isValid() for shape in parts.values())
-    assert all(len(shape.Solids()) == 1 for shape in parts.values())
-
-    enclosure = DESIGN.drum_enclosure
-    upper_box = parts["enclosure_upper"].BoundingBox()
-    lower_box = parts["enclosure_lower"].BoundingBox()
-    assert upper_box.xlen == pytest.approx(DESIGN.enclosure_overall_width)
-    assert lower_box.xlen == pytest.approx(DESIGN.enclosure_overall_width)
-    assert DESIGN.enclosure_overall_width == pytest.approx(DESIGN.enclosure_outer_width)
-    assert upper_box.ylen == pytest.approx(DESIGN.enclosure_outer_depth)
-    assert lower_box.ylen == pytest.approx(DESIGN.enclosure_outer_depth)
-    assert upper_box.zmin == pytest.approx(enclosure.split_gap / 2)
-    assert lower_box.zmax == pytest.approx(-enclosure.split_gap / 2)
-    assert upper_box.zmax == pytest.approx(DESIGN.enclosure_outer_height / 2)
-    assert lower_box.zmin == pytest.approx(-DESIGN.enclosure_outer_height / 2)
-    assert upper_box.zmax == pytest.approx(-lower_box.zmin)
-    assert DESIGN.enclosure_ceiling_z == pytest.approx(96.702228)
-    assert DESIGN.enclosure_floor_z == pytest.approx(-96.702228)
-    assert enclosure.card_ceiling_clearance == pytest.approx(10.0)
-    assert enclosure.closure_method == "embedded_magnets"
-    assert parts["enclosure_upper"].intersect(
-        parts["enclosure_lower"]
-    ).Volume() == pytest.approx(0)
-
-    rear_opening_probe = (
-        cq.Workplane(
-            "XY",
-            origin=(0, DESIGN.enclosure_inner_depth / 2, 0),
-        )
-        .box(
-            DESIGN.enclosure_inner_width - 2,
-            1,
-            DESIGN.enclosure_inner_height - 2,
-        )
-        .val()
-    )
-    for shape in parts.values():
-        assert shape.intersect(rear_opening_probe).Volume() == pytest.approx(0)
-
-
-def test_enclosure_roof_respects_captured_card_envelope_and_clearance() -> None:
-    parts = drum_enclosure_parts()
-    enclosure = DESIGN.drum_enclosure
-    upper = parts["enclosure_upper"]
-    lower = parts["enclosure_lower"]
-
-    assert DESIGN.upper_card_protrusion_above_drum == pytest.approx(44.202228)
-    assert DESIGN.enclosure_ceiling_z - enclosure.upper_card_envelope_height == (
-        pytest.approx(enclosure.card_ceiling_clearance)
-    )
-
-    cavity_probe = (
-        cq.Workplane(
-            "XY",
-            origin=(0, 0, DESIGN.enclosure_ceiling_z - 0.5),
-        )
-        .box(1, 1, 0.5)
-        .val()
-    )
-    upper_roof_probe = (
-        cq.Workplane(
-            "XY",
-            origin=(
-                0,
-                0,
-                DESIGN.enclosure_ceiling_z + enclosure.wall_thickness / 2,
-            ),
-        )
-        .box(1, 1, enclosure.wall_thickness / 2)
-        .val()
-    )
-    lower_floor_probe = upper_roof_probe.mirror("XY")
-    assert upper.intersect(cavity_probe).Volume() == pytest.approx(0)
-    assert upper.intersect(upper_roof_probe).Volume() > 0
-    assert lower.intersect(lower_floor_probe).Volume() > 0
-
-
-def test_enclosure_window_and_drum_clearances_are_real_geometry() -> None:
-    parts = drum_enclosure_parts()
-    shell = cq.Compound.makeCompound(list(parts.values()))
-    enclosure = DESIGN.drum_enclosure
-    front_y = -DESIGN.enclosure_inner_depth / 2 - enclosure.front_thickness / 2
-    window_probe = (
-        cq.Workplane("XY", origin=(0, front_y, 0))
-        .box(
-            DESIGN.enclosure_window_width - 0.5,
-            enclosure.front_thickness + 1,
-            DESIGN.enclosure_window_height - 0.5,
-        )
-        .edges("|Y")
-        .fillet(enclosure.window_corner_radius)
-        .val()
-    )
-    assert shell.intersect(window_probe).Volume() == pytest.approx(0)
-
-    drum_offset = -DESIGN.drum_outer_width / 2
-    oriented_drum = cq.Compound.makeCompound(
-        [
-            _orient_for_enclosure(shape, drum_offset)
-            for shape in drum_component_shapes().values()
-        ]
-    )
-    assert shell.intersect(oriented_drum).Volume() == pytest.approx(0)
-
-
-def test_enclosure_assemblies_contain_two_shell_parts() -> None:
-    enclosure = enclosure_assembly()
-    assert set(enclosure.objects) == {
-        "alphabets-v2-drum-enclosure",
-        "enclosure_upper",
-        "enclosure_lower",
-    }
-    assert enclosure.toCompound().isValid()
-
-    module = enclosed_module_assembly()
-    assert {"enclosure_upper", "enclosure_lower"} < set(module.objects)
-    assert module.toCompound().isValid()
-
-    components = enclosed_module_components(exploded=True)
-    assert len(components) == 202
-    assert all(component.shape.isValid() for component in components)
-    assert {"card_00", "card_63"} < {component.name for component in components}
-
-
 def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
     namespace = runpy.run_path(str(MECHANICAL_DIR / "view_enclosure.py"))
     result = namespace["result"]
     assert isinstance(result, cq.Assembly)
-    assert result.name == "alphabets-v2-enclosed-module"
+    assert result.name == "alphabets-v2-captured-enclosure"
     assert result.toCompound().isValid()
-    assert len(namespace["objects"]) == 202
+    assert {"enclosure_upper", "enclosure_lower"} < set(namespace["objects"])
+    assert "pawl_definitive" in namespace["objects"]
     assert "card_00" in namespace["objects"]
     assert "sticker_00_front" in namespace["objects"]
     assert "sticker_00_back" in namespace["objects"]
@@ -1190,8 +1057,6 @@ def test_generated_manufacturing_files_are_readable() -> None:
     assert manifest["units"] == "mm"
     assert manifest["parameters"]["drum"]["positions"] == 64
     assert manifest["geometry"]["drum_assembly"]["valid"] is True
-    assert manifest["geometry"]["enclosure_upper"]["solid_count"] == 1
-    assert manifest["geometry"]["enclosure_lower"]["solid_count"] == 1
 
     for path in sorted((GENERATED / "cut").glob("*.dxf")):
         document = ezdxf.readfile(path)
@@ -1231,6 +1096,24 @@ def test_generated_manufacturing_files_are_readable() -> None:
     preview = GENERATED / "preview/module-reference.svg"
     assert preview.stat().st_size > 1000
     assert "<svg" in preview.read_text(encoding="utf-8")
+
+
+def test_parallel_stale_enclosure_exports_are_absent() -> None:
+    stale_paths = (
+        GENERATED / "preview/enclosure-exploded.svg",
+        GENERATED / "preview/enclosure-module.svg",
+        GENERATED / "print/drum-enclosure-lower.stl",
+        GENERATED / "print/drum-enclosure-upper.stl",
+        GENERATED / "step/drum-enclosure-assembly.step",
+        GENERATED / "step/drum-enclosure-lower.step",
+        GENERATED / "step/drum-enclosure-upper.step",
+        GENERATED / "step/enclosed-module-reference.step",
+    )
+    assert not any(path.exists() for path in stale_paths)
+    assert (
+        GENERATED
+        / "captured-enclosure/print/captured-enclosure-bambu-a1-mini-four-part-plate.stl"
+    ).exists()
 
 
 def test_captured_enclosure_manufacturing_files_are_readable() -> None:

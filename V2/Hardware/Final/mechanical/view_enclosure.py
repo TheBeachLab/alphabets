@@ -1,27 +1,37 @@
 # SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
-"""CQ-editor entry point for the printable rear-open enclosure."""
+"""CQ-editor entry point for the capture-fitted printed enclosure."""
 
 from __future__ import annotations
 
 import os
 from pathlib import Path
 
-from alphabets_cad.assemblies import (
-    enclosed_module_assembly,
-    enclosed_module_components,
-)
+import cadquery as cq
+
+from alphabets_cad.assemblies import captured_enclosure_design_components
 from alphabets_cad.parameters import DESIGN, load_design_profile
 
 profile = os.environ.get("ALPHABETS_PROFILE")
 parameters = load_design_profile(Path(profile), base=DESIGN) if profile else DESIGN
-components = enclosed_module_components(parameters, exploded=True)
+default_capture = (
+    Path(__file__).resolve().parent.parent
+    / "blender/generated/cards-position-capture.json"
+)
+capture_path = Path(os.environ.get("ALPHABETS_CARD_CAPTURE", default_capture))
+components = captured_enclosure_design_components(capture_path, parameters)
 objects = {component.name: component.shape for component in components}
-result = enclosed_module_assembly(parameters, exploded=True)
+result = cq.Assembly(name="alphabets-v2-captured-enclosure")
+for component in components:
+    if component.name == "pawl_prototype":
+        continue
+    result.add(component.shape, name=component.name, color=component.color)
 
 _show_object = globals().get("show_object")
 if callable(_show_object):
     for component in components:
+        if component.name == "pawl_prototype":
+            continue
         _show_object(
             component.shape,
             name=component.name,

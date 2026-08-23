@@ -50,10 +50,12 @@ openscad -o /tmp/v2-prototype-drum-55mm.dxf \
   V2/Hardware/Prototype/structure/spool.scad
 ```
 
-The definitive variant is the only current manufacturing route: its card,
-64-position drum and two-part enclosure are generated from
-`V2/Hardware/Final/mechanical/alphabets_cad/`. Its enclosure still needs a physical
-fit check before a production run.
+The definitive variant is the only current manufacturing route: its card and
+64-position drum are generated from `V2/Hardware/Final/mechanical/alphabets_cad/`.
+Its sole current enclosure is the capture-fitted pipeline under
+`generated/captured-enclosure/`, confirmed against the latest physical print
+on 2026-08-23. Further fit observations are still required before a production
+run.
 
 Both card substrates are 0.5 mm. A 0.1 mm sticker is applied to each face,
 making the covered area 0.7 mm thick; the opposite free-edge strip, lateral

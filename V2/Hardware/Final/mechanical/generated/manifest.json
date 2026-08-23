@@ -4,7 +4,6 @@
   "cad_engine": "CadQuery 2.8.0 / OCCT",
   "fabrication_status": {
     "card_and_laser_cut_drum": "ported from current dimensional sources",
-    "drum_enclosure": "two symmetric printable halves sized from the captured card envelope; embedded magnetic coupling requires physical validation",
     "enclosure_sketch": "non-solid reference geometry",
     "holder_side": "ported dormant legacy profile; physical validation required",
     "motor": "clearance reference, not a manufacturing model",
@@ -50,86 +49,6 @@
       "solid_count": 4,
       "valid": true,
       "volume_mm3": 30081.736816
-    },
-    "enclosed_module": {
-      "bounds_mm": {
-        "x": [
-          -51.05,
-          32.05
-        ],
-        "y": [
-          -86.657773,
-          86.657773
-        ],
-        "z": [
-          -99.102228,
-          99.102228
-        ]
-      },
-      "component_volume_sum_mm3": 288862.258571,
-      "solid_count": 202,
-      "valid": true,
-      "volume_mm3": 284264.540723
-    },
-    "enclosure_assembly": {
-      "bounds_mm": {
-        "x": [
-          -32.05,
-          32.05
-        ],
-        "y": [
-          -47.5,
-          44.5
-        ],
-        "z": [
-          -99.102228,
-          99.102228
-        ]
-      },
-      "component_volume_sum_mm3": 138893.384908,
-      "solid_count": 2,
-      "valid": true,
-      "volume_mm3": 138893.384908
-    },
-    "enclosure_lower": {
-      "bounds_mm": {
-        "x": [
-          -32.05,
-          32.05
-        ],
-        "y": [
-          -47.5,
-          44.5
-        ],
-        "z": [
-          -99.102228,
-          -0.1
-        ]
-      },
-      "component_volume_sum_mm3": 69410.199714,
-      "solid_count": 1,
-      "valid": true,
-      "volume_mm3": 69410.199714
-    },
-    "enclosure_upper": {
-      "bounds_mm": {
-        "x": [
-          -32.05,
-          32.05
-        ],
-        "y": [
-          -47.5,
-          44.5
-        ],
-        "z": [
-          0.1,
-          99.102228
-        ]
-      },
-      "component_volume_sum_mm3": 69483.185194,
-      "solid_count": 1,
-      "valid": true,
-      "volume_mm3": 69483.185194
     },
     "module_reference": {
       "bounds_mm": {
@@ -442,7 +361,6 @@
   "schema_version": 1,
   "source_lineage": {
     "card": "V2/Hardware/Final/cards/generate_card.py",
-    "drum_enclosure": "native CadQuery design sized from V2/Hardware/Final/blender/generated/card-envelope.json",
     "enclosure_reference": "V2/Hardware/Prototype/structure/side_motor.FCStd Sketch",
     "holder_reference": "V2/Hardware/Prototype/structure/spool-holder.scad side()",
     "laser_cut_drum": "V2/Hardware/Prototype/structure/spool.scad",

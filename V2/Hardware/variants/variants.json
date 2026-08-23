@@ -78,7 +78,7 @@
       "enclosure": {
         "status": "manufacturing-source",
         "source": "V2/Hardware/Final/mechanical/alphabets_cad",
-        "note": "Current two-part, open-rear CadQuery enclosure. Physical fit remains a required fabrication check."
+        "note": "The capture-fitted two-part, open-rear CadQuery enclosure is the sole current source; its latest physical print was confirmed on 2026-08-23."
       },
       "artifacts": {
         "cards": [

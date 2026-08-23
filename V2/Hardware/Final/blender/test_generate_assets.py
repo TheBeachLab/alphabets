@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from generate_assets import (
-    EXCLUDED_STATIC_COMPONENTS,
     NORTH_FALL_BIAS_DEGREES,
     build_scene_manifest,
     build_sticker_mapping,
@@ -20,10 +19,6 @@ def test_generated_json_objects_embed_license_metadata() -> None:
         assert {key: document[key] for key in EXPECTED_JSON_LICENSE_METADATA} == dict(
             EXPECTED_JSON_LICENSE_METADATA
         )
-
-
-def test_provisional_enclosure_is_excluded_from_blender_scene() -> None:
-    assert EXCLUDED_STATIC_COMPONENTS == {"enclosure_lower", "enclosure_upper"}
 
 
 def test_mapping_assigns_every_card_face_exactly_once() -> None:

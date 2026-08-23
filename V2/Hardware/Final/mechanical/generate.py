@@ -32,7 +32,7 @@ def main() -> None:
         "--variant",
         choices=("prototype", "definitive"),
         default="definitive",
-        help="physical V2 variant; only Definitivo has a current enclosure source",
+        help="physical V2 variant; only Definitivo has current parametric sources",
     )
     parser.add_argument(
         "--profile",
@@ -46,7 +46,7 @@ def main() -> None:
         parser.error(str(error))
     if variant.enclosure.status != "manufacturing-source":
         parser.error(
-            f"{variant.name} has no validated enclosure generator; use its historical "
+            f"{variant.name} has no validated parametric generator; use its historical "
             f"reference at {variant.enclosure.source}"
         )
     params = load_design_profile(args.profile, base=DESIGN) if args.profile else DESIGN

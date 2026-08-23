@@ -26,10 +26,16 @@ for source_dir in (LICENSES_DIR, MECHANICAL_DIR, STICKERS_DIR):
 
 import cadquery as cq
 from alphabets_cad.assemblies import (
+    BACKPACK,
+    MOTOR,
+    SHAFT,
+    _orient_for_enclosure,
+    _rotate_drum_to_stop,
+    drum_components,
     drum_stop_rotation_degrees,
-    enclosed_module_components,
 )
 from alphabets_cad.parameters import DESIGN
+from alphabets_cad.parts import motor_components
 from artifact_license_metadata import embed_artifact_license
 from generate_stickers import (
     DEFAULT_FONT,
@@ -46,7 +52,6 @@ ATLAS_COLUMNS = 16
 ATLAS_ROWS = 4
 ATLAS_WIDTH_PX = 4096
 ATLAS_HEIGHT_PX = 2071
-EXCLUDED_STATIC_COMPONENTS = frozenset({"enclosure_lower", "enclosure_upper"})
 NORTH_FALL_BIAS_DEGREES = 0.5
 
 
@@ -310,16 +315,41 @@ def export_static_meshes() -> list[dict[str, Any]]:
     mesh_dir = GENERATED_DIR / "meshes"
     mesh_dir.mkdir(parents=True, exist_ok=True)
     components: list[dict[str, Any]] = []
-    for component in enclosed_module_components(DESIGN, exploded=False):
-        if component.name in EXCLUDED_STATIC_COMPONENTS:
-            stale_path = mesh_dir / f"{component.name}.stl"
-            stale_path.unlink(missing_ok=True)
-            continue
-        if component.name.startswith(("card_", "sticker_")):
-            continue
-        path = mesh_dir / f"{component.name}.stl"
+    drum_offset = -DESIGN.drum_outer_width / 2
+    static_shapes = [
+        (
+            component.name,
+            _orient_for_enclosure(
+                _rotate_drum_to_stop(component.shape, DESIGN), drum_offset
+            ),
+            component.color,
+        )
+        for component in drum_components(DESIGN)
+    ]
+    motor_offset = -DESIGN.enclosure_outer_width / 2
+    motor_colors = {
+        "motor_body": MOTOR,
+        "motor_collar": MOTOR,
+        "motor_backpack": BACKPACK,
+        "motor_shaft": SHAFT,
+    }
+    static_shapes.extend(
+        (
+            name,
+            _orient_for_enclosure(
+                shape.rotate((0, 0, 0), (0, 0, 1), 90)
+                if name == "motor_shaft"
+                else shape,
+                motor_offset,
+            ),
+            motor_colors[name],
+        )
+        for name, shape in motor_components(DESIGN).items()
+    )
+    for name, shape, color in static_shapes:
+        path = mesh_dir / f"{name}.stl"
         cq.exporters.export(
-            component.shape,
+            shape,
             str(path),
             tolerance=0.05,
             angularTolerance=0.1,
@@ -327,9 +357,9 @@ def export_static_meshes() -> list[dict[str, Any]]:
         embed_artifact_license(path)
         components.append(
             {
-                "name": component.name,
+                "name": name,
                 "file": str(path.relative_to(GENERATED_DIR)),
-                "color": list(component.color.toTuple()),
+                "color": list(color.toTuple()),
             }
         )
     return components

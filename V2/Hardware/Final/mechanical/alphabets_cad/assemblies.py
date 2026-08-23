@@ -18,7 +18,6 @@ from .parts import (
     captured_drum_enclosure_parts,
     captured_enclosure_limits,
     captured_pawl_parts,
-    drum_enclosure_parts,
     drum_support,
     flap_card,
     flap_sticker_layers,
@@ -427,98 +426,4 @@ def captured_enclosure_design_components(
         *motor,
         electronics,
         *_capture_reference_components(data),
-    )
-
-
-def enclosure_components(
-    params: DesignParameters = DESIGN,
-    *,
-    exploded: bool = False,
-) -> tuple[Component, ...]:
-    """Individually inspectable printable enclosure halves."""
-
-    separation = 10.0 if exploded else 0.0
-    parts = drum_enclosure_parts(params)
-    return (
-        Component(
-            name="enclosure_upper",
-            shape=parts["enclosure_upper"].translate((0, 0, separation)),
-            color=ENCLOSURE,
-        ),
-        Component(
-            name="enclosure_lower",
-            shape=parts["enclosure_lower"].translate((0, 0, -separation)),
-            color=ENCLOSURE,
-        ),
-    )
-
-
-def enclosure_assembly(
-    params: DesignParameters = DESIGN,
-    *,
-    exploded: bool = False,
-) -> cq.Assembly:
-    """The two printable enclosure halves in assembled or exploded position."""
-
-    return _assembly_from_components(
-        "alphabets-v2-drum-enclosure", enclosure_components(params, exploded=exploded)
-    )
-
-
-def enclosed_module_components(
-    params: DesignParameters = DESIGN,
-    *,
-    exploded: bool = False,
-) -> tuple[Component, ...]:
-    """Individually inspectable rear-open enclosure, drum and motor parts."""
-
-    drum_offset = -params.drum_outer_width / 2
-    drum = tuple(
-        Component(
-            name=component.name,
-            shape=_orient_for_enclosure(
-                _rotate_drum_to_stop(component.shape, params), drum_offset
-            ),
-            color=component.color,
-        )
-        for component in drum_components(params)
-    )
-    motor_offset = -params.enclosure_outer_width / 2
-    motor_colors = {
-        "motor_body": MOTOR,
-        "motor_collar": MOTOR,
-        "motor_backpack": BACKPACK,
-        "motor_shaft": SHAFT,
-    }
-    motor = tuple(
-        Component(
-            name=name,
-            shape=_orient_for_enclosure(
-                shape.rotate((0, 0, 0), (0, 0, 1), 90)
-                if name == "motor_shaft"
-                else shape,
-                motor_offset,
-            ),
-            color=motor_colors[name],
-        )
-        for name, shape in motor_components(params).items()
-    )
-    return (
-        *enclosure_components(params, exploded=exploded),
-        *drum,
-        *mounted_card_components(params),
-        *motor,
-    )
-
-
-def enclosed_module_assembly(
-    params: DesignParameters = DESIGN,
-    *,
-    exploded: bool = False,
-) -> cq.Assembly:
-    """Rear-open enclosure, current drum and externally mounted motor."""
-
-    return _assembly_from_components(
-        "alphabets-v2-enclosed-module",
-        enclosed_module_components(params, exploded=exploded),
     )
