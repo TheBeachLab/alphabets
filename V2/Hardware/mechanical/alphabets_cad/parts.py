@@ -1137,7 +1137,7 @@ def _captured_pawl_shape(
     *,
     tip_extension: float = 0.0,
 ) -> cq.Shape:
-    """Short rounded stop at the captured support edge, with M3 head recess."""
+    """Replaceable rounded pawl with a flush front pad and M3 clearance hole."""
 
     enclosure = params.drum_enclosure
     bounds = capture["pawl"]["bounds_world_mm"]
@@ -1146,11 +1146,12 @@ def _captured_pawl_shape(
     center_x = (minimum[0] + maximum[0]) / 2
     blade_half_width = enclosure.pawl_mount_width / 2
     tip_z = minimum[2] - tip_extension
-    base_z = maximum[2]
+    base_z = limits.inner_top_z
     thickness = maximum[1] - minimum[1] + enclosure.pawl_thickness_addition
     tip_radius = min(enclosure.pawl_tip_radius, blade_half_width / 2)
     tip_center_z = tip_z + tip_radius
-    mount_center_z = base_z - enclosure.pawl_head_recess_diameter / 2
+    mount_height = limits.outer_top_z - limits.inner_top_z
+    mount_center_z = _captured_pawl_screw_axis_z(limits)
 
     blade = (
         cq.Workplane("XZ", origin=(0, limits.front_y, 0))
@@ -1173,7 +1174,14 @@ def _captured_pawl_shape(
         .extrude(-thickness)
         .val()
     )
-    outer = blade.fuse(rounded_tip).clean()
+    mount_pad = (
+        cq.Workplane("XZ", origin=(0, limits.front_y, 0))
+        .center(center_x, mount_center_z)
+        .rect(enclosure.pawl_mount_width, mount_height)
+        .extrude(-thickness)
+        .val()
+    )
+    outer = mount_pad.fuse(blade).fuse(rounded_tip).clean()
     outer = (
         cq.Workplane(obj=outer)
         .faces(">Y")
@@ -1206,7 +1214,7 @@ def _captured_pawl_mount(
     limits: CapturedEnclosureLimits,
     params: DesignParameters = DESIGN,
 ) -> cq.Shape:
-    """Short captured replaceable pawl retained as the default viewer part."""
+    """Definitive-card replaceable pawl retained as the default viewer part."""
 
     return _captured_pawl_shape(capture, limits, params)
 

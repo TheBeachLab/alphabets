@@ -12,8 +12,9 @@ from alphabets_cad.export import generate_captured_enclosure
 from alphabets_cad.parameters import DESIGN, load_design_profile
 
 MECHANICAL_DIR = Path(__file__).resolve().parent
-V2_DIR = MECHANICAL_DIR.parents[1]
-DEFAULT_CAPTURE = V2_DIR / "Final/generated/blender/cards-position-capture.json"
+DEFAULT_CAPTURE = (
+    MECHANICAL_DIR.parent / "blender/generated/cards-position-capture.json"
+)
 
 
 def main() -> None:
@@ -27,18 +28,12 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=V2_DIR / "Final/generated/enclosure",
+        default=MECHANICAL_DIR / "generated/captured-enclosure",
     )
     parser.add_argument("--profile", type=Path)
-    parser.add_argument("--variant", choices=("prototype", "definitive"))
     args = parser.parse_args()
     params = load_design_profile(args.profile, base=DESIGN) if args.profile else DESIGN
-    generate_captured_enclosure(
-        args.output,
-        args.capture,
-        params,
-        physical_variant=args.variant,
-    )
+    generate_captured_enclosure(args.output, args.capture, params)
 
 
 if __name__ == "__main__":

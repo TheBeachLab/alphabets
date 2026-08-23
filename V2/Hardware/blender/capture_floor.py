@@ -13,9 +13,8 @@ from pathlib import Path
 import bpy
 
 BLENDER_DIR = Path(__file__).resolve().parent
-V2_DIR = BLENDER_DIR.parents[1]
-CODE_DIR = V2_DIR / "Code"
-OUTPUT = V2_DIR / "Final/generated/blender/floor-position.json"
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
+OUTPUT = BLENDER_DIR / "generated" / "floor-position.json"
 OBJECT_NAME = "CompressionFloor_Adjustable"
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))

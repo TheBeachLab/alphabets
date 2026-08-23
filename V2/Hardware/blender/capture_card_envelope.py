@@ -17,9 +17,8 @@ from typing import Any
 import bpy
 
 BLENDER_DIR = Path(__file__).resolve().parent
-V2_DIR = BLENDER_DIR.parents[1]
-CODE_DIR = V2_DIR / "Code"
-GENERATED_DIR = V2_DIR / "Final/generated/blender"
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
+GENERATED_DIR = BLENDER_DIR / "generated"
 MM_PER_M = 1000.0
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))

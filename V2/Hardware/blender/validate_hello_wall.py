@@ -12,10 +12,9 @@ from pathlib import Path
 import bpy
 
 BLENDER_DIR = Path(__file__).resolve().parent
-V2_DIR = BLENDER_DIR.parents[1]
-CODE_DIR = V2_DIR / "Code"
-OUTPUT_DIR = V2_DIR / "Final/generated/blender/hello-wall"
-CAPTURE_PATH = V2_DIR / "Final/generated/blender/cards-position-capture.json"
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
+OUTPUT_DIR = BLENDER_DIR / "generated/hello-wall"
+CAPTURE_PATH = BLENDER_DIR / "generated/cards-position-capture.json"
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 

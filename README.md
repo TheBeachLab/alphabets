@@ -30,10 +30,9 @@ prototype firmware remains in
 [V2/Firmware/attiny44-module](V2/Firmware/attiny44-module).
 The selectable 64-position character presets and custom drum settings are
 documented in [V2/Code/letters.md](V2/Code/letters.md).
-The two incompatible physical builds are separated into complete packages:
-[V2 Prototype (55 mm)](V2/Prototype/README.md) and
-[V2 Final (50 mm)](V2/Final/README.md). Never mix their cards, stickers, drum,
-Blender capture or enclosure files.
+The two incompatible physical V2 builds — the installed 55 mm prototype and
+the 50 mm definitive hardware — are explicitly separated in
+[V2/variants](V2/variants/README.md).
 The parametric mechanical source and fabrication exports are in
 [V2/Hardware/mechanical](V2/Hardware/mechanical/README.md).
 

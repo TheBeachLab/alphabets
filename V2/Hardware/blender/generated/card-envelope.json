@@ -1,0 +1,32 @@
+{
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
+  "schema_version": 1,
+  "captured_at": "2026-08-21T23:43:42.100610+00:00",
+  "source_blend": "/Users/Papi/Repositories/alphabets/V2/Hardware/blender/generated/alphabets-v2-interactive.blend",
+  "source_blend_sha256": "0406b439123518149fca972f9856d9ea07299942a9490bf4d0f56803d4b63e83",
+  "frame": 1332,
+  "controller_step_count": 5,
+  "drum_radius_mm": 42.50000553070721,
+  "upper": {
+    "distance_from_axis_mm": 86.70222759246826,
+    "object": "card_16",
+    "world_mm": [
+      -25.0,
+      2.170685,
+      86.702228
+    ],
+    "protrusion_above_drum_mm": 44.202222
+  },
+  "lower_measured_reference": {
+    "distance_from_axis_mm": 86.70181035995483,
+    "object": "card_48",
+    "world_mm": [
+      -25.0,
+      -2.162707,
+      -86.70181
+    ],
+    "protrusion_below_drum_mm": 44.201805
+  },
+  "enclosure_rule": "use the upper distance from the drum axis for both symmetric halves"
+}

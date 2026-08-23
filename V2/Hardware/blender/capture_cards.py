@@ -5,7 +5,6 @@
 
 from __future__ import annotations
 
-import argparse
 import json
 import sys
 from datetime import UTC, datetime
@@ -14,9 +13,8 @@ from pathlib import Path
 import bpy
 
 BLENDER_DIR = Path(__file__).resolve().parent
-V2_DIR = BLENDER_DIR.parents[1]
-CODE_DIR = V2_DIR / "Code"
-GENERATED_DIR = V2_DIR / "Final/generated/blender"
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
+GENERATED_DIR = BLENDER_DIR / "generated"
 JSON_PATH = GENERATED_DIR / "cards-position-capture.json"
 BLEND_PATH = GENERATED_DIR / "alphabets-v2-card-positions.blend"
 MM = 1000
@@ -24,14 +22,6 @@ if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
 from json_license_metadata import write_licensed_json
-
-
-def parse_args() -> argparse.Namespace:
-    arguments = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--json-output", type=Path, default=JSON_PATH)
-    parser.add_argument("--blend-output", type=Path, default=BLEND_PATH)
-    return parser.parse_args(arguments)
 
 
 def rounded(values: list[float] | tuple[float, ...]) -> list[float]:
@@ -83,7 +73,6 @@ def combined_bounds(captures: list[dict]) -> dict:
 
 
 def main() -> int:
-    args = parse_args()
     scene = bpy.context.scene
     depsgraph = bpy.context.evaluated_depsgraph_get()
     cards = []
@@ -101,7 +90,6 @@ def main() -> int:
     completed_steps = int(controller.get("step_count", 0))
     data = {
         "schema_version": 1,
-        "physical_variant": scene.get("physical_variant", "definitive"),
         "captured_at_utc": datetime.now(UTC).isoformat(),
         "source_blend": bpy.data.filepath,
         "capture_frame": scene.frame_current,
@@ -122,16 +110,15 @@ def main() -> int:
         "pawl": object_capture(bpy.data.objects["CardStopPawl_Adjustable"], depsgraph),
         "status": "Blender simulation snapshot; not yet transferred to CadQuery",
     }
-    args.json_output.parent.mkdir(parents=True, exist_ok=True)
-    args.blend_output.parent.mkdir(parents=True, exist_ok=True)
-    write_licensed_json(args.json_output, data)
-    if Path(bpy.data.filepath).resolve() != args.blend_output.resolve():
-        bpy.ops.wm.save_as_mainfile(filepath=str(args.blend_output), copy=True)
+    GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+    write_licensed_json(JSON_PATH, data)
+    if Path(bpy.data.filepath).resolve() != BLEND_PATH.resolve():
+        bpy.ops.wm.save_as_mainfile(filepath=str(BLEND_PATH), copy=True)
     print(
         json.dumps(
             {
-                "json": str(args.json_output),
-                "blend": str(args.blend_output),
+                "json": str(JSON_PATH),
+                "blend": str(BLEND_PATH),
                 "frame": scene.frame_current,
                 "position": completed_steps % 64,
             },

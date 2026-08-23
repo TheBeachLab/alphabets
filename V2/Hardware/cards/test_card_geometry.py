@@ -10,8 +10,6 @@ from xml.etree import ElementTree as ET
 
 CARDS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = CARDS_DIR.parents[2]
-FINAL_CARDS_DIR = REPO_ROOT / "V2/Final/generated/cards"
-PROTOTYPE_CARDS_DIR = REPO_ROOT / "V2/Prototype/generated/cards"
 SVG = "{http://www.w3.org/2000/svg}"
 SPDX_LICENSE_PROPERTY = "SPDX-License-Identifier"
 
@@ -19,7 +17,7 @@ SPDX_LICENSE_PROPERTY = "SPDX-License-Identifier"
 class CardGeometryTests(unittest.TestCase):
     def setUp(self):
         self.manifest = json.loads(
-            (FINAL_CARDS_DIR / "card-50x48.json").read_text(encoding="utf-8")
+            (CARDS_DIR / "card-50x48.json").read_text(encoding="utf-8")
         )
         self.assertEqual(
             self.manifest["SPDX-FileCopyrightText"],
@@ -31,7 +29,7 @@ class CardGeometryTests(unittest.TestCase):
         sticker = json.loads(
             (
                 REPO_ROOT
-                / "V2/Final/generated/stickers/international-64-black-white-45x91.json"
+                / "V2/Hardware/stickers/generated/international-64-black-white-45x91.json"
             ).read_text(encoding="utf-8")
         )
         self.assertEqual(self.manifest["matching_sticker_mm"], [45.0, 91.0])
@@ -42,9 +40,7 @@ class CardGeometryTests(unittest.TestCase):
         )
 
     def test_prototype_card_keeps_55x43_outline_with_50x40_stickers(self):
-        manifest = json.loads(
-            (PROTOTYPE_CARDS_DIR / "card-55x43.json").read_text(encoding="utf-8")
-        )
+        manifest = json.loads((CARDS_DIR / "card.json").read_text(encoding="utf-8"))
         card = manifest["card_mm"]
         self.assertEqual(manifest["physical_variant"], "prototype")
         self.assertEqual(card["body_width"], 55.0)
@@ -90,7 +86,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertGreaterEqual(drum["tab_radial_clearance"], 0.15)
 
     def test_svg_has_a_closed_58x48_mm_cut_path_with_visible_margin(self):
-        root = ET.parse(FINAL_CARDS_DIR / "card-50x48-cut.svg").getroot()
+        root = ET.parse(CARDS_DIR / "card-50x48-cut.svg").getroot()
         self.assertEqual(root.attrib["width"], "60mm")
         self.assertEqual(root.attrib["height"], "50mm")
         self.assertEqual(root.attrib["viewBox"], "0 0 60 50")
@@ -101,7 +97,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(path.attrib["fill"], "none")
 
     def test_dxf_contains_one_closed_eight_vertex_cut_polyline(self):
-        dxf = (FINAL_CARDS_DIR / "card-50x48-cut.dxf").read_text(encoding="ascii")
+        dxf = (CARDS_DIR / "card-50x48-cut.dxf").read_text(encoding="ascii")
         self.assertIn("LWPOLYLINE", dxf)
         self.assertRegex(dxf, r"(?m)^90\n8$")
         self.assertRegex(dxf, r"(?m)^70\n1$")
@@ -109,7 +105,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertEqual(len(re.findall(r"(?m)^20$", dxf)), 8)
 
     def test_fcstd_records_dimensions_and_contains_shapes(self):
-        with zipfile.ZipFile(FINAL_CARDS_DIR / "card-50x48.fcstd") as archive:
+        with zipfile.ZipFile(CARDS_DIR / "card-50x48.fcstd") as archive:
             names = set(archive.namelist())
             document = archive.read("Document.xml").decode("utf-8")
         self.assertIn("CutOutline.Shape.brp", names)
@@ -162,7 +158,7 @@ class CardGeometryTests(unittest.TestCase):
         self.assertRegex(source, r"sdiam\s*=\s*85\s*;")
         self.assertRegex(source, r"e\s*=\s*2\.15\s*;")
         self.assertIn('part == "assembly"', source)
-        dxf = REPO_ROOT / "V2/Final/source/legacy-spool-50mm.dxf"
+        dxf = REPO_ROOT / "V2/Hardware/structure/spool-50mm.dxf"
         self.assertGreater(dxf.stat().st_size, 100_000)
         self.assertIn("ENTITIES", dxf.read_text(encoding="ascii"))
 

@@ -17,10 +17,9 @@ python3 -m pip install -r V2/Hardware/stickers/requirements.txt
 ## Physical variants
 
 The generator can lock characters and sticker dimensions to a physical V2
-variant. This is the normal fabrication path; use the complete
-[`V2/Prototype`](../../Prototype/README.md) or
-[`V2/Final`](../../Final/README.md) package so the artwork cannot be mixed with
-the wrong card, drum or enclosure.
+variant. This is the normal fabrication path; see
+[`../../variants/`](../../variants/README.md) for the full card, drum and
+enclosure contract.
 
 ```sh
 # Existing 55 mm demonstration hardware; 2.5 mm side margin.
@@ -86,7 +85,7 @@ distortion. Each visible outline is geometrically centered in its equal-sized
 card; proportional advance widths do not change the card size. No glyph
 receives an individual scale or vertical offset.
 
-The matched **V2 Final** geometry is `45 × 91 mm`: after the center cut it
+The matched **V2 Definitivo** geometry is `45 × 91 mm`: after the center cut it
 creates two `45 × 45.5 mm` stickers. Each is centred laterally on the complete
 `50 × 48 mm` visible face and aligned to its hinge/tab edge. The opposite
 2.5 mm strip remains unstickered. The center-cut edge of each half is the edge
@@ -127,11 +126,16 @@ python3 V2/Hardware/stickers/generate_stickers.py \
 
 Colors use `#RRGGBB`. Yellow is the historical `#FFCC00`.
 
-Generate all four colors in the correct version folder with:
+Generate the four production color variants at 45 × 91 mm with:
 
 ```sh
-cd V2/Prototype  # or V2/Final
-make stickers
+for preset in black-white black-yellow yellow-black white-black; do
+  python3 V2/Hardware/stickers/generate_stickers.py \
+    --variant definitive \
+    --color-preset "$preset" \
+    --output-svg "V2/Hardware/stickers/generated/international-64-${preset}-45x91.svg" \
+    --output-pdf "output/pdf/alphabets-international-64-${preset}-45x91-stickers.pdf"
+done
 ```
 
 ## Preset or custom characters

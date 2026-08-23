@@ -5,7 +5,6 @@
 
 from __future__ import annotations
 
-import argparse
 import json
 import math
 import shutil
@@ -19,7 +18,7 @@ V2_DIR = BLENDER_DIR.parents[1]
 MECHANICAL_DIR = V2_DIR / "Hardware" / "mechanical"
 STICKERS_DIR = V2_DIR / "Hardware" / "stickers"
 CODE_DIR = V2_DIR / "Code"
-GENERATED_DIR = V2_DIR / "Final/generated/blender"
+GENERATED_DIR = BLENDER_DIR / "generated"
 
 for source_dir in (CODE_DIR, MECHANICAL_DIR, STICKERS_DIR):
     if str(source_dir) not in sys.path:
@@ -30,7 +29,7 @@ from alphabets_cad.assemblies import (
     drum_stop_rotation_degrees,
     enclosed_module_components,
 )
-from alphabets_cad.parameters import DESIGN, DesignParameters, load_design_profile
+from alphabets_cad.parameters import DESIGN
 from artifact_license_metadata import embed_artifact_license
 from generate_stickers import (
     DEFAULT_FONT,
@@ -42,7 +41,6 @@ from generate_stickers import (
     load_profile,
 )
 from json_license_metadata import JSON_LICENSE_METADATA
-from physical_variants import load_variant
 
 ATLAS_COLUMNS = 16
 ATLAS_ROWS = 4
@@ -50,9 +48,6 @@ ATLAS_WIDTH_PX = 4096
 ATLAS_HEIGHT_PX = 2071
 EXCLUDED_STATIC_COMPONENTS = frozenset({"enclosure_lower", "enclosure_upper"})
 NORTH_FALL_BIAS_DEGREES = 0.5
-ACTIVE_DESIGN: DesignParameters = DESIGN
-ACTIVE_CHARACTER_PRESET = "international-64"
-ACTIVE_VARIANT = "definitive"
 
 
 def _round(value: float) -> float:
@@ -62,8 +57,8 @@ def _round(value: float) -> float:
 def build_sticker_mapping() -> dict[str, Any]:
     """Map all 128 physical sticker faces onto one 64-character atlas."""
 
-    profile = load_profile(ACTIVE_CHARACTER_PRESET, None)
-    if len(profile.characters) != ACTIVE_DESIGN.drum.positions:
+    profile = load_profile("international-64", None)
+    if len(profile.characters) != DESIGN.drum.positions:
         raise ValueError("the Blender atlas requires exactly 64 characters")
 
     assignments: list[dict[str, Any]] = []
@@ -123,7 +118,6 @@ def build_sticker_mapping() -> dict[str, Any]:
     return {
         **JSON_LICENSE_METADATA,
         "schema_version": 1,
-        "physical_variant": ACTIVE_VARIANT,
         "character_set": {
             "id": profile.id,
             "characters": profile.characters,
@@ -136,10 +130,10 @@ def build_sticker_mapping() -> dict[str, Any]:
             "width_px": ATLAS_WIDTH_PX,
             "height_px": ATLAS_HEIGHT_PX,
             "cell_mm": [
-                ACTIVE_DESIGN.card.sticker_width,
-                2 * ACTIVE_DESIGN.card.sticker_face_height,
+                DESIGN.card.sticker_width,
+                2 * DESIGN.card.sticker_face_height,
             ],
-            "split_y_mm": ACTIVE_DESIGN.card.sticker_face_height,
+            "split_y_mm": DESIGN.card.sticker_face_height,
         },
         "numbering": {
             "card_00": "lower front stop position",
@@ -153,10 +147,10 @@ def build_sticker_mapping() -> dict[str, Any]:
 
 
 def build_scene_manifest(static_components: list[dict[str, Any]]) -> dict[str, Any]:
-    card = ACTIVE_DESIGN.card
-    drum = ACTIVE_DESIGN.drum
+    card = DESIGN.card
+    drum = DESIGN.drum
     step_degrees = 360 / drum.positions
-    stop_degrees = drum_stop_rotation_degrees(ACTIVE_DESIGN)
+    stop_degrees = drum_stop_rotation_degrees(DESIGN)
     front_lower_position = drum.positions // 2
     poses: list[dict[str, Any]] = []
     for position in range(drum.positions):
@@ -193,7 +187,6 @@ def build_scene_manifest(static_components: list[dict[str, Any]]) -> dict[str, A
     return {
         **JSON_LICENSE_METADATA,
         "schema_version": 1,
-        "physical_variant": ACTIVE_VARIANT,
         "units": "millimetres",
         "card": {
             "body_width": card.body_width,
@@ -230,7 +223,7 @@ def build_scene_manifest(static_components: list[dict[str, Any]]) -> dict[str, A
             "geometry_version": 1,
             "size_mm": 250,
             "thickness_mm": 2,
-            "initial_top_z_mm": -75,
+            "initial_top_z_mm": -95,
             "long_run_top_z_mm": -75,
             "long_run_end_frame": 1_000_000,
             "long_run_ready_frame": 360,
@@ -266,18 +259,18 @@ def build_scene_manifest(static_components: list[dict[str, Any]]) -> dict[str, A
 
 
 def write_atlas() -> None:
-    profile = load_profile(ACTIVE_CHARACTER_PRESET, None)
+    profile = load_profile("international-64", None)
     face = FontFace.load(DEFAULT_FONT, DEFAULT_FONT_WEIGHT, DEFAULT_FONT_WIDTH)
     geometry = SheetGeometry(
-        card_width_mm=ACTIVE_DESIGN.card.sticker_width,
-        card_height_mm=2 * ACTIVE_DESIGN.card.sticker_face_height,
+        card_width_mm=DESIGN.card.sticker_width,
+        card_height_mm=2 * DESIGN.card.sticker_face_height,
         margin_mm=0,
         column_gap_mm=0,
         row_gap_mm=0,
         columns=ATLAS_COLUMNS,
         glyph_padding_x_mm=3,
         glyph_padding_y_mm=4,
-        split_y_mm=ACTIVE_DESIGN.card.sticker_face_height,
+        split_y_mm=DESIGN.card.sticker_face_height,
     )
     svg, _ = build_svg(
         profile,
@@ -317,7 +310,7 @@ def export_static_meshes() -> list[dict[str, Any]]:
     mesh_dir = GENERATED_DIR / "meshes"
     mesh_dir.mkdir(parents=True, exist_ok=True)
     components: list[dict[str, Any]] = []
-    for component in enclosed_module_components(ACTIVE_DESIGN, exploded=False):
+    for component in enclosed_module_components(DESIGN, exploded=False):
         if component.name in EXCLUDED_STATIC_COMPONENTS:
             stale_path = mesh_dir / f"{component.name}.stl"
             stale_path.unlink(missing_ok=True)
@@ -342,27 +335,7 @@ def export_static_meshes() -> list[dict[str, Any]]:
     return components
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--variant", choices=("prototype", "definitive"), default="definitive"
-    )
-    parser.add_argument("--profile", type=Path)
-    parser.add_argument("--output", type=Path, default=GENERATED_DIR)
-    return parser.parse_args()
-
-
 def main() -> int:
-    global ACTIVE_CHARACTER_PRESET, ACTIVE_DESIGN, ACTIVE_VARIANT, GENERATED_DIR
-    args = parse_args()
-    variant = load_variant(args.variant)
-    profile_path = args.profile or (
-        V2_DIR / ("Prototype" if variant.id == "prototype" else "Final") / "design.toml"
-    )
-    ACTIVE_DESIGN = load_design_profile(profile_path, base=DESIGN)
-    ACTIVE_CHARACTER_PRESET = variant.character_preset
-    ACTIVE_VARIANT = variant.id
-    GENERATED_DIR = args.output.resolve()
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     write_atlas()
     mapping = build_sticker_mapping()

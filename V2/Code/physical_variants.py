@@ -12,10 +12,7 @@ from typing import Any
 from json_license_metadata import LicenseMetadataError, validate_json_license
 
 V2_DIR = Path(__file__).resolve().parents[1]
-DEFAULT_CATALOG_PATHS = (
-    V2_DIR / "Prototype" / "variant.json",
-    V2_DIR / "Final" / "variant.json",
-)
+DEFAULT_CATALOG_PATH = V2_DIR / "variants" / "variants.json"
 
 
 class PhysicalVariantError(ValueError):
@@ -191,7 +188,8 @@ def _validate_match(variant: PhysicalVariant) -> None:
         )
 
 
-def _load_catalog(catalog_path: Path) -> list[PhysicalVariant]:
+def load_variants(path: Path | None = None) -> dict[str, PhysicalVariant]:
+    catalog_path = path or DEFAULT_CATALOG_PATH
     try:
         data = json.loads(catalog_path.read_text(encoding="utf-8"))
     except OSError as error:
@@ -211,31 +209,18 @@ def _load_catalog(catalog_path: Path) -> list[PhysicalVariant]:
     entries = data.get("variants")
     if not isinstance(entries, list) or not entries:
         raise PhysicalVariantError("physical variant catalog has no variants")
-    variants: list[PhysicalVariant] = []
+    variants: dict[str, PhysicalVariant] = {}
     for entry in entries:
         if not isinstance(entry, dict):
             raise PhysicalVariantError("physical variant entry must be an object")
         variant = _variant(entry)
+        if variant.id in variants:
+            raise PhysicalVariantError(f"duplicate physical variant id: {variant.id!r}")
         _validate_match(variant)
-        variants.append(variant)
+        variants[variant.id] = variant
     default_variant = data.get("default_variant")
-    if default_variant not in {variant.id for variant in variants}:
+    if default_variant not in variants:
         raise PhysicalVariantError("physical variant default does not exist")
-    return variants
-
-
-def load_variants(path: Path | None = None) -> dict[str, PhysicalVariant]:
-    """Load the isolated Prototype and Final physical contracts."""
-
-    catalog_paths = (path,) if path is not None else DEFAULT_CATALOG_PATHS
-    variants: dict[str, PhysicalVariant] = {}
-    for catalog_path in catalog_paths:
-        for variant in _load_catalog(catalog_path):
-            if variant.id in variants:
-                raise PhysicalVariantError(
-                    f"duplicate physical variant id: {variant.id!r}"
-                )
-            variants[variant.id] = variant
     return variants
 
 

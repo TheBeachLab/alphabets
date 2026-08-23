@@ -1,30 +1,87 @@
 <!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
 <!-- SPDX-License-Identifier: MIT -->
+# V2 Definitivo card and drum width
 
-# Shared V2 card generator
+This directory is the **V2 Definitivo** 50 mm card route. The incompatible
+55 mm **V2 Prototipo** card remains preserved as `card.fcstd`; its complete
+physical contract is in [`../../variants/`](../../variants/README.md).
 
-`generate_card.py` produces the editable FreeCAD card, SVG/DXF cutter outlines
-and a manufacturing manifest. It is shared by two incompatible complete
-packages:
+The production card uses one half of the `45 × 91 mm` sticker sheet:
 
-| Version | Card body | Tabs | Drum inner / outer width |
-| --- | --- | --- | --- |
-| [`V2/Prototype`](../../Prototype/README.md) | 55 × 43 × 0.5 mm | 4 × 3 mm | 56 / 60.3 mm |
-| [`V2/Final`](../../Final/README.md) | 50 × 48 × 0.5 mm | 4 × 2.5 mm | 51 / 55.3 mm |
+- visible body: the complete central `50 × 48 mm` surface;
+- total card: `50 × 48 mm`;
+- side tabs: `4 × 2.5 mm` each; their bare `0.5 mm` thickness is included in the
+  pivot fit, leaving at least `0.15 mm` radial clearance in the `3 mm` holes;
+- total width across the tabs: `58 mm`;
+- black card substrate: `0.5 mm`;
+- sticker face: `45 × 45.5 mm`, centred with `2.5 mm` lateral margin and aligned
+  to the hinge/tab edge, leaving the opposite 2.5 mm strip bare;
+- one `0.1 mm` sticker on each face, for `0.7 mm` finished body thickness;
+- the visible colour comes from the sticker, not from the substrate model.
 
-The complete visible face includes the tab band. A 0.1 mm sticker is applied to
-each face, so a finished stickered card is 0.7 mm thick. The substrate is black;
-the visible color comes from the sticker.
+The two drum sides are separated by `51 mm`: the `50 mm` card body plus
+`1 mm` total axial clearance. The drum keeps its `85 mm` diameter and all 64
+flap positions.
 
-Use the version-level build so the card is generated together with matching
-stickers, drum, Blender capture and enclosure:
+## Current manufacturing source
+
+The card is now generated with the complete V2 mechanical model in
+[`../mechanical/`](../mechanical/README.md). That model produces the current
+DXF and STEP together with the matching drum and validates their shared
+dimensions automatically.
+
+## Preserved FreeCAD files
+
+The FreeCAD document properties record The Beach Lab as creator and company,
+identify the licence as MIT, link to the repository licence, and repeat the SPDX
+copyright and licence identifiers in the document comment. This metadata stays
+inside an `.fcstd` or `.FCBak` file when it is shared separately.
+
+- `card-50x48.fcstd`: editable FreeCAD model and dimensional parameter sheet;
+- `card-50x48-cut.svg`: exact vector cutter outline in millimetres;
+- `card-50x48-cut.dxf`: the same closed outline on the `CUT` layer;
+- `card-50x48.json`: manufacturing dimensions and the card/sticker/drum match.
+
+The earlier FreeCAD representation can still be regenerated from the repository
+root with:
 
 ```sh
-cd V2/Prototype  # or V2/Final
-make cards
-make check
+/Applications/FreeCAD.app/Contents/Resources/bin/FreeCADCmd \
+  V2/Hardware/cards/generate_card.py
 ```
 
-The FreeCAD file embeds the variant, exact dimensions and project licence.
-Prototype and Final outputs live only below their respective `generated/cards`
-folders.
+The regenerated `card.fcstd`, `card-cut.svg`, `card-cut.dxf`, and `card.json`
+describe the 55 × 43 mm prototype geometry with its corrected 0.5 mm substrate.
+Generate either geometry explicitly with FreeCADCmd:
+
+```sh
+# Definitivo: 50 × 48 mm card.
+/Applications/FreeCAD.app/Contents/Resources/bin/FreeCADCmd \
+  V2/Hardware/cards/generate_card.py --pass '--variant definitive'
+
+# Prototipo: 55 × 43 mm card; choose a separate output directory.
+/Applications/FreeCAD.app/Contents/Resources/bin/FreeCADCmd \
+  V2/Hardware/cards/generate_card.py \
+  --pass '--variant prototype --output-dir /tmp/alphabets-v2-prototype-card'
+```
+
+## Drum
+
+`../structure/spool.scad` derives the drum separation from `flap_width = 50`
+and `axial_clearance = 1`. Its `part` selector renders the side disc, the
+shortened spacer, a cutting layout containing both, or the assembled drum:
+
+```sh
+openscad -o V2/Hardware/structure/spool-50mm.dxf \
+  -D 'make3d=false' -D 'part="layout"' \
+  V2/Hardware/structure/spool.scad
+```
+
+The assembled outer drum width is `55.3 mm`: `51 mm` between the inner faces
+plus two `2.15 mm` side discs. Render it with `-D 'part="assembly"'`.
+The generated `../structure/spool-50mm.dxf` contains the 85 mm side disc and
+the shortened spacer cutting geometry; cut two copies of the side disc for one
+drum.
+
+The old 55 mm card spacing can still be reproduced explicitly with
+`-D 'flap_width=55'`.

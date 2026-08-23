@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
 
@@ -17,13 +16,10 @@ from alphabets_cad.parameters import DESIGN, load_design_profile
 profile = os.environ.get("ALPHABETS_PROFILE")
 parameters = load_design_profile(Path(profile), base=DESIGN) if profile else DESIGN
 default_capture = (
-    Path(__file__).resolve().parents[2]
-    / "Final/generated/blender/cards-position-capture.json"
+    Path(__file__).resolve().parent.parent
+    / "blender/generated/cards-position-capture.json"
 )
 capture_path = Path(os.environ.get("ALPHABETS_CARD_CAPTURE", default_capture))
-physical_variant = json.loads(capture_path.read_text(encoding="utf-8")).get(
-    "physical_variant", "definitive"
-)
 components = captured_enclosure_design_components(capture_path, parameters)
 objects = {component.name: component.shape for component in components}
 
@@ -83,16 +79,8 @@ for name, members in group_members.items():
         groups[name] = _viewer_group(name, members)
         group_colors[name] = None
         group_alphas[name] = None
-active_pawl_group = (
-    "pua_prototipo" if physical_variant == "prototype" else "pua_definitiva"
-)
 group_modes = {
-    name: (
-        Render.NONE
-        if name.startswith("pua_") and name != active_pawl_group
-        else Render.ALL
-    )
-    for name in groups
+    name: Render.NONE if name == "pua_prototipo" else Render.ALL for name in groups
 }
 
 set_port(3939)

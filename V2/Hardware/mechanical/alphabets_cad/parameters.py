@@ -83,7 +83,6 @@ class DrumDimensions:
     motor_axis_height: float = 6.0
     motor_axis_radius: float = 2.5
     shaft_axis_radius: float = 1.7
-    allow_tab_interference: bool = False
 
     @property
     def radius(self) -> float:
@@ -206,7 +205,7 @@ class DrumEnclosureDimensions:
     pawl_head_recess_diameter: float = 6.0
     pawl_head_recess_depth: float = 1.0
     pawl_tip_radius: float = 2.0
-    prototype_pawl_extension: float = 0.0
+    prototype_pawl_extension: float = 5.0
     upper_card_envelope_height: float = 86.702228
     card_ceiling_clearance: float = 10.0
     closure_method: str = "embedded_magnets"
@@ -379,10 +378,7 @@ def design_from_mapping(
         replacements[section] = replace(current, **values)
 
     result = replace(design, **replacements)
-    if (
-        result.flap_tab_radial_clearance < result.drum.flap_rotation_clearance
-        and not result.drum.allow_tab_interference
-    ):
+    if result.flap_tab_radial_clearance < result.drum.flap_rotation_clearance:
         raise ValueError(
             "card tab does not have the required radial clearance to rotate "
             "inside the drum flap hole"
@@ -407,6 +403,5 @@ def load_design_profile(
 
 
 MECHANICAL_DIR = Path(__file__).resolve().parents[1]
-V2_DIR = MECHANICAL_DIR.parents[1]
-DEFAULT_PROFILE = V2_DIR / "Final" / "design.toml"
+DEFAULT_PROFILE = MECHANICAL_DIR / "design.toml"
 DESIGN = load_design_profile(DEFAULT_PROFILE)

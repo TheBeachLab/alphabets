@@ -69,9 +69,8 @@ def _place_on_plate(
 def _captured_bambu_a1_mini_plate(
     parts: dict[str, cq.Shape],
     pawls: dict[str, cq.Shape],
-    pawl_variants: tuple[str, ...] = ("definitive", "prototype"),
 ) -> tuple[cq.Shape, dict[str, dict[str, object]]]:
-    """Lay out one isolated variant's parts inside the A1 mini build volume."""
+    """Lay out all four printable parts inside the A1 mini build volume."""
 
     margin = A1_MINI_PLATE_MARGIN_MM
     gap = A1_MINI_PART_GAP_MM
@@ -79,59 +78,56 @@ def _captured_bambu_a1_mini_plate(
     lower_preview = _place_on_plate(parts["enclosure_lower"], x=0, y=0, x_rotation=-90)
     upper_size = upper_preview.BoundingBox()
     lower_size = lower_preview.BoundingBox()
-    # With the front rims on the bed, the two halves fit the A1 Mini only when
-    # arranged side by side. This also keeps them in their assembled relation,
-    # separated by the requested small printable gap.
-    group_width = lower_size.xlen + gap + upper_size.xlen
-    group_height = max(lower_size.ylen, upper_size.ylen)
+    group_width = max(upper_size.xlen, lower_size.xlen)
+    group_height = lower_size.ylen + gap + upper_size.ylen
     group_x = (A1_MINI_BUILD_VOLUME_MM[0] - group_width) / 2
     group_y = (A1_MINI_BUILD_VOLUME_MM[1] - group_height) / 2
-    lower_x = group_x
-    upper_x = lower_x + lower_size.xlen + gap
-    lower_y = group_y + (group_height - lower_size.ylen) / 2
-    upper_y = group_y + (group_height - upper_size.ylen) / 2
-    pawl_names = tuple(f"pawl_{variant}" for variant in pawl_variants)
-    pawl_sizes = {
-        name: _place_on_plate(pawls[name], x=0, y=0, x_rotation=90).BoundingBox()
-        for name in pawl_names
-    }
-    pawl_gap = 10.0
-    pawl_group_width = sum(size.xlen for size in pawl_sizes.values()) + pawl_gap * max(
-        0, len(pawl_sizes) - 1
+    lower_x = group_x + (group_width - lower_size.xlen) / 2
+    upper_x = group_x + (group_width - upper_size.xlen) / 2
+    definitive_preview = _place_on_plate(
+        pawls["pawl_definitive"], x=0, y=0, x_rotation=90
     )
-    pawl_x = lower_x + (lower_size.xlen - pawl_group_width) / 2
+    prototype_preview = _place_on_plate(
+        pawls["pawl_prototype"], x=0, y=0, x_rotation=90
+    )
+    definitive_size = definitive_preview.BoundingBox()
+    prototype_size = prototype_preview.BoundingBox()
+    pawl_gap = 10.0
+    pawl_group_width = definitive_size.xlen + pawl_gap + prototype_size.xlen
+    pawl_x = (A1_MINI_BUILD_VOLUME_MM[0] - pawl_group_width) / 2
     pawl_y = (
-        lower_y + (lower_size.ylen - max(size.ylen for size in pawl_sizes.values())) / 2
-    ) + gap
+        group_y + (lower_size.ylen - max(definitive_size.ylen, prototype_size.ylen)) / 2
+    )
     placements = {
         "enclosure_upper": _place_on_plate(
             parts["enclosure_upper"],
             x=upper_x,
-            y=upper_y,
+            y=group_y + lower_size.ylen + gap,
             x_rotation=-90,
         ),
         "enclosure_lower": _place_on_plate(
             parts["enclosure_lower"],
             x=lower_x,
-            y=lower_y,
+            y=group_y,
             x_rotation=-90,
         ),
+        "pawl_definitive": _place_on_plate(
+            pawls["pawl_definitive"],
+            x=pawl_x,
+            y=pawl_y,
+            x_rotation=90,
+        ),
+        "pawl_prototype": _place_on_plate(
+            pawls["pawl_prototype"],
+            x=pawl_x + definitive_size.xlen + pawl_gap,
+            y=pawl_y,
+            x_rotation=90,
+        ),
     }
-    current_pawl_x = pawl_x
-    for name in pawl_names:
-        placements[name] = _place_on_plate(
-            pawls[name], x=current_pawl_x, y=pawl_y, x_rotation=90
-        )
-        current_pawl_x += pawl_sizes[name].xlen + pawl_gap
     plate = cq.Compound.makeCompound(list(placements.values()))
     plate_box = plate.BoundingBox()
     build_x, build_y, build_z = A1_MINI_BUILD_VOLUME_MM
-    if (
-        plate_box.xmin < margin
-        or plate_box.ymin < margin
-        or plate_box.xmax > build_x - margin
-        or plate_box.ymax > build_y - margin
-    ):
+    if plate_box.xmax > build_x - margin or plate_box.ymax > build_y - margin:
         raise ValueError("captured enclosure parts do not fit the A1 mini plate")
     if plate_box.zmax > build_z:
         raise ValueError("captured enclosure parts exceed the A1 mini build height")
@@ -170,12 +166,8 @@ def generate_captured_enclosure(
     output_root: Path,
     capture_path: Path,
     params: DesignParameters = DESIGN,
-    physical_variant: str | None = None,
 ) -> None:
     """Export the two-part enclosure fitted to a settled Blender capture."""
-
-    if physical_variant not in {None, "prototype", "definitive"}:
-        raise ValueError(f"unknown physical variant: {physical_variant!r}")
 
     output_root = output_root.resolve()
     directories = {name: output_root / name for name in ("print", "step", "preview")}
@@ -183,18 +175,9 @@ def generate_captured_enclosure(
         directory.mkdir(parents=True, exist_ok=True)
 
     capture = json.loads(capture_path.read_text(encoding="utf-8"))
-    capture_variant = capture.get("physical_variant")
-    if physical_variant is not None and capture_variant != physical_variant:
-        raise ValueError(
-            f"capture is for {capture_variant!r}, not {physical_variant!r}"
-        )
     parts = captured_drum_enclosure_parts(capture, params)
     pawls = captured_pawl_parts(capture, params)
-    pawl_variants = (
-        (physical_variant,) if physical_variant else ("definitive", "prototype")
-    )
-    active_pawl_name = f"pawl_{physical_variant or 'definitive'}"
-    assembly = cq.Compound.makeCompound([*parts.values(), pawls[active_pawl_name]])
+    assembly = cq.Compound.makeCompound([*parts.values(), pawls["pawl_definitive"]])
     limits = captured_enclosure_limits(capture, params)
     remaining_docking_gap = (
         params.motor.chassis_height
@@ -216,34 +199,24 @@ def generate_captured_enclosure(
             angularTolerance=0.125,
         )
         embed_artifact_license(stl_path)
-    for variant in pawl_variants:
+    for variant in ("definitive", "prototype"):
         shape = pawls[f"pawl_{variant}"]
-        pawl_stem = (
-            "captured-enclosure-pawl"
-            if physical_variant
-            else f"captured-enclosure-pawl-{variant}"
-        )
         _export_step(
             shape,
-            directories["step"] / f"{pawl_stem}.step",
+            directories["step"] / f"captured-enclosure-pawl-{variant}.step",
         )
-        stl_path = directories["print"] / f"{pawl_stem}.stl"
+        stl_path = directories["print"] / f"captured-enclosure-pawl-{variant}.stl"
         shape.exportStl(
             str(stl_path),
             tolerance=0.05,
             angularTolerance=0.1,
         )
         embed_artifact_license(stl_path)
-    print_plate, print_plate_layout = _captured_bambu_a1_mini_plate(
-        parts, pawls, pawl_variants
-    )
+    print_plate, print_plate_layout = _captured_bambu_a1_mini_plate(parts, pawls)
     print_plate_summary = _shape_summary(print_plate)
-    plate_filename = (
-        "captured-enclosure-print-plate.stl"
-        if physical_variant
-        else "captured-enclosure-bambu-a1-mini-four-part-plate.stl"
+    print_plate_path = (
+        directories["print"] / "captured-enclosure-bambu-a1-mini-four-part-plate.stl"
     )
-    print_plate_path = directories["print"] / plate_filename
     print_plate.exportStl(
         str(print_plate_path),
         tolerance=0.08,
@@ -284,7 +257,6 @@ def generate_captured_enclosure(
 
     manifest = {
         "schema_version": 1,
-        "physical_variant": physical_variant,
         "units": "mm",
         "cad_engine": "CadQuery 2.8.0 / OCCT",
         "capture": {
@@ -390,12 +362,11 @@ def generate_captured_enclosure(
             "rear_open": True,
             "screw_lugs": False,
             "replaceable_pawls": (
-                "one variant-specific pawl with a 1 mm outer-face chamfer, "
-                "retained by one M3 screw into a self-tapping pilot"
-                if physical_variant
-                else "legacy combined export containing both pawl lengths"
+                "2 mm definitive and 5 mm-longer prototype parts with 1 mm "
+                "outer-face chamfers, retained by one M3 screw into a "
+                "self-tapping pilot"
             ),
-            "visible_assembly_pawl": physical_variant or "definitive",
+            "visible_assembly_pawl": "definitive",
             "lower_shaft_support": (
                 "M3 self-tapping pilot in a 9 mm boss tapered continuously "
                 "from the inside wall; user-supplied M3 screw forms the axle "
@@ -446,17 +417,10 @@ def generate_captured_enclosure(
             ),
         },
         "geometry": {
-            name: _shape_summary(shape)
-            for name, shape in {
-                **parts,
-                **{
-                    f"pawl_{variant}": pawls[f"pawl_{variant}"]
-                    for variant in pawl_variants
-                },
-            }.items()
+            name: _shape_summary(shape) for name, shape in {**parts, **pawls}.items()
         },
         "print_plate": {
-            "file": f"print/{plate_filename}",
+            "file": "print/captured-enclosure-bambu-a1-mini-four-part-plate.stl",
             "printer": "Bambu Lab A1 mini",
             "build_volume_mm": list(A1_MINI_BUILD_VOLUME_MM),
             "margin_mm": A1_MINI_PLATE_MARGIN_MM,
@@ -593,11 +557,7 @@ def _shape_summary(shape: cq.Shape) -> dict[str, object]:
     }
 
 
-def generate(
-    output_root: Path,
-    params: DesignParameters = DESIGN,
-    physical_variant: str | None = None,
-) -> None:
+def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
     output_root = output_root.resolve()
     directories = {
         name: output_root / name for name in ("cut", "print", "step", "preview")
@@ -761,7 +721,6 @@ def generate(
 
     manifest = {
         "schema_version": 1,
-        "physical_variant": physical_variant,
         "units": "mm",
         "cad_engine": "CadQuery 2.8.0 / OCCT",
         "parameters": params.as_dict(),
@@ -773,8 +732,8 @@ def generate(
             "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
             "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
             "drum_enclosure": (
-                "native CadQuery design sized from the selected "
-                "V2/<variant>/generated/blender capture"
+                "native CadQuery design sized from "
+                "V2/Hardware/blender/generated/card-envelope.json"
             ),
         },
         "geometry": geometry_summary,

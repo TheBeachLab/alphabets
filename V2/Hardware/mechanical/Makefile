@@ -3,8 +3,8 @@
 PYTHON ?= .venv/bin/python
 UV ?= uv
 CQ_EDITOR ?= cq-editor
-PROFILE ?= ../../Final/design.toml
-OUTPUT ?= ../../Final/generated/mechanical
+PROFILE ?=
+OUTPUT ?= generated
 VARIANT ?= definitive
 OCP_ENV ?= .ocp-venv
 
@@ -28,7 +28,7 @@ generate:
 	PYTHONPATH=. $(PYTHON) generate.py --output $(OUTPUT) --variant $(VARIANT) $(if $(PROFILE),--profile $(PROFILE))
 
 generate-captured-enclosure:
-	PYTHONPATH=. $(PYTHON) export_captured_enclosure.py --variant $(VARIANT) --output ../../Final/generated/enclosure $(if $(PROFILE),--profile $(PROFILE))
+	PYTHONPATH=. $(PYTHON) export_captured_enclosure.py $(if $(PROFILE),--profile $(PROFILE))
 
 lint:
 	$(PYTHON) -m ruff check .
@@ -43,4 +43,4 @@ verify-generated: check
 	git diff --exit-code -- generated
 
 clean-generated:
-	rm -rf ../../Final/generated/mechanical ../../Final/generated/enclosure
+	rm -rf generated

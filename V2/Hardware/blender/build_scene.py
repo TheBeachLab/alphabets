@@ -16,9 +16,8 @@ import bpy
 from mathutils import Vector
 
 BLENDER_DIR = Path(__file__).resolve().parent
-V2_DIR = BLENDER_DIR.parents[1]
-CODE_DIR = V2_DIR / "Code"
-GENERATED_DIR = V2_DIR / "Final/generated/blender"
+CODE_DIR = BLENDER_DIR.parents[1] / "Code"
+GENERATED_DIR = BLENDER_DIR / "generated"
 PAWL_CAPTURE_PATH = GENERATED_DIR / "pawl-position.json"
 FLOOR_CAPTURE_PATH = GENERATED_DIR / "floor-position.json"
 MM = 0.001
@@ -28,18 +27,13 @@ if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
 from json_license_metadata import validate_json_license
+
 from license_metadata import apply_blend_license_metadata
 
 
 def parse_args() -> argparse.Namespace:
     arguments = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--assets-dir",
-        type=Path,
-        default=GENERATED_DIR,
-        help="variant-specific generated Blender assets",
-    )
     parser.add_argument(
         "--output",
         type=Path,
@@ -385,8 +379,6 @@ def build_floor(
         floor["position_source"] = str(FLOOR_CAPTURE_PATH.name)
     else:
         floor["position_source"] = "scene manifest initial position"
-        final_y = pawl.location.y - size / 2
-        floor.location = (floor.location.x, final_y, floor.location.z)
     floor.data.materials.append(floor_material)
     add_rigid_body(floor, "PASSIVE", "BOX")
     floor.rigid_body.kinematic = not long_run
@@ -648,7 +640,6 @@ def configure_scene(scene_data: dict[str, Any]) -> None:
     scene["fabrication_source"] = (
         "CadQuery remains authoritative; Blender is simulation only"
     )
-    scene["physical_variant"] = scene_data.get("physical_variant", "definitive")
 
 
 def configure_interactive_viewports() -> None:
@@ -664,11 +655,7 @@ def configure_interactive_viewports() -> None:
 
 
 def main() -> int:
-    global FLOOR_CAPTURE_PATH, GENERATED_DIR, PAWL_CAPTURE_PATH
     args = parse_args()
-    GENERATED_DIR = args.assets_dir.resolve()
-    PAWL_CAPTURE_PATH = GENERATED_DIR / "pawl-position.json"
-    FLOOR_CAPTURE_PATH = GENERATED_DIR / "floor-position.json"
     scene_data = load_json(GENERATED_DIR / "scene.json")
     mapping_data = load_json(GENERATED_DIR / "sticker-mapping.json")
     clear_scene()

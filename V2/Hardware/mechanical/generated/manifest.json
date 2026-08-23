@@ -1,0 +1,453 @@
+{
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
+  "cad_engine": "CadQuery 2.8.0 / OCCT",
+  "fabrication_status": {
+    "card_and_laser_cut_drum": "ported from current dimensional sources",
+    "drum_enclosure": "two symmetric printable halves sized from the captured card envelope; embedded magnetic coupling requires physical validation",
+    "enclosure_sketch": "non-solid reference geometry",
+    "holder_side": "ported dormant legacy profile; physical validation required",
+    "motor": "clearance reference, not a manufacturing model",
+    "printed_spool": "ported legacy alternative; physical validation required"
+  },
+  "geometry": {
+    "card": {
+      "bounds_mm": {
+        "x": [
+          -4.0,
+          54.0
+        ],
+        "y": [
+          0.0,
+          48.0
+        ],
+        "z": [
+          0.0,
+          0.5
+        ]
+      },
+      "component_volume_sum_mm3": 1210.0,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 1210.0
+    },
+    "drum_assembly": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          55.3
+        ]
+      },
+      "component_volume_sum_mm3": 30109.084816,
+      "solid_count": 4,
+      "valid": true,
+      "volume_mm3": 30081.736816
+    },
+    "enclosed_module": {
+      "bounds_mm": {
+        "x": [
+          -51.05,
+          32.05
+        ],
+        "y": [
+          -86.657773,
+          86.657773
+        ],
+        "z": [
+          -99.102228,
+          99.102228
+        ]
+      },
+      "component_volume_sum_mm3": 288862.258571,
+      "solid_count": 202,
+      "valid": true,
+      "volume_mm3": 284264.540723
+    },
+    "enclosure_assembly": {
+      "bounds_mm": {
+        "x": [
+          -32.05,
+          32.05
+        ],
+        "y": [
+          -47.5,
+          44.5
+        ],
+        "z": [
+          -99.102228,
+          99.102228
+        ]
+      },
+      "component_volume_sum_mm3": 138893.384908,
+      "solid_count": 2,
+      "valid": true,
+      "volume_mm3": 138893.384908
+    },
+    "enclosure_lower": {
+      "bounds_mm": {
+        "x": [
+          -32.05,
+          32.05
+        ],
+        "y": [
+          -47.5,
+          44.5
+        ],
+        "z": [
+          -99.102228,
+          -0.1
+        ]
+      },
+      "component_volume_sum_mm3": 69410.199714,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 69410.199714
+    },
+    "enclosure_upper": {
+      "bounds_mm": {
+        "x": [
+          -32.05,
+          32.05
+        ],
+        "y": [
+          -47.5,
+          44.5
+        ],
+        "z": [
+          0.1,
+          99.102228
+        ]
+      },
+      "component_volume_sum_mm3": 69483.185194,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 69483.185194
+    },
+    "module_reference": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          -19.0,
+          55.3
+        ]
+      },
+      "component_volume_sum_mm3": 46320.873663,
+      "solid_count": 8,
+      "valid": true,
+      "volume_mm3": 43069.730789
+    },
+    "motor_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          2.15
+        ]
+      },
+      "component_volume_sum_mm3": 11100.949467,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 11100.949467
+    },
+    "motor_reference": {
+      "bounds_mm": {
+        "x": [
+          -21.0,
+          21.0
+        ],
+        "y": [
+          -26.0,
+          6.0
+        ],
+        "z": [
+          -19.0,
+          10.0
+        ]
+      },
+      "component_volume_sum_mm3": 16211.788847,
+      "solid_count": 4,
+      "valid": true,
+      "volume_mm3": 13066.856402
+    },
+    "printed_motor_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          2.0
+        ]
+      },
+      "component_volume_sum_mm3": 2674.737307,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 2674.737307
+    },
+    "printed_shaft_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          5.0
+        ]
+      },
+      "component_volume_sum_mm3": 2723.223213,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 2723.223213
+    },
+    "shaft_disc": {
+      "bounds_mm": {
+        "x": [
+          -42.5,
+          42.5
+        ],
+        "y": [
+          -42.5,
+          42.5
+        ],
+        "z": [
+          0.0,
+          2.15
+        ]
+      },
+      "component_volume_sum_mm3": 11110.755349,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 11110.755349
+    },
+    "support": {
+      "bounds_mm": {
+        "x": [
+          -17.5,
+          17.5
+        ],
+        "y": [
+          -27.65,
+          27.65
+        ],
+        "z": [
+          0.0,
+          2.15
+        ]
+      },
+      "component_volume_sum_mm3": 3948.69,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 3948.69
+    }
+  },
+  "parameters": {
+    "card": {
+      "body_width": 50.0,
+      "finished_thickness": 0.7,
+      "overall_width": 58.0,
+      "sticker_face_height": 45.5,
+      "sticker_face_thickness": 0.1,
+      "sticker_side_margin": 2.5,
+      "sticker_width": 45.0,
+      "sticker_y_offset": 2.5,
+      "tab_axis_height": 46.75,
+      "tab_height": 2.5,
+      "tab_rotation_radius": 1.2747548783981961,
+      "tab_start_height": 45.5,
+      "tab_width": 4.0,
+      "thickness": 0.5,
+      "total_height": 48.0,
+      "visible_height": 48.0
+    },
+    "drum": {
+      "axial_clearance": 1.0,
+      "diameter": 85.0,
+      "flap_hole_center_radius": 40.0,
+      "flap_hole_diameter": 3.0,
+      "flap_rotation_clearance": 0.15,
+      "flap_tab_radial_clearance": 0.22524512160180388,
+      "inner_width": 51.0,
+      "laser_kerf": 0.1,
+      "motor_axis_height": 6.0,
+      "motor_axis_radius": 2.5,
+      "motor_axis_width": 3.0,
+      "outer_width": 55.3,
+      "positions": 64,
+      "shaft_axis_radius": 1.7,
+      "side_thickness": 2.15,
+      "support_tab_width": 6.0,
+      "support_width": 35.0,
+      "support_y": 20.0
+    },
+    "drum_enclosure": {
+      "alignment_base_size": 8.0,
+      "alignment_clearance": 0.2,
+      "alignment_end_inset": 20.0,
+      "alignment_height": 3.0,
+      "alignment_top_size": 2.0,
+      "axial_clearance": 2.0,
+      "boss_end_chamfer": 1.5,
+      "capture_card_clearance": 2.0,
+      "capture_outer_corner_radius": 10.0,
+      "capture_split_height": 12.0,
+      "capture_top_clearance": 2.0,
+      "capture_wall_thickness": 8.0,
+      "card_ceiling_clearance": 10.0,
+      "ceiling_z": 96.702228,
+      "closure_method": "embedded_magnets",
+      "docking_clearance": 0.3,
+      "docking_recess_depth": 6.0,
+      "electronics_card_center_y": 0.0,
+      "electronics_card_center_z": -50.0,
+      "electronics_card_clearance": 0.5,
+      "electronics_card_height": 35.0,
+      "electronics_card_width": 50.0,
+      "floor_thickness": 8.0,
+      "floor_z": -96.702228,
+      "front_inner_chamfer": 4.0,
+      "front_thickness": 3.0,
+      "inner_depth": 89.0,
+      "inner_half_height": 96.702228,
+      "inner_height": 193.404456,
+      "inner_width": 59.3,
+      "magnet_depth_clearance": 0.2,
+      "magnet_diameter": 3.0,
+      "magnet_radial_clearance": 0.2,
+      "magnet_thickness": 1.0,
+      "motor_bore_diameter": 10.0,
+      "motor_cable_clearance": 1.0,
+      "motor_electronics_corner_radius": 8.0,
+      "motor_inset_depth": 6.0,
+      "motor_mount_boss_radius": 4.5,
+      "motor_mount_disc_clearance": 0.5,
+      "motor_mount_hole_diameter": 4.4,
+      "outer_corner_radius": 4.0,
+      "outer_depth": 92.0,
+      "outer_height": 198.20445600000002,
+      "outer_width": 64.1,
+      "overall_width": 64.1,
+      "pawl_head_recess_depth": 1.0,
+      "pawl_head_recess_diameter": 6.0,
+      "pawl_mount_land_margin": 2.0,
+      "pawl_mount_width": 10.0,
+      "pawl_outer_chamfer": 1.0,
+      "pawl_pilot_depth": 8.0,
+      "pawl_thickness_addition": 1.0,
+      "pawl_tip_radius": 2.0,
+      "prototype_pawl_extension": 5.0,
+      "radial_clearance": 2.0,
+      "screw_clearance_diameter": 3.4,
+      "screw_head_depth": 2.0,
+      "screw_head_diameter": 6.2,
+      "screw_pilot_diameter": 2.6,
+      "shaft_bore_diameter": 3.4,
+      "shaft_head_recess_depth": 2.0,
+      "shaft_head_recess_diameter": 6.0,
+      "shaft_support_axial_clearance": 0.5,
+      "shaft_support_boss_radius": 4.5,
+      "side_feature_chamfer": 6.0,
+      "split_gap": 0.2,
+      "stack_alignment_x_inset": 14.0,
+      "stack_alignment_y_inset": 20.0,
+      "top_mark_chamfer": 0.2,
+      "top_mark_character": "α",
+      "top_mark_depth": 0.2,
+      "top_mark_font_size": 90.0,
+      "top_mark_rotation": 180.0,
+      "top_mark_split_gap": 2.0,
+      "upper_card_envelope_height": 86.702228,
+      "upper_card_protrusion_above_drum": 44.202228000000005,
+      "wall_thickness": 2.4,
+      "window_clearance": 1.0,
+      "window_corner_radius": 2.0,
+      "window_height": 50.0,
+      "window_width": 52.0
+    },
+    "enclosure_reference": {
+      "left_width": 40.0,
+      "lower_height": 75.0,
+      "lower_reference_start": -2.11899,
+      "reference_line_length": 41.5,
+      "right_width": 60.0,
+      "upper_height": 60.0,
+      "upper_reference_start": 1.751
+    },
+    "holder": {
+      "axis_radius": 5.0,
+      "end_radius": 20.0,
+      "end_tab_length": 10.0,
+      "kerf": 0.2,
+      "length": 80.0,
+      "thickness": 2.5,
+      "width": 40.0
+    },
+    "motor": {
+      "backpack_extent": 18.0,
+      "backpack_height": 16.0,
+      "backpack_width": 14.6,
+      "chassis_height": 19.0,
+      "chassis_radius": 14.0,
+      "mount_bracket_height": 0.8,
+      "mount_center_offset": 17.5,
+      "mount_hole_radius": 2.1,
+      "mount_outer_radius": 3.5,
+      "shaft_collar_height": 1.5,
+      "shaft_collar_radius": 4.5,
+      "shaft_flat_height": 6.0,
+      "shaft_flat_width": 3.0,
+      "shaft_height": 10.0,
+      "shaft_offset": 8.0,
+      "shaft_radius": 2.5
+    },
+    "printed_spool": {
+      "center_hub_radius": 6.5,
+      "ring_width": 5.0,
+      "shaft_pin_height": 5.0,
+      "shaft_pin_radius": 1.5,
+      "thickness": 2.0
+    }
+  },
+  "schema_version": 1,
+  "source_lineage": {
+    "card": "V2/Hardware/cards/generate_card.py",
+    "drum_enclosure": "native CadQuery design sized from V2/Hardware/blender/generated/card-envelope.json",
+    "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
+    "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
+    "laser_cut_drum": "V2/Hardware/structure/spool.scad",
+    "motor_reference": "V2/Hardware/structure/28byj48.scad",
+    "printed_spool": "V2/Hardware/structure/spool-3dp.scad"
+  },
+  "units": "mm"
+}

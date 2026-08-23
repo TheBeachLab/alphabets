@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1388mm" height="278mm" viewBox="0 0 1388 278">
+  <!-- alphabets-license
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+SPDX-License-Identifier: MIT
+-->
+  <metadata id="alphabets-license">
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab &lt;https://beachlab.org&gt;
+SPDX-License-Identifier: MIT
+</metadata>
+  <title>Demo 64 cut paths</title>
+  <g id="cut-guides" fill="none" stroke="#FF00FF" stroke-width="0.15">
+    <rect x="5" y="5" width="55" height="86"/>
+    <path d="M 5 48 H 60"/>
+    <rect x="68" y="5" width="55" height="86"/>
+    <path d="M 68 48 H 123"/>
+    <rect x="131" y="5" width="55" height="86"/>
+    <path d="M 131 48 H 186"/>
+    <rect x="194" y="5" width="55" height="86"/>
+    <path d="M 194 48 H 249"/>
+    <rect x="257" y="5" width="55" height="86"/>
+    <path d="M 257 48 H 312"/>
+    <rect x="320" y="5" width="55" height="86"/>
+    <path d="M 320 48 H 375"/>
+    <rect x="383" y="5" width="55" height="86"/>
+    <path d="M 383 48 H 438"/>
+    <rect x="446" y="5" width="55" height="86"/>
+    <path d="M 446 48 H 501"/>
+    <rect x="509" y="5" width="55" height="86"/>
+    <path d="M 509 48 H 564"/>
+    <rect x="572" y="5" width="55" height="86"/>
+    <path d="M 572 48 H 627"/>
+    <rect x="635" y="5" width="55" height="86"/>
+    <path d="M 635 48 H 690"/>
+    <rect x="698" y="5" width="55" height="86"/>
+    <path d="M 698 48 H 753"/>
+    <rect x="761" y="5" width="55" height="86"/>
+    <path d="M 761 48 H 816"/>
+    <rect x="824" y="5" width="55" height="86"/>
+    <path d="M 824 48 H 879"/>
+    <rect x="887" y="5" width="55" height="86"/>
+    <path d="M 887 48 H 942"/>
+    <rect x="950" y="5" width="55" height="86"/>
+    <path d="M 950 48 H 1005"/>
+    <rect x="1013" y="5" width="55" height="86"/>
+    <path d="M 1013 48 H 1068"/>
+    <rect x="1076" y="5" width="55" height="86"/>
+    <path d="M 1076 48 H 1131"/>
+    <rect x="1139" y="5" width="55" height="86"/>
+    <path d="M 1139 48 H 1194"/>
+    <rect x="1202" y="5" width="55" height="86"/>
+    <path d="M 1202 48 H 1257"/>
+    <rect x="1265" y="5" width="55" height="86"/>
+    <path d="M 1265 48 H 1320"/>
+    <rect x="1328" y="5" width="55" height="86"/>
+    <path d="M 1328 48 H 1383"/>
+    <rect x="5" y="96" width="55" height="86"/>
+    <path d="M 5 139 H 60"/>
+    <rect x="68" y="96" width="55" height="86"/>
+    <path d="M 68 139 H 123"/>
+    <rect x="131" y="96" width="55" height="86"/>
+    <path d="M 131 139 H 186"/>
+    <rect x="194" y="96" width="55" height="86"/>
+    <path d="M 194 139 H 249"/>
+    <rect x="257" y="96" width="55" height="86"/>
+    <path d="M 257 139 H 312"/>
+    <rect x="320" y="96" width="55" height="86"/>
+    <path d="M 320 139 H 375"/>
+    <rect x="383" y="96" width="55" height="86"/>
+    <path d="M 383 139 H 438"/>
+    <rect x="446" y="96" width="55" height="86"/>
+    <path d="M 446 139 H 501"/>
+    <rect x="509" y="96" width="55" height="86"/>
+    <path d="M 509 139 H 564"/>
+    <rect x="572" y="96" width="55" height="86"/>
+    <path d="M 572 139 H 627"/>
+    <rect x="635" y="96" width="55" height="86"/>
+    <path d="M 635 139 H 690"/>
+    <rect x="698" y="96" width="55" height="86"/>
+    <path d="M 698 139 H 753"/>
+    <rect x="761" y="96" width="55" height="86"/>
+    <path d="M 761 139 H 816"/>
+    <rect x="824" y="96" width="55" height="86"/>
+    <path d="M 824 139 H 879"/>
+    <rect x="887" y="96" width="55" height="86"/>
+    <path d="M 887 139 H 942"/>
+    <rect x="950" y="96" width="55" height="86"/>
+    <path d="M 950 139 H 1005"/>
+    <rect x="1013" y="96" width="55" height="86"/>
+    <path d="M 1013 139 H 1068"/>
+    <rect x="1076" y="96" width="55" height="86"/>
+    <path d="M 1076 139 H 1131"/>
+    <rect x="1139" y="96" width="55" height="86"/>
+    <path d="M 1139 139 H 1194"/>
+    <rect x="1202" y="96" width="55" height="86"/>
+    <path d="M 1202 139 H 1257"/>
+    <rect x="1265" y="96" width="55" height="86"/>
+    <path d="M 1265 139 H 1320"/>
+    <rect x="1328" y="96" width="55" height="86"/>
+    <path d="M 1328 139 H 1383"/>
+    <rect x="5" y="187" width="55" height="86"/>
+    <path d="M 5 230 H 60"/>
+    <rect x="68" y="187" width="55" height="86"/>
+    <path d="M 68 230 H 123"/>
+    <rect x="131" y="187" width="55" height="86"/>
+    <path d="M 131 230 H 186"/>
+    <rect x="194" y="187" width="55" height="86"/>
+    <path d="M 194 230 H 249"/>
+    <rect x="257" y="187" width="55" height="86"/>
+    <path d="M 257 230 H 312"/>
+    <rect x="320" y="187" width="55" height="86"/>
+    <path d="M 320 230 H 375"/>
+    <rect x="383" y="187" width="55" height="86"/>
+    <path d="M 383 230 H 438"/>
+    <rect x="446" y="187" width="55" height="86"/>
+    <path d="M 446 230 H 501"/>
+    <rect x="509" y="187" width="55" height="86"/>
+    <path d="M 509 230 H 564"/>
+    <rect x="572" y="187" width="55" height="86"/>
+    <path d="M 572 230 H 627"/>
+    <rect x="635" y="187" width="55" height="86"/>
+    <path d="M 635 230 H 690"/>
+    <rect x="698" y="187" width="55" height="86"/>
+    <path d="M 698 230 H 753"/>
+    <rect x="761" y="187" width="55" height="86"/>
+    <path d="M 761 230 H 816"/>
+    <rect x="824" y="187" width="55" height="86"/>
+    <path d="M 824 230 H 879"/>
+    <rect x="887" y="187" width="55" height="86"/>
+    <path d="M 887 230 H 942"/>
+    <rect x="950" y="187" width="55" height="86"/>
+    <path d="M 950 230 H 1005"/>
+    <rect x="1013" y="187" width="55" height="86"/>
+    <path d="M 1013 230 H 1068"/>
+    <rect x="1076" y="187" width="55" height="86"/>
+    <path d="M 1076 230 H 1131"/>
+    <rect x="1139" y="187" width="55" height="86"/>
+    <path d="M 1139 230 H 1194"/>
+    <rect x="1202" y="187" width="55" height="86"/>
+    <path d="M 1202 230 H 1257"/>
+  </g>
+</svg>
