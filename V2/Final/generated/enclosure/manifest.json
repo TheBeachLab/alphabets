@@ -75,22 +75,22 @@
     "pawl_definitive": {
       "bounds_mm": {
         "x": [
-          -5.013192,
-          5.013192
+          -5.0,
+          5.0
         ],
         "y": [
           40.301193,
-          42.34138
+          42.308377
         ],
         "z": [
-          3.902803,
-          89.691317
+          3.91002,
+          11.917268
         ]
       },
-      "component_volume_sum_mm3": 1105.091541,
+      "component_volume_sum_mm3": 48.849278,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 1105.091541
+      "volume_mm3": 48.849278
     }
   },
   "limits_mm": {
@@ -147,7 +147,7 @@
     "pawl_screw_clearance_diameter": 3.4,
     "pawl_thickness_addition": 1.0,
     "pawl_tip_radius": 2.0,
-    "prototype_pawl_extension": 5.0,
+    "prototype_pawl_extension": 0.0,
     "remaining_side_wall": 2.0,
     "shaft_head_recess_depth": 2.0,
     "shaft_head_recess_diameter": 6.0,
@@ -191,10 +191,10 @@
           129.004907
         ]
       },
-      "component_volume_sum_mm3": 434845.675543,
+      "component_volume_sum_mm3": 433787.342425,
       "solid_count": 3,
       "valid": true,
-      "volume_mm3": 434845.675543
+      "volume_mm3": 433787.342425
     },
     "margin_mm": 5.0,
     "part_gap_mm": 2.0,
@@ -249,8 +249,8 @@
             54.999496
           ],
           "y": [
-            49.118919,
-            134.881081
+            88.0,
+            96.0
           ],
           "z": [
             -0.0,

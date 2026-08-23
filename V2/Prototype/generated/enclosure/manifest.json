@@ -35,75 +35,75 @@
     "enclosure_lower": {
       "bounds_mm": {
         "x": [
-          -42.919936,
-          41.820938
+          -41.940894,
+          41.821245
         ],
         "y": [
-          -81.750571,
+          -83.459699,
           40.374796
         ],
         "z": [
           -87.475405,
-          16.369485
+          15.390387
         ]
       },
-      "component_volume_sum_mm3": 208618.408977,
+      "component_volume_sum_mm3": 212059.602542,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 208618.408977
+      "volume_mm3": 212059.602542
     },
     "enclosure_upper": {
       "bounds_mm": {
         "x": [
-          -41.874189,
-          41.874111
+          -42.900507,
+          42.90068
         ],
         "y": [
-          -81.748797,
+          -83.457925,
           40.374796
         ],
         "z": [
-          11.726263,
-          85.243531
+          10.7,
+          86.445553
         ]
       },
-      "component_volume_sum_mm3": 197825.921589,
+      "component_volume_sum_mm3": 202989.403936,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 197825.921589
+      "volume_mm3": 202989.403936
     },
     "pawl_prototype": {
       "bounds_mm": {
         "x": [
-          -5.020027,
-          5.020027
+          -5.0,
+          5.0
         ],
         "y": [
           40.301193,
-          42.341859
+          42.308377
         ],
         "z": [
-          -1.097435,
-          83.782757
+          3.91002,
+          11.917268
         ]
       },
-      "component_volume_sum_mm3": 1093.277255,
+      "component_volume_sum_mm3": 48.849278,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 1093.277255
+      "volume_mm3": 48.849278
     }
   },
   "limits_mm": {
-    "back_y": -81.744234681,
+    "back_y": -83.45336246,
     "front_y": 40.301814675,
     "inner_bottom_z": -74.99999553,
-    "inner_top_z": 75.769405484,
-    "inner_x_max": 33.500373036,
-    "inner_x_min": -33.500451267,
+    "inner_top_z": 76.969746864,
+    "inner_x_max": 33.500680374,
+    "inner_x_min": -33.500506404,
     "outer_bottom_z": -82.99999553,
-    "outer_top_z": 83.769405484,
-    "outer_x_max": 41.500373036,
-    "outer_x_min": -41.500451267
+    "outer_top_z": 84.969746864,
+    "outer_x_max": 41.500680374,
+    "outer_x_min": -41.500506404
   },
   "parameters": {
     "alignment_base_size": 8.0,
@@ -129,7 +129,7 @@
     "magnet_radial_clearance": 0.2,
     "magnet_thickness": 1.0,
     "minimum_same_orientation_gap": 7.3,
-    "minimum_same_orientation_pitch": 90.300824303,
+    "minimum_same_orientation_pitch": 90.301186778,
     "motor_bore_diameter": 10.0,
     "motor_cable_clearance": 1.0,
     "motor_electronics_corner_radius": 8.0,
@@ -147,7 +147,7 @@
     "pawl_screw_clearance_diameter": 3.4,
     "pawl_thickness_addition": 1.0,
     "pawl_tip_radius": 2.0,
-    "prototype_pawl_extension": 5.0,
+    "prototype_pawl_extension": 0.0,
     "remaining_side_wall": 2.0,
     "shaft_head_recess_depth": 2.0,
     "shaft_head_recess_diameter": 6.0,
@@ -179,8 +179,8 @@
     "geometry": {
       "bounds_mm": {
         "x": [
-          5.999175,
-          174.000825
+          5.998813,
+          174.001187
         ],
         "y": [
           39.525002,
@@ -188,13 +188,13 @@
         ],
         "z": [
           -0.0,
-          122.04605
+          123.755177
         ]
       },
-      "component_volume_sum_mm3": 407539.598543,
+      "component_volume_sum_mm3": 415097.855642,
       "solid_count": 3,
       "valid": true,
-      "volume_mm3": 407539.598543
+      "volume_mm3": 415097.855642
     },
     "margin_mm": 5.0,
     "part_gap_mm": 2.0,
@@ -203,7 +203,7 @@
         "bed_face": "front enclosure rim",
         "bounds_mm": {
           "x": [
-            5.999175,
+            5.998813,
             89.0
           ],
           "y": [
@@ -211,8 +211,8 @@
             140.474998
           ],
           "z": [
-            -0.0,
-            122.04605
+            0.0,
+            123.755177
           ]
         },
         "rotation_deg": {
@@ -225,15 +225,15 @@
         "bounds_mm": {
           "x": [
             91.0,
-            174.000825
+            174.001187
           ],
           "y": [
-            54.165297,
-            125.834703
+            53.565126,
+            126.434874
           ],
           "z": [
-            -0.0,
-            122.04605
+            0.0,
+            123.755177
           ]
         },
         "rotation_deg": {
@@ -245,12 +245,12 @@
         "bed_face": "flat rear face",
         "bounds_mm": {
           "x": [
-            42.499588,
-            52.499588
+            42.499407,
+            52.499407
           ],
           "y": [
-            49.573279,
-            134.426721
+            88.0,
+            96.0
           ],
           "z": [
             -0.0,

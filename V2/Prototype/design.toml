@@ -35,6 +35,6 @@ shaft_axis_radius = 1.7
 allow_tab_interference = true
 
 [drum_enclosure]
-# The 43 mm prototype card is 5 mm shorter than the 48 mm final card, so the
-# replaceable pawl reaches 5 mm farther toward the card support point.
-prototype_pawl_extension = 5.0
+# Both profiles pivot on the same drum holes and reuse the same settled
+# orientations, so the stop point near the hinge does not move with card length.
+prototype_pawl_extension = 0.0

@@ -36,7 +36,7 @@ capture-envelope:
 check:
 	$(PYTHON) -m ruff check .
 	$(PYTHON) -m ruff format --check .
-	$(PYTHON) -m pytest -q test_generate_assets.py test_hello_wall.py
+	$(PYTHON) -m pytest -q test_generate_assets.py test_retarget_card_capture.py test_hello_wall.py
 
 check-steps: interactive
 	$(BLENDER) $(FINAL_OUTPUT)/alphabets-v2-interactive.blend --background --python validate_appended_steps.py -- --steps 20

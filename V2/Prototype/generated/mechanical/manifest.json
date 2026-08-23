@@ -367,7 +367,7 @@
       "pawl_pilot_depth": 8.0,
       "pawl_thickness_addition": 1.0,
       "pawl_tip_radius": 2.0,
-      "prototype_pawl_extension": 5.0,
+      "prototype_pawl_extension": 0.0,
       "radial_clearance": 2.0,
       "screw_clearance_diameter": 3.4,
       "screw_head_depth": 2.0,

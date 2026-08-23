@@ -367,7 +367,7 @@
       "pawl_pilot_depth": 8.0,
       "pawl_thickness_addition": 1.0,
       "pawl_tip_radius": 2.0,
-      "prototype_pawl_extension": 5.0,
+      "prototype_pawl_extension": 0.0,
       "radial_clearance": 2.0,
       "screw_clearance_diameter": 3.4,
       "screw_head_depth": 2.0,
@@ -444,7 +444,7 @@
   "schema_version": 1,
   "source_lineage": {
     "card": "V2/Hardware/cards/generate_card.py",
-    "drum_enclosure": "native CadQuery design sized from V2/Hardware/blender/generated/card-envelope.json",
+    "drum_enclosure": "native CadQuery design sized from the selected V2/<variant>/generated/blender capture",
     "enclosure_reference": "V2/Hardware/structure/side_motor.FCStd Sketch",
     "holder_reference": "V2/Hardware/structure/spool-holder.scad side()",
     "laser_cut_drum": "V2/Hardware/structure/spool.scad",

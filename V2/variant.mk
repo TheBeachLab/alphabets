@@ -39,6 +39,7 @@ blender: mechanical
 	$(PYTHON) $(V2_DIR)/Hardware/blender/generate_assets.py --variant $(VARIANT) --profile $(PROFILE) --output $(BLENDER_OUTPUT)
 	$(BLENDER) --background --python $(V2_DIR)/Hardware/blender/build_scene.py -- --assets-dir $(BLENDER_OUTPUT) --output $(BLEND_FILE) --preview $(BLENDER_OUTPUT)/alphabets-v2-$(FOLDER_SLUG).png
 	$(BLENDER) $(BLEND_FILE) --background --python $(V2_DIR)/Hardware/blender/capture_cards.py -- --json-output $(BLENDER_OUTPUT)/cards-position-capture.json --blend-output $(BLEND_FILE)
+	$(if $(REFERENCE_CAPTURE),$(PYTHON) $(V2_DIR)/Hardware/blender/retarget_card_capture.py --source-capture $(REFERENCE_CAPTURE) --source-scene $(REFERENCE_SCENE) --target-capture $(BLENDER_OUTPUT)/cards-position-capture.json --target-scene $(BLENDER_OUTPUT)/scene.json)
 
 enclosure: blender
 	PYTHONPATH=$(V2_DIR)/Hardware/mechanical $(PYTHON) $(V2_DIR)/Hardware/mechanical/export_captured_enclosure.py --variant $(VARIANT) --profile $(PROFILE) --capture $(BLENDER_OUTPUT)/cards-position-capture.json --output $(ENCLOSURE)

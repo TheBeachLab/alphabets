@@ -107,13 +107,9 @@ def main() -> int:
         raise RuntimeError("enclosure supports are narrower than the selected drum")
 
     if variant.id == "prototype":
-        definitive = load_variant("definitive")
-        expected_pawl_extension = (
-            definitive.card.total_height_mm - variant.card.total_height_mm
-        )
         equal(
             params.drum_enclosure.prototype_pawl_extension,
-            expected_pawl_extension,
+            0,
             "prototype pawl extension",
         )
 

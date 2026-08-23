@@ -206,7 +206,7 @@ class DrumEnclosureDimensions:
     pawl_head_recess_diameter: float = 6.0
     pawl_head_recess_depth: float = 1.0
     pawl_tip_radius: float = 2.0
-    prototype_pawl_extension: float = 5.0
+    prototype_pawl_extension: float = 0.0
     upper_card_envelope_height: float = 86.702228
     card_ceiling_clearance: float = 10.0
     closure_method: str = "embedded_magnets"

@@ -138,7 +138,7 @@ magnet_depth_clearance = 0.2
 pawl_head_recess_diameter = 6.0
 pawl_head_recess_depth = 1.0
 pawl_tip_radius = 2.0
-prototype_pawl_extension = 5.0
+prototype_pawl_extension = 0.0
 # Retained from the accepted Final card-envelope capture at frame 1332.
 upper_card_envelope_height = 86.702228
 card_ceiling_clearance = 10.0

@@ -43,7 +43,6 @@ from alphabets_cad.parts import (
     _captured_motor_mount_pocket,
     _captured_pawl_mount,
     _captured_pawl_pilot,
-    _captured_pawl_screw_axis_z,
     _captured_shaft_head_recess,
     _captured_shaft_support,
     _captured_stack_alignment_frustums,
@@ -555,27 +554,14 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         abs=1e-5,
     )
     assert pawl_box.zmin == pytest.approx(captured_pawl["minimum"][2], abs=1e-5)
-    assert pawl_box.zmax == pytest.approx(limits.outer_top_z)
+    assert pawl_box.zmax == pytest.approx(captured_pawl["maximum"][2], abs=1e-5)
+    assert pawl_box.zlen == pytest.approx(
+        captured_pawl["maximum"][2] - captured_pawl["minimum"][2], abs=1e-5
+    )
     assert pawls["pawl_prototype"].BoundingBox().zmin == pytest.approx(
         pawl_box.zmin - enclosure.prototype_pawl_extension
     )
     assert upper.intersect(pawl).Volume() == pytest.approx(0)
-    assert pawl.isInside(
-        cq.Vector(4.8, limits.front_y + 0.5, _captured_pawl_screw_axis_z(limits)),
-        1e-6,
-    )
-    assert not pawl.isInside(
-        cq.Vector(
-            4.8,
-            pawl_box.ymax - 0.1,
-            _captured_pawl_screw_axis_z(limits),
-        ),
-        1e-6,
-    )
-    assert pawl.isInside(
-        cq.Vector(4.8, limits.front_y + 0.5, limits.inner_top_z - 0.5),
-        1e-6,
-    )
     assert pawl.isInside(
         cq.Vector(
             enclosure.pawl_tip_radius - 0.2,
@@ -588,7 +574,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         cq.Vector(
             enclosure.pawl_head_recess_diameter / 2 - 0.2,
             pawl_box.ymax - enclosure.pawl_head_recess_depth / 2,
-            _captured_pawl_screw_axis_z(limits),
+            captured_pawl["maximum"][2] - enclosure.pawl_head_recess_diameter / 2,
         ),
         1e-6,
     )
@@ -596,7 +582,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         cq.Vector(
             enclosure.pawl_head_recess_diameter / 2 - 0.2,
             limits.front_y + 0.5,
-            _captured_pawl_screw_axis_z(limits),
+            captured_pawl["maximum"][2] - enclosure.pawl_head_recess_diameter / 2,
         ),
         1e-6,
     )
