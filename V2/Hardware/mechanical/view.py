@@ -13,8 +13,9 @@ from alphabets_cad.assemblies import (
 )
 from alphabets_cad.parameters import DESIGN, load_design_profile
 
-# Select a partial TOML override with `make gui PROFILE=profiles/fit-check.toml`.
-# Blank means the committed design profile in `design.toml`.
+# Select a complete profile with ALPHABETS_PROFILE. Blank keeps the shared
+# dataclass defaults; the fabrication entry points live in V2/Prototype and
+# V2/Final and always supply their own design.toml.
 profile = os.environ.get("ALPHABETS_PROFILE")
 parameters = load_design_profile(Path(profile), base=DESIGN) if profile else DESIGN
 components = module_reference_components(parameters)

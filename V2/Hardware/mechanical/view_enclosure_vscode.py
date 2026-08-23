@@ -16,8 +16,8 @@ from alphabets_cad.parameters import DESIGN, load_design_profile
 profile = os.environ.get("ALPHABETS_PROFILE")
 parameters = load_design_profile(Path(profile), base=DESIGN) if profile else DESIGN
 default_capture = (
-    Path(__file__).resolve().parent.parent
-    / "blender/generated/cards-position-capture.json"
+    Path(__file__).resolve().parents[2]
+    / "Final/generated/blender/cards-position-capture.json"
 )
 capture_path = Path(os.environ.get("ALPHABETS_CARD_CAPTURE", default_capture))
 components = captured_enclosure_design_components(capture_path, parameters)

@@ -2,6 +2,14 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Alphabets
 
+> [!WARNING]
+> **UNDER HEAVY DEVELOPMENT — NOT READY FOR USE OR FABRICATION.**
+> The mechanical designs, electronics and generated manufacturing files are
+> being actively revised and have not been physically validated. Do not order,
+> print, cut or assemble parts from this repository without independently
+> checking every dimension. V2 Prototype and V2 Final are incompatible systems;
+> never mix files between their folders.
+
 <p align="center">
   <img src="hero-fashion-window.jpg" width="49%" alt="Alphabets split-flap strip in a fashion storefront at blue hour">
   <img src="hero-cafe.jpg" width="49%" alt="Alphabets split-flap matrix receiving a message inside a cafe">
@@ -22,9 +30,10 @@ prototype firmware remains in
 [V2/Firmware/attiny44-module](V2/Firmware/attiny44-module).
 The selectable 64-position character presets and custom drum settings are
 documented in [V2/Code/letters.md](V2/Code/letters.md).
-The two incompatible physical V2 builds — the installed 55 mm prototype and
-the 50 mm definitive hardware — are explicitly separated in
-[V2/variants](V2/variants/README.md).
+The two incompatible physical builds are separated into complete packages:
+[V2 Prototype (55 mm)](V2/Prototype/README.md) and
+[V2 Final (50 mm)](V2/Final/README.md). Never mix their cards, stickers, drum,
+Blender capture or enclosure files.
 The parametric mechanical source and fabrication exports are in
 [V2/Hardware/mechanical](V2/Hardware/mechanical/README.md).
 

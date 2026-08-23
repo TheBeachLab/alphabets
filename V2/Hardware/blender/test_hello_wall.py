@@ -44,7 +44,10 @@ def test_sticker_assets_are_gloss_black_with_yellow_letters() -> None:
     assert manifest["stickers"]["letter_rgb"] == list(LETTER_RGB)
     assert manifest["stickers"]["finish"] == "gloss black"
     assert manifest["stickers"]["all_128_faces_mapped"] is True
-    assert manifest["stickers"]["base_atlas"] == "generated/sticker-atlas.png"
+    assert (
+        manifest["stickers"]["base_atlas"]
+        == "V2/Final/generated/blender/sticker-atlas.png"
+    )
     assert (
         manifest["stickers"]["typography"]
         == "production atlas with independent X/Y fit"

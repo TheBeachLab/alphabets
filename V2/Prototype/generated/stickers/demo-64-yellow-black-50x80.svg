@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1278mm" height="260mm" viewBox="0 0 1278 260">
+  <!-- alphabets-license
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+SPDX-License-Identifier: MIT
+-->
+  <metadata id="alphabets-license">
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab &lt;https://beachlab.org&gt;
+SPDX-License-Identifier: MIT
+</metadata>
+  <title>Demo 64 sticker sheet</title>
+  <defs>
+    <clipPath id="clip-card-01" clipPathUnits="userSpaceOnUse"><rect x="5" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-02" clipPathUnits="userSpaceOnUse"><rect x="63" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-03" clipPathUnits="userSpaceOnUse"><rect x="121" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-04" clipPathUnits="userSpaceOnUse"><rect x="179" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-05" clipPathUnits="userSpaceOnUse"><rect x="237" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-06" clipPathUnits="userSpaceOnUse"><rect x="295" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-07" clipPathUnits="userSpaceOnUse"><rect x="353" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-08" clipPathUnits="userSpaceOnUse"><rect x="411" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-09" clipPathUnits="userSpaceOnUse"><rect x="469" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-10" clipPathUnits="userSpaceOnUse"><rect x="527" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-11" clipPathUnits="userSpaceOnUse"><rect x="585" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-12" clipPathUnits="userSpaceOnUse"><rect x="643" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-13" clipPathUnits="userSpaceOnUse"><rect x="701" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-14" clipPathUnits="userSpaceOnUse"><rect x="759" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-15" clipPathUnits="userSpaceOnUse"><rect x="817" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-16" clipPathUnits="userSpaceOnUse"><rect x="875" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-17" clipPathUnits="userSpaceOnUse"><rect x="933" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-18" clipPathUnits="userSpaceOnUse"><rect x="991" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-19" clipPathUnits="userSpaceOnUse"><rect x="1049" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-20" clipPathUnits="userSpaceOnUse"><rect x="1107" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-21" clipPathUnits="userSpaceOnUse"><rect x="1165" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-22" clipPathUnits="userSpaceOnUse"><rect x="1223" y="5" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-23" clipPathUnits="userSpaceOnUse"><rect x="5" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-24" clipPathUnits="userSpaceOnUse"><rect x="63" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-25" clipPathUnits="userSpaceOnUse"><rect x="121" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-26" clipPathUnits="userSpaceOnUse"><rect x="179" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-27" clipPathUnits="userSpaceOnUse"><rect x="237" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-28" clipPathUnits="userSpaceOnUse"><rect x="295" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-29" clipPathUnits="userSpaceOnUse"><rect x="353" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-30" clipPathUnits="userSpaceOnUse"><rect x="411" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-31" clipPathUnits="userSpaceOnUse"><rect x="469" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-32" clipPathUnits="userSpaceOnUse"><rect x="527" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-33" clipPathUnits="userSpaceOnUse"><rect x="585" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-34" clipPathUnits="userSpaceOnUse"><rect x="643" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-35" clipPathUnits="userSpaceOnUse"><rect x="701" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-36" clipPathUnits="userSpaceOnUse"><rect x="759" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-37" clipPathUnits="userSpaceOnUse"><rect x="817" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-38" clipPathUnits="userSpaceOnUse"><rect x="875" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-39" clipPathUnits="userSpaceOnUse"><rect x="933" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-40" clipPathUnits="userSpaceOnUse"><rect x="991" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-41" clipPathUnits="userSpaceOnUse"><rect x="1049" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-42" clipPathUnits="userSpaceOnUse"><rect x="1107" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-43" clipPathUnits="userSpaceOnUse"><rect x="1165" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-44" clipPathUnits="userSpaceOnUse"><rect x="1223" y="90" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-45" clipPathUnits="userSpaceOnUse"><rect x="5" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-46" clipPathUnits="userSpaceOnUse"><rect x="63" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-47" clipPathUnits="userSpaceOnUse"><rect x="121" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-48" clipPathUnits="userSpaceOnUse"><rect x="179" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-49" clipPathUnits="userSpaceOnUse"><rect x="237" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-50" clipPathUnits="userSpaceOnUse"><rect x="295" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-51" clipPathUnits="userSpaceOnUse"><rect x="353" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-52" clipPathUnits="userSpaceOnUse"><rect x="411" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-53" clipPathUnits="userSpaceOnUse"><rect x="469" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-54" clipPathUnits="userSpaceOnUse"><rect x="527" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-55" clipPathUnits="userSpaceOnUse"><rect x="585" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-56" clipPathUnits="userSpaceOnUse"><rect x="643" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-57" clipPathUnits="userSpaceOnUse"><rect x="701" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-58" clipPathUnits="userSpaceOnUse"><rect x="759" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-59" clipPathUnits="userSpaceOnUse"><rect x="817" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-60" clipPathUnits="userSpaceOnUse"><rect x="875" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-61" clipPathUnits="userSpaceOnUse"><rect x="933" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-62" clipPathUnits="userSpaceOnUse"><rect x="991" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-63" clipPathUnits="userSpaceOnUse"><rect x="1049" y="175" width="50" height="80"/></clipPath>
+    <clipPath id="clip-card-64" clipPathUnits="userSpaceOnUse"><rect x="1107" y="175" width="50" height="80"/></clipPath>
+  </defs>
+  <g id="backgrounds">
+    <rect id="card-01" x="5" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-02" x="63" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-03" x="121" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-04" x="179" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-05" x="237" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-06" x="295" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-07" x="353" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-08" x="411" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-09" x="469" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-10" x="527" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-11" x="585" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-12" x="643" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-13" x="701" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-14" x="759" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-15" x="817" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-16" x="875" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-17" x="933" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-18" x="991" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-19" x="1049" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-20" x="1107" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-21" x="1165" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-22" x="1223" y="5" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-23" x="5" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-24" x="63" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-25" x="121" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-26" x="179" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-27" x="237" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-28" x="295" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-29" x="353" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-30" x="411" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-31" x="469" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-32" x="527" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-33" x="585" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-34" x="643" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-35" x="701" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-36" x="759" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-37" x="817" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-38" x="875" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-39" x="933" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-40" x="991" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-41" x="1049" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-42" x="1107" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-43" x="1165" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-44" x="1223" y="90" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-45" x="5" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-46" x="63" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-47" x="121" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-48" x="179" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-49" x="237" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-50" x="295" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-51" x="353" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-52" x="411" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-53" x="469" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-54" x="527" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-55" x="585" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-56" x="643" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-57" x="701" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-58" x="759" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-59" x="817" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-60" x="875" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-61" x="933" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-62" x="991" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-63" x="1049" y="175" width="50" height="80" fill="#FFCC00"/>
+    <rect id="card-64" x="1107" y="175" width="50" height="80" fill="#FFCC00"/>
+  </g>
+  <g id="glyphs" fill="#000000" fill-rule="nonzero">
+    <g clip-path="url(#clip-card-01)">
+      <path id="glyph-01" data-character="A" d="M413 0H519L332 718H200L12 0H120L153 138H379ZM265 609 353 244H178Z" transform="translate(14.906977 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-02)">
+      <path id="glyph-02" data-character="B" d="M160 315H290C342 315 370 277 370 213C370 145 338 106 287 106H160ZM160 421V611H267C307 611 334 571 334 518C334 470 311 421 267 421ZM60 718V0H269C405 0 478 81 478 218C478 321 427 375 375 389C410 421 432 465 432 526C432 650 354 718 266 718Z" transform="translate(72.70801 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-03)">
+      <path id="glyph-03" data-character="C" d="M521 598C477 685 406 728 308 728C151 728 51 567 51 359C51 147 158 -10 308 -10C399 -10 468 30 515 111L434 170C405 134 373 105 312 105C216 105 153 215 153 359C153 514 210 614 308 614C375 614 409 594 438 538Z" transform="translate(129.741602 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-04)">
+      <path id="glyph-04" data-character="D" d="M219 611C362 611 434 512 434 361C434 213 355 108 219 108H155V611ZM233 0C406 0 536 137 536 362C536 568 415 718 238 718H60V0Z" transform="translate(187.059432 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-05)">
+      <path id="glyph-05" data-character="E" d="M60 0H399V106H160V315H308V421H160V611H399V718H60Z" transform="translate(248.953488 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-06)">
+      <path id="glyph-06" data-character="F" d="M160 611H399V718H60V0H160V315H313V421H160Z" transform="translate(306.953488 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-07)">
+      <path id="glyph-07" data-character="G" d="M306 -10C466 -10 553 138 553 313V361H316V254H433C433 158 394 101 306 101C212 101 156 211 156 359C156 534 214 614 314 614C374 614 409 594 438 538L522 596C473 685 411 728 306 728C157 728 51 587 51 359C51 151 154 -10 306 -10Z" transform="translate(360.832041 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-08)">
+      <path id="glyph-08" data-character="H" d="M394 0H494V718H394V421H160V718H60V0H160V315H394Z" transform="translate(420.25323 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-09)">
+      <path id="glyph-09" data-character="I" d="M64 0H164V718H64Z" transform="translate(487.51938 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-10)">
+      <path id="glyph-10" data-character="J" d="M192 718V272C192 148 147 100 62 100C48 100 34 101 19 103L7 2C15 -1 36 -5 73 -5C205 -5 291 108 291 257V718Z" transform="translate(543.529716 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-11)">
+      <path id="glyph-11" data-character="K" d="M385 0H508L312 405L494 718H375L160 356V718H60V0H160V169L244 306Z" transform="translate(593.855297 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-12)">
+      <path id="glyph-12" data-character="L" d="M60 0H421V106H160V718H60Z" transform="translate(654.328165 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-13)">
+      <path id="glyph-13" data-character="M" d="M489 0H588V718H460L330 304L196 718H60V0H160V491L327 0H332L489 490Z" transform="translate(707.581395 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-14)">
+      <path id="glyph-14" data-character="N" d="M389 0H502V718H402V228L182 718H60V0H159V511Z" transform="translate(768.02584 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-15)">
+      <path id="glyph-15" data-character="O" d="M306 -10C458 -10 562 130 562 359C562 591 458 728 306 728C155 728 51 591 51 359C51 130 155 -10 306 -10ZM306 102C214 102 149 184 149 359C149 534 206 617 306 617C407 617 464 534 464 359C464 184 398 102 306 102Z" transform="translate(824.576227 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-16)">
+      <path id="glyph-16" data-character="P" d="M292 611C357 611 385 573 385 497C385 425 357 389 292 389H160V611ZM284 283C405 283 484 359 484 500C484 647 400 718 284 718H60V0H160V283Z" transform="translate(884.537468 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-17)">
+      <path id="glyph-17" data-character="Q" d="M306 -10C347 -10 384 0 417 19L462 -53L533 11L485 81C533 145 562 238 562 359C562 591 458 728 306 728C155 728 51 591 51 359C51 130 155 -10 306 -10ZM306 98C214 98 149 186 149 359C149 534 206 617 306 617C407 617 464 534 464 359C464 275 454 214 427 171L341 307L271 240L360 109C344 102 326 98 306 98Z" transform="translate(940.576227 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-18)">
+      <path id="glyph-18" data-character="R" d="M292 611C357 611 385 573 385 497C385 425 357 389 292 389H160V611ZM377 0H485L363 302C439 329 484 396 484 500C484 637 417 718 284 718H60V0H160V283H263Z" transform="translate(1000.509044 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-19)">
+      <path id="glyph-19" data-character="S" d="M44 50C89 15 151 -10 236 -10C353 -10 444 70 444 198C444 307 363 360 256 429C211 458 149 494 149 545C149 590 187 616 248 616C308 616 353 598 385 567L412 677C385 709 316 728 241 728C142 728 50 669 50 557C50 501 61 473 89 438C130 387 187 353 234 322C307 273 344 239 344 188C344 132 302 99 237 99C169 99 124 123 81 155Z" transform="translate(1060.129199 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-20)">
+      <path id="glyph-20" data-character="T" d="M300 611H463V718H26V611H191V0H300Z" transform="translate(1118.100775 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-21)">
+      <path id="glyph-21" data-character="U" d="M277 -10C415 -10 490 97 490 258V718H391V258C391 138 352 96 277 96C198 96 156 138 156 258V718H57V258C57 95 139 -10 277 -10Z" transform="translate(1174.452196 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-22)">
+      <path id="glyph-22" data-character="V" d="M323 0 518 718H403L265 151L127 718H12L203 0Z" transform="translate(1232.935401 66.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-23)">
+      <path id="glyph-23" data-character="W" d="M303 0 401 500 496 0H638L788 718H680L569 170L457 718H343L232 170L121 718H14L161 0Z" transform="translate(7.204134 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-24)">
+      <path id="glyph-24" data-character="X" d="M511 718H397L266 463L136 718H18L197 362L18 0H133L261 261L388 0H504L327 358Z" transform="translate(72.963824 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-25)">
+      <path id="glyph-25" data-character="Y" d="M305 274 491 718H380L252 394L123 718H11L197 272V0H305Z" transform="translate(131.731266 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-26)">
+      <path id="glyph-26" data-character="Z" d="M43 0H444V99H154L442 607V718H43V618H331L43 109Z" transform="translate(190.157623 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-27)">
+      <path id="glyph-27" data-character=":" d="M112 0C139 0 162 33 162 72C162 113 139 145 112 145C81 145 58 113 58 72C58 33 81 0 112 0ZM112 390C139 390 162 422 162 462C162 502 139 534 112 534C81 534 58 502 58 462C58 422 81 390 112 390Z" transform="translate(255.74677 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-28)">
+      <path id="glyph-28" data-character="." d="M106 0C137 0 164 33 164 72C164 113 137 145 106 145C71 145 50 113 50 72C50 33 71 0 106 0Z" transform="translate(313.917313 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-29)">
+      <path id="glyph-29" data-character="0" d="M283 624C384 624 418 534 418 359C418 179 376 98 283 98C191 98 150 179 150 359C150 534 187 624 283 624ZM283 -10C439 -10 516 119 516 359C516 599 435 728 282 728C133 728 51 598 51 359C51 119 134 -10 283 -10Z" transform="translate(361.883721 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-30)">
+      <path id="glyph-30" data-character="1" d="M87 0H186V718H111C104 679 73 656 33 653V555H87Z" transform="translate(429.775194 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-31)">
+      <path id="glyph-31" data-character="2" d="M54 0H426V106H167C167 183 191 239 267 283C355 334 426 390 426 525C426 654 353 728 250 728C162 728 105 696 58 631L124 538C157 598 193 613 244 613C304 613 325 579 325 519C325 472 320 450 295 426C270 402 235 391 200 368C99 304 54 219 54 57Z" transform="translate(480.356589 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-32)">
+      <path id="glyph-32" data-character="3" d="M221 -10C340 -10 410 82 410 211C410 307 359 375 310 394C353 422 375 468 375 544C375 664 306 728 221 728C139 728 82 664 72 614L153 579C169 606 180 622 219 622C266 622 284 588 284 537C284 472 264 441 215 441H178V335H215C275 335 310 298 310 210C310 142 277 95 221 95C174 95 145 118 129 157L46 92C79 24 137 -10 221 -10Z" transform="translate(539.03876 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-33)">
+      <path id="glyph-33" data-character="4" d="M289 551V291H145ZM387 186H453V291H387V718H286L31 276V186H289V0H387Z" transform="translate(596.242894 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-34)">
+      <path id="glyph-34" data-character="5" d="M232 -10C356 -10 446 74 446 234C446 391 378 484 257 484C224 484 191 472 164 445L178 611H408V718H88L63 368L155 324C184 360 217 375 250 375C306 375 350 328 350 235C350 147 302 101 230 101C190 101 151 115 104 152L54 46C94 11 140 -10 232 -10Z" transform="translate(653.788114 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-35)">
+      <path id="glyph-35" data-character="6" d="M241 367C298 367 335 315 335 231C335 147 297 95 236 95C175 95 145 148 145 232C145 316 180 367 241 367ZM230 -10C350 -10 425 74 425 239C425 375 355 468 259 468C216 468 166 434 142 399C163 546 239 600 327 621L311 721C159 708 47 512 47 276C47 100 118 -10 230 -10Z" transform="translate(712.583979 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-36)">
+      <path id="glyph-36" data-character="7" d="M235 0C238 241 313 480 425 595V718H45V611H314C205 480 140 243 129 0Z" transform="translate(770.640827 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-37)">
+      <path id="glyph-37" data-character="8" d="M244 351C316 351 346 309 346 217C346 125 308 89 244 89C180 89 140 133 140 217C140 306 175 351 244 351ZM244 630C293 630 310 595 310 538C310 487 287 452 244 452C196 452 172 481 172 538C172 595 192 630 244 630ZM241 -10C362 -10 438 70 438 215C438 303 400 391 332 407C383 443 398 495 398 552C398 673 337 728 240 728C148 728 90 661 90 553C90 497 105 447 148 412C91 393 48 311 48 215C48 72 125 -10 241 -10Z" transform="translate(828.186047 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-38)">
+      <path id="glyph-38" data-character="9" d="M229 348C169 348 137 400 137 484C137 565 173 620 233 620C293 620 324 566 324 482C324 398 290 348 229 348ZM242 728C117 728 43 640 43 475C43 340 112 246 212 246C256 246 305 271 325 314C306 171 228 101 146 93L158 -8C312 0 424 202 424 438C424 615 356 728 242 728Z" transform="translate(886.726098 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-39)">
+      <path id="glyph-39" data-character="$" d="M286 318C322 303 346 279 346 248C346 208 326 181 286 166ZM191 447C162 458 145 480 145 501C145 530 159 552 191 556ZM286 66C387 85 438 146 438 248C438 344 390 397 286 422V551C330 542 362 530 381 513L408 615C379 636 339 650 286 657V718H191V653C96 645 43 584 43 512C43 429 92 372 191 339V163C144 172 107 188 76 207L46 109C86 86 135 72 191 64V0H286Z" transform="translate(944.328165 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-40)">
+      <path id="glyph-40" data-character="€" d="M17 394H63V334H35L17 226H77C112 85 202 -10 319 -10C390 -10 447 14 489 62L426 155C397 130 359 110 322 110C262 110 218 154 190 226H296L342 334H167V392H367L411 498H188C213 566 255 608 319 608C368 608 401 589 434 549L484 665C440 707 385 728 319 728C195 728 112 638 77 498H35Z" transform="translate(1001.617571 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-41)">
+      <path id="glyph-41" data-character="&amp;" d="M335 160C318 129 284 107 243 107C178 107 146 143 146 214C146 265 168 298 199 321ZM471 0H604L477 156C502 200 534 305 534 402H425C420 338 412 287 395 250C192 471 180 510 180 547C180 600 197 626 241 626C284 626 299 603 306 535L414 577C410 678 355 728 248 728C171 728 66 692 66 568C66 500 86 446 142 395C87 361 33 302 33 199C33 66 115 -10 236 -10C316 -10 373 28 409 81Z" transform="translate(1055.894057 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-42)">
+      <path id="glyph-42" data-character="@" d="M390 426H334V409C323 420 313 429 296 429C237 429 186 386 186 290C186 197 221 141 278 141C313 141 339 159 354 176C367 151 388 142 415 142C499 142 539 226 539 346C539 572 431 654 298 654C153 654 42 528 42 280C42 105 118 -44 272 -71L284 5C171 29 119 145 119 292C119 447 166 584 305 584C409 584 465 506 465 335C465 239 448 203 423 203C404 203 397 213 390 228ZM296 374C310 374 321 368 330 355V225C319 213 305 207 290 207C261 207 247 239 247 290C247 330 259 374 296 374Z" transform="translate(1115.485788 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-43)">
+      <path id="glyph-43" data-character="%" d="M203 0 631 718H546L121 0ZM565 -16C653 -16 696 56 696 189C696 322 652 393 564 393C480 393 434 322 434 189C434 56 481 -16 565 -16ZM182 324C270 324 313 396 313 529C313 662 269 733 181 733C97 733 51 662 51 529C51 396 98 324 182 324ZM565 326C616 326 632 278 632 189C632 100 610 55 565 55C518 55 499 97 499 189C499 278 517 326 565 326ZM182 666C233 666 249 618 249 529C249 440 227 395 182 395C135 395 116 437 116 529C116 618 134 666 182 666Z" transform="translate(1168.767442 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-44)">
+      <path id="glyph-44" data-character="×" d="M73 207 138 143 285 290 431 143 495 208 349 354 495 500 431 565 285 418 138 565 73 501 220 354Z" transform="translate(1231.855297 151.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-45)">
+      <path id="glyph-45" data-character="/" d="M92 -96 365 747H284L12 -96Z" transform="translate(19.284238 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-46)">
+      <path id="glyph-46" data-character="·" d="M106 280C137 280 164 313 164 352C164 393 137 425 106 425C71 425 50 393 50 352C50 313 71 280 106 280Z" transform="translate(81.917313 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-47)">
+      <path id="glyph-47" data-character="#" d="M252 461H371L334 260H217ZM431 460H542V542H446L477 718H417L385 542H268L298 718H236L207 542H81V460H190L156 261H40V180H141L110 0H169L202 180H320L288 0H346L381 180H501V261H393Z" transform="translate(129.457364 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-48)">
+      <path id="glyph-48" data-character="=" d="M483 459V550H34V459ZM483 159V250H34V159Z" transform="translate(189.30491 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-49)">
+      <path id="glyph-49" data-character="*" d="M31 387 64 330 224 429V241H287L282 430L444 334L476 391L311 480L475 572L441 629L281 530V718H218L223 530L61 625L29 568L195 479Z" transform="translate(247.645995 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-50)">
+      <path id="glyph-50" data-character="+" d="M239 101H330V309H537V400H330V607H239V400H31V309H239Z" transform="translate(303.855297 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-51)">
+      <path id="glyph-51" data-character="-" d="M26 335H192V441H26Z" transform="translate(371.803618 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-52)">
+      <path id="glyph-52" data-character="±" d="M239 101H330V309H537V400H330V607H239V400H31V309H239ZM537 -41V50H31V-41Z" transform="translate(419.855297 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-53)">
+      <path id="glyph-53" data-character="(" d="M317 -186C220 -35 172 120 172 281C172 462 218 618 314 747H221C135 602 92 446 92 281C92 116 135 -40 221 -186Z" transform="translate(482.374677 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-54)">
+      <path id="glyph-54" data-character=")" d="M114 -186C200 -40 243 116 243 281C243 446 200 602 114 747H21C117 618 163 462 163 281C163 120 115 -35 18 -186Z" transform="translate(544.581395 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-55)">
+      <path id="glyph-55" data-character="&lt;" d="M483 109V210L121 354L483 499V600L34 401V309Z" transform="translate(595.30491 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-56)">
+      <path id="glyph-56" data-character="&gt;" d="M483 309V401L34 600V499L396 354L34 210V109Z" transform="translate(653.30491 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-57)">
+      <path id="glyph-57" data-character="," d="M63 -89C127 -78 160 -8 160 72C160 113 130 145 102 145C67 145 43 113 43 72C43 35 63 0 98 0H116C111 -47 98 -64 63 -72Z" transform="translate(720.229974 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-58)">
+      <path id="glyph-58" data-character="'" d="M109 443 129 754H37L54 443Z" transform="translate(779.281654 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-59)">
+      <path id="glyph-59" data-character="°" d="M205 728C122 728 57 661 57 579C57 496 122 430 205 430C287 430 354 496 354 579C354 661 287 728 205 728ZM205 664C252 664 291 625 291 578C291 530 252 493 205 493C158 493 120 530 120 578C120 625 157 664 205 664Z" transform="translate(830.317829 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-60)">
+      <path id="glyph-60" data-character="■" d="M33 75H583V625H33Z" transform="translate(882.490956 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-61)">
+      <path id="glyph-61" data-character="£" d="M93 333H134V209C134 145 108 106 65 106H53V0H460V106H199C214 119 231 150 231 201V333H346V440H231V528C231 589 255 624 299 624C338 624 360 610 375 583L443 647C423 692 384 728 307 728C179 728 134 630 134 523V440H93Z" transform="translate(943.418605 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-62)">
+      <path id="glyph-62" data-character="~" d="M161 435C110 435 62 404 27 340L88 292C107 328 129 352 160 352C219 352 264 265 348 265C399 265 449 300 484 364L425 415C405 378 383 348 348 348C292 348 256 435 161 435Z" transform="translate(1001.475452 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+    <g clip-path="url(#clip-card-63)">
+      <path id="glyph-63" data-character="©" d="M38 359C38 155 198 -10 396 -10C593 -10 755 155 755 359C755 563 593 728 396 728C198 728 38 563 38 359ZM98 359C98 525 230 659 396 659C562 659 696 525 696 359C696 193 562 61 396 61C230 61 98 193 98 359ZM535 500C508 549 462 574 398 574C296 574 232 483 232 363C232 242 302 152 398 152C457 152 501 175 531 221L479 257C462 237 440 221 401 221C340 221 297 283 297 363C297 451 334 506 398 506C431 506 458 492 479 464Z" transform="translate(1051.459948 236.753191) scale(0.056848 -0.076596)"/>
+    </g>
+  </g>
+  <g id="cut-guides" fill="none" stroke="#FF00FF" stroke-width="0.15">
+    <rect x="5" y="5" width="50" height="80"/>
+    <path d="M 5 45 H 55"/>
+    <rect x="63" y="5" width="50" height="80"/>
+    <path d="M 63 45 H 113"/>
+    <rect x="121" y="5" width="50" height="80"/>
+    <path d="M 121 45 H 171"/>
+    <rect x="179" y="5" width="50" height="80"/>
+    <path d="M 179 45 H 229"/>
+    <rect x="237" y="5" width="50" height="80"/>
+    <path d="M 237 45 H 287"/>
+    <rect x="295" y="5" width="50" height="80"/>
+    <path d="M 295 45 H 345"/>
+    <rect x="353" y="5" width="50" height="80"/>
+    <path d="M 353 45 H 403"/>
+    <rect x="411" y="5" width="50" height="80"/>
+    <path d="M 411 45 H 461"/>
+    <rect x="469" y="5" width="50" height="80"/>
+    <path d="M 469 45 H 519"/>
+    <rect x="527" y="5" width="50" height="80"/>
+    <path d="M 527 45 H 577"/>
+    <rect x="585" y="5" width="50" height="80"/>
+    <path d="M 585 45 H 635"/>
+    <rect x="643" y="5" width="50" height="80"/>
+    <path d="M 643 45 H 693"/>
+    <rect x="701" y="5" width="50" height="80"/>
+    <path d="M 701 45 H 751"/>
+    <rect x="759" y="5" width="50" height="80"/>
+    <path d="M 759 45 H 809"/>
+    <rect x="817" y="5" width="50" height="80"/>
+    <path d="M 817 45 H 867"/>
+    <rect x="875" y="5" width="50" height="80"/>
+    <path d="M 875 45 H 925"/>
+    <rect x="933" y="5" width="50" height="80"/>
+    <path d="M 933 45 H 983"/>
+    <rect x="991" y="5" width="50" height="80"/>
+    <path d="M 991 45 H 1041"/>
+    <rect x="1049" y="5" width="50" height="80"/>
+    <path d="M 1049 45 H 1099"/>
+    <rect x="1107" y="5" width="50" height="80"/>
+    <path d="M 1107 45 H 1157"/>
+    <rect x="1165" y="5" width="50" height="80"/>
+    <path d="M 1165 45 H 1215"/>
+    <rect x="1223" y="5" width="50" height="80"/>
+    <path d="M 1223 45 H 1273"/>
+    <rect x="5" y="90" width="50" height="80"/>
+    <path d="M 5 130 H 55"/>
+    <rect x="63" y="90" width="50" height="80"/>
+    <path d="M 63 130 H 113"/>
+    <rect x="121" y="90" width="50" height="80"/>
+    <path d="M 121 130 H 171"/>
+    <rect x="179" y="90" width="50" height="80"/>
+    <path d="M 179 130 H 229"/>
+    <rect x="237" y="90" width="50" height="80"/>
+    <path d="M 237 130 H 287"/>
+    <rect x="295" y="90" width="50" height="80"/>
+    <path d="M 295 130 H 345"/>
+    <rect x="353" y="90" width="50" height="80"/>
+    <path d="M 353 130 H 403"/>
+    <rect x="411" y="90" width="50" height="80"/>
+    <path d="M 411 130 H 461"/>
+    <rect x="469" y="90" width="50" height="80"/>
+    <path d="M 469 130 H 519"/>
+    <rect x="527" y="90" width="50" height="80"/>
+    <path d="M 527 130 H 577"/>
+    <rect x="585" y="90" width="50" height="80"/>
+    <path d="M 585 130 H 635"/>
+    <rect x="643" y="90" width="50" height="80"/>
+    <path d="M 643 130 H 693"/>
+    <rect x="701" y="90" width="50" height="80"/>
+    <path d="M 701 130 H 751"/>
+    <rect x="759" y="90" width="50" height="80"/>
+    <path d="M 759 130 H 809"/>
+    <rect x="817" y="90" width="50" height="80"/>
+    <path d="M 817 130 H 867"/>
+    <rect x="875" y="90" width="50" height="80"/>
+    <path d="M 875 130 H 925"/>
+    <rect x="933" y="90" width="50" height="80"/>
+    <path d="M 933 130 H 983"/>
+    <rect x="991" y="90" width="50" height="80"/>
+    <path d="M 991 130 H 1041"/>
+    <rect x="1049" y="90" width="50" height="80"/>
+    <path d="M 1049 130 H 1099"/>
+    <rect x="1107" y="90" width="50" height="80"/>
+    <path d="M 1107 130 H 1157"/>
+    <rect x="1165" y="90" width="50" height="80"/>
+    <path d="M 1165 130 H 1215"/>
+    <rect x="1223" y="90" width="50" height="80"/>
+    <path d="M 1223 130 H 1273"/>
+    <rect x="5" y="175" width="50" height="80"/>
+    <path d="M 5 215 H 55"/>
+    <rect x="63" y="175" width="50" height="80"/>
+    <path d="M 63 215 H 113"/>
+    <rect x="121" y="175" width="50" height="80"/>
+    <path d="M 121 215 H 171"/>
+    <rect x="179" y="175" width="50" height="80"/>
+    <path d="M 179 215 H 229"/>
+    <rect x="237" y="175" width="50" height="80"/>
+    <path d="M 237 215 H 287"/>
+    <rect x="295" y="175" width="50" height="80"/>
+    <path d="M 295 215 H 345"/>
+    <rect x="353" y="175" width="50" height="80"/>
+    <path d="M 353 215 H 403"/>
+    <rect x="411" y="175" width="50" height="80"/>
+    <path d="M 411 215 H 461"/>
+    <rect x="469" y="175" width="50" height="80"/>
+    <path d="M 469 215 H 519"/>
+    <rect x="527" y="175" width="50" height="80"/>
+    <path d="M 527 215 H 577"/>
+    <rect x="585" y="175" width="50" height="80"/>
+    <path d="M 585 215 H 635"/>
+    <rect x="643" y="175" width="50" height="80"/>
+    <path d="M 643 215 H 693"/>
+    <rect x="701" y="175" width="50" height="80"/>
+    <path d="M 701 215 H 751"/>
+    <rect x="759" y="175" width="50" height="80"/>
+    <path d="M 759 215 H 809"/>
+    <rect x="817" y="175" width="50" height="80"/>
+    <path d="M 817 215 H 867"/>
+    <rect x="875" y="175" width="50" height="80"/>
+    <path d="M 875 215 H 925"/>
+    <rect x="933" y="175" width="50" height="80"/>
+    <path d="M 933 215 H 983"/>
+    <rect x="991" y="175" width="50" height="80"/>
+    <path d="M 991 215 H 1041"/>
+    <rect x="1049" y="175" width="50" height="80"/>
+    <path d="M 1049 215 H 1099"/>
+    <rect x="1107" y="175" width="50" height="80"/>
+    <path d="M 1107 215 H 1157"/>
+  </g>
+</svg>

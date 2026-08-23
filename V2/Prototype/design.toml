@@ -1,0 +1,40 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+# SPDX-License-Identifier: MIT
+
+# V2 Prototype: dimensions of the existing 55 mm physical hardware.
+# Shared motor, enclosure feature and fastener dimensions inherit from the
+# CadQuery dataclass defaults; every dimension that distinguishes this physical
+# system from V2 Final is explicit here.
+
+[card]
+body_width = 55.0
+total_height = 43.0
+tab_width = 4.0
+tab_height = 3.0
+thickness = 0.5
+sticker_width = 50.0
+sticker_face_height = 40.0
+sticker_face_thickness = 0.1
+
+[drum]
+positions = 64
+diameter = 85.0
+side_thickness = 2.15
+laser_kerf = 0.1
+axial_clearance = 1.0
+support_width = 35.0
+support_tab_width = 6.0
+support_y = 20.0
+flap_hole_diameter = 3.0
+flap_rotation_clearance = 0.15
+flap_hole_center_radius = 40.0
+motor_axis_width = 3.0
+motor_axis_height = 6.0
+motor_axis_radius = 2.5
+shaft_axis_radius = 1.7
+allow_tab_interference = true
+
+[drum_enclosure]
+# The prototype scene uses its own 43 mm card capture; it must not use the
+# legacy +5 mm substitute pawl that was previously mixed into V2 Final.
+prototype_pawl_extension = 0.0

@@ -13,12 +13,13 @@ from typing import Any
 BLENDER_DIR = Path(__file__).resolve().parent
 V2_DIR = BLENDER_DIR.parents[1]
 MECHANICAL_DIR = V2_DIR / "Hardware/mechanical"
-OUTPUT_DIR = BLENDER_DIR / "generated/hello-wall"
+FINAL_DIR = V2_DIR / "Final"
+OUTPUT_DIR = FINAL_DIR / "generated/blender/hello-wall"
 CODE_DIR = V2_DIR / "Code"
 COMPONENTS_DIR = OUTPUT_DIR / "components"
-CAPTURE_PATH = BLENDER_DIR / "generated/cards-position-capture.json"
-ENCLOSURE_MANIFEST_PATH = MECHANICAL_DIR / "generated/captured-enclosure/manifest.json"
-STICKER_MAPPING_PATH = BLENDER_DIR / "generated/sticker-mapping.json"
+CAPTURE_PATH = FINAL_DIR / "generated/blender/cards-position-capture.json"
+ENCLOSURE_MANIFEST_PATH = FINAL_DIR / "generated/enclosure/manifest.json"
+STICKER_MAPPING_PATH = FINAL_DIR / "generated/blender/sticker-mapping.json"
 FONT_PATH = V2_DIR / "Hardware/stickers/fonts/BlueHighwayD-International.otf"
 ROWS = ("HALLO", "WELT!")
 BACKGROUND_RGB = (2, 3, 4)
@@ -248,7 +249,7 @@ def build_manifest() -> dict[str, object]:
         "electronics_included": False,
         "motor_included": True,
         "scene_kind": "technical assembly; no render generated",
-        "mechanism_source": "generated/cards-position-capture.json",
+        "mechanism_source": "V2/Final/generated/blender/cards-position-capture.json",
         "per_module": {
             "enclosure_halves": 2,
             "drum_components": 4,
@@ -271,7 +272,7 @@ def build_manifest() -> dict[str, object]:
             "finish": "gloss black",
             "font": str(FONT_PATH.relative_to(V2_DIR)),
             "all_128_faces_mapped": True,
-            "base_atlas": "generated/sticker-atlas.png",
+            "base_atlas": "V2/Final/generated/blender/sticker-atlas.png",
             "typography": "production atlas with independent X/Y fit",
         },
         "fasteners": _fastener_layout(limits, enclosure, capture),

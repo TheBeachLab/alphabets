@@ -99,7 +99,7 @@ def test_scene_numbering_starts_lower_then_upper_then_incoming() -> None:
         "geometry_version": 1,
         "size_mm": 250,
         "thickness_mm": 2,
-        "initial_top_z_mm": -95,
+        "initial_top_z_mm": -75,
         "long_run_top_z_mm": -75,
         "long_run_end_frame": 1_000_000,
         "long_run_ready_frame": 360,

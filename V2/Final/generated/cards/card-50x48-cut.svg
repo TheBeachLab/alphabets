@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="60mm" height="50mm" viewBox="0 0 60 50">
+  <!-- alphabets-license
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+SPDX-License-Identifier: MIT
+-->
+  <metadata id="alphabets-license">
+SPDX-FileCopyrightText: 2014-2026 The Beach Lab &lt;https://beachlab.org&gt;
+SPDX-License-Identifier: MIT
+</metadata>
+  <title>V2 card 50 x 48 mm cut path</title>
+  <path id="card-cut" d="M 5 49 L 55 49 L 55 3.5 L 59 3.5 L 59 1 L 1 1 L 1 3.5 L 5 3.5 Z" fill="none" stroke="#FF00FF" stroke-width="0.15"/>
+</svg>

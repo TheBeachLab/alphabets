@@ -18,10 +18,11 @@ from mathutils import Matrix, Vector
 BLENDER_DIR = Path(__file__).resolve().parent
 V2_DIR = BLENDER_DIR.parents[1]
 CODE_DIR = V2_DIR / "Code"
-OUTPUT_DIR = BLENDER_DIR / "generated/hello-wall"
-SOURCE_BLEND = BLENDER_DIR / "generated/alphabets-v2-card-positions.blend"
-CAPTURE_PATH = BLENDER_DIR / "generated/cards-position-capture.json"
-MECHANICAL_OUTPUT = V2_DIR / "Hardware/mechanical/generated/captured-enclosure"
+FINAL_DIR = V2_DIR / "Final"
+OUTPUT_DIR = FINAL_DIR / "generated/blender/hello-wall"
+SOURCE_BLEND = FINAL_DIR / "generated/blender/alphabets-v2-final.blend"
+CAPTURE_PATH = FINAL_DIR / "generated/blender/cards-position-capture.json"
+MECHANICAL_OUTPUT = FINAL_DIR / "generated/enclosure"
 MM = 0.001
 ROWS = ("HALLO", "WELT!")
 DRUM_PARTS = ("motor_side", "shaft_side", "support_front", "support_back")
@@ -33,7 +34,6 @@ if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
 from json_license_metadata import validate_json_license
-
 from license_metadata import apply_blend_license_metadata
 
 
@@ -439,7 +439,7 @@ def main() -> int:
         MECHANICAL_OUTPUT / "print/captured-enclosure-lower.stl", "EnclosureLower"
     )
     pawl_mesh = imported_stl_mesh(
-        MECHANICAL_OUTPUT / "print/captured-enclosure-pawl-definitive.stl",
+        MECHANICAL_OUTPUT / "print/captured-enclosure-pawl.stl",
         "PawlDefinitive",
     )
     for mesh in (enclosure_upper, enclosure_lower, pawl_mesh):

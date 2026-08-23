@@ -1,7 +1,8 @@
 # SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
 # Example only: a reversible fit-check variant.
-# All omitted dimensions inherit from ../design.toml.
+# All omitted dimensions inherit from the selected V2/Prototype or V2/Final
+# design.toml profile.
 
 [drum]
 axial_clearance = 1.5

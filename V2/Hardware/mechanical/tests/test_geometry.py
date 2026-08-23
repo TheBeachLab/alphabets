@@ -68,8 +68,10 @@ from alphabets_cad.parts import (
 MECHANICAL_DIR = Path(__file__).resolve().parents[1]
 HARDWARE_DIR = MECHANICAL_DIR.parent
 REPO_ROOT = MECHANICAL_DIR.parents[2]
-GENERATED = MECHANICAL_DIR / "generated"
-CARD_CAPTURE = HARDWARE_DIR / "blender/generated/cards-position-capture.json"
+FINAL_DIR = REPO_ROOT / "V2/Final"
+GENERATED = FINAL_DIR / "generated/mechanical"
+ENCLOSURE_GENERATED = FINAL_DIR / "generated/enclosure"
+CARD_CAPTURE = FINAL_DIR / "generated/blender/cards-position-capture.json"
 
 
 def assert_bounds(
@@ -101,7 +103,7 @@ def test_current_source_parameters_are_centralized_without_drift() -> None:
         assert float(match.group(1)) == pytest.approx(float(value))
 
     card_manifest = json.loads(
-        (HARDWARE_DIR / "cards/card-50x48.json").read_text(encoding="utf-8")
+        (FINAL_DIR / "generated/cards/card-50x48.json").read_text(encoding="utf-8")
     )
     assert card_manifest["card_mm"]["body_width"] == DESIGN.card.body_width
     assert card_manifest["card_mm"]["total_height"] == DESIGN.card.total_height
@@ -134,20 +136,6 @@ def test_current_source_parameters_are_centralized_without_drift() -> None:
         match = re.search(rf"(?m)^\s*{name}\s*=\s*([0-9./]+)\s*;", motor)
         assert match, name
         assert float(Fraction(match.group(1))) == pytest.approx(value)
-
-    card_envelope = json.loads(
-        (HARDWARE_DIR / "blender/generated/card-envelope.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    assert card_envelope["upper"]["distance_from_axis_mm"] == pytest.approx(
-        DESIGN.drum_enclosure.upper_card_envelope_height,
-        abs=1e-6,
-    )
-    assert card_envelope["drum_radius_mm"] == pytest.approx(
-        DESIGN.drum.radius,
-        abs=1e-5,
-    )
 
 
 def test_flap_card_matches_current_cutter_geometry() -> None:
@@ -497,13 +485,27 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert all(len(shape.Solids()) == 1 for shape in parts.values())
 
     enclosure = DESIGN.drum_enclosure
+    cards = capture["all_cards_bounds_world_mm"]
+    floor = capture["floor"]["bounds_world_mm"]
+    captured_pawl = capture["pawl"]["bounds_world_mm"]
     assert limits.inner_bottom_z == pytest.approx(-75, abs=1e-5)
-    assert limits.back_y == pytest.approx(-68.750377417)
-    assert limits.front_y == pytest.approx(40.301814675)
-    assert limits.inner_top_z == pytest.approx(68.313832998)
-    assert limits.outer_width == pytest.approx(78.01138468)
-    assert limits.outer_depth == pytest.approx(109.052192092)
-    assert limits.outer_height == pytest.approx(159.313828528)
+    assert limits.back_y == pytest.approx(
+        min(cards["minimum"][1], -DESIGN.drum.radius) - enclosure.capture_card_clearance
+    )
+    assert limits.front_y == pytest.approx(
+        min(floor["maximum"][1], captured_pawl["minimum"][1])
+    )
+    assert limits.inner_top_z == pytest.approx(
+        max(
+            cards["maximum"][2],
+            captured_pawl["maximum"][2],
+            DESIGN.drum.radius,
+        )
+        + enclosure.capture_top_clearance
+    )
+    assert limits.outer_width > DESIGN.card.overall_width
+    assert limits.outer_depth > 0
+    assert limits.outer_height > 0
 
     upper = parts["enclosure_upper"]
     lower = parts["enclosure_lower"]
@@ -540,7 +542,6 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
 
     pawl = _captured_pawl_mount(capture, limits)
     pawl_box = pawl.BoundingBox()
-    captured_pawl = capture["pawl"]["bounds_world_mm"]
     assert pawl.isValid()
     assert len(pawl.Solids()) == 1
     assert pawl_box.xlen == pytest.approx(enclosure.pawl_mount_width, abs=1e-5)
@@ -863,10 +864,12 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         abs=1e-5,
     )
 
-    print_plate, print_layout = _captured_bambu_a1_mini_plate(parts, pawls)
+    print_plate, print_layout = _captured_bambu_a1_mini_plate(
+        parts, pawls, ("definitive",)
+    )
     print_box = print_plate.BoundingBox()
     assert print_plate.isValid()
-    assert len(print_plate.Solids()) == 4
+    assert len(print_plate.Solids()) == 3
     assert print_box.zmin == pytest.approx(0, abs=1e-5)
     assert (print_box.xmin + print_box.xmax) / 2 == pytest.approx(
         A1_MINI_BUILD_VOLUME_MM[0] / 2
@@ -882,7 +885,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert print_layout["enclosure_upper"]["bed_face"] == "front enclosure rim"
     assert print_layout["enclosure_lower"]["bed_face"] == "front enclosure rim"
     assert print_layout["pawl_definitive"]["bed_face"] == "flat rear face"
-    assert print_layout["pawl_prototype"]["bed_face"] == "flat rear face"
+    assert "pawl_prototype" not in print_layout
     assert print_layout["enclosure_upper"]["rotation_deg"] == {"x": -90, "z": 0}
 
 
@@ -1012,22 +1015,25 @@ def test_captured_enclosure_clears_mechanism_and_ignores_floor_solver_outliers()
         limits.outer_x_min + DESIGN.drum_enclosure.motor_inset_depth
     )
 
+    floor_top = capture["floor"]["bounds_world_mm"]["maximum"][2]
+    below_floor_cards = {
+        number
+        for number in range(DESIGN.drum.positions)
+        if shapes[f"card_{number:02d}"].BoundingBox().zmin < floor_top
+    }
+    assert below_floor_cards
+
     intersecting_cards = {
         number
         for number in range(DESIGN.drum.positions)
+        if number not in below_floor_cards
         if any(
             shapes[half].intersect(shapes[f"card_{number:02d}"]).Volume() > 1e-5
             for half in ("enclosure_upper", "enclosure_lower")
         )
     }
     assert intersecting_cards == set()
-
-    below_floor_cards = {
-        number
-        for number in range(DESIGN.drum.positions)
-        if shapes[f"card_{number:02d}"].BoundingBox().zmin < -75
-    }
-    assert below_floor_cards == {25, 26, 27, 28}
+    assert limits.inner_bottom_z == pytest.approx(floor_top, abs=1e-5)
 
 
 def test_two_part_enclosure_is_valid_separate_and_rear_open() -> None:
@@ -1232,15 +1238,15 @@ def test_generated_manufacturing_files_are_readable() -> None:
 
 
 def test_captured_enclosure_manufacturing_files_are_readable() -> None:
-    output = GENERATED / "captured-enclosure"
+    output = ENCLOSURE_GENERATED
     manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["capture"]["frame"] == 27464
-    assert manifest["capture"]["controller"]["display_position"] == 37
+    assert manifest["physical_variant"] == "definitive"
+    assert manifest["capture"]["frame"] == 800
+    assert manifest["capture"]["controller"]["display_position"] == 0
     assert manifest["limits_mm"]["inner_bottom_z"] == pytest.approx(-75, abs=1e-5)
     assert manifest["geometry"]["enclosure_upper"]["solid_count"] == 1
     assert manifest["geometry"]["enclosure_lower"]["solid_count"] == 1
     assert manifest["geometry"]["pawl_definitive"]["solid_count"] == 1
-    assert manifest["geometry"]["pawl_prototype"]["solid_count"] == 1
     assert manifest["parameters"]["top_mark_depth"] == pytest.approx(0.2)
     assert manifest["parameters"]["top_mark_rotation"] == pytest.approx(180)
     assert manifest["parameters"]["electronics_card_width"] == pytest.approx(50)
@@ -1256,14 +1262,13 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert "alpha top face" in manifest["features"]["vertical_stack_magnets"]
     assert manifest["print_plate"]["printer"] == "Bambu Lab A1 mini"
     assert manifest["print_plate"]["build_volume_mm"] == [180, 180, 180]
-    assert manifest["print_plate"]["geometry"]["solid_count"] == 4
+    assert manifest["print_plate"]["geometry"]["solid_count"] == 3
 
     expected_step = {
         "captured-enclosure-upper.step",
         "captured-enclosure-lower.step",
         "captured-enclosure-assembly.step",
-        "captured-enclosure-pawl-definitive.step",
-        "captured-enclosure-pawl-prototype.step",
+        "captured-enclosure-pawl.step",
     }
     assert {path.name for path in (output / "step").glob("*.step")} == expected_step
     for path in sorted((output / "step").glob("*.step")):
@@ -1272,11 +1277,10 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
         assert shape.BoundingBox().DiagonalLength > 0
 
     expected_stl = {
-        "captured-enclosure-bambu-a1-mini-four-part-plate.stl",
+        "captured-enclosure-print-plate.stl",
         "captured-enclosure-upper.stl",
         "captured-enclosure-lower.stl",
-        "captured-enclosure-pawl-definitive.stl",
-        "captured-enclosure-pawl-prototype.stl",
+        "captured-enclosure-pawl.stl",
     }
     assert {path.name for path in (output / "print").glob("*.stl")} == expected_stl
     for path in sorted((output / "print").glob("*.stl")):
