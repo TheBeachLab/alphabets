@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+# SPDX-License-Identifier: MIT
+cadquery==2.8.0
+pytest==8.4.2
+ruff==0.16.3

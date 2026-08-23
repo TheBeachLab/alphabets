@@ -8,7 +8,7 @@ sticker sheet, card, drum spacing and enclosure source.
 
 | Variant | Character preset | Sticker / halves | Card | Drum inner / outer width | Enclosure |
 | --- | --- | --- | --- | --- | --- |
-| **V2 Prototipo** | `demo-64` | 50 × 80 / 50 × 40 mm | 55 × 43 mm, all visible | 56 / 60.3 mm | historical FreeCAD reference only |
+| **V2 Prototipo** | `demo-64` | 50 × 80 / 50 × 40 mm | 55 × 43 mm, all visible | 56 / 60.3 mm | isolated CadQuery Prototype derivative; physical fit pending |
 | **V2 Definitivo** | `international-64` | 45 × 91 / 45 × 45.5 mm | 50 × 48 mm, all visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
 
 Both variants leave a 2.5 mm placement margin at each lateral edge. The sticker
@@ -39,20 +39,24 @@ manufacturing manifest. It rejects an incompatible width or height override.
 
 ## Sources and fabrication status
 
-The prototype keeps its 55 × 43 mm planar geometry, drum source and enclosure
-reference. The card source is corrected to the measured 0.5 mm substrate; its
-enclosure is **not** a validated fabrication source.
-To reproduce its 55 mm drum source, pass the explicit old flap width:
+The prototype now has an isolated CadQuery package under
+[`../Prototype/mechanical`](../Prototype/mechanical/README.md). It was copied
+from the trusted printed Final source and adjusted as one matched profile: card,
+stickers, drum, pawl and enclosure. Its enclosure uses the settled Final
+transforms as a conservative reference and is **not yet physically validated
+as a Prototype enclosure**.
+
+Rebuild the Prototype package with:
 
 ```sh
-openscad -o /tmp/v2-prototype-drum-55mm.dxf \
-  -D 'make3d=false' -D 'part="layout"' -D 'flap_width=55' \
-  V2/Hardware/Prototype/structure/spool.scad
+cd V2/Hardware/Prototype/mechanical
+make check
 ```
 
-The definitive variant is the only current manufacturing route: its card and
-64-position drum are generated from `V2/Hardware/Final/mechanical/alphabets_cad/`.
-Its sole current enclosure is the capture-fitted pipeline under
+The definitive variant remains the only one confirmed against a current
+physical print. Its card and 64-position drum are generated from
+`V2/Hardware/Final/mechanical/alphabets_cad/`, and its sole current enclosure is
+the capture-fitted pipeline under
 `generated/captured-enclosure/`, confirmed against the latest physical print
 on 2026-08-23. Further fit observations are still required before a production
 run.

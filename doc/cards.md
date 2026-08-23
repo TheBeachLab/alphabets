@@ -10,6 +10,17 @@ visible halves combine to show one character.
 
 ![Cut outline of a V2 Final card](../V2/Hardware/Final/cards/card-50x48-cut.svg)
 
+## Two matched card sizes
+
+| Variant | Card body | Including tabs | Sticker on each face | Drum inner width |
+| --- | ---: | ---: | ---: | ---: |
+| V2 Prototype | 55 × 43 × 0.5 mm | 63 × 43 mm | 50 × 40 × 0.1 mm | 56 mm |
+| V2 Final | 50 × 48 × 0.5 mm | 58 × 48 mm | 45 × 45.5 × 0.1 mm | 51 mm |
+
+Both cards are completely visible. The sticker reaches the hinge edge; the
+opposite free-edge strip is left unstickered—3 mm on Prototype and 2.5 mm on
+Final.
+
 ## V2 Final dimensions
 
 | Part | Size |
@@ -31,12 +42,18 @@ card width also changes the drum spacing and the required enclosure clearance.
 V2 Prototype uses 55 mm cards and is incompatible with the 50 mm V2 Final
 system described here.
 
+The Prototype source is no longer inferred from the Final card file. Its
+55 × 43 mm card and matched 56 mm drum are generated together from the
+[isolated Prototype CadQuery package](../V2/Hardware/Prototype/mechanical/README.md).
+
 ## Design files
 
 - The editable and generated card files are in
   [`V2/Hardware/Final/cards`](../V2/Hardware/Final/cards/README.md).
 - The current shared CadQuery model is in
   [`V2/Hardware/Final/mechanical`](../V2/Hardware/Final/mechanical/README.md).
+- The Prototype card, drum and enclosure derivative are in
+  [`V2/Hardware/Prototype/mechanical`](../V2/Hardware/Prototype/mechanical/README.md).
 - The exact Prototype/Final match is recorded in
   [`V2/Hardware/variants`](../V2/Hardware/variants/README.md).
 

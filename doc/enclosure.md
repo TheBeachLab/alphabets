@@ -28,6 +28,20 @@ beyond the drum while they flip. This capture-fitted model is the enclosure
 shown in the VS Code OCP viewer and is the only current enclosure source. The
 latest physical print was confirmed from this version on 2026-08-23.
 
+## V2 Prototype derivative
+
+![Prototype enclosure derivative](../V2/Hardware/Prototype/mechanical/generated/captured-enclosure/preview/captured-enclosure-module.svg)
+
+The Prototype now has its own copied CadQuery source and generated outputs. It
+uses the 55 × 43 mm card, 56 / 60.3 mm drum widths, Demo‑64 sticker geometry
+and the 5 mm-longer Prototype pawl. It deliberately does not use the stale
+FreeCAD enclosure or its old render.
+
+The copied model applies Prototype geometry to the trusted Final settled
+transforms. That makes it reproducible and keeps conservative moving-envelope
+limits, but it does **not** prove Prototype physical fit. The next acceptance
+step is one complete Prototype print with the real cards and mechanism.
+
 ## Files
 
 - The editable source, parameters, commands, and validation notes are in the
@@ -36,6 +50,10 @@ latest physical print was confirmed from this version on 2026-08-23.
   [`generated/captured-enclosure`](../V2/Hardware/Final/mechanical/generated/captured-enclosure/).
 - The four-part A1 Mini print plate used by this pipeline is
   [`captured-enclosure-bambu-a1-mini-four-part-plate.stl`](../V2/Hardware/Final/mechanical/generated/captured-enclosure/print/captured-enclosure-bambu-a1-mini-four-part-plate.stl).
+- Prototype source, parameters and validation boundary are in the
+  [Prototype mechanical README](../V2/Hardware/Prototype/mechanical/README.md).
+- The Prototype three-part A1 Mini plate is
+  [`captured-enclosure-bambu-a1-mini-prototype-plate.stl`](../V2/Hardware/Prototype/mechanical/generated/captured-enclosure/print/captured-enclosure-bambu-a1-mini-prototype-plate.stl).
 
 The similarly named enclosure files that used to live directly under
 `generated/preview`, `generated/print`, and `generated/step` belonged to an

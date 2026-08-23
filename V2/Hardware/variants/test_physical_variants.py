@@ -22,7 +22,9 @@ class PhysicalVariantTests(unittest.TestCase):
         self.assertEqual(set(variants), {"prototype", "definitive"})
         self.assertEqual(variants["prototype"].character_preset, "demo-64")
         self.assertEqual(variants["definitive"].character_preset, "international-64")
-        self.assertEqual(variants["prototype"].enclosure.status, "legacy-reference")
+        self.assertEqual(
+            variants["prototype"].enclosure.status, "manufacturing-source"
+        )
         self.assertEqual(
             variants["definitive"].enclosure.status, "manufacturing-source"
         )

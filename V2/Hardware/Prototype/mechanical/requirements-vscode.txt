@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
+# SPDX-License-Identifier: MIT
+# Must track the installed OCP CAD Viewer VS Code extension (v4.x).
+ocp-vscode~=4.0.1
