@@ -2,9 +2,12 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Alphabets
 
-![Alphabets split-flap strip in a fashion storefront at blue hour](hero-fashion-window.jpg)
+<p align="center">
+  <img src="hero-fashion-window.jpg" width="49%" alt="Alphabets split-flap strip in a fashion storefront at blue hour">
+  <img src="hero-cafe.jpg" width="49%" alt="Alphabets split-flap matrix receiving a message inside a cafe">
+</p>
 
-![Alphabets split-flap matrix receiving a message inside a cafe](hero-cafe.jpg)
+![Blender render of ten modular Alphabets V2 split-flap units displaying HALLO WELT!](hallov2.webp)
 
 Welcome to the public repository of the second edition of the worldwide loved **open source split-flap display**. Please find information about the first release [here](V1).
 

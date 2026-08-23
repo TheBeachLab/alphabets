@@ -1,5 +1,6 @@
 <!-- SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org> -->
 <!-- SPDX-License-Identifier: MIT -->
+
 # Blender gravity scene
 
 This directory turns the definitive CadQuery geometry into a Blender rigid-body
@@ -73,43 +74,38 @@ with:
 This writes `generated/floor-position.json`; subsequent generated scenes reuse
 that transform automatically.
 
+## Long-running enclosure capture
+
+Run `make long-run` to build the interactive scene used for enclosure capture.
+The floor is already stationary with its top 75 mm below the drum axis and its
+front edge below the pawl; it is never swept through the cards. Play once to the
+`READY_TO_ROTATE` marker at frame 360, then use the `Alphabets` sidebar to turn
+the drum. The scene ends at frame 1,000,000 and playback is configured to stop,
+not loop. A five-degree initial fall bias in the southern cards avoids the
+perfectly vertical Bullet contact while the stack is being initialized.
+
 The sticker atlas is packed into the blend file, and its 3D viewports are saved
 in Material Preview. If a viewport is manually switched to Solid mode, press
 `Z` and select `Material Preview` to see the artwork again.
-
-## Advance one or more characters
-
-The installed `Alphabets Drum Step` add-on exposes an `Alphabets` tab in the 3D
-View sidebar. Set `Steps per move` to any value from 1 to 64, then use the
-`Advance N steps` button. Each position rotates the two drum disks, motor shaft,
-and all 64 hinge axes by exactly `-5.625` degrees around world X: anticlockwise
-when viewed from the motor at negative X. Multi-step moves preserve a separate
-motor and settling phase for every character rather than jumping directly to
-the final angle.
-
-Each step creates a 24-frame eased motor movement and then evaluates 24 settling
-frames. The button remains disabled until all requested steps finish and stops
-at position 64. Cards remain independent rigid bodies. The scene uses 32 Bullet
-substeps per frame and 50 solver iterations so a 0.7 mm finished card cannot
-tunnel through its neighbor during a normal step. `Reset simulation` returns to
-the blank position. Timeline playback is saved as `Stop at End Frame`; the same
-setting is available from Timeline > Playback > Loop if it is changed manually.
-Every appended move extends both the visible frame range and Bullet's rigid-body
-cache range; these two endpoints must remain identical when stepping beyond the
-original frame 800 simulation.
-
-The card substrate remains black. Only the sticker background uses a bright
-yellow review material, with the sticker glyph rendered dark, so the stickers
-remain easy to distinguish. This is a Blender inspection aid, not a
-fabrication-material change.
 
 Each generated `.blend` stores its MIT licence and The Beach Lab attribution in
 the scene's custom properties and embeds the complete licence text in a text
 block named `LICENSE`. Those records remain inside the document when the blend
 file is shared on its own.
 
-Cards use stronger linear and angular damping in the rigid-body review scene so
-they settle promptly instead of oscillating unrealistically around the hinge.
+## Advance the drum for multiple revolutions
+
+The installed `Alphabets Drum Step` add-on exposes an `Alphabets` tab in the 3D
+View sidebar. Each step rotates the two drum disks, both structural supports,
+the motor shaft, and all 64 hinge axes by exactly `-5.625` degrees around world
+X: anticlockwise when viewed from the motor at negative X. `Steps per move` may
+be used for several positions; the total step counter continues beyond 64.
+
+Each position uses a 96-frame sinusoidal motor movement followed by 96 settling
+frames. The button remains disabled until both phases finish. Cards remain
+independent rigid bodies, hinged to a motor-driven kinematic drum body. The scene
+uses 32 Bullet substeps per frame and 50 solver iterations. `Reset simulation`
+returns to the blank position.
 
 A deterministic 0.05 mm center-of-mass tolerance toward the falling side keeps
 an upright card from returning to mathematically perfect equilibrium when it
@@ -137,7 +133,33 @@ make capture-envelope
 
 This measures every evaluated card and sticker vertex at the saved frame and
 writes `generated/card-envelope.json`, including the source blend hash, frame,
-step position, drum radius, and upper/lower extrema. The enclosure uses the
-captured upper distance from the drum axis and applies it symmetrically to both
-halves. The clearance above that envelope remains a separate CadQuery
-parameter, so changing it does not require editing the captured evidence.
+step position, drum radius, and upper/lower extrema. It is retained as an
+independent measurement workflow alongside the captured-card enclosure scene.
+
+## Static 5 × 2 HALLO / WELT! wall
+
+Build the presentation scene with:
+
+```sh
+make hello-wall
+```
+
+The result is the technical scene
+`generated/hello-wall/alphabets-hallo-welt-5x2.blend` plus a JSON manifest. No
+render is generated. Its ten modules preserve the current CadQuery enclosure
+dimensions and docking pitch. The top row reads `HALLO` and the lower row reads
+`WELT!`, representing the spoken phrase `HALLO WELT!` without spending an
+eleventh module on the space.
+
+Every module contains both enclosure halves, both drum discs and both drum
+supports, all 64 captured cards, all 128 sticker faces, the definitive pawl,
+the complete motor reference, four M3 screws and six 3 × 1 mm magnets seated in
+their CAD pockets. PCBs and cables remain excluded. Sticker backgrounds use a
+low-roughness gloss-black material with yellow Blue Highway lettering from the
+production atlas, so every displayed glyph shares its scale and baseline. At
+captured display position 37, the requested full glyph is mapped continuously
+across `sticker_38_back` above and `sticker_37_front` below.
+
+The file also includes a front orthographic render camera and Blender's packed
+`studio.exr` HDRI. The build prepares these resources but does not render an
+image.

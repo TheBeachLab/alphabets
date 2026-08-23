@@ -1,0 +1,310 @@
+{
+  "SPDX-FileCopyrightText": "2014-2026 The Beach Lab <https://beachlab.org>",
+  "SPDX-License-Identifier": "MIT",
+  "cad_engine": "CadQuery 2.8.0 / OCCT",
+  "capture": {
+    "controller": {
+      "completed_revolutions": 0,
+      "completed_steps": 37,
+      "display_position": 37,
+      "rotation_x_degrees": -208.125002803
+    },
+    "file": "cards-position-capture.json",
+    "frame": 27464
+  },
+  "fabrication_status": "Parametric prototype derived from the captured settled mechanism; clearances and print orientation require physical fit validation before final fabrication.",
+  "features": {
+    "front_bed_printing": "6 mm 45 degree lead-ins on both side recesses and a 2 mm lead-in through the remaining motor bore wall; screw pilots remain cylindrical",
+    "front_edge": "4 mm inner chamfer with a flat mounting land at the pawl",
+    "front_open": true,
+    "lower_shaft_support": "M3 self-tapping pilot in a 9 mm boss tapered continuously from the inside wall; user-supplied M3 screw forms the axle through the drum's 3.4 mm clearance hole",
+    "motor_electronics_pocket": "single approximately 55.7 x 76.6 mm rounded-rectangle side pocket around the motor and a 50 x 35 mm electronics-card envelope, with an 8 mm inner corner radius and continuous 6 mm lead-in",
+    "motor_mount": "two M3 self-tapping pilots in internal bosses tapered continuously from the inside wall",
+    "part_alignment": "four 3 mm truncated pyramids with 45 degree sides and 0.2 mm socket clearance",
+    "rear_open": true,
+    "replaceable_pawls": "2 mm definitive and 5 mm-longer prototype parts with 1 mm outer-face chamfers, retained by one M3 screw into a self-tapping pilot",
+    "screw_lugs": false,
+    "side_docking_relief": "6 mm motor inset plus 6 mm opposite recess; 7.3 mm body gap still required for equal orientation",
+    "split_magnets": "one unchamfered 3.4 x 1.2 mm magnet insert per side and per half for nominal 3 x 1 mm magnets",
+    "top_mark": "large split alpha rotated toward the front and recessed 0.2 mm into the upper face through a nominal 0.2 mm chamfer",
+    "vertical_stack_magnets": "one centred unchamfered 3.4 x 1.2 mm insert in the alpha top face and one matching insert in the module base",
+    "vertical_stacking": "four downward 3 mm truncated pyramids and four matching top sockets with 0.2 mm clearance, inset to the tangent of the 10 mm enclosure corner radius",
+    "visible_assembly_pawl": "definitive"
+  },
+  "geometry": {
+    "enclosure_lower": {
+      "bounds_mm": {
+        "x": [
+          -40.425269,
+          39.326165
+        ],
+        "y": [
+          -68.756714,
+          40.374796
+        ],
+        "z": [
+          -87.475405,
+          16.369485
+        ]
+      },
+      "component_volume_sum_mm3": 178146.804967,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 178146.804967
+    },
+    "enclosure_upper": {
+      "bounds_mm": {
+        "x": [
+          -40.405785,
+          40.4056
+        ],
+        "y": [
+          -68.75494,
+          40.374796
+        ],
+        "z": [
+          10.7,
+          77.787959
+        ]
+      },
+      "component_volume_sum_mm3": 159293.913997,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 159293.913997
+    },
+    "pawl_definitive": {
+      "bounds_mm": {
+        "x": [
+          -5.0,
+          5.0
+        ],
+        "y": [
+          40.301193,
+          42.30832
+        ],
+        "z": [
+          47.233988,
+          76.313833
+        ]
+      },
+      "component_volume_sum_mm3": 367.988112,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 367.988112
+    },
+    "pawl_prototype": {
+      "bounds_mm": {
+        "x": [
+          -5.0,
+          5.0
+        ],
+        "y": [
+          40.301193,
+          42.308262
+        ],
+        "z": [
+          42.234047,
+          76.313833
+        ]
+      },
+      "component_volume_sum_mm3": 433.036345,
+      "solid_count": 1,
+      "valid": true,
+      "volume_mm3": 433.036345
+    }
+  },
+  "limits_mm": {
+    "back_y": -68.750377417,
+    "front_y": 40.301814675,
+    "inner_bottom_z": -74.99999553,
+    "inner_top_z": 68.313832998,
+    "inner_x_max": 31.005600139,
+    "inner_x_min": -31.005784541,
+    "outer_bottom_z": -82.99999553,
+    "outer_top_z": 76.313832998,
+    "outer_x_max": 39.005600138999995,
+    "outer_x_min": -39.005784541
+  },
+  "parameters": {
+    "alignment_base_size": 8.0,
+    "alignment_clearance": 0.2,
+    "alignment_height": 3.0,
+    "alignment_top_size": 2.0,
+    "axial_clearance": 2.0,
+    "boss_end_chamfer": 1.5,
+    "capture_card_clearance": 2.0,
+    "capture_split_height": 12.0,
+    "capture_top_clearance": 2.0,
+    "docking_clearance": 0.3,
+    "docking_recess_depth": 6.0,
+    "electronics_card_center_y": 0.0,
+    "electronics_card_center_z": -50.0,
+    "electronics_card_clearance": 0.5,
+    "electronics_card_height": 35.0,
+    "electronics_card_width": 50.0,
+    "floor_thickness": 8.0,
+    "front_inner_chamfer": 4.0,
+    "magnet_depth_clearance": 0.2,
+    "magnet_diameter": 3.0,
+    "magnet_radial_clearance": 0.2,
+    "magnet_thickness": 1.0,
+    "minimum_same_orientation_gap": 7.3,
+    "minimum_same_orientation_pitch": 85.31138467999999,
+    "motor_bore_diameter": 10.0,
+    "motor_cable_clearance": 1.0,
+    "motor_electronics_corner_radius": 8.0,
+    "motor_inset_depth": 6.0,
+    "motor_mount_boss_radius": 4.5,
+    "motor_mount_disc_clearance": 0.5,
+    "motor_mount_pilot_diameter": 2.6,
+    "outer_corner_radius": 10.0,
+    "pawl_head_recess_depth": 1.0,
+    "pawl_head_recess_diameter": 6.0,
+    "pawl_mount_width": 10.0,
+    "pawl_outer_chamfer": 1.0,
+    "pawl_pilot_depth": 8.0,
+    "pawl_pilot_diameter": 2.6,
+    "pawl_screw_clearance_diameter": 3.4,
+    "pawl_thickness_addition": 1.0,
+    "pawl_tip_radius": 2.0,
+    "prototype_pawl_extension": 5.0,
+    "remaining_side_wall": 2.0,
+    "shaft_head_recess_depth": 2.0,
+    "shaft_head_recess_diameter": 6.0,
+    "shaft_screw_clearance_diameter": 3.4,
+    "shaft_support_axial_clearance": 0.5,
+    "shaft_support_boss_radius": 4.5,
+    "shaft_support_pilot_diameter": 2.6,
+    "side_feature_chamfer": 6.0,
+    "split_gap": 0.2,
+    "stack_alignment_x_inset": 14.0,
+    "stack_alignment_y_inset": 20.0,
+    "top_mark_chamfer": 0.2,
+    "top_mark_character": "α",
+    "top_mark_depth": 0.2,
+    "top_mark_font": "Overpass Mono Medium",
+    "top_mark_font_size": 90.0,
+    "top_mark_rotation": 180.0,
+    "top_mark_split_gap": 2.0,
+    "wall_thickness": 8.0
+  },
+  "print_plate": {
+    "build_volume_mm": [
+      180.0,
+      180.0,
+      180.0
+    ],
+    "file": "print/captured-enclosure-bambu-a1-mini-four-part-plate.stl",
+    "geometry": {
+      "bounds_mm": {
+        "x": [
+          50.994308,
+          129.005692
+        ],
+        "y": [
+          6.418086,
+          173.581914
+        ],
+        "z": [
+          -0.0,
+          109.052192
+        ]
+      },
+      "component_volume_sum_mm3": 338241.739592,
+      "solid_count": 4,
+      "valid": true,
+      "volume_mm3": 338241.739592
+    },
+    "margin_mm": 5.0,
+    "part_gap_mm": 2.0,
+    "parts": {
+      "enclosure_lower": {
+        "bed_face": "front enclosure rim",
+        "bounds_mm": {
+          "x": [
+            50.994308,
+            129.005692
+          ],
+          "y": [
+            6.418086,
+            107.368081
+          ],
+          "z": [
+            -0.0,
+            109.052192
+          ]
+        },
+        "rotation_deg": {
+          "x": -90,
+          "z": 0
+        }
+      },
+      "enclosure_upper": {
+        "bed_face": "front enclosure rim",
+        "bounds_mm": {
+          "x": [
+            50.994308,
+            129.005692
+          ],
+          "y": [
+            109.368081,
+            173.581914
+          ],
+          "z": [
+            -0.0,
+            109.052192
+          ]
+        },
+        "rotation_deg": {
+          "x": -90,
+          "z": 0
+        }
+      },
+      "pawl_definitive": {
+        "bed_face": "flat rear face",
+        "bounds_mm": {
+          "x": [
+            75.0,
+            85.0
+          ],
+          "y": [
+            39.856104,
+            68.930063
+          ],
+          "z": [
+            -0.0,
+            1.999998
+          ]
+        },
+        "rotation_deg": {
+          "x": 90,
+          "z": 0
+        }
+      },
+      "pawl_prototype": {
+        "bed_face": "flat rear face",
+        "bounds_mm": {
+          "x": [
+            95.0,
+            105.0
+          ],
+          "y": [
+            39.856104,
+            73.930063
+          ],
+          "z": [
+            -0.0,
+            1.999998
+          ]
+        },
+        "rotation_deg": {
+          "x": 90,
+          "z": 0
+        }
+      }
+    },
+    "printer": "Bambu Lab A1 mini"
+  },
+  "schema_version": 1,
+  "units": "mm"
+}

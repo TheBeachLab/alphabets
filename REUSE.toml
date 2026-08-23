@@ -46,13 +46,19 @@ SPDX-FileCopyrightText = "2021 The Overpass Project Authors"
 SPDX-License-Identifier = "OFL-1.1"
 
 [[annotations]]
+path = ["V2/Hardware/mechanical/assets/fonts/3270NerdFontMono-ALPHABETS.ttf", "V2/Hardware/mechanical/assets/fonts/LICENSE-3270-NERD-FONT.txt"]
+precedence = "override"
+SPDX-FileCopyrightText = ["1993-2022 The 3270font Authors", "2011-2022 Ricardo Banffy", "1993-2011 Paul Mattes", "2004-2005 Don Russell"]
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
 path = ["V2/Hardware/stickers/fonts/BlueHighwayD-International.otf"]
 precedence = "override"
 SPDX-FileCopyrightText = ["2026 The Beach Lab <https://beachlab.org>", "2024 Raymond Larabie", "2021 The Overpass Project Authors <https://github.com/RedHatOfficial/Overpass>"]
 SPDX-License-Identifier = "CC0-1.0 AND OFL-1.1"
 
 [[annotations]]
-path = ["**/*.drl", "**/*.dxf", "**/*.gm1", "**/*.gtl", "**/*.gto", "**/*.gts", "**/*.jpg", "**/*.jpeg", "**/*.pdf", "**/*.png", "**/*.step", "**/*.stl", "**/*.zip"]
+path = ["**/*.drl", "**/*.dxf", "**/*.gm1", "**/*.gtl", "**/*.gto", "**/*.gts", "**/*.jpg", "**/*.jpeg", "**/*.pdf", "**/*.png", "**/*.step", "**/*.stl", "**/*.webp", "**/*.zip"]
 precedence = "override"
 SPDX-FileCopyrightText = "2014-2026 The Beach Lab <https://beachlab.org>"
 SPDX-License-Identifier = "MIT"

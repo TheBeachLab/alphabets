@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
-"""Blender add-on for physically simulated Alphabets drum steps."""
+"""Blender add-on for long-running physically simulated Alphabets drum steps."""
 
 from __future__ import annotations
 
@@ -11,15 +11,16 @@ import bpy
 bl_info = {
     "name": "Alphabets Drum Step",
     "author": "Alphabets",
-    "version": (1, 1, 1),
+    "version": (1, 2, 0),
     "blender": (5, 2, 0),
     "location": "3D View > Sidebar > Alphabets",
-    "description": "Advance the 64-position drum by configurable physical steps",
+    "description": "Advance the 64-position drum for multiple revolutions",
     "category": "Animation",
 }
 
 CONTROLLER_NAME = "DrumStepController"
-TOTAL_STEPS = 64
+TOTAL_POSITIONS = 64
+MAX_STEPS = 1_000_000
 
 
 def controller_object() -> bpy.types.Object | None:
@@ -27,7 +28,7 @@ def controller_object() -> bpy.types.Object | None:
 
 
 def extend_simulation_range(scene: bpy.types.Scene, end_frame: int) -> None:
-    """Keep the scene and Bullet cache ranges aligned for appended steps."""
+    """Keep the scene and Bullet cache ranges aligned without shortening either."""
 
     point_cache = (
         scene.rigidbody_world.point_cache if scene.rigidbody_world is not None else None
@@ -43,21 +44,21 @@ def extend_simulation_range(scene: bpy.types.Scene, end_frame: int) -> None:
 
 
 def ensure_controller_properties(controller: bpy.types.Object) -> None:
-    """Add controls introduced after a blend file was originally generated."""
+    """Add controls introduced after a blend file was generated."""
 
     if "steps_per_move" not in controller:
         controller["steps_per_move"] = 1
     controller.id_properties_ui("steps_per_move").update(
         min=1,
-        max=TOTAL_STEPS,
+        max=256,
         step=1,
-        description="Number of complete character positions to advance",
+        description="Complete character positions to advance in this operation",
     )
     controller.id_properties_ui("step_count").update(
         min=0,
-        max=TOTAL_STEPS,
+        max=MAX_STEPS,
         step=1,
-        description="Completed character positions since reset",
+        description="Total completed positions; values above 64 are additional turns",
     )
 
 
@@ -75,21 +76,22 @@ def insert_smooth_step(
     motor_end = start_frame + duration
     settle_end = motor_end + settle_frames
 
-    controller.rotation_mode = "XYZ"
-    controller.rotation_euler.x = math.radians(current_step * degrees_per_step)
-    controller.keyframe_insert(data_path="rotation_euler", index=0, frame=start_frame)
-    controller.rotation_euler.x = math.radians(target_step * degrees_per_step)
-    controller.keyframe_insert(data_path="rotation_euler", index=0, frame=motor_end)
-
-    action = controller.animation_data.action if controller.animation_data else None
-    if action is not None and hasattr(action, "fcurves"):
-        for curve in action.fcurves:
-            if curve.data_path != "rotation_euler" or curve.array_index != 0:
-                continue
-            for point in curve.keyframe_points:
-                if start_frame <= point.co.x <= motor_end:
-                    point.interpolation = "SINE"
-                    point.easing = "EASE_IN_OUT"
+    previous_interpolation = (
+        bpy.context.preferences.edit.keyframe_new_interpolation_type
+    )
+    bpy.context.preferences.edit.keyframe_new_interpolation_type = "SINE"
+    try:
+        controller.rotation_mode = "XYZ"
+        controller.rotation_euler.x = math.radians(current_step * degrees_per_step)
+        controller.keyframe_insert(
+            data_path="rotation_euler", index=0, frame=start_frame
+        )
+        controller.rotation_euler.x = math.radians(target_step * degrees_per_step)
+        controller.keyframe_insert(data_path="rotation_euler", index=0, frame=motor_end)
+    finally:
+        bpy.context.preferences.edit.keyframe_new_interpolation_type = (
+            previous_interpolation
+        )
 
     controller["step_count"] = target_step
     controller["step_busy"] = True
@@ -102,17 +104,12 @@ def insert_smooth_steps(
     start_frame: int,
     requested_steps: int,
 ) -> tuple[int, int, int]:
-    """Insert up to ``requested_steps`` complete move-and-settle cycles."""
+    """Append complete move-and-settle cycles without a one-revolution limit."""
 
-    current_step = int(controller.get("step_count", 0))
-    remaining_steps = max(0, TOTAL_STEPS - current_step)
-    step_total = min(max(0, requested_steps), remaining_steps)
-    if step_total == 0:
-        return current_step, start_frame, start_frame
-
+    step_total = max(1, min(int(requested_steps), 256))
     motor_end = start_frame
     settle_end = start_frame
-    target_step = current_step
+    target_step = int(controller.get("step_count", 0))
     for _ in range(step_total):
         target_step, motor_end, settle_end = insert_smooth_step(controller, settle_end)
     return target_step, motor_end, settle_end
@@ -121,7 +118,7 @@ def insert_smooth_steps(
 class ALPHABETS_OT_advance_one(bpy.types.Operator):
     bl_idname = "alphabets.advance_one_character"
     bl_label = "Advance character steps"
-    bl_description = "Advance the selected number of positions, settling every step"
+    bl_description = "Advance the selected positions, settling after every step"
 
     _timer = None
     _settle_end = 0
@@ -132,7 +129,7 @@ class ALPHABETS_OT_advance_one(bpy.types.Operator):
         return (
             controller is not None
             and not bool(controller.get("step_busy", False))
-            and int(controller.get("step_count", 0)) < TOTAL_STEPS
+            and int(controller.get("step_count", 0)) < MAX_STEPS
         )
 
     def invoke(self, context: bpy.types.Context, event: bpy.types.Event):
@@ -147,12 +144,12 @@ class ALPHABETS_OT_advance_one(bpy.types.Operator):
         target_step, _, self._settle_end = insert_smooth_steps(
             controller, scene.frame_current, requested_steps
         )
-        if self._settle_end == scene.frame_current:
-            self.report({"INFO"}, "The drum is already at position 64")
-            return {"CANCELLED"}
         scene.playback_loop_mode = "STOP_END_FRAME"
         extend_simulation_range(scene, self._settle_end)
-        self.report({"INFO"}, f"Advancing to position {target_step}")
+        self.report(
+            {"INFO"},
+            f"Position {target_step % TOTAL_POSITIONS:02d}; total step {target_step}",
+        )
         fps = scene.render.fps / scene.render.fps_base
         self._timer = context.window_manager.event_timer_add(
             1 / fps, window=context.window
@@ -223,15 +220,17 @@ class ALPHABETS_PT_drum_step(bpy.types.Panel):
             layout.label(text="DrumStepController missing", icon="ERROR")
             return
         ensure_controller_properties(controller)
-        current_step = int(controller["step_count"])
-        requested_steps = int(controller["steps_per_move"])
-        actual_steps = min(requested_steps, max(0, TOTAL_STEPS - current_step))
-        layout.label(text=f"Position: {current_step} / {TOTAL_STEPS}")
+        completed = int(controller["step_count"])
+        position = completed % TOTAL_POSITIONS
+        revolutions, _ = divmod(completed, TOTAL_POSITIONS)
+        layout.label(text=f"Position: {position:02d} / 63")
+        layout.label(text=f"Completed turns: {revolutions}")
         layout.prop(controller, '["steps_per_move"]', text="Steps per move")
         layout.prop(controller, '["step_duration_frames"]', text="Motor frames")
         row = layout.row()
-        row.enabled = not bool(controller.get("step_busy", False)) and actual_steps > 0
-        label = f"Advance {actual_steps} step" + ("s" if actual_steps != 1 else "")
+        row.enabled = not bool(controller.get("step_busy", False))
+        requested = int(controller["steps_per_move"])
+        label = f"Advance {requested} step" + ("s" if requested != 1 else "")
         row.operator(ALPHABETS_OT_advance_one.bl_idname, text=label, icon="PLAY")
         layout.operator(ALPHABETS_OT_reset_simulation.bl_idname, icon="LOOP_BACK")
 

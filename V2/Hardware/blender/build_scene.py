@@ -15,18 +15,20 @@ from typing import Any
 import bpy
 from mathutils import Vector
 
-from license_metadata import apply_blend_license_metadata
-
 BLENDER_DIR = Path(__file__).resolve().parent
 CODE_DIR = BLENDER_DIR.parents[1] / "Code"
 GENERATED_DIR = BLENDER_DIR / "generated"
 PAWL_CAPTURE_PATH = GENERATED_DIR / "pawl-position.json"
 FLOOR_CAPTURE_PATH = GENERATED_DIR / "floor-position.json"
 MM = 0.001
+if str(BLENDER_DIR) not in sys.path:
+    sys.path.insert(0, str(BLENDER_DIR))
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 
 from json_license_metadata import validate_json_license
+
+from license_metadata import apply_blend_license_metadata
 
 
 def parse_args() -> argparse.Namespace:
@@ -43,6 +45,7 @@ def parse_args() -> argparse.Namespace:
         default=GENERATED_DIR / "alphabets-v2-gravity.png",
     )
     parser.add_argument("--no-simulate", action="store_true")
+    parser.add_argument("--long-run", action="store_true")
     return parser.parse_args(arguments)
 
 
@@ -105,7 +108,7 @@ def material(
 
 
 def atlas_material(atlas_path: Path) -> bpy.types.Material:
-    result = bpy.data.materials.new("StickerAtlas_YellowReview")
+    result = bpy.data.materials.new("StickerAtlas_BlackWhite")
     result.use_nodes = True
     nodes = result.node_tree.nodes
     links = result.node_tree.links
@@ -118,14 +121,8 @@ def atlas_material(atlas_path: Path) -> bpy.types.Material:
     image_node.interpolation = "Linear"
     uv_node = nodes.new("ShaderNodeUVMap")
     uv_node.uv_map = "AtlasUV"
-    review_colors = nodes.new("ShaderNodeValToRGB")
-    review_colors.name = "YellowCardReviewColors"
-    review_colors.label = "Black atlas -> yellow card; white glyph -> dark glyph"
-    review_colors.color_ramp.elements[0].color = (1.0, 0.62, 0.015, 1)
-    review_colors.color_ramp.elements[1].color = (0.012, 0.014, 0.018, 1)
     links.new(uv_node.outputs["UV"], image_node.inputs["Vector"])
-    links.new(image_node.outputs["Color"], review_colors.inputs["Fac"])
-    links.new(review_colors.outputs["Color"], shader.inputs["Base Color"])
+    links.new(image_node.outputs["Color"], shader.inputs["Base Color"])
     shader.inputs["Roughness"].default_value = 0.62
     return result
 
@@ -349,6 +346,9 @@ def build_floor(
     scene_data: dict[str, Any],
     helpers_collection: bpy.types.Collection,
     floor_material: bpy.types.Material,
+    pawl: bpy.types.Object,
+    *,
+    long_run: bool,
 ) -> bpy.types.Object:
     floor_data = scene_data["manual_floor"]
     thickness = floor_data["thickness_mm"] * MM
@@ -381,7 +381,10 @@ def build_floor(
         floor["position_source"] = "scene manifest initial position"
     floor.data.materials.append(floor_material)
     add_rigid_body(floor, "PASSIVE", "BOX")
-    floor.rigid_body.kinematic = True
+    floor.rigid_body.kinematic = not long_run
+    if long_run:
+        floor.rigid_body.use_margin = True
+        floor.rigid_body.collision_margin = 0.0005
     floor.rigid_body.friction = 0.48
     floor["purpose"] = (
         "Manually positioned compacting plane for discovering the enclosure volume"
@@ -390,6 +393,13 @@ def build_floor(
     floor["geometry_version"] = floor_data["geometry_version"]
     floor["interactive_mode"] = "move on Z while timeline playback is running"
     floor["initial_top_z_mm"] = floor_data["initial_top_z_mm"]
+    if long_run:
+        top_z = floor_data["long_run_top_z_mm"] * MM
+        final_y = pawl.location.y - size / 2
+        floor.location = (floor.location.x, final_y, top_z - thickness / 2)
+        floor["long_run"] = True
+        floor["final_front_edge_y_mm"] = round((final_y + size / 2) / MM, 6)
+        floor["final_top_z_mm"] = floor_data["long_run_top_z_mm"]
     return floor
 
 
@@ -402,6 +412,7 @@ def build_cards(
     helpers_collection: bpy.types.Collection,
     card_material: bpy.types.Material,
     sticker_material: bpy.types.Material,
+    long_run: bool,
 ) -> None:
     card_dimensions = scene_data["card"]
     outline = card_outline(card_dimensions)
@@ -429,15 +440,19 @@ def build_cards(
     )
     anchor.hide_render = True
     anchor.hide_set(True)
-    add_rigid_body(anchor, "PASSIVE", "BOX")
+    add_rigid_body(anchor, "ACTIVE", "BOX")
+    anchor.rigid_body.kinematic = True
+    anchor.rigid_body.mass = 10
 
     for pose in scene_data["card_poses"]:
         number = pose["card"]
+        is_southern = number == 0 or number >= 33
         name = f"card_{number:02d}"
         card = bpy.data.objects.new(name, source_mesh.copy())
         cards_collection.objects.link(card)
         card.data.materials.append(card_material)
-        tilt = math.radians(pose["tilt_degrees"])
+        tilt_degrees = 5 if long_run and is_southern else pose["tilt_degrees"]
+        tilt = math.radians(tilt_degrees)
         pivot = tuple(value * MM for value in pose["pivot_mm"])
         center_x = center_mm[0] * MM
         center_z = center_mm[1] * MM
@@ -455,8 +470,8 @@ def build_cards(
         card.rigid_body.mass = 0.00105
         card.rigid_body.friction = 0.42
         card.rigid_body.restitution = 0.02
-        card.rigid_body.linear_damping = 0.28
-        card.rigid_body.angular_damping = 0.55
+        card.rigid_body.linear_damping = 0.12
+        card.rigid_body.angular_damping = 0.22
         card.rigid_body.use_margin = True
         card.rigid_body.collision_margin = 0.0001
         card.rigid_body.use_deactivation = False
@@ -533,30 +548,30 @@ def build_step_controller(
     controller[step_data["property"]] = 0
     controller.id_properties_ui(step_data["property"]).update(
         min=0,
-        max=64,
+        soft_max=1_000_000,
         step=1,
-        description="Completed character positions since reset",
+        description="Total completed positions across any number of revolutions",
     )
     controller["degrees_per_step"] = step_data["degrees_per_step"]
     controller["direction"] = step_data["direction"]
-    controller["step_duration_frames"] = 24
-    controller["settle_frames"] = 24
+    controller["step_duration_frames"] = 96
+    controller["settle_frames"] = 96
     controller["steps_per_move"] = 1
     controller["step_busy"] = False
     controller["usage"] = (
-        "Set Steps per move and use Advance in the Alphabets sidebar panel"
+        "Use Advance steps in the Alphabets sidebar after READY_TO_ROTATE"
     )
     controller.id_properties_ui("step_duration_frames").update(
         min=6,
         max=120,
         step=1,
-        description="Motor movement duration; 24 frames equals one second at 24 fps",
+        description="Motor movement duration; 96 frames equals four seconds at 24 fps",
     )
     controller.id_properties_ui("steps_per_move").update(
         min=1,
-        max=64,
+        max=256,
         step=1,
-        description="Number of complete character positions to advance",
+        description="Complete character positions to advance in this operation",
     )
 
     for name in step_data["rotating_components"]:
@@ -611,7 +626,6 @@ def configure_scene(scene_data: dict[str, Any]) -> None:
     scene.gravity = (0, 0, -scene_data["simulation"]["gravity_m_s2"])
     scene.frame_start = 1
     scene.frame_end = scene_data["simulation"]["end_frame"]
-    scene.playback_loop_mode = "STOP_END_FRAME"
     scene.render.engine = "BLENDER_EEVEE"
     scene.render.resolution_x = 1200
     scene.render.resolution_y = 900
@@ -661,8 +675,14 @@ def main() -> int:
     sticker_mat = atlas_material(GENERATED_DIR / mapping_data["atlas"]["file"])
 
     import_structure(scene_data, structure_collection)
-    build_floor(scene_data, helpers_collection, floor_mat)
-    build_adjustable_pawl(scene_data, adjustable_collection, pawl_mat)
+    pawl = build_adjustable_pawl(scene_data, adjustable_collection, pawl_mat)
+    build_floor(
+        scene_data,
+        helpers_collection,
+        floor_mat,
+        pawl,
+        long_run=args.long_run,
+    )
     build_cards(
         scene_data,
         mapping_data,
@@ -672,12 +692,24 @@ def main() -> int:
         helpers_collection,
         card_mat,
         sticker_mat,
+        long_run=args.long_run,
     )
     step_controller = build_step_controller(
         scene_data, controller_collection, constraints_collection
     )
     setup_camera_and_lighting()
     configure_interactive_viewports()
+
+    if args.long_run:
+        ready_frame = scene_data["manual_floor"]["long_run_ready_frame"]
+        scene = bpy.context.scene
+        scene.frame_end = scene_data["manual_floor"]["long_run_end_frame"]
+        scene.playback_loop_mode = "STOP_END_FRAME"
+        scene.timeline_markers.new("READY_TO_ROTATE", frame=ready_frame)
+        scene["long_run_note"] = (
+            f"Play once to frame {ready_frame}, then use the Alphabets panel to "
+            "advance any number of drum steps without a timeline loop."
+        )
 
     scene = bpy.context.scene
     scene.frame_set(1)
@@ -698,8 +730,9 @@ def main() -> int:
     bpy.ops.render.render(write_still=True)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.object.select_all(action="DESELECT")
-    step_controller.select_set(True)
-    bpy.context.view_layer.objects.active = step_controller
+    selected_object = step_controller
+    selected_object.select_set(True)
+    bpy.context.view_layer.objects.active = selected_object
     apply_blend_license_metadata(scene)
     bpy.ops.file.pack_all()
     # Keep custom SPDX properties inspectable without Blender so the repository

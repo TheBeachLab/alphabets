@@ -211,13 +211,22 @@ def build_scene_manifest(static_components: list[dict[str, Any]]) -> dict[str, A
             "property": "step_count",
             "degrees_per_step": _round(-360 / drum.positions),
             "direction": "anticlockwise from motor side at negative X",
-            "rotating_components": ["motor_side", "shaft_side", "motor_shaft"],
+            "rotating_components": [
+                "motor_side",
+                "shaft_side",
+                "support_front",
+                "support_back",
+                "motor_shaft",
+            ],
         },
         "manual_floor": {
             "geometry_version": 1,
             "size_mm": 250,
             "thickness_mm": 2,
             "initial_top_z_mm": -95,
+            "long_run_top_z_mm": -75,
+            "long_run_end_frame": 1_000_000,
+            "long_run_ready_frame": 360,
         },
         "pawl": {
             "name": "CardStopPawl_Adjustable",
