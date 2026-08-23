@@ -35,6 +35,6 @@ shaft_axis_radius = 1.7
 allow_tab_interference = true
 
 [drum_enclosure]
-# The prototype scene uses its own 43 mm card capture; it must not use the
-# legacy +5 mm substitute pawl that was previously mixed into V2 Final.
-prototype_pawl_extension = 0.0
+# The 43 mm prototype card is 5 mm shorter than the 48 mm final card, so the
+# replaceable pawl reaches 5 mm farther toward the card support point.
+prototype_pawl_extension = 5.0

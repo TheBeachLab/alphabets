@@ -106,6 +106,17 @@ def main() -> int:
     if support_gap < variant.drum.outer_width_mm:
         raise RuntimeError("enclosure supports are narrower than the selected drum")
 
+    if variant.id == "prototype":
+        definitive = load_variant("definitive")
+        expected_pawl_extension = (
+            definitive.card.total_height_mm - variant.card.total_height_mm
+        )
+        equal(
+            params.drum_enclosure.prototype_pawl_extension,
+            expected_pawl_extension,
+            "prototype pawl extension",
+        )
+
     expected_pawl = f"pawl_{variant.id}"
     plate_parts = set(enclosure["print_plate"]["parts"])
     if plate_parts != {"enclosure_upper", "enclosure_lower", expected_pawl}:
