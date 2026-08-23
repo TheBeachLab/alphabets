@@ -1,0 +1,14 @@
+Typodermic public-domain font license
+=====================================
+
+These fonts have been released into the public domain using CC0 1.0 Universal.
+The copyright holder, Raymond Larabie, has waived all copyright and related or
+neighboring rights to the extent allowed by law.
+
+License: https://creativecommons.org/publicdomain/zero/1.0/
+Source: https://typodermicfonts.com/public-domain/
+Archive: https://typodermicfonts.com/assets/downloads/typodermic-public-domain-2024-12.zip
+
+This repository copy was retrieved from the official Typodermic archive on
+2026-08-18. The text above is a concise restatement; the linked CC0 legal code
+is authoritative.

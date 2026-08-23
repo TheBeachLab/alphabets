@@ -3,8 +3,8 @@
 # ATtiny44A module firmware
 
 This AVR C firmware implements the controller-to-module protocol in
-[`../../PROTOCOL_V1_ATTINY44.md`](../../PROTOCOL_V1_ATTINY44.md) for the
-[`../../Hardware/electronics/attiny44-ring`](../../Hardware/electronics/attiny44-ring)
+[`prototype protocol`](../../Protocol/PROTOCOL_V1_ATTINY44.md) for the
+[`ATtiny44 ring board`](../../Hardware/Prototype/electronics/attiny44-ring)
 board.
 
 ## Implemented behavior

@@ -3,7 +3,7 @@
 # ATtiny1624 module firmware
 
 This AVR C firmware implements revision 2 of the controller-to-module
-[`protocol`](../../PROTOCOL.md) for a 5 V ATtiny1624-SSU module.
+[`protocol`](../../Protocol/PROTOCOL.md) for a 5 V ATtiny1624-SSU module.
 
 ## Implemented behavior
 

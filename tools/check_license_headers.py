@@ -12,7 +12,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "V2" / "Code"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "LICENSES"))
 
 from artifact_license_metadata import (
     SUPPORTED_SUFFIXES as ARTIFACT_SUFFIXES,
@@ -243,7 +243,7 @@ def has_embedded_native_declaration(path: Path) -> bool:
         return has_embedded_freecad_declaration(path)
     if suffix == ".blend":
         return has_embedded_blend_declaration(path)
-    if suffix == ".otf":
+    if suffix in {".otf", ".ttf"}:
         return has_embedded_font_declaration(path)
     return False
 
