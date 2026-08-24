@@ -858,52 +858,6 @@ def _captured_shaft_head_recess(
     )
 
 
-def _captured_alignment_centers(
-    limits: CapturedEnclosureLimits,
-    params: DesignParameters = DESIGN,
-) -> tuple[tuple[float, float], ...]:
-    enclosure = params.drum_enclosure
-    x_centers = (
-        (limits.outer_x_min + limits.inner_x_min) / 2,
-        (limits.outer_x_max + limits.inner_x_max) / 2,
-    )
-    y_centers = (
-        limits.back_y + enclosure.alignment_end_inset,
-        limits.front_y - enclosure.alignment_end_inset,
-    )
-    return tuple((x, y) for x in x_centers for y in y_centers)
-
-
-def _captured_alignment_frustums(
-    limits: CapturedEnclosureLimits,
-    params: DesignParameters = DESIGN,
-    *,
-    sockets: bool,
-) -> cq.Shape:
-    """Four 45-degree truncated pyramids or their clearance sockets."""
-
-    enclosure = params.drum_enclosure
-    split_height = enclosure.capture_split_height
-    lower_split = split_height - enclosure.split_gap / 2
-    upper_split = split_height + enclosure.split_gap / 2
-    clearance = enclosure.alignment_clearance if sockets else 0.0
-    base_size = enclosure.alignment_base_size + 2 * clearance
-    top_size = enclosure.alignment_top_size + 2 * clearance
-    start_z = upper_split - EPSILON if sockets else lower_split - EPSILON
-    height = enclosure.alignment_height + 2 * EPSILON
-    frustums = []
-    for x, y in _captured_alignment_centers(limits, params):
-        frustums.append(
-            cq.Workplane("XY", origin=(x, y, start_z))
-            .rect(base_size, base_size)
-            .workplane(offset=height)
-            .rect(top_size, top_size)
-            .loft(combine=True)
-            .val()
-        )
-    return cq.Compound.makeCompound(frustums)
-
-
 def _captured_stack_alignment_centers(
     limits: CapturedEnclosureLimits,
     params: DesignParameters = DESIGN,
@@ -953,40 +907,6 @@ def _captured_stack_alignment_frustums(
             .val()
         )
     return cq.Compound.makeCompound(frustums)
-
-
-def _captured_magnet_pockets(
-    limits: CapturedEnclosureLimits,
-    params: DesignParameters = DESIGN,
-    *,
-    upper: bool,
-) -> cq.Shape:
-    """One FDM-compensated magnet insert per side at the centre of the split."""
-
-    enclosure = params.drum_enclosure
-    radius = enclosure.magnet_diameter / 2 + enclosure.magnet_radial_clearance
-    depth = enclosure.magnet_thickness + enclosure.magnet_depth_clearance + EPSILON
-    center_y = (limits.back_y + limits.front_y) / 2
-    x_centers = (
-        (limits.outer_x_min + limits.inner_x_min) / 2,
-        (limits.outer_x_max + limits.inner_x_max) / 2,
-    )
-    if upper:
-        start_z = enclosure.capture_split_height + enclosure.split_gap / 2 - EPSILON
-        direction = cq.Vector(0, 0, 1)
-    else:
-        start_z = enclosure.capture_split_height - enclosure.split_gap / 2 + EPSILON
-        direction = cq.Vector(0, 0, -1)
-    pockets = [
-        cq.Solid.makeCylinder(
-            radius,
-            depth,
-            cq.Vector(x, center_y, start_z),
-            direction,
-        )
-        for x in x_centers
-    ]
-    return cq.Compound.makeCompound(pockets)
 
 
 def _captured_stack_magnet_pocket(
@@ -1330,78 +1250,32 @@ def _captured_enclosure_shell(
     return shell.cut(_captured_pawl_pilot(limits, params)).clean()
 
 
-def _captured_enclosure_half(
-    upper: bool,
+def _captured_enclosure(
     capture: Mapping[str, Any],
     params: DesignParameters = DESIGN,
 ) -> cq.Shape:
-    enclosure = params.drum_enclosure
-    limits = captured_enclosure_limits(capture, params)
-    lower_split = enclosure.capture_split_height - enclosure.split_gap / 2
-    upper_split = enclosure.capture_split_height + enclosure.split_gap / 2
-    if upper:
-        clip_min = upper_split
-        clip_max = limits.outer_top_z + 1
-    else:
-        clip_min = limits.outer_bottom_z - 1
-        clip_max = lower_split
+    """Complete printable enclosure with only external stacking interfaces."""
 
-    clipping_box = (
-        cq.Workplane("XY")
-        .box(
-            limits.outer_width + 20,
-            2 * limits.outer_depth,
-            clip_max - clip_min,
-        )
-        .translate(
-            (
-                (limits.outer_x_min + limits.outer_x_max) / 2,
-                (limits.back_y + limits.front_y) / 2,
-                (clip_min + clip_max) / 2,
-            )
-        )
-        .val()
+    limits = captured_enclosure_limits(capture, params)
+    stack_keys = _captured_stack_alignment_frustums(limits, params, sockets=False)
+    stack_sockets = _captured_stack_alignment_frustums(limits, params, sockets=True)
+    return (
+        _captured_enclosure_shell(capture, params)
+        .fuse(_captured_shaft_support(limits, params))
+        .fuse(stack_keys)
+        .cut(_captured_shaft_head_recess(limits, params))
+        .cut(stack_sockets)
+        .cut(_captured_top_alpha_cutter(limits, params))
+        .cut(_captured_stack_magnet_pocket(limits, params, top=True))
+        .cut(_captured_stack_magnet_pocket(limits, params, top=False))
+        .clean()
     )
-    half = _captured_enclosure_shell(capture, params).intersect(clipping_box).clean()
-    alignment = _captured_alignment_frustums(
-        limits,
-        params,
-        sockets=upper,
-    )
-    stack_alignment = _captured_stack_alignment_frustums(
-        limits,
-        params,
-        sockets=upper,
-    )
-    if upper:
-        half = (
-            half.cut(alignment)
-            .cut(stack_alignment)
-            .cut(_captured_top_alpha_cutter(limits, params))
-            .cut(_captured_magnet_pockets(limits, params, upper=True))
-            .cut(_captured_stack_magnet_pocket(limits, params, top=True))
-            .clean()
-        )
-    else:
-        half = (
-            half.fuse(_captured_shaft_support(limits, params))
-            .fuse(alignment)
-            .fuse(stack_alignment)
-            .cut(_captured_shaft_head_recess(limits, params))
-            .cut(_captured_magnet_pockets(limits, params, upper=False))
-            .cut(_captured_stack_magnet_pocket(limits, params, top=False))
-            .clean()
-        )
-    return half
 
 
 def captured_drum_enclosure_parts(
     capture: Mapping[str, Any],
     params: DesignParameters = DESIGN,
 ) -> dict[str, cq.Shape]:
-    """Two printable enclosure halves fitted to a captured settled mechanism."""
+    """One printable enclosure fitted to a captured settled mechanism."""
 
-    return {
-        "enclosure_upper": _captured_enclosure_half(True, capture, params),
-        "enclosure_lower": _captured_enclosure_half(False, capture, params),
-    }
+    return {"enclosure": _captured_enclosure(capture, params)}

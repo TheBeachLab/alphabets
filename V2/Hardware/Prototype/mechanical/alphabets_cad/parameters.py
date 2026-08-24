@@ -144,7 +144,7 @@ class EnclosureReferenceDimensions:
 
 @dataclass(frozen=True)
 class DrumEnclosureDimensions:
-    """Printable two-part enclosure around the current 85 mm drum."""
+    """Printable one-piece enclosure around the current drum."""
 
     top_distance: float = 66.32
     bottom_distance: float = 75.0
@@ -153,8 +153,6 @@ class DrumEnclosureDimensions:
     wall_thickness: float = 8.0
     side_inset_depth: float = 6.0
     capture_outer_corner_radius: float = 10.0
-    split_gap: float = 0.2
-    capture_split_height: float = 12.0
     pawl_mount_land_margin: float = 2.0
     docking_clearance: float = 0.3
     motor_cable_clearance: float = 1.0
@@ -179,7 +177,6 @@ class DrumEnclosureDimensions:
     alignment_base_size: float = 8.0
     alignment_top_size: float = 2.0
     alignment_clearance: float = 0.2
-    alignment_end_inset: float = 20.0
     stack_alignment_x_inset: float = 14.0
     stack_alignment_y_inset: float = 20.0
     top_mark_character: str = "α"
@@ -200,7 +197,6 @@ class DrumEnclosureDimensions:
     pawl_head_recess_depth: float = 1.0
     pawl_tip_radius: float = 2.0
     prototype_pawl_extension: float = 3.0
-    closure_method: str = "embedded_magnets"
     screw_clearance_diameter: float = 3.4
     screw_pilot_diameter: float = 2.6
     screw_head_diameter: float = 6.2

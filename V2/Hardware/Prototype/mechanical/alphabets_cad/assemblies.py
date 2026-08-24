@@ -384,7 +384,7 @@ def captured_enclosure_design_components(
     capture_path: Path,
     params: DesignParameters = DESIGN,
 ) -> tuple[Component, ...]:
-    """Captured mechanism inside its fitted two-part enclosure."""
+    """Captured mechanism inside its fitted one-piece enclosure."""
 
     data = load_card_capture(capture_path)
     capture_rotation = float(data["controller"]["rotation_x_degrees"])

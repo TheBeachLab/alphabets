@@ -31,10 +31,8 @@ from alphabets_cad.export import (
 from alphabets_cad.parameters import DESIGN, load_design_profile
 from alphabets_cad.parts import (
     ALPHA_FONT_PATH,
-    _captured_alignment_frustums,
     _captured_docking_recess,
     _captured_electronics_card_envelope,
-    _captured_magnet_pockets,
     _captured_motor_mount_bosses,
     _captured_motor_mount_pilots,
     _captured_motor_mount_pocket,
@@ -525,8 +523,7 @@ def test_capture_design_view_groups_fit_data_without_floor_or_pawl_solids() -> N
     components = captured_enclosure_design_components(CARD_CAPTURE)
     names = {component.name for component in components}
     assert {
-        "enclosure_upper",
-        "enclosure_lower",
+        "enclosure",
         "pawl_definitive",
         "pawl_prototype",
         "motor_side",
@@ -547,7 +544,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     capture = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
     limits = captured_enclosure_limits(capture)
     parts = captured_drum_enclosure_parts(capture)
-    assert tuple(parts) == ("enclosure_upper", "enclosure_lower")
+    assert tuple(parts) == ("enclosure",)
     assert all(shape.isValid() for shape in parts.values())
     assert all(len(shape.Solids()) == 1 for shape in parts.values())
 
@@ -568,33 +565,30 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert limits.outer_height == pytest.approx(157.32)
     assert enclosure.front_chamfer == pytest.approx(enclosure.wall_thickness / 2)
 
-    upper = parts["enclosure_upper"]
-    lower = parts["enclosure_lower"]
-    assert upper.BoundingBox().zmin == pytest.approx(
-        enclosure.capture_split_height + enclosure.split_gap / 2,
-        abs=1e-5,
-    )
-    assert lower.BoundingBox().zmax == pytest.approx(
-        enclosure.capture_split_height
-        + enclosure.alignment_height
-        - enclosure.split_gap / 2
-        + 0.05,
-        abs=1e-5,
-    )
-    assert upper.intersect(lower).Volume() == pytest.approx(0)
-    assert upper.BoundingBox().xlen == pytest.approx(limits.outer_width)
-    assert lower.BoundingBox().xlen == pytest.approx(limits.outer_width)
-    assert lower.BoundingBox().zmin == pytest.approx(
+    shell = parts["enclosure"]
+    assert shell.BoundingBox().xlen == pytest.approx(limits.outer_width)
+    assert shell.BoundingBox().zmin == pytest.approx(
         limits.outer_bottom_z - enclosure.alignment_height,
         abs=1e-5,
+    )
+    assert shell.BoundingBox().zmax == pytest.approx(limits.outer_top_z, abs=1e-5)
+
+    # The former split plane is continuous enclosure wall, without a seam,
+    # alignment keys or magnet pockets.
+    assert shell.isInside(
+        cq.Vector(
+            (limits.outer_x_min + limits.inner_x_min) / 2,
+            (limits.back_y + limits.front_y) / 2,
+            12.0,
+        ),
+        1e-6,
     )
 
     for end_y in (limits.back_y, limits.front_y):
         opening_probe = (
             cq.Workplane("XY").box(20, 1, 80).translate((15, end_y, 0)).val()
         )
-        assert upper.intersect(opening_probe).Volume() == pytest.approx(0)
-        assert lower.intersect(opening_probe).Volume() == pytest.approx(0)
+        assert shell.intersect(opening_probe).Volume() == pytest.approx(0)
 
     pawls = captured_pawl_parts(capture)
     assert tuple(pawls) == ("pawl_definitive", "pawl_prototype")
@@ -621,7 +615,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert pawls["pawl_prototype"].BoundingBox().zmin == pytest.approx(
         pawl_box.zmin - enclosure.prototype_pawl_extension
     )
-    assert upper.intersect(pawl).Volume() == pytest.approx(0)
+    assert shell.intersect(pawl).Volume() == pytest.approx(0)
     assert pawl.isInside(
         cq.Vector(4.8, limits.front_y + 0.5, _captured_pawl_screw_axis_z(limits)),
         1e-6,
@@ -665,25 +659,25 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
 
     # The 4 mm treatment chamfers only the inner front rim and restores a flat
     # land around the replaceable pawl; the outside front edge stays square.
-    assert upper.isInside(
+    assert shell.isInside(
         cq.Vector(6, limits.front_y - 0.1, limits.inner_top_z + 0.1),
         1e-6,
     )
-    assert not upper.isInside(
+    assert not shell.isInside(
         cq.Vector(15, limits.front_y - 0.1, limits.inner_top_z + 0.1),
         1e-6,
     )
-    assert upper.isInside(
+    assert shell.isInside(
         cq.Vector(15, limits.front_y - 4, limits.inner_top_z + 0.1),
         1e-6,
     )
-    assert upper.isInside(
+    assert shell.isInside(
         cq.Vector(15, limits.front_y - 0.1, limits.outer_top_z - 0.1),
         1e-6,
     )
 
     pawl_pilot = _captured_pawl_pilot(limits)
-    assert upper.intersect(pawl_pilot).Volume() == pytest.approx(0, abs=1e-6)
+    assert shell.intersect(pawl_pilot).Volume() == pytest.approx(0, abs=1e-6)
     assert pawl_pilot.BoundingBox().ymax == pytest.approx(
         limits.front_y + 0.05, abs=1e-5
     )
@@ -746,7 +740,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         enclosure.shaft_head_recess_depth + 0.1,
         abs=1e-5,
     )
-    assert lower.intersect(shaft_head_recess).Volume() == pytest.approx(
+    assert shell.intersect(shaft_head_recess).Volume() == pytest.approx(
         0,
         abs=1e-6,
     )
@@ -756,11 +750,11 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert motor_bosses.isValid()
     assert len(motor_bosses.Solids()) == 2
     assert len(motor_pilots.Solids()) == 2
-    assert motor_bosses.cut(motor_pilots).cut(lower).Volume() == pytest.approx(
+    assert motor_bosses.cut(motor_pilots).cut(shell).Volume() == pytest.approx(
         0,
         abs=1e-6,
     )
-    assert lower.intersect(motor_pilots).Volume() == pytest.approx(0, abs=1e-6)
+    assert shell.intersect(motor_pilots).Volume() == pytest.approx(0, abs=1e-6)
     assert motor_bosses.BoundingBox().xmax == pytest.approx(
         -DESIGN.drum_outer_width / 2 - enclosure.motor_mount_disc_clearance
     )
@@ -805,30 +799,17 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         1e-6,
     )
 
-    alignment_keys = _captured_alignment_frustums(limits, sockets=False)
-    alignment_sockets = _captured_alignment_frustums(limits, sockets=True)
-    assert alignment_keys.isValid()
-    assert alignment_sockets.isValid()
-    assert len(alignment_keys.Solids()) == 4
-    assert len(alignment_sockets.Solids()) == 4
-    assert alignment_keys.cut(lower).Volume() == pytest.approx(0, abs=1e-6)
-    assert upper.intersect(alignment_sockets).Volume() == pytest.approx(0, abs=1e-6)
-    assert alignment_keys.BoundingBox().zlen == pytest.approx(
-        enclosure.alignment_height + 0.1,
-        abs=1e-5,
-    )
-
     stack_keys = _captured_stack_alignment_frustums(limits, sockets=False)
     stack_sockets = _captured_stack_alignment_frustums(limits, sockets=True)
     assert stack_keys.isValid()
     assert stack_sockets.isValid()
     assert len(stack_keys.Solids()) == 4
     assert len(stack_sockets.Solids()) == 4
-    assert stack_keys.cut(lower).Volume() == pytest.approx(0, abs=1e-6)
-    assert upper.intersect(stack_sockets).Volume() == pytest.approx(0, abs=1e-6)
+    assert stack_keys.cut(shell).Volume() == pytest.approx(0, abs=1e-6)
+    assert shell.intersect(stack_sockets).Volume() == pytest.approx(0, abs=1e-6)
     stacked_keys = stack_keys.translate((0, 0, limits.outer_height))
     assert stacked_keys.cut(stack_sockets).Volume() == pytest.approx(0, abs=1e-6)
-    assert stacked_keys.intersect(upper).Volume() == pytest.approx(0, abs=1e-6)
+    assert stacked_keys.intersect(shell).Volume() == pytest.approx(0, abs=1e-6)
     assert stack_keys.BoundingBox().xmin == pytest.approx(
         limits.outer_x_min + enclosure.capture_outer_corner_radius,
         abs=1e-5,
@@ -838,37 +819,12 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         abs=1e-5,
     )
 
-    upper_magnets = _captured_magnet_pockets(limits, upper=True)
-    lower_magnets = _captured_magnet_pockets(limits, upper=False)
-    assert len(upper_magnets.Solids()) == 2
-    assert len(lower_magnets.Solids()) == 2
     expected_magnet_radius = (
         enclosure.magnet_diameter / 2 + enclosure.magnet_radial_clearance
     )
     expected_magnet_depth = (
         enclosure.magnet_thickness + enclosure.magnet_depth_clearance + 0.05
     )
-    assert upper_magnets.Volume() == pytest.approx(
-        2 * math.pi * expected_magnet_radius**2 * expected_magnet_depth,
-        rel=1e-6,
-    )
-    assert upper.intersect(upper_magnets).Volume() == pytest.approx(0, abs=1e-6)
-    assert lower.intersect(lower_magnets).Volume() == pytest.approx(0, abs=1e-6)
-    for upper_magnet, lower_magnet in zip(
-        upper_magnets.Solids(), lower_magnets.Solids(), strict=True
-    ):
-        assert upper_magnet.Center().x == pytest.approx(lower_magnet.Center().x)
-        assert upper_magnet.Center().y == pytest.approx(lower_magnet.Center().y)
-        assert upper_magnet.Center().y == pytest.approx(
-            (
-                limits.back_y
-                + enclosure.alignment_end_inset
-                + limits.front_y
-                - enclosure.alignment_end_inset
-            )
-            / 2
-        )
-
     top_stack_magnet = _captured_stack_magnet_pocket(limits, top=True)
     bottom_stack_magnet = _captured_stack_magnet_pocket(limits, top=False)
     assert top_stack_magnet.isValid()
@@ -886,8 +842,8 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         (limits.back_y + limits.front_y) / 2
     )
     assert bottom_stack_magnet.Center().y == pytest.approx(top_stack_magnet.Center().y)
-    assert upper.intersect(top_stack_magnet).Volume() == pytest.approx(0, abs=1e-6)
-    assert lower.intersect(bottom_stack_magnet).Volume() == pytest.approx(
+    assert shell.intersect(top_stack_magnet).Volume() == pytest.approx(0, abs=1e-6)
+    assert shell.intersect(bottom_stack_magnet).Volume() == pytest.approx(
         0,
         abs=1e-6,
     )
@@ -919,9 +875,9 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         .val()
     )
     assert alpha.intersect(split_probe).Volume() == pytest.approx(0, abs=1e-6)
-    assert upper.intersect(alpha).Volume() == pytest.approx(0, abs=1e-6)
+    assert shell.intersect(alpha).Volume() == pytest.approx(0, abs=1e-6)
     assert alpha.intersect(stack_sockets).Volume() == pytest.approx(0, abs=1e-6)
-    assert upper.BoundingBox().ymax == pytest.approx(
+    assert shell.BoundingBox().ymax == pytest.approx(
         limits.front_y,
         abs=1e-5,
     )
@@ -929,7 +885,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     print_plate, print_layout = _captured_bambu_a1_mini_plate(parts, pawls)
     print_box = print_plate.BoundingBox()
     assert print_plate.isValid()
-    assert len(print_plate.Solids()) == 3
+    assert len(print_plate.Solids()) == 2
     assert print_box.zmin == pytest.approx(0, abs=1e-5)
     assert (print_box.xmin + print_box.xmax) / 2 == pytest.approx(
         A1_MINI_BUILD_VOLUME_MM[0] / 2
@@ -942,10 +898,9 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert print_box.xmax <= A1_MINI_BUILD_VOLUME_MM[0] - A1_MINI_PLATE_MARGIN_MM
     assert print_box.ymax <= A1_MINI_BUILD_VOLUME_MM[1] - A1_MINI_PLATE_MARGIN_MM
     assert print_box.zmax <= A1_MINI_BUILD_VOLUME_MM[2]
-    assert print_layout["enclosure_upper"]["bed_face"] == "front enclosure rim"
-    assert print_layout["enclosure_lower"]["bed_face"] == "front enclosure rim"
+    assert print_layout["enclosure"]["bed_face"] == "front enclosure rim"
     assert print_layout["pawl_prototype"]["bed_face"] == "flat rear face"
-    assert print_layout["enclosure_upper"]["rotation_deg"] == {"x": -90, "z": 0}
+    assert print_layout["enclosure"]["rotation_deg"] == {"x": -90, "z": 0}
 
 
 def test_one_side_inset_controls_both_recesses_and_remaining_wall() -> None:
@@ -1052,9 +1007,7 @@ def test_captured_enclosure_clears_mechanism_and_ignores_floor_solver_outliers()
 ):
     components = captured_enclosure_design_components(CARD_CAPTURE)
     shapes = {component.name: component.shape for component in components}
-    shell = cq.Compound.makeCompound(
-        [shapes["enclosure_upper"], shapes["enclosure_lower"]]
-    )
+    shell = shapes["enclosure"]
     for name in (
         "motor_body",
         "motor_backpack",
@@ -1077,10 +1030,7 @@ def test_captured_enclosure_clears_mechanism_and_ignores_floor_solver_outliers()
     intersecting_cards = {
         number
         for number in range(DESIGN.drum.positions)
-        if any(
-            shapes[half].intersect(shapes[f"card_{number:02d}"]).Volume() > 1e-5
-            for half in ("enclosure_upper", "enclosure_lower")
-        )
+        if shell.intersect(shapes[f"card_{number:02d}"]).Volume() > 1e-5
     }
     assert intersecting_cards == set()
 
@@ -1100,7 +1050,7 @@ def test_cq_editor_enclosure_entry_point_builds_exploded_module() -> None:
     assert isinstance(result, cq.Assembly)
     assert result.name == "alphabets-v2-captured-enclosure"
     assert result.toCompound().isValid()
-    assert {"enclosure_upper", "enclosure_lower"} < set(namespace["objects"])
+    assert "enclosure" in namespace["objects"]
     assert "pawl_prototype" in namespace["objects"]
     assert "card_00" in namespace["objects"]
     assert "sticker_00_front" in namespace["objects"]
@@ -1193,8 +1143,7 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert manifest["capture"]["frame"] == 27464
     assert manifest["capture"]["controller"]["display_position"] == 37
     assert manifest["limits_mm"]["inner_bottom_z"] == pytest.approx(-75, abs=1e-5)
-    assert manifest["geometry"]["enclosure_upper"]["solid_count"] == 1
-    assert manifest["geometry"]["enclosure_lower"]["solid_count"] == 1
+    assert manifest["geometry"]["enclosure"]["solid_count"] == 1
     assert manifest["geometry"]["pawl_prototype"]["solid_count"] == 1
     assert manifest["parameters"]["top_mark_depth"] == pytest.approx(0.2)
     assert manifest["parameters"]["top_mark_rotation"] == pytest.approx(180)
@@ -1212,6 +1161,8 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert manifest["parameters"]["magnet_thickness"] == pytest.approx(1)
     assert manifest["parameters"]["magnet_radial_clearance"] == pytest.approx(0.2)
     assert manifest["parameters"]["magnet_depth_clearance"] == pytest.approx(0.2)
+    assert "capture_split_height" not in manifest["parameters"]
+    assert "split_gap" not in manifest["parameters"]
     assert manifest["parameters"]["pawl_head_recess_diameter"] == pytest.approx(6)
     assert manifest["parameters"]["pawl_head_recess_depth"] == pytest.approx(1)
     assert manifest["parameters"]["shaft_head_recess_diameter"] == pytest.approx(6)
@@ -1222,11 +1173,13 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert manifest["physical_variant"] == "prototype"
     assert manifest["character_set"] == "demo-64"
     assert manifest["features"]["visible_assembly_pawl"] == "prototype"
-    assert manifest["print_plate"]["geometry"]["solid_count"] == 3
+    assert "without an assembly seam" in manifest["features"]["enclosure_construction"]
+    assert "split_magnets" not in manifest["features"]
+    assert "part_alignment" not in manifest["features"]
+    assert manifest["print_plate"]["geometry"]["solid_count"] == 2
 
     expected_step = {
-        "captured-enclosure-upper.step",
-        "captured-enclosure-lower.step",
+        "captured-enclosure.step",
         "captured-enclosure-assembly.step",
         "captured-enclosure-pawl-prototype.step",
     }
@@ -1238,8 +1191,7 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
 
     expected_stl = {
         "captured-enclosure-bambu-a1-mini-prototype-plate.stl",
-        "captured-enclosure-upper.stl",
-        "captured-enclosure-lower.stl",
+        "captured-enclosure.stl",
         "captured-enclosure-pawl-prototype.stl",
     }
     assert {path.name for path in (output / "print").glob("*.stl")} == expected_stl

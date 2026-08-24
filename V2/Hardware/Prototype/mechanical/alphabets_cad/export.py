@@ -64,37 +64,24 @@ def _captured_bambu_a1_mini_plate(
     parts: dict[str, cq.Shape],
     pawls: dict[str, cq.Shape],
 ) -> tuple[cq.Shape, dict[str, dict[str, object]]]:
-    """Lay out the three Prototype printable parts on an A1 mini plate."""
+    """Lay out the one-piece enclosure and Prototype pawl on an A1 mini plate."""
 
     margin = A1_MINI_PLATE_MARGIN_MM
-    gap = A1_MINI_PART_GAP_MM
-    upper_preview = _place_on_plate(parts["enclosure_upper"], x=0, y=0, x_rotation=-90)
-    lower_preview = _place_on_plate(parts["enclosure_lower"], x=0, y=0, x_rotation=-90)
-    upper_size = upper_preview.BoundingBox()
-    lower_size = lower_preview.BoundingBox()
-    group_width = max(upper_size.xlen, lower_size.xlen)
-    group_height = lower_size.ylen + gap + upper_size.ylen
-    group_x = (A1_MINI_BUILD_VOLUME_MM[0] - group_width) / 2
-    group_y = (A1_MINI_BUILD_VOLUME_MM[1] - group_height) / 2
-    lower_x = group_x + (group_width - lower_size.xlen) / 2
-    upper_x = group_x + (group_width - upper_size.xlen) / 2
+    enclosure_preview = _place_on_plate(parts["enclosure"], x=0, y=0, x_rotation=-90)
+    enclosure_size = enclosure_preview.BoundingBox()
+    enclosure_x = (A1_MINI_BUILD_VOLUME_MM[0] - enclosure_size.xlen) / 2
+    enclosure_y = (A1_MINI_BUILD_VOLUME_MM[1] - enclosure_size.ylen) / 2
     prototype_preview = _place_on_plate(
         pawls["pawl_prototype"], x=0, y=0, x_rotation=90
     )
     prototype_size = prototype_preview.BoundingBox()
     pawl_x = (A1_MINI_BUILD_VOLUME_MM[0] - prototype_size.xlen) / 2
-    pawl_y = group_y + (lower_size.ylen - prototype_size.ylen) / 2
+    pawl_y = (A1_MINI_BUILD_VOLUME_MM[1] - prototype_size.ylen) / 2
     placements = {
-        "enclosure_upper": _place_on_plate(
-            parts["enclosure_upper"],
-            x=upper_x,
-            y=group_y + lower_size.ylen + gap,
-            x_rotation=-90,
-        ),
-        "enclosure_lower": _place_on_plate(
-            parts["enclosure_lower"],
-            x=lower_x,
-            y=group_y,
+        "enclosure": _place_on_plate(
+            parts["enclosure"],
+            x=enclosure_x,
+            y=enclosure_y,
             x_rotation=-90,
         ),
         "pawl_prototype": _place_on_plate(
@@ -153,10 +140,22 @@ def generate_captured_enclosure(
     directories = {name: output_root / name for name in ("print", "step", "preview")}
     for directory in directories.values():
         directory.mkdir(parents=True, exist_ok=True)
+    for obsolete in (
+        directories["print"] / "captured-enclosure-upper.stl",
+        directories["print"] / "captured-enclosure-lower.stl",
+        directories["step"] / "captured-enclosure-upper.step",
+        directories["step"] / "captured-enclosure-lower.step",
+    ):
+        obsolete.unlink(missing_ok=True)
 
     capture = json.loads(capture_path.read_text(encoding="utf-8"))
     parts = captured_drum_enclosure_parts(capture, params)
     pawls = captured_pawl_parts(capture, params)
+    prototype_pawl = pawls["pawl_prototype"]
+    geometry_summary = {
+        name: _shape_summary(shape)
+        for name, shape in {**parts, "pawl_prototype": prototype_pawl}.items()
+    }
     assembly = cq.Compound.makeCompound([*parts.values(), pawls["pawl_prototype"]])
     limits = captured_enclosure_limits(capture, params)
     remaining_docking_gap = (
@@ -165,20 +164,18 @@ def generate_captured_enclosure(
         + params.drum_enclosure.docking_clearance
     )
 
-    for half in ("upper", "lower"):
-        shape = parts[f"enclosure_{half}"]
-        _export_step(
-            shape,
-            directories["step"] / f"captured-enclosure-{half}.step",
-        )
-        stl_path = directories["print"] / f"captured-enclosure-{half}.stl"
-        shape.exportStl(
-            str(stl_path),
-            tolerance=0.08,
-            angularTolerance=0.125,
-        )
-        embed_artifact_license(stl_path)
-    prototype_pawl = pawls["pawl_prototype"]
+    enclosure = parts["enclosure"]
+    _export_step(
+        enclosure,
+        directories["step"] / "captured-enclosure.step",
+    )
+    enclosure_path = directories["print"] / "captured-enclosure.stl"
+    enclosure.exportStl(
+        str(enclosure_path),
+        tolerance=0.08,
+        angularTolerance=0.125,
+    )
+    embed_artifact_license(enclosure_path)
     _export_step(
         prototype_pawl,
         directories["step"] / "captured-enclosure-pawl-prototype.step",
@@ -257,7 +254,6 @@ def generate_captured_enclosure(
             "wall_thickness": params.drum_enclosure.wall_thickness,
             "side_inset_depth": params.drum_enclosure.side_inset_depth,
             "outer_corner_radius": (params.drum_enclosure.capture_outer_corner_radius),
-            "capture_split_height": params.drum_enclosure.capture_split_height,
             "front_chamfer": params.drum_enclosure.front_chamfer,
             "docking_clearance": params.drum_enclosure.docking_clearance,
             "motor_cable_clearance": params.drum_enclosure.motor_cable_clearance,
@@ -335,7 +331,6 @@ def generate_captured_enclosure(
             "magnet_thickness": params.drum_enclosure.magnet_thickness,
             "magnet_radial_clearance": (params.drum_enclosure.magnet_radial_clearance),
             "magnet_depth_clearance": (params.drum_enclosure.magnet_depth_clearance),
-            "split_gap": params.drum_enclosure.split_gap,
         },
         "features": {
             "front_open": True,
@@ -366,17 +361,13 @@ def generate_captured_enclosure(
                 "8 mm inner corner radius and continuous "
                 f"{min(params.drum_enclosure.side_feature_chamfer, params.drum_enclosure.side_inset_depth):g} mm lead-in"
             ),
-            "split_magnets": (
-                "one unchamfered 3.4 x 1.2 mm magnet insert per side and per "
-                "half for nominal 3 x 1 mm magnets"
+            "enclosure_construction": (
+                "one continuous printable shell without an assembly seam, "
+                "split magnets or internal alignment keys"
             ),
             "vertical_stack_magnets": (
                 "one centred unchamfered 3.4 x 1.2 mm insert in the alpha "
                 "top face and one matching insert in the module base"
-            ),
-            "part_alignment": (
-                "four 3 mm truncated pyramids with 45 degree sides and "
-                "0.2 mm socket clearance"
             ),
             "vertical_stacking": (
                 "four downward 3 mm truncated pyramids and four matching "
@@ -395,7 +386,7 @@ def generate_captured_enclosure(
             ),
             "top_mark": (
                 "large split alpha rotated toward the front and recessed "
-                "0.2 mm into the upper face through a nominal 0.2 mm chamfer"
+                "0.2 mm into the top face through a nominal 0.2 mm chamfer"
             ),
             "side_docking_relief": (
                 f"{params.drum_enclosure.side_inset_depth:g} mm motor/electronics "
@@ -404,10 +395,7 @@ def generate_captured_enclosure(
                 "for equal orientation"
             ),
         },
-        "geometry": {
-            name: _shape_summary(shape)
-            for name, shape in {**parts, "pawl_prototype": prototype_pawl}.items()
-        },
+        "geometry": geometry_summary,
         "print_plate": {
             "file": "print/captured-enclosure-bambu-a1-mini-prototype-plate.stl",
             "printer": "Bambu Lab A1 mini",

@@ -68,10 +68,11 @@ make check PYTHON=/path/to/python
 ```
 
 `make generate` creates the Prototype card, drum, motor references and neutral
-manufacturing files. `make generate-captured-enclosure` creates the two
-enclosure halves, Prototype pawl, assembly, review image and a three-part Bambu
-Lab A1 Mini plate. `make verify-generated` regenerates everything and fails if
-the committed outputs are stale.
+manufacturing files. `make generate-captured-enclosure` creates the one-piece
+enclosure, Prototype pawl, assembly, review image and a two-object Bambu Lab A1
+Mini plate. The enclosure prints standing on its front rim, with the pawl
+inside the open area of the same plate. `make verify-generated` regenerates
+everything and fails if the committed outputs are stale.
 
 ## View and adjust
 
@@ -93,6 +94,10 @@ The primary `[drum_enclosure]` controls use the drum centre as their origin:
 The front follows the saved front-card/pawl plane. `front_chamfer` is derived
 as `wall_thickness / 2`, and the material left behind both side recesses is
 `wall_thickness - side_inset_depth`.
+
+The enclosure is one continuous shell. It has no horizontal assembly seam,
+split magnets or internal alignment keys. The external top/bottom magnet
+pockets and pyramids remain because they align complete modules when stacked.
 
 Captured card angles come from the settled Blender snapshot, while every card
 tab axis is rebuilt on the exact calculated centre of its rotated drum hole.
@@ -116,9 +121,9 @@ or `make gui-enclosure`.
 - `generated/cut/flap-card.dxf`: Prototype card cutter profile.
 - `generated/step/flap-card.step`: neutral 3D card model.
 - `generated/cut/drum-*.dxf`: matched 56 mm internal-width drum parts.
-- `generated/captured-enclosure/print/`: upper/lower STL, Prototype pawl and
-  three-part A1 Mini plate.
-- `generated/captured-enclosure/step/`: upper/lower, pawl and assembly STEP.
+- `generated/captured-enclosure/print/`: one-piece enclosure STL, Prototype
+  pawl and two-object A1 Mini plate.
+- `generated/captured-enclosure/step/`: enclosure, pawl and assembly STEP.
 - `generated/manifest.json` and `generated/captured-enclosure/manifest.json`:
   exact dimensions, bounds, source lineage and validation boundary.
 

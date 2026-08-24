@@ -16,6 +16,7 @@
   "character_set": "demo-64",
   "fabrication_status": "Parametric Prototype derivative of the printed Final CadQuery source. It uses the Prototype card, drum and pawl dimensions with the settled Final transforms; it requires a Prototype print and physical fit check.",
   "features": {
+    "enclosure_construction": "one continuous printable shell without an assembly seam, split magnets or internal alignment keys",
     "front_alignment": "automatic from the saved front-card/pawl capture plane; there is no manual front offset",
     "front_bed_printing": "6 mm 45 degree lead-ins on both side recesses and a 2 mm lead-in through the remaining motor bore wall; screw pilots remain cylindrical",
     "front_edge": "4 mm inner chamfer, derived as half the wall thickness, with a flat pawl land",
@@ -23,57 +24,35 @@
     "lower_shaft_support": "M3 self-tapping pilot in a 9 mm boss tapered continuously from the inside wall; user-supplied M3 screw forms the axle through the drum's 3.4 mm clearance hole",
     "motor_electronics_pocket": "single approximately 55.7 x 76.6 mm rounded-rectangle side pocket around the motor and a 50 x 35 mm electronics-card envelope, with an 8 mm inner corner radius and continuous 6 mm lead-in",
     "motor_mount": "two M3 self-tapping pilots in internal bosses tapered continuously from the inside wall",
-    "part_alignment": "four 3 mm truncated pyramids with 45 degree sides and 0.2 mm socket clearance",
     "rear_open": true,
     "replaceable_pawls": "Prototype pawl with a 1 mm outer-face chamfer, retained by one M3 screw into a self-tapping pilot",
     "screw_lugs": false,
     "side_docking_relief": "6 mm motor/electronics inset plus 6 mm opposite recess; 7.3 mm body gap still required for equal orientation",
-    "split_magnets": "one unchamfered 3.4 x 1.2 mm magnet insert per side and per half for nominal 3 x 1 mm magnets",
-    "top_mark": "large split alpha rotated toward the front and recessed 0.2 mm into the upper face through a nominal 0.2 mm chamfer",
+    "top_mark": "large split alpha rotated toward the front and recessed 0.2 mm into the top face through a nominal 0.2 mm chamfer",
     "vertical_stack_magnets": "one centred unchamfered 3.4 x 1.2 mm insert in the alpha top face and one matching insert in the module base",
     "vertical_stacking": "four downward 3 mm truncated pyramids and four matching top sockets with 0.2 mm clearance, inset to the tangent of the 10 mm enclosure corner radius",
     "visible_assembly_pawl": "prototype"
   },
   "geometry": {
-    "enclosure_lower": {
+    "enclosure": {
       "bounds_mm": {
         "x": [
-          -41.569485,
-          40.470565
+          -40.15,
+          40.15
         ],
         "y": [
-          -64.756336,
-          40.374796
+          -64.75,
+          40.301815
         ],
         "z": [
-          -87.47541,
-          16.369485
+          -86.0,
+          74.32
         ]
       },
-      "component_volume_sum_mm3": 171997.510361,
+      "component_volume_sum_mm3": 324370.829352,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 171997.510361
-    },
-    "enclosure_upper": {
-      "bounds_mm": {
-        "x": [
-          -41.55,
-          41.55
-        ],
-        "y": [
-          -64.754562,
-          40.374796
-        ],
-        "z": [
-          10.7,
-          75.794126
-        ]
-      },
-      "component_volume_sum_mm3": 151949.804554,
-      "solid_count": 1,
-      "valid": true,
-      "volume_mm3": 151949.804554
+      "volume_mm3": 324370.829352
     },
     "pawl_prototype": {
       "bounds_mm": {
@@ -82,11 +61,11 @@
           5.0
         ],
         "y": [
-          40.301193,
-          42.308306
+          40.301815,
+          42.301813
         ],
         "z": [
-          44.234002,
+          44.239874,
           74.32
         ]
       },
@@ -116,7 +95,6 @@
     "back_distance": 64.75,
     "boss_end_chamfer": 1.5,
     "bottom_distance": 75.0,
-    "capture_split_height": 12.0,
     "docking_clearance": 0.3,
     "electronics_card_center_y": 0.0,
     "electronics_card_center_z": -50.0,
@@ -157,7 +135,6 @@
     "side_clearance": 2.0,
     "side_feature_chamfer": 6.0,
     "side_inset_depth": 6.0,
-    "split_gap": 0.2,
     "stack_alignment_x_inset": 14.0,
     "stack_alignment_y_inset": 20.0,
     "top_distance": 66.32,
@@ -185,23 +162,23 @@
           130.15
         ],
         "y": [
-          7.415,
-          172.585
+          9.84,
+          170.16
         ],
         "z": [
           -0.0,
           105.051815
         ]
       },
-      "component_volume_sum_mm3": 324328.39139,
-      "solid_count": 3,
+      "component_volume_sum_mm3": 324751.909335,
+      "solid_count": 2,
       "valid": true,
-      "volume_mm3": 324328.39139
+      "volume_mm3": 324751.909335
     },
     "margin_mm": 5.0,
     "part_gap_mm": 2.0,
     "parts": {
-      "enclosure_lower": {
+      "enclosure": {
         "bed_face": "front enclosure rim",
         "bounds_mm": {
           "x": [
@@ -209,29 +186,8 @@
             130.15
           ],
           "y": [
-            7.415,
-            108.365
-          ],
-          "z": [
-            -0.0,
-            105.051815
-          ]
-        },
-        "rotation_deg": {
-          "x": -90,
-          "z": 0
-        }
-      },
-      "enclosure_upper": {
-        "bed_face": "front enclosure rim",
-        "bounds_mm": {
-          "x": [
-            49.85,
-            130.15
-          ],
-          "y": [
-            110.365,
-            172.585
+            9.84,
+            170.16
           ],
           "z": [
             -0.0,
@@ -251,8 +207,8 @@
             95.0
           ],
           "y": [
-            42.849937,
-            72.930063
+            74.959937,
+            105.040063
           ],
           "z": [
             -0.0,
