@@ -369,6 +369,15 @@ def design_from_mapping(
         raise ValueError(
             "side_inset_depth must be non-negative and smaller than wall_thickness"
         )
+    chamfers = {
+        "side_feature_chamfer": enclosure.side_feature_chamfer,
+        "boss_end_chamfer": enclosure.boss_end_chamfer,
+        "top_mark_chamfer": enclosure.top_mark_chamfer,
+        "pawl_outer_chamfer": enclosure.pawl_outer_chamfer,
+    }
+    for name, value in chamfers.items():
+        if value < 0:
+            raise ValueError(f"{name} cannot be negative")
     return result
 
 

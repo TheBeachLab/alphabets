@@ -526,6 +526,13 @@ def _x_axis_chamfered_circle(
     """Circle recess with a 45-degree lead-in from an exterior side face."""
 
     transition = min(chamfer, depth)
+    if transition <= 0:
+        return cq.Solid.makeCylinder(
+            radius,
+            depth + EPSILON,
+            cq.Vector(x, y, z),
+            cq.Vector(direction, 0, 0),
+        ).clean()
     outer_plane = cq.Plane(
         origin=(x, y, z),
         xDir=(0, 1, 0),
@@ -573,6 +580,14 @@ def _x_axis_chamfered_rectangle(
         xDir=(0, 1, 0),
         normal=(direction, 0, 0),
     )
+    if transition <= 0:
+        return (
+            cq.Workplane(outer_plane)
+            .rect(width, height)
+            .extrude(depth + EPSILON)
+            .val()
+            .clean()
+        )
     inner_x = x + direction * transition
     inner_plane = cq.Plane(
         origin=(inner_x, y, z),
@@ -679,6 +694,12 @@ def _captured_motor_mount_pocket(
         height,
         enclosure.motor_electronics_corner_radius,
     )
+    if chamfer <= 0:
+        return cq.Solid.extrudeLinear(
+            inner_wire,
+            [],
+            cq.Vector(depth + EPSILON, 0, 0),
+        ).clean()
     lead_in = cq.Solid.makeLoft([outer_wire, inner_wire], True)
     if chamfer == depth:
         return lead_in.clean()
@@ -742,17 +763,25 @@ def _captured_motor_mount_bosses(
             cq.Vector(anchor_x, mount_y, -params.motor.shaft_offset),
             cq.Vector(1, 0, 0),
         )
-        lead_out = cq.Solid.makeCone(
-            enclosure.motor_mount_boss_radius,
-            enclosure.motor_mount_boss_radius - radial_taper,
-            visible_length,
-            cq.Vector(
-                inner_wall_x,
-                mount_y,
-                -params.motor.shaft_offset,
-            ),
-            cq.Vector(1, 0, 0),
-        )
+        if radial_taper > 0:
+            lead_out = cq.Solid.makeCone(
+                enclosure.motor_mount_boss_radius,
+                enclosure.motor_mount_boss_radius - radial_taper,
+                visible_length,
+                cq.Vector(
+                    inner_wall_x,
+                    mount_y,
+                    -params.motor.shaft_offset,
+                ),
+                cq.Vector(1, 0, 0),
+            )
+        else:
+            lead_out = cq.Solid.makeCylinder(
+                enclosure.motor_mount_boss_radius,
+                visible_length,
+                cq.Vector(inner_wall_x, mount_y, -params.motor.shaft_offset),
+                cq.Vector(1, 0, 0),
+            )
         bosses.append(straight.fuse(lead_out).clean())
     return bosses[0].fuse(bosses[1]).clean()
 
@@ -824,15 +853,22 @@ def _captured_shaft_support(
         cq.Vector(anchor_x, 0, 0),
         cq.Vector(-1, 0, 0),
     )
-    boss = boss.fuse(
-        cq.Solid.makeCone(
+    if radial_taper > 0:
+        lead_out = cq.Solid.makeCone(
             enclosure.shaft_support_boss_radius,
             enclosure.shaft_support_boss_radius - radial_taper,
             visible_length,
             cq.Vector(inner_wall_x, 0, 0),
             cq.Vector(-1, 0, 0),
         )
-    )
+    else:
+        lead_out = cq.Solid.makeCylinder(
+            enclosure.shaft_support_boss_radius,
+            visible_length,
+            cq.Vector(inner_wall_x, 0, 0),
+            cq.Vector(-1, 0, 0),
+        )
+    boss = boss.fuse(lead_out)
     pilot = cq.Solid.makeCylinder(
         enclosure.screw_pilot_diameter / 2,
         anchor_x - boss_end_x + EPSILON,
@@ -976,12 +1012,21 @@ def _captured_top_alpha_cutter(
             ),
             key=lambda face: abs(face.Center().z - top_z),
         )
-        halves.append(
-            cq.Solid.makeLoft(
-                [bottom_face.outerWire(), top_face.outerWire()],
-                True,
+        if enclosure.top_mark_chamfer > 0:
+            halves.append(
+                cq.Solid.makeLoft(
+                    [bottom_face.outerWire(), top_face.outerWire()],
+                    True,
+                )
             )
-        )
+        else:
+            halves.append(
+                cq.Solid.extrudeLinear(
+                    bottom_face.outerWire(),
+                    bottom_face.innerWires(),
+                    cq.Vector(0, 0, top_z),
+                )
+            )
     mark = cq.Compound.makeCompound(halves).rotate(
         (0, 0, 0),
         (0, 0, 1),
@@ -1067,14 +1112,15 @@ def _captured_pawl_shape(
         .val()
     )
     outer = mount_pad.fuse(blade).fuse(rounded_tip).clean()
-    outer = (
-        cq.Workplane(obj=outer)
-        .faces(">Y")
-        .edges()
-        .chamfer(enclosure.pawl_outer_chamfer)
-        .val()
-        .clean()
-    )
+    if enclosure.pawl_outer_chamfer > 0:
+        outer = (
+            cq.Workplane(obj=outer)
+            .faces(">Y")
+            .edges()
+            .chamfer(enclosure.pawl_outer_chamfer)
+            .val()
+            .clean()
+        )
     screw_clearance = cq.Solid.makeCylinder(
         enclosure.screw_clearance_diameter / 2,
         thickness + 2 * EPSILON,
@@ -1178,12 +1224,13 @@ def _captured_enclosure_shell(
             limits.inner_top_z + EPSILON,
         ),
     )
-    shell = (
-        cq.Workplane(obj=shell)
-        .edges(front_inner_selector)
-        .chamfer(enclosure.front_chamfer)
-        .val()
-    )
+    if enclosure.front_chamfer > 0:
+        shell = (
+            cq.Workplane(obj=shell)
+            .edges(front_inner_selector)
+            .chamfer(enclosure.front_chamfer)
+            .val()
+        )
     pawl_land_width = enclosure.pawl_mount_width + 2 * enclosure.pawl_mount_land_margin
     pawl_mount_land = (
         cq.Workplane("XY")

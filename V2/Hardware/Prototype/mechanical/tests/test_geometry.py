@@ -372,6 +372,46 @@ def test_enclosure_rejects_an_inset_that_removes_the_wall(tmp_path: Path) -> Non
         load_design_profile(profile, base=DESIGN)
 
 
+def test_zero_disables_every_configurable_enclosure_chamfer(tmp_path: Path) -> None:
+    profile = tmp_path / "zero-chamfers.toml"
+    profile.write_text(
+        """[drum_enclosure]
+side_feature_chamfer = 0.0
+boss_end_chamfer = 0.0
+top_mark_chamfer = 0.0
+pawl_outer_chamfer = 0.0
+""",
+        encoding="utf-8",
+    )
+    params = load_design_profile(profile, base=DESIGN)
+    capture = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
+
+    enclosure_parts = captured_drum_enclosure_parts(capture, params)
+    pawl_parts = captured_pawl_parts(capture, params)
+
+    assert all(part.isValid() for part in enclosure_parts.values())
+    assert all(part.isValid() for part in pawl_parts.values())
+
+
+@pytest.mark.parametrize(
+    "name",
+    (
+        "side_feature_chamfer",
+        "boss_end_chamfer",
+        "top_mark_chamfer",
+        "pawl_outer_chamfer",
+    ),
+)
+def test_enclosure_rejects_negative_chamfers(tmp_path: Path, name: str) -> None:
+    profile = tmp_path / f"negative-{name}.toml"
+    profile.write_text(
+        f"[drum_enclosure]\n{name} = -0.1\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match=f"{name} cannot be negative"):
+        load_design_profile(profile, base=DESIGN)
+
+
 def test_cq_editor_entry_point_builds_the_reference_module() -> None:
     namespace = runpy.run_path(str(MECHANICAL_DIR / "view.py"))
     result = namespace["result"]
