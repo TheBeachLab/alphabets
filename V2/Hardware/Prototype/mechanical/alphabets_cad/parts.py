@@ -603,48 +603,39 @@ def captured_enclosure_limits(
     capture: Mapping[str, Any],
     params: DesignParameters = DESIGN,
 ) -> CapturedEnclosureLimits:
-    """Derive compact enclosure planes from cards, floor and fixed pawl.
+    """Place the enclosure from direct drum-centred distances.
 
-    The floor is authoritative for the lower internal plane. Card vertices that
-    have penetrated slightly below it in Bullet are therefore ignored instead
-    of making the enclosure taller.
+    Top, bottom and back are user-controlled inner surfaces. Side clearance is
+    measured from the drum faces. Only the front remains capture-driven so it
+    follows the saved front-card/pawl plane without another tuning parameter.
     """
 
     enclosure = params.drum_enclosure
-    cards = capture["all_cards_bounds_world_mm"]
     floor = capture["floor"]["bounds_world_mm"]
     pawl = capture["pawl"]["bounds_world_mm"]
 
-    card_minimum = tuple(float(value) for value in cards["minimum"])
-    card_maximum = tuple(float(value) for value in cards["maximum"])
     pawl_minimum = tuple(float(value) for value in pawl["minimum"])
-    pawl_maximum = tuple(float(value) for value in pawl["maximum"])
-    floor_top = float(floor["maximum"][2])
     floor_front = float(floor["maximum"][1])
 
     half_drum_width = params.drum_outer_width / 2
-    inner_x_min = min(card_minimum[0], -half_drum_width) - enclosure.axial_clearance
-    inner_x_max = max(card_maximum[0], half_drum_width) + enclosure.axial_clearance
-    back_y = (
-        min(card_minimum[1], -params.drum.radius) - enclosure.capture_card_clearance
-    )
+    inner_x_min = -half_drum_width - enclosure.side_clearance
+    inner_x_max = half_drum_width + enclosure.side_clearance
+    back_y = -enclosure.back_distance
     front_y = min(floor_front, pawl_minimum[1])
-    inner_top_z = (
-        max(card_maximum[2], pawl_maximum[2], params.drum.radius)
-        + enclosure.capture_top_clearance
-    )
+    inner_bottom_z = -enclosure.bottom_distance
+    inner_top_z = enclosure.top_distance
 
     return CapturedEnclosureLimits(
         inner_x_min=inner_x_min,
         inner_x_max=inner_x_max,
         back_y=back_y,
         front_y=front_y,
-        inner_bottom_z=floor_top,
+        inner_bottom_z=inner_bottom_z,
         inner_top_z=inner_top_z,
-        outer_x_min=inner_x_min - enclosure.capture_wall_thickness,
-        outer_x_max=inner_x_max + enclosure.capture_wall_thickness,
-        outer_bottom_z=floor_top - enclosure.floor_thickness,
-        outer_top_z=inner_top_z + enclosure.capture_wall_thickness,
+        outer_x_min=inner_x_min - enclosure.wall_thickness,
+        outer_x_max=inner_x_max + enclosure.wall_thickness,
+        outer_bottom_z=inner_bottom_z - enclosure.wall_thickness,
+        outer_top_z=inner_top_z + enclosure.wall_thickness,
     )
 
 
@@ -656,8 +647,8 @@ def _captured_motor_mount_pocket(
 
     enclosure = params.drum_enclosure
     start_x = limits.outer_x_min - EPSILON
-    depth = enclosure.motor_inset_depth + EPSILON
-    chamfer = min(enclosure.side_feature_chamfer, enclosure.motor_inset_depth)
+    depth = enclosure.side_inset_depth + EPSILON
+    chamfer = min(enclosure.side_feature_chamfer, enclosure.side_inset_depth)
     minimum_y, maximum_y, minimum_z, maximum_z = _motor_electronics_pocket_bounds(
         params
     )
@@ -709,13 +700,13 @@ def _captured_electronics_card_envelope(
     return (
         cq.Workplane("XY")
         .box(
-            enclosure.motor_inset_depth,
+            enclosure.side_inset_depth,
             enclosure.electronics_card_width,
             enclosure.electronics_card_height,
         )
         .translate(
             (
-                limits.outer_x_min + enclosure.motor_inset_depth / 2,
+                limits.outer_x_min + enclosure.side_inset_depth / 2,
                 enclosure.electronics_card_center_y,
                 enclosure.electronics_card_center_z,
             )
@@ -731,7 +722,7 @@ def _captured_motor_mount_bosses(
     """Two internal bosses carrying the motor's M3 self-tapping pilots."""
 
     enclosure = params.drum_enclosure
-    anchor_x = limits.outer_x_min + enclosure.motor_inset_depth
+    anchor_x = limits.outer_x_min + enclosure.side_inset_depth
     inner_wall_x = limits.inner_x_min
     boss_end_x = -params.drum_outer_width / 2 - enclosure.motor_mount_disc_clearance
     embedded_length = inner_wall_x - anchor_x
@@ -773,7 +764,7 @@ def _captured_motor_mount_pilots(
     """M3 pilots from the recessed motor face through both internal bosses."""
 
     enclosure = params.drum_enclosure
-    start_x = limits.outer_x_min + enclosure.motor_inset_depth - EPSILON
+    start_x = limits.outer_x_min + enclosure.side_inset_depth - EPSILON
     end_x = -params.drum_outer_width / 2 - enclosure.motor_mount_disc_clearance
     pilots = [
         cq.Solid.makeCylinder(
@@ -800,8 +791,8 @@ def _captured_docking_recess(
     motor = params.motor
     return _x_axis_chamfered_circle(
         motor.chassis_radius + enclosure.docking_clearance,
-        enclosure.docking_recess_depth + EPSILON,
-        min(enclosure.side_feature_chamfer, enclosure.docking_recess_depth),
+        enclosure.side_inset_depth + EPSILON,
+        min(enclosure.side_feature_chamfer, enclosure.side_inset_depth),
         limits.outer_x_max + EPSILON,
         0,
         -motor.shaft_offset,
@@ -816,7 +807,7 @@ def _captured_shaft_support(
     """Lower-half boss with an M3 self-tapping pilot for a screw axle."""
 
     enclosure = params.drum_enclosure
-    anchor_x = limits.outer_x_max - enclosure.docking_recess_depth + EPSILON
+    anchor_x = limits.outer_x_max - enclosure.side_inset_depth + EPSILON
     inner_wall_x = limits.inner_x_max
     disc_outer_x = params.drum_outer_width / 2
     boss_end_x = disc_outer_x + enclosure.shaft_support_axial_clearance
@@ -858,7 +849,7 @@ def _captured_shaft_head_recess(
     """Flat Ø6 mm counterbore for the screw axle head on the shaft side."""
 
     enclosure = params.drum_enclosure
-    start_x = limits.outer_x_max - enclosure.docking_recess_depth + EPSILON
+    start_x = limits.outer_x_max - enclosure.side_inset_depth + EPSILON
     return cq.Solid.makeCylinder(
         enclosure.shaft_head_recess_diameter / 2,
         enclosure.shaft_head_recess_depth + 2 * EPSILON,
@@ -1259,7 +1250,7 @@ def _captured_enclosure_shell(
         .fillet(enclosure.capture_outer_corner_radius)
     )
     inner_corner_radius = max(
-        enclosure.capture_outer_corner_radius - enclosure.capture_wall_thickness,
+        enclosure.capture_outer_corner_radius - enclosure.wall_thickness,
         0.5,
     )
     cavity = (
@@ -1296,7 +1287,7 @@ def _captured_enclosure_shell(
     shell = (
         cq.Workplane(obj=shell)
         .edges(front_inner_selector)
-        .chamfer(enclosure.front_inner_chamfer)
+        .chamfer(enclosure.front_chamfer)
         .val()
     )
     pawl_land_width = enclosure.pawl_mount_width + 2 * enclosure.pawl_mount_land_margin
@@ -1304,13 +1295,13 @@ def _captured_enclosure_shell(
         cq.Workplane("XY")
         .box(
             pawl_land_width,
-            enclosure.front_inner_chamfer,
+            enclosure.front_chamfer,
             limits.outer_top_z - limits.inner_top_z,
         )
         .translate(
             (
                 0,
-                limits.front_y - enclosure.front_inner_chamfer / 2,
+                limits.front_y - enclosure.front_chamfer / 2,
                 (limits.inner_top_z + limits.outer_top_z) / 2,
             )
         )
@@ -1324,13 +1315,13 @@ def _captured_enclosure_shell(
     shell = shell.fuse(_captured_motor_mount_bosses(limits, params)).clean()
     shell = shell.cut(_captured_motor_mount_pilots(limits, params))
 
-    motor_bore_wall = enclosure.capture_wall_thickness - enclosure.motor_inset_depth
+    motor_bore_wall = enclosure.remaining_side_wall
     shell = shell.cut(
         _x_axis_chamfered_circle(
             enclosure.motor_bore_diameter / 2,
             motor_bore_wall + 2 * EPSILON,
             motor_bore_wall,
-            limits.outer_x_min + enclosure.motor_inset_depth - EPSILON,
+            limits.outer_x_min + enclosure.side_inset_depth - EPSILON,
             0,
             0,
             1,

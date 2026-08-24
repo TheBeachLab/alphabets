@@ -23,7 +23,7 @@ and Final parts must not be mixed.
 | Sticker on each card face | 50 × 40 × 0.1 mm |
 | Drum | 64 positions, 85 mm diameter |
 | Drum inner / outer width | 56 / 60.3 mm |
-| Visible pawl | Prototype, 5 mm longer than Final |
+| Visible pawl | Prototype, 3 mm longer than Final |
 
 The sticker starts 3 mm from the card's free edge and reaches the hinge edge.
 The complete 43 mm card remains visible; the 3 mm free-edge strip is simply
@@ -78,6 +78,21 @@ the committed outputs are stale.
 All direct dimensions are in [`design.toml`](design.toml). Derived dimensions
 are calculated in `alphabets_cad/parameters.py`, so card, drum and enclosure
 widths cannot silently drift apart.
+
+The primary `[drum_enclosure]` controls use the drum centre as their origin:
+
+| Parameter | Meaning |
+| --- | --- |
+| `top_distance` | Drum centre to the inside of the top wall |
+| `bottom_distance` | Drum centre to the inside floor |
+| `back_distance` | Drum centre to the inside back edge |
+| `side_clearance` | Gap from each outside drum face to its inside enclosure wall |
+| `wall_thickness` | Enclosure thickness on the sides, top and bottom |
+| `side_inset_depth` | Shared motor/electronics and opposite-side recess depth |
+
+The front follows the saved front-card/pawl plane. `front_chamfer` is derived
+as `wall_thickness / 2`, and the material left behind both side recesses is
+`wall_thickness - side_inset_depth`.
 
 For VS Code with OCP CAD Viewer:
 

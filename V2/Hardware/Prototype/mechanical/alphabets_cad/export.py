@@ -161,8 +161,7 @@ def generate_captured_enclosure(
     limits = captured_enclosure_limits(capture, params)
     remaining_docking_gap = (
         params.motor.chassis_height
-        - params.drum_enclosure.motor_inset_depth
-        - params.drum_enclosure.docking_recess_depth
+        - 2 * params.drum_enclosure.side_inset_depth
         + params.drum_enclosure.docking_clearance
     )
 
@@ -251,16 +250,15 @@ def generate_captured_enclosure(
         },
         "limits_mm": asdict(limits),
         "parameters": {
-            "wall_thickness": params.drum_enclosure.capture_wall_thickness,
-            "floor_thickness": params.drum_enclosure.floor_thickness,
-            "axial_clearance": params.drum_enclosure.axial_clearance,
-            "capture_card_clearance": (params.drum_enclosure.capture_card_clearance),
-            "capture_top_clearance": params.drum_enclosure.capture_top_clearance,
+            "top_distance": params.drum_enclosure.top_distance,
+            "bottom_distance": params.drum_enclosure.bottom_distance,
+            "back_distance": params.drum_enclosure.back_distance,
+            "side_clearance": params.drum_enclosure.side_clearance,
+            "wall_thickness": params.drum_enclosure.wall_thickness,
+            "side_inset_depth": params.drum_enclosure.side_inset_depth,
             "outer_corner_radius": (params.drum_enclosure.capture_outer_corner_radius),
             "capture_split_height": params.drum_enclosure.capture_split_height,
-            "front_inner_chamfer": params.drum_enclosure.front_inner_chamfer,
-            "motor_inset_depth": params.drum_enclosure.motor_inset_depth,
-            "docking_recess_depth": params.drum_enclosure.docking_recess_depth,
+            "front_chamfer": params.drum_enclosure.front_chamfer,
             "docking_clearance": params.drum_enclosure.docking_clearance,
             "motor_cable_clearance": params.drum_enclosure.motor_cable_clearance,
             "side_feature_chamfer": params.drum_enclosure.side_feature_chamfer,
@@ -279,10 +277,7 @@ def generate_captured_enclosure(
             "motor_electronics_corner_radius": (
                 params.drum_enclosure.motor_electronics_corner_radius
             ),
-            "remaining_side_wall": (
-                params.drum_enclosure.capture_wall_thickness
-                - params.drum_enclosure.motor_inset_depth
-            ),
+            "remaining_side_wall": params.drum_enclosure.remaining_side_wall,
             "minimum_same_orientation_gap": remaining_docking_gap,
             "minimum_same_orientation_pitch": (
                 limits.outer_width + remaining_docking_gap
@@ -345,6 +340,10 @@ def generate_captured_enclosure(
         "features": {
             "front_open": True,
             "rear_open": True,
+            "front_alignment": (
+                "automatic from the saved front-card/pawl capture plane; "
+                "there is no manual front offset"
+            ),
             "screw_lugs": False,
             "replaceable_pawls": (
                 "Prototype pawl with a 1 mm outer-face chamfer, retained by "
@@ -364,7 +363,8 @@ def generate_captured_enclosure(
                 "single approximately 55.7 x 76.6 mm rounded-rectangle side "
                 "pocket around the "
                 "motor and a 50 x 35 mm electronics-card envelope, with an "
-                "8 mm inner corner radius and continuous 6 mm lead-in"
+                "8 mm inner corner radius and continuous "
+                f"{min(params.drum_enclosure.side_feature_chamfer, params.drum_enclosure.side_inset_depth):g} mm lead-in"
             ),
             "split_magnets": (
                 "one unchamfered 3.4 x 1.2 mm magnet insert per side and per "
@@ -383,19 +383,23 @@ def generate_captured_enclosure(
                 "top sockets with 0.2 mm clearance, inset to the tangent of "
                 "the 10 mm enclosure corner radius"
             ),
-            "front_edge": ("4 mm inner chamfer with a flat mounting land at the pawl"),
+            "front_edge": (
+                f"{params.drum_enclosure.front_chamfer:g} mm inner chamfer, "
+                "derived as half the wall thickness, with a flat pawl land"
+            ),
             "front_bed_printing": (
-                "6 mm 45 degree lead-ins on both side recesses and a 2 mm "
-                "lead-in through the remaining motor bore wall; screw pilots "
-                "remain cylindrical"
+                f"{min(params.drum_enclosure.side_feature_chamfer, params.drum_enclosure.side_inset_depth):g} mm "
+                "45 degree lead-ins on both side recesses and a "
+                f"{params.drum_enclosure.remaining_side_wall:g} mm lead-in through "
+                "the remaining motor bore wall; screw pilots remain cylindrical"
             ),
             "top_mark": (
                 "large split alpha rotated toward the front and recessed "
                 "0.2 mm into the upper face through a nominal 0.2 mm chamfer"
             ),
             "side_docking_relief": (
-                f"{params.drum_enclosure.motor_inset_depth:g} mm motor inset plus "
-                f"{params.drum_enclosure.docking_recess_depth:g} mm opposite "
+                f"{params.drum_enclosure.side_inset_depth:g} mm motor/electronics "
+                f"inset plus {params.drum_enclosure.side_inset_depth:g} mm opposite "
                 f"recess; {remaining_docking_gap:g} mm body gap still required "
                 "for equal orientation"
             ),

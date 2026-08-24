@@ -314,10 +314,11 @@ def test_design_profile_applies_direct_values_and_keeps_derived_values() -> None
     profile = MECHANICAL_DIR / "profiles/fit-check.toml"
     params = load_design_profile(profile, base=DESIGN)
     assert params.drum.axial_clearance == 1.5
-    assert params.drum_enclosure.radial_clearance == 2.5
+    assert params.drum_enclosure.side_clearance == 2.5
     assert params.drum_inner_width == pytest.approx(56.5)
     assert params.enclosure_inner_height == pytest.approx(DESIGN.enclosure_inner_height)
-    assert params.enclosure_inner_depth == pytest.approx(90.0)
+    assert params.enclosure_inner_width == pytest.approx(65.8)
+    assert params.enclosure_outer_width == pytest.approx(81.8)
 
 
 def test_design_profile_rejects_unknown_dimension(tmp_path: Path) -> None:
@@ -331,6 +332,44 @@ def test_design_profile_rejects_a_tab_that_cannot_rotate(tmp_path: Path) -> None
     profile = tmp_path / "blocked-tab.toml"
     profile.write_text("[drum]\nallow_tab_interference = false\n", encoding="utf-8")
     with pytest.raises(ValueError, match="required radial clearance"):
+        load_design_profile(profile, base=DESIGN)
+
+
+def test_enclosure_primary_controls_are_direct_and_safe(tmp_path: Path) -> None:
+    profile = tmp_path / "enclosure.toml"
+    profile.write_text(
+        """[drum_enclosure]
+top_distance = 70.0
+bottom_distance = 72.0
+back_distance = 65.0
+side_clearance = 3.0
+wall_thickness = 10.0
+side_inset_depth = 7.0
+""",
+        encoding="utf-8",
+    )
+    params = load_design_profile(profile, base=DESIGN)
+    enclosure = params.drum_enclosure
+    assert enclosure.front_chamfer == pytest.approx(5)
+    assert enclosure.remaining_side_wall == pytest.approx(3)
+    capture = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
+    baseline = captured_enclosure_limits(capture)
+    limits = captured_enclosure_limits(capture, params)
+    assert limits.inner_top_z == pytest.approx(70)
+    assert limits.inner_bottom_z == pytest.approx(-72)
+    assert limits.back_y == pytest.approx(-65)
+    assert limits.front_y == pytest.approx(baseline.front_y)
+    assert limits.inner_x_min == pytest.approx(-params.drum_outer_width / 2 - 3)
+    assert limits.inner_x_max == pytest.approx(params.drum_outer_width / 2 + 3)
+
+
+def test_enclosure_rejects_an_inset_that_removes_the_wall(tmp_path: Path) -> None:
+    profile = tmp_path / "invalid-enclosure.toml"
+    profile.write_text(
+        "[drum_enclosure]\nwall_thickness = 6.0\nside_inset_depth = 6.0\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="smaller than wall_thickness"):
         load_design_profile(profile, base=DESIGN)
 
 
@@ -481,12 +520,20 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
 
     enclosure = DESIGN.drum_enclosure
     assert limits.inner_bottom_z == pytest.approx(-75, abs=1e-5)
-    assert limits.back_y == pytest.approx(-68.750377417)
+    assert limits.back_y == pytest.approx(-enclosure.back_distance)
     assert limits.front_y == pytest.approx(40.301814675)
-    assert limits.inner_top_z == pytest.approx(68.313832998)
+    assert limits.inner_top_z == pytest.approx(enclosure.top_distance)
+    assert limits.inner_bottom_z == pytest.approx(-enclosure.bottom_distance)
+    assert limits.inner_x_min == pytest.approx(
+        -DESIGN.drum_outer_width / 2 - enclosure.side_clearance
+    )
+    assert limits.inner_x_max == pytest.approx(
+        DESIGN.drum_outer_width / 2 + enclosure.side_clearance
+    )
     assert limits.outer_width == pytest.approx(80.3)
-    assert limits.outer_depth == pytest.approx(109.052192092)
-    assert limits.outer_height == pytest.approx(159.313828528)
+    assert limits.outer_depth == pytest.approx(105.051814675)
+    assert limits.outer_height == pytest.approx(157.32)
+    assert enclosure.front_chamfer == pytest.approx(enclosure.wall_thickness / 2)
 
     upper = parts["enclosure_upper"]
     lower = parts["enclosure_lower"]
@@ -868,24 +915,24 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert print_layout["enclosure_upper"]["rotation_deg"] == {"x": -90, "z": 0}
 
 
-def test_side_recesses_leave_two_millimetres_and_have_45_degree_lead_ins() -> None:
+def test_one_side_inset_controls_both_recesses_and_remaining_wall() -> None:
     capture = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
     limits = captured_enclosure_limits(capture)
     enclosure = DESIGN.drum_enclosure
 
     assert (
-        limits.inner_x_min - (limits.outer_x_min + enclosure.motor_inset_depth)
-    ) == pytest.approx(2)
+        limits.inner_x_min - (limits.outer_x_min + enclosure.side_inset_depth)
+    ) == pytest.approx(enclosure.remaining_side_wall)
     assert (
-        limits.outer_x_max - enclosure.docking_recess_depth - limits.inner_x_max
-    ) == pytest.approx(2)
+        limits.outer_x_max - enclosure.side_inset_depth - limits.inner_x_max
+    ) == pytest.approx(enclosure.remaining_side_wall)
 
     motor_pocket = _captured_motor_mount_pocket(limits)
     docking_recess = _captured_docking_recess(limits)
     assert motor_pocket.isValid()
     assert docking_recess.isValid()
     assert motor_pocket.BoundingBox().xmax == pytest.approx(
-        limits.outer_x_min + enclosure.motor_inset_depth + 0.05,
+        limits.outer_x_min + enclosure.side_inset_depth + 0.05,
         abs=1e-5,
     )
     assert len(motor_pocket.Solids()) == 1
@@ -894,7 +941,7 @@ def test_side_recesses_leave_two_millimetres_and_have_45_degree_lead_ins() -> No
         .box(0.02, 120, 120)
         .translate(
             (
-                limits.outer_x_min + enclosure.motor_inset_depth - 0.01,
+                limits.outer_x_min + enclosure.side_inset_depth - 0.01,
                 0,
                 -30,
             )
@@ -932,12 +979,12 @@ def test_side_recesses_leave_two_millimetres_and_have_45_degree_lead_ins() -> No
     )
     electronics = _captured_electronics_card_envelope(limits)
     electronics_box = electronics.BoundingBox()
-    assert electronics_box.xlen == pytest.approx(enclosure.motor_inset_depth)
+    assert electronics_box.xlen == pytest.approx(enclosure.side_inset_depth)
     assert electronics_box.ylen == pytest.approx(enclosure.electronics_card_width)
     assert electronics_box.zlen == pytest.approx(enclosure.electronics_card_height)
     assert electronics.cut(motor_pocket).Volume() == pytest.approx(0, abs=1e-6)
     assert docking_recess.BoundingBox().xmin == pytest.approx(
-        limits.outer_x_max - enclosure.docking_recess_depth - 0.05,
+        limits.outer_x_max - enclosure.side_inset_depth - 0.05,
         abs=1e-5,
     )
 
@@ -952,7 +999,7 @@ def test_side_recesses_leave_two_millimetres_and_have_45_degree_lead_ins() -> No
         .box(0.02, 60, 60)
         .translate(
             (
-                limits.outer_x_max - enclosure.docking_recess_depth + 0.01,
+                limits.outer_x_max - enclosure.side_inset_depth + 0.01,
                 0,
                 -DESIGN.motor.shaft_offset,
             )
@@ -991,7 +1038,7 @@ def test_captured_enclosure_clears_mechanism_and_ignores_floor_solver_outliers()
     capture = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
     limits = captured_enclosure_limits(capture)
     assert shapes["motor_body"].BoundingBox().xmax == pytest.approx(
-        limits.outer_x_min + DESIGN.drum_enclosure.motor_inset_depth
+        limits.outer_x_min + DESIGN.drum_enclosure.side_inset_depth
     )
 
     intersecting_cards = {
@@ -1120,6 +1167,14 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert manifest["parameters"]["top_mark_rotation"] == pytest.approx(180)
     assert manifest["parameters"]["electronics_card_width"] == pytest.approx(50)
     assert manifest["parameters"]["electronics_card_height"] == pytest.approx(35)
+    assert manifest["parameters"]["top_distance"] == pytest.approx(66.32)
+    assert manifest["parameters"]["bottom_distance"] == pytest.approx(75)
+    assert manifest["parameters"]["back_distance"] == pytest.approx(64.75)
+    assert manifest["parameters"]["side_clearance"] == pytest.approx(2)
+    assert manifest["parameters"]["wall_thickness"] == pytest.approx(8)
+    assert manifest["parameters"]["side_inset_depth"] == pytest.approx(6)
+    assert manifest["parameters"]["remaining_side_wall"] == pytest.approx(2)
+    assert manifest["parameters"]["front_chamfer"] == pytest.approx(4)
     assert manifest["parameters"]["magnet_diameter"] == pytest.approx(3)
     assert manifest["parameters"]["magnet_thickness"] == pytest.approx(1)
     assert manifest["parameters"]["magnet_radial_clearance"] == pytest.approx(0.2)

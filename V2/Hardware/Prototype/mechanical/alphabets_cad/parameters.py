@@ -146,24 +146,16 @@ class EnclosureReferenceDimensions:
 class DrumEnclosureDimensions:
     """Printable two-part enclosure around the current 85 mm drum."""
 
-    wall_thickness: float = 2.4
-    front_thickness: float = 3.0
-    capture_wall_thickness: float = 8.0
-    floor_thickness: float = 8.0
-    radial_clearance: float = 2.0
-    axial_clearance: float = 2.0
-    capture_card_clearance: float = 2.0
-    capture_top_clearance: float = 2.0
-    window_clearance: float = 1.0
-    window_corner_radius: float = 2.0
-    outer_corner_radius: float = 4.0
+    top_distance: float = 66.32
+    bottom_distance: float = 75.0
+    back_distance: float = 64.75
+    side_clearance: float = 2.0
+    wall_thickness: float = 8.0
+    side_inset_depth: float = 6.0
     capture_outer_corner_radius: float = 10.0
     split_gap: float = 0.2
     capture_split_height: float = 12.0
-    front_inner_chamfer: float = 4.0
     pawl_mount_land_margin: float = 2.0
-    motor_inset_depth: float = 6.0
-    docking_recess_depth: float = 6.0
     docking_clearance: float = 0.3
     motor_cable_clearance: float = 1.0
     side_feature_chamfer: float = 6.0
@@ -207,14 +199,24 @@ class DrumEnclosureDimensions:
     pawl_head_recess_diameter: float = 6.0
     pawl_head_recess_depth: float = 1.0
     pawl_tip_radius: float = 2.0
-    prototype_pawl_extension: float = 5.0
-    upper_card_envelope_height: float = 86.702228
-    card_ceiling_clearance: float = 10.0
+    prototype_pawl_extension: float = 3.0
     closure_method: str = "embedded_magnets"
     screw_clearance_diameter: float = 3.4
     screw_pilot_diameter: float = 2.6
     screw_head_diameter: float = 6.2
     screw_head_depth: float = 2.0
+
+    @property
+    def front_chamfer(self) -> float:
+        """Front inner-edge chamfer derived from the enclosure thickness."""
+
+        return self.wall_thickness / 2
+
+    @property
+    def remaining_side_wall(self) -> float:
+        """Material left behind both side recesses."""
+
+        return self.wall_thickness - self.side_inset_depth
 
 
 @dataclass(frozen=True)
@@ -243,7 +245,7 @@ class DesignParameters:
 
     @property
     def enclosure_inner_width(self) -> float:
-        return self.drum_outer_width + 2 * self.drum_enclosure.axial_clearance
+        return self.drum_outer_width + 2 * self.drum_enclosure.side_clearance
 
     @property
     def enclosure_outer_width(self) -> float:
@@ -251,44 +253,20 @@ class DesignParameters:
 
     @property
     def enclosure_inner_height(self) -> float:
-        return 2 * self.enclosure_inner_half_height
-
-    @property
-    def enclosure_inner_half_height(self) -> float:
         enclosure = self.drum_enclosure
-        return enclosure.upper_card_envelope_height + enclosure.card_ceiling_clearance
-
-    @property
-    def upper_card_protrusion_above_drum(self) -> float:
-        return self.drum_enclosure.upper_card_envelope_height - self.drum.radius
+        return enclosure.top_distance + enclosure.bottom_distance
 
     @property
     def enclosure_ceiling_z(self) -> float:
-        return self.enclosure_inner_half_height
+        return self.drum_enclosure.top_distance
 
     @property
     def enclosure_floor_z(self) -> float:
-        return -self.enclosure_inner_half_height
+        return -self.drum_enclosure.bottom_distance
 
     @property
     def enclosure_outer_height(self) -> float:
         return self.enclosure_inner_height + 2 * self.drum_enclosure.wall_thickness
-
-    @property
-    def enclosure_inner_depth(self) -> float:
-        return self.drum.diameter + 2 * self.drum_enclosure.radial_clearance
-
-    @property
-    def enclosure_outer_depth(self) -> float:
-        return self.enclosure_inner_depth + self.drum_enclosure.front_thickness
-
-    @property
-    def enclosure_window_width(self) -> float:
-        return self.card.body_width + 2 * self.drum_enclosure.window_clearance
-
-    @property
-    def enclosure_window_height(self) -> float:
-        return self.card.total_height + 2 * self.drum_enclosure.window_clearance
 
     @property
     def flap_tab_radial_clearance(self) -> float:
@@ -320,16 +298,10 @@ class DesignParameters:
                 "overall_width": self.enclosure_overall_width,
                 "inner_height": self.enclosure_inner_height,
                 "outer_height": self.enclosure_outer_height,
-                "inner_half_height": self.enclosure_inner_half_height,
                 "ceiling_z": self.enclosure_ceiling_z,
                 "floor_z": self.enclosure_floor_z,
-                "upper_card_protrusion_above_drum": (
-                    self.upper_card_protrusion_above_drum
-                ),
-                "inner_depth": self.enclosure_inner_depth,
-                "outer_depth": self.enclosure_outer_depth,
-                "window_width": self.enclosure_window_width,
-                "window_height": self.enclosure_window_height,
+                "front_chamfer": self.drum_enclosure.front_chamfer,
+                "remaining_side_wall": self.drum_enclosure.remaining_side_wall,
             }
         )
         return result
@@ -388,10 +360,23 @@ def design_from_mapping(
             "card tab does not have the required radial clearance to rotate "
             "inside the drum flap hole"
         )
-    if result.drum_enclosure.upper_card_envelope_height < result.drum.radius:
-        raise ValueError("upper card envelope must reach beyond the drum radius")
-    if result.drum_enclosure.card_ceiling_clearance < 0:
-        raise ValueError("card ceiling clearance cannot be negative")
+    enclosure = result.drum_enclosure
+    centre_distances = {
+        "top_distance": enclosure.top_distance,
+        "bottom_distance": enclosure.bottom_distance,
+        "back_distance": enclosure.back_distance,
+    }
+    for name, value in centre_distances.items():
+        if value <= 0:
+            raise ValueError(f"{name} must be positive")
+    if enclosure.side_clearance < 0:
+        raise ValueError("side_clearance cannot be negative")
+    if enclosure.wall_thickness <= 0:
+        raise ValueError("wall_thickness must be positive")
+    if not 0 <= enclosure.side_inset_depth < enclosure.wall_thickness:
+        raise ValueError(
+            "side_inset_depth must be non-negative and smaller than wall_thickness"
+        )
     return result
 
 

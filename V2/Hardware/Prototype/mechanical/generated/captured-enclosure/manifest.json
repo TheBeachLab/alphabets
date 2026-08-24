@@ -16,8 +16,9 @@
   "character_set": "demo-64",
   "fabrication_status": "Parametric Prototype derivative of the printed Final CadQuery source. It uses the Prototype card, drum and pawl dimensions with the settled Final transforms; it requires a Prototype print and physical fit check.",
   "features": {
+    "front_alignment": "automatic from the saved front-card/pawl capture plane; there is no manual front offset",
     "front_bed_printing": "6 mm 45 degree lead-ins on both side recesses and a 2 mm lead-in through the remaining motor bore wall; screw pilots remain cylindrical",
-    "front_edge": "4 mm inner chamfer with a flat mounting land at the pawl",
+    "front_edge": "4 mm inner chamfer, derived as half the wall thickness, with a flat pawl land",
     "front_open": true,
     "lower_shaft_support": "M3 self-tapping pilot in a 9 mm boss tapered continuously from the inside wall; user-supplied M3 screw forms the axle through the drum's 3.4 mm clearance hole",
     "motor_electronics_pocket": "single approximately 55.7 x 76.6 mm rounded-rectangle side pocket around the motor and a 50 x 35 mm electronics-card envelope, with an 8 mm inner corner radius and continuous 6 mm lead-in",
@@ -26,7 +27,7 @@
     "rear_open": true,
     "replaceable_pawls": "Prototype pawl with a 1 mm outer-face chamfer, retained by one M3 screw into a self-tapping pilot",
     "screw_lugs": false,
-    "side_docking_relief": "6 mm motor inset plus 6 mm opposite recess; 7.3 mm body gap still required for equal orientation",
+    "side_docking_relief": "6 mm motor/electronics inset plus 6 mm opposite recess; 7.3 mm body gap still required for equal orientation",
     "split_magnets": "one unchamfered 3.4 x 1.2 mm magnet insert per side and per half for nominal 3 x 1 mm magnets",
     "top_mark": "large split alpha rotated toward the front and recessed 0.2 mm into the upper face through a nominal 0.2 mm chamfer",
     "vertical_stack_magnets": "one centred unchamfered 3.4 x 1.2 mm insert in the alpha top face and one matching insert in the module base",
@@ -41,38 +42,38 @@
           40.470565
         ],
         "y": [
-          -68.756714,
+          -64.756336,
           40.374796
         ],
         "z": [
-          -87.475405,
+          -87.47541,
           16.369485
         ]
       },
-      "component_volume_sum_mm3": 179964.640179,
+      "component_volume_sum_mm3": 171997.510361,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 179964.640179
+      "volume_mm3": 171997.510361
     },
     "enclosure_upper": {
       "bounds_mm": {
         "x": [
-          -40.523737,
+          -41.55,
           41.55
         ],
         "y": [
-          -68.75494,
+          -64.754562,
           40.374796
         ],
         "z": [
-          10.856667,
-          77.787959
+          10.7,
+          75.794126
         ]
       },
-      "component_volume_sum_mm3": 161272.23326,
+      "component_volume_sum_mm3": 151949.804554,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 161272.23326
+      "volume_mm3": 151949.804554
     },
     "pawl_prototype": {
       "bounds_mm": {
@@ -82,28 +83,28 @@
         ],
         "y": [
           40.301193,
-          42.308262
+          42.308306
         ],
         "z": [
-          42.234047,
-          76.313833
+          44.234002,
+          74.32
         ]
       },
-      "component_volume_sum_mm3": 433.036345,
+      "component_volume_sum_mm3": 381.079892,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 433.036345
+      "volume_mm3": 381.079892
     }
   },
   "limits_mm": {
-    "back_y": -68.750377417,
+    "back_y": -64.75,
     "front_y": 40.301814675,
-    "inner_bottom_z": -74.99999553,
-    "inner_top_z": 68.313832998,
+    "inner_bottom_z": -75.0,
+    "inner_top_z": 66.32,
     "inner_x_max": 32.15,
     "inner_x_min": -32.15,
-    "outer_bottom_z": -82.99999553,
-    "outer_top_z": 76.313832998,
+    "outer_bottom_z": -83.0,
+    "outer_top_z": 74.32,
     "outer_x_max": 40.15,
     "outer_x_min": -40.15
   },
@@ -112,20 +113,17 @@
     "alignment_clearance": 0.2,
     "alignment_height": 3.0,
     "alignment_top_size": 2.0,
-    "axial_clearance": 2.0,
+    "back_distance": 64.75,
     "boss_end_chamfer": 1.5,
-    "capture_card_clearance": 2.0,
+    "bottom_distance": 75.0,
     "capture_split_height": 12.0,
-    "capture_top_clearance": 2.0,
     "docking_clearance": 0.3,
-    "docking_recess_depth": 6.0,
     "electronics_card_center_y": 0.0,
     "electronics_card_center_z": -50.0,
     "electronics_card_clearance": 0.5,
     "electronics_card_height": 35.0,
     "electronics_card_width": 50.0,
-    "floor_thickness": 8.0,
-    "front_inner_chamfer": 4.0,
+    "front_chamfer": 4.0,
     "magnet_depth_clearance": 0.2,
     "magnet_diameter": 3.0,
     "magnet_radial_clearance": 0.2,
@@ -135,7 +133,6 @@
     "motor_bore_diameter": 10.0,
     "motor_cable_clearance": 1.0,
     "motor_electronics_corner_radius": 8.0,
-    "motor_inset_depth": 6.0,
     "motor_mount_boss_radius": 4.5,
     "motor_mount_disc_clearance": 0.5,
     "motor_mount_pilot_diameter": 2.6,
@@ -149,7 +146,7 @@
     "pawl_screw_clearance_diameter": 3.4,
     "pawl_thickness_addition": 1.0,
     "pawl_tip_radius": 2.0,
-    "prototype_pawl_extension": 5.0,
+    "prototype_pawl_extension": 3.0,
     "remaining_side_wall": 2.0,
     "shaft_head_recess_depth": 2.0,
     "shaft_head_recess_diameter": 6.0,
@@ -157,10 +154,13 @@
     "shaft_support_axial_clearance": 0.5,
     "shaft_support_boss_radius": 4.5,
     "shaft_support_pilot_diameter": 2.6,
+    "side_clearance": 2.0,
     "side_feature_chamfer": 6.0,
+    "side_inset_depth": 6.0,
     "split_gap": 0.2,
     "stack_alignment_x_inset": 14.0,
     "stack_alignment_y_inset": 20.0,
+    "top_distance": 66.32,
     "top_mark_chamfer": 0.2,
     "top_mark_character": "α",
     "top_mark_depth": 0.2,
@@ -185,18 +185,18 @@
           130.15
         ],
         "y": [
-          6.418086,
-          173.581914
+          7.415,
+          172.585
         ],
         "z": [
           -0.0,
-          109.052192
+          105.051815
         ]
       },
-      "component_volume_sum_mm3": 341669.90631,
+      "component_volume_sum_mm3": 324328.39139,
       "solid_count": 3,
       "valid": true,
-      "volume_mm3": 341669.90631
+      "volume_mm3": 324328.39139
     },
     "margin_mm": 5.0,
     "part_gap_mm": 2.0,
@@ -209,12 +209,12 @@
             130.15
           ],
           "y": [
-            6.418086,
-            107.368081
+            7.415,
+            108.365
           ],
           "z": [
-            0.0,
-            109.052192
+            -0.0,
+            105.051815
           ]
         },
         "rotation_deg": {
@@ -230,12 +230,12 @@
             130.15
           ],
           "y": [
-            109.368081,
-            173.581914
+            110.365,
+            172.585
           ],
           "z": [
             -0.0,
-            109.052192
+            105.051815
           ]
         },
         "rotation_deg": {
@@ -251,8 +251,8 @@
             95.0
           ],
           "y": [
-            39.856104,
-            73.930063
+            42.849937,
+            72.930063
           ],
           "z": [
             -0.0,

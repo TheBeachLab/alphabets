@@ -82,24 +82,22 @@ upper_reference_start = 1.751
 lower_reference_start = -2.11899
 
 [drum_enclosure]
-wall_thickness = 2.4
-front_thickness = 3.0
-capture_wall_thickness = 8.0
-floor_thickness = 8.0
-radial_clearance = 2.0
-axial_clearance = 2.0
-capture_card_clearance = 2.0
-capture_top_clearance = 2.0
-window_clearance = 1.0
-window_corner_radius = 2.0
-outer_corner_radius = 4.0
+# Primary enclosure controls. Top, bottom and back are inner surfaces measured
+# directly from the drum centre/axis. The front stays aligned to the saved
+# front-card and pawl plane, so it has no manual offset.
+top_distance = 66.32
+bottom_distance = 75.0
+back_distance = 64.75
+side_clearance = 2.0
+wall_thickness = 8.0
+# Both the motor/electronics pocket and the opposite docking recess enter this
+# far from their outside faces. With an 8 mm wall and 6 mm inset, 2 mm remains.
+side_inset_depth = 6.0
+
 capture_outer_corner_radius = 10.0
 split_gap = 0.2
 capture_split_height = 12.0
-front_inner_chamfer = 4.0
 pawl_mount_land_margin = 2.0
-motor_inset_depth = 6.0
-docking_recess_depth = 6.0
 docking_clearance = 0.3
 motor_cable_clearance = 1.0
 side_feature_chamfer = 6.0
@@ -143,11 +141,7 @@ magnet_depth_clearance = 0.2
 pawl_head_recess_diameter = 6.0
 pawl_head_recess_depth = 1.0
 pawl_tip_radius = 2.0
-prototype_pawl_extension = 5.0
-# Conservative value retained from the printed Final source. The local capture
-# supplies the settled Final transforms used to derive this Prototype model.
-upper_card_envelope_height = 86.702228
-card_ceiling_clearance = 10.0
+prototype_pawl_extension = 3.0
 closure_method = "embedded_magnets"
 screw_clearance_diameter = 3.4
 screw_pilot_diameter = 2.6

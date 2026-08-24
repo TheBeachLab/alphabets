@@ -379,7 +379,7 @@ def captured_enclosure_design_components(
 
     motor_offset = (
         captured_enclosure_limits(data, params).outer_x_min
-        + params.drum_enclosure.motor_inset_depth
+        + params.drum_enclosure.side_inset_depth
     )
     motor_colors = {
         "motor_body": MOTOR,
