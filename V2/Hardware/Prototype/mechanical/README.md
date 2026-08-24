@@ -89,11 +89,21 @@ The primary `[drum_enclosure]` controls use the drum centre as their origin:
 | `back_distance` | Drum centre to the inside back edge |
 | `side_clearance` | Gap from each outside drum face to its inside enclosure wall |
 | `wall_thickness` | Enclosure thickness on the sides, top and bottom |
-| `side_inset_depth` | Shared motor/electronics and opposite-side recess depth |
+| `side_inset_depth` | Depth of both full-side pockets |
+| `side_pocket_chamfer` | 45-degree lead-in depth at both pocket openings |
+| `side_pocket_margin` | Structural rim around every pocket opening |
+| `side_pocket_corner_radius` | Radius at both rounded pocket openings |
+| `electronics_card_center_y` | PCB centre; negative values move it toward the back |
+| `electronics_card_center_z` | PCB centre height relative to the drum axis |
 
 The front follows the saved front-card/pawl plane. `front_chamfer` is derived
-as `wall_thickness / 2`, and the material left behind both side recesses is
+as `wall_thickness / 2`, and the material left behind both side pockets is
 `wall_thickness - side_inset_depth`.
+
+Both enclosure faces use the same large rounded-rectangle pocket. The pocket
+shape is independent of the electronics envelope, so
+`electronics_card_center_y` and `electronics_card_center_z` can move the board
+anywhere that fits within the recessed side tray.
 
 The enclosure is one continuous shell. It has no horizontal assembly seam,
 magnet pockets or internal alignment keys. Four external truncated pyramids on

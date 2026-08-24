@@ -32,16 +32,15 @@ from alphabets_cad.export import (
 from alphabets_cad.parameters import DESIGN, load_design_profile
 from alphabets_cad.parts import (
     ALPHA_FONT_PATH,
-    _captured_docking_recess,
     _captured_electronics_card_envelope,
     _captured_motor_mount_bosses,
     _captured_motor_mount_pilots,
-    _captured_motor_mount_pocket,
     _captured_pawl_mount,
     _captured_pawl_pilot,
     _captured_pawl_screw_axis_z,
     _captured_shaft_head_recess,
     _captured_shaft_support,
+    _captured_side_pockets,
     _captured_stack_alignment_frustums,
     _captured_top_alpha_cutter,
     captured_drum_enclosure_parts,
@@ -378,7 +377,7 @@ def test_zero_disables_every_configurable_enclosure_chamfer(tmp_path: Path) -> N
     profile = tmp_path / "zero-chamfers.toml"
     profile.write_text(
         """[drum_enclosure]
-side_feature_chamfer = 0.0
+side_pocket_chamfer = 0.0
 boss_end_chamfer = 0.0
 top_mark_chamfer = 0.0
 pawl_outer_chamfer = 0.0
@@ -398,7 +397,7 @@ pawl_outer_chamfer = 0.0
 @pytest.mark.parametrize(
     "name",
     (
-        "side_feature_chamfer",
+        "side_pocket_chamfer",
         "boss_end_chamfer",
         "top_mark_chamfer",
         "pawl_outer_chamfer",
@@ -411,6 +410,37 @@ def test_enclosure_rejects_negative_chamfers(tmp_path: Path, name: str) -> None:
         encoding="utf-8",
     )
     with pytest.raises(ValueError, match=f"{name} cannot be negative"):
+        load_design_profile(profile, base=DESIGN)
+
+
+@pytest.mark.parametrize(
+    "name",
+    ("side_pocket_margin", "side_pocket_corner_radius"),
+)
+def test_enclosure_rejects_negative_side_pocket_dimensions(
+    tmp_path: Path,
+    name: str,
+) -> None:
+    profile = tmp_path / f"negative-{name}.toml"
+    profile.write_text(
+        f"[drum_enclosure]\n{name} = -0.1\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match=f"{name} cannot be negative"):
+        load_design_profile(profile, base=DESIGN)
+
+
+def test_side_pocket_radius_covers_its_chamfer(tmp_path: Path) -> None:
+    profile = tmp_path / "small-side-pocket-radius.toml"
+    profile.write_text(
+        """[drum_enclosure]
+side_inset_depth = 4.0
+side_pocket_chamfer = 4.0
+side_pocket_corner_radius = 3.0
+""",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="at least the side pocket chamfer"):
         load_design_profile(profile, base=DESIGN)
 
 
@@ -645,15 +675,20 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert shell.BoundingBox().zmax == pytest.approx(limits.outer_top_z, abs=1e-5)
 
     # The former split plane is continuous enclosure wall, without a seam,
-    # alignment keys or magnet pockets.
-    assert shell.isInside(
-        cq.Vector(
-            (limits.outer_x_min + limits.inner_x_min) / 2,
-            (limits.back_y + limits.front_y) / 2,
-            12.0,
-        ),
-        1e-6,
-    )
+    # alignment keys or magnet pockets. The full side trays retain their
+    # configured structural rim at both sides.
+    for x in (
+        (limits.outer_x_min + limits.inner_x_min) / 2,
+        (limits.outer_x_max + limits.inner_x_max) / 2,
+    ):
+        assert shell.isInside(
+            cq.Vector(
+                x,
+                limits.back_y + enclosure.side_pocket_margin / 2,
+                12.0,
+            ),
+            1e-6,
+        )
     center_y = (limits.back_y + limits.front_y) / 2
     assert shell.isInside(cq.Vector(0, center_y, limits.outer_top_z - 0.1), 1e-6)
     assert shell.isInside(cq.Vector(0, center_y, limits.outer_bottom_z + 0.1), 1e-6)
@@ -946,7 +981,7 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert print_layout["enclosure"]["rotation_deg"] == {"x": -90, "z": 0}
 
 
-def test_one_side_inset_controls_both_recesses_and_remaining_wall() -> None:
+def test_one_side_inset_controls_both_full_side_pockets_and_remaining_wall() -> None:
     capture = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
     limits = captured_enclosure_limits(capture)
     enclosure = DESIGN.drum_enclosure
@@ -958,91 +993,62 @@ def test_one_side_inset_controls_both_recesses_and_remaining_wall() -> None:
         limits.outer_x_max - enclosure.side_inset_depth - limits.inner_x_max
     ) == pytest.approx(enclosure.remaining_side_wall)
 
-    motor_pocket = _captured_motor_mount_pocket(limits)
-    docking_recess = _captured_docking_recess(limits)
+    motor_pocket, shaft_pocket = _captured_side_pockets(limits)
     assert motor_pocket.isValid()
-    assert docking_recess.isValid()
+    assert shaft_pocket.isValid()
     assert motor_pocket.BoundingBox().xmax == pytest.approx(
         limits.outer_x_min + enclosure.side_inset_depth + 0.05,
         abs=1e-5,
     )
+    assert shaft_pocket.BoundingBox().xmin == pytest.approx(
+        limits.outer_x_max - enclosure.side_inset_depth - 0.05,
+        abs=1e-5,
+    )
     assert len(motor_pocket.Solids()) == 1
-    inner_motor_section = motor_pocket.intersect(
-        cq.Workplane("XY")
-        .box(0.02, 120, 120)
-        .translate(
-            (
-                limits.outer_x_min + enclosure.side_inset_depth - 0.01,
-                0,
-                -30,
+    assert len(shaft_pocket.Solids()) == 1
+
+    chamfer = min(enclosure.side_pocket_chamfer, enclosure.side_inset_depth)
+    expected_width = limits.outer_depth - 2 * enclosure.side_pocket_margin - 2 * chamfer
+    expected_height = (
+        limits.outer_height - 2 * enclosure.side_pocket_margin - 2 * chamfer
+    )
+    inner_sections = (
+        motor_pocket.intersect(
+            cq.Workplane("XY")
+            .box(0.02, 200, 200)
+            .translate(
+                (
+                    limits.outer_x_min + enclosure.side_inset_depth - 0.01,
+                    0,
+                    0,
+                )
             )
-        )
-        .val()
+            .val()
+        ),
+        shaft_pocket.intersect(
+            cq.Workplane("XY")
+            .box(0.02, 200, 200)
+            .translate(
+                (
+                    limits.outer_x_max - enclosure.side_inset_depth + 0.01,
+                    0,
+                    0,
+                )
+            )
+            .val()
+        ),
     )
-    rounded_card_margin = (
-        enclosure.electronics_card_clearance
-        + enclosure.motor_electronics_corner_radius * (1 - 1 / math.sqrt(2))
-    )
-    assert inner_motor_section.BoundingBox().ylen == pytest.approx(
-        enclosure.electronics_card_width + 2 * rounded_card_margin,
-        abs=0.05,
-    )
-    expected_pocket_min_z = min(
-        enclosure.electronics_card_center_z
-        - enclosure.electronics_card_height / 2
-        - rounded_card_margin,
-        -DESIGN.motor.shaft_offset
-        - DESIGN.motor.backpack_extent
-        - enclosure.docking_clearance
-        - enclosure.motor_cable_clearance,
-    )
-    expected_pocket_max_z = max(
-        enclosure.electronics_card_center_z
-        + enclosure.electronics_card_height / 2
-        + rounded_card_margin,
-        -DESIGN.motor.shaft_offset
-        + DESIGN.motor.chassis_radius
-        + enclosure.docking_clearance,
-    )
-    assert inner_motor_section.BoundingBox().zlen == pytest.approx(
-        expected_pocket_max_z - expected_pocket_min_z,
-        abs=0.05,
-    )
+    for section in inner_sections:
+        assert section.BoundingBox().ylen == pytest.approx(expected_width, abs=0.05)
+        assert section.BoundingBox().zlen == pytest.approx(expected_height, abs=0.05)
+
     electronics = _captured_electronics_card_envelope(limits)
     electronics_box = electronics.BoundingBox()
     assert electronics_box.xlen == pytest.approx(enclosure.side_inset_depth)
     assert electronics_box.ylen == pytest.approx(enclosure.electronics_card_width)
     assert electronics_box.zlen == pytest.approx(enclosure.electronics_card_height)
     assert electronics.cut(motor_pocket).Volume() == pytest.approx(0, abs=1e-6)
-    assert docking_recess.BoundingBox().xmin == pytest.approx(
-        limits.outer_x_max - enclosure.side_inset_depth - 0.05,
-        abs=1e-5,
-    )
-
-    outer_section = docking_recess.intersect(
-        cq.Workplane("XY")
-        .box(0.02, 60, 60)
-        .translate((limits.outer_x_max - 0.01, 0, -DESIGN.motor.shaft_offset))
-        .val()
-    )
-    inner_section = docking_recess.intersect(
-        cq.Workplane("XY")
-        .box(0.02, 60, 60)
-        .translate(
-            (
-                limits.outer_x_max - enclosure.side_inset_depth + 0.01,
-                0,
-                -DESIGN.motor.shaft_offset,
-            )
-        )
-        .val()
-    )
-    assert (
-        outer_section.BoundingBox().ylen - inner_section.BoundingBox().ylen
-    ) / 2 == pytest.approx(
-        enclosure.side_feature_chamfer,
-        abs=0.05,
-    )
+    assert shaft_pocket.Volume() == pytest.approx(motor_pocket.Volume())
 
 
 def test_captured_enclosure_clears_mechanism_and_ignores_floor_solver_outliers() -> (
@@ -1183,36 +1189,69 @@ def test_parallel_stale_enclosure_exports_are_absent() -> None:
 def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     output = GENERATED / "captured-enclosure"
     manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+    enclosure = DESIGN.drum_enclosure
     assert manifest["capture"]["frame"] == 27464
     assert manifest["capture"]["controller"]["display_position"] == 37
-    assert manifest["limits_mm"]["inner_bottom_z"] == pytest.approx(-75, abs=1e-5)
+    assert manifest["limits_mm"]["inner_bottom_z"] == pytest.approx(
+        -enclosure.bottom_distance,
+        abs=1e-5,
+    )
     assert manifest["geometry"]["enclosure"]["solid_count"] == 1
     assert manifest["geometry"]["pawl_prototype"]["solid_count"] == 1
-    assert manifest["parameters"]["top_mark_depth"] == pytest.approx(0.2)
-    assert manifest["parameters"]["top_mark_rotation"] == pytest.approx(180)
-    assert manifest["parameters"]["electronics_card_width"] == pytest.approx(50)
-    assert manifest["parameters"]["electronics_card_height"] == pytest.approx(35)
-    assert manifest["parameters"]["top_distance"] == pytest.approx(66.32)
-    assert manifest["parameters"]["bottom_distance"] == pytest.approx(75)
-    assert manifest["parameters"]["back_distance"] == pytest.approx(64.75)
-    assert manifest["parameters"]["side_clearance"] == pytest.approx(2)
-    assert manifest["parameters"]["wall_thickness"] == pytest.approx(8)
-    assert manifest["parameters"]["side_inset_depth"] == pytest.approx(6)
-    assert manifest["parameters"]["remaining_side_wall"] == pytest.approx(2)
-    assert manifest["parameters"]["front_chamfer"] == pytest.approx(4)
+    assert manifest["parameters"]["top_mark_depth"] == pytest.approx(
+        enclosure.top_mark_depth
+    )
+    assert manifest["parameters"]["top_mark_rotation"] == pytest.approx(
+        enclosure.top_mark_rotation
+    )
+    assert manifest["parameters"]["electronics_card_width"] == pytest.approx(
+        enclosure.electronics_card_width
+    )
+    assert manifest["parameters"]["electronics_card_height"] == pytest.approx(
+        enclosure.electronics_card_height
+    )
+    for name in (
+        "top_distance",
+        "bottom_distance",
+        "back_distance",
+        "side_clearance",
+        "wall_thickness",
+        "side_inset_depth",
+        "remaining_side_wall",
+        "front_chamfer",
+        "side_pocket_margin",
+        "side_pocket_corner_radius",
+    ):
+        assert manifest["parameters"][name] == pytest.approx(getattr(enclosure, name))
+    assert "motor_electronics_corner_radius" not in manifest["parameters"]
+    assert "electronics_card_clearance" not in manifest["parameters"]
+    assert "motor_cable_clearance" not in manifest["parameters"]
     assert not any("magnet" in name for name in manifest["parameters"])
     assert "capture_split_height" not in manifest["parameters"]
     assert "split_gap" not in manifest["parameters"]
-    assert manifest["parameters"]["pawl_head_recess_diameter"] == pytest.approx(6)
-    assert manifest["parameters"]["pawl_head_recess_depth"] == pytest.approx(1)
-    assert manifest["parameters"]["shaft_head_recess_diameter"] == pytest.approx(6)
-    assert manifest["parameters"]["shaft_head_recess_depth"] == pytest.approx(2)
+    assert manifest["parameters"]["pawl_head_recess_diameter"] == pytest.approx(
+        enclosure.pawl_head_recess_diameter
+    )
+    assert manifest["parameters"]["pawl_head_recess_depth"] == pytest.approx(
+        enclosure.pawl_head_recess_depth
+    )
+    assert manifest["parameters"]["shaft_head_recess_diameter"] == pytest.approx(
+        enclosure.shaft_head_recess_diameter
+    )
+    assert manifest["parameters"]["shaft_head_recess_depth"] == pytest.approx(
+        enclosure.shaft_head_recess_depth
+    )
     assert "vertical_stack_magnets" not in manifest["features"]
     assert manifest["print_plate"]["printer"] == "Bambu Lab A1 mini"
     assert manifest["print_plate"]["build_volume_mm"] == [180, 180, 180]
     assert manifest["physical_variant"] == "prototype"
     assert manifest["character_set"] == "demo-64"
     assert manifest["features"]["visible_assembly_pawl"] == "prototype"
+    assert (
+        "matching motor-side and shaft-side"
+        in manifest["features"]["full_side_pockets"]
+    )
+    assert "motor_electronics_pocket" not in manifest["features"]
     assert "without an assembly seam" in manifest["features"]["enclosure_construction"]
     assert "split_magnets" not in manifest["features"]
     assert "part_alignment" not in manifest["features"]

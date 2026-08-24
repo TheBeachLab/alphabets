@@ -256,8 +256,11 @@ def generate_captured_enclosure(
             "outer_corner_radius": (params.drum_enclosure.capture_outer_corner_radius),
             "front_chamfer": params.drum_enclosure.front_chamfer,
             "docking_clearance": params.drum_enclosure.docking_clearance,
-            "motor_cable_clearance": params.drum_enclosure.motor_cable_clearance,
-            "side_feature_chamfer": params.drum_enclosure.side_feature_chamfer,
+            "side_pocket_chamfer": params.drum_enclosure.side_pocket_chamfer,
+            "side_pocket_margin": params.drum_enclosure.side_pocket_margin,
+            "side_pocket_corner_radius": (
+                params.drum_enclosure.side_pocket_corner_radius
+            ),
             "boss_end_chamfer": params.drum_enclosure.boss_end_chamfer,
             "electronics_card_width": params.drum_enclosure.electronics_card_width,
             "electronics_card_height": (params.drum_enclosure.electronics_card_height),
@@ -266,12 +269,6 @@ def generate_captured_enclosure(
             ),
             "electronics_card_center_z": (
                 params.drum_enclosure.electronics_card_center_z
-            ),
-            "electronics_card_clearance": (
-                params.drum_enclosure.electronics_card_clearance
-            ),
-            "motor_electronics_corner_radius": (
-                params.drum_enclosure.motor_electronics_corner_radius
             ),
             "remaining_side_wall": params.drum_enclosure.remaining_side_wall,
             "minimum_same_orientation_gap": remaining_docking_gap,
@@ -337,7 +334,9 @@ def generate_captured_enclosure(
             ),
             "screw_lugs": False,
             "replaceable_pawls": (
-                "Prototype pawl with a 1 mm outer-face chamfer, retained by "
+                "Prototype pawl with a "
+                f"{params.drum_enclosure.pawl_outer_chamfer:g} mm outer-face "
+                "chamfer, retained by "
                 "one M3 screw into a self-tapping pilot"
             ),
             "visible_assembly_pawl": "prototype",
@@ -350,12 +349,13 @@ def generate_captured_enclosure(
                 "two M3 self-tapping pilots in internal bosses tapered "
                 "continuously from the inside wall"
             ),
-            "motor_electronics_pocket": (
-                "single approximately 55.7 x 76.6 mm rounded-rectangle side "
-                "pocket around the "
-                "motor and a 50 x 35 mm electronics-card envelope, with an "
-                "8 mm inner corner radius and continuous "
-                f"{min(params.drum_enclosure.side_feature_chamfer, params.drum_enclosure.side_inset_depth):g} mm lead-in"
+            "full_side_pockets": (
+                "matching motor-side and shaft-side rounded-rectangle trays, "
+                f"each inset {params.drum_enclosure.side_pocket_margin:g} mm "
+                "from the projected side boundary, with a "
+                f"{params.drum_enclosure.side_pocket_corner_radius:g} mm opening "
+                "corner radius and continuous "
+                f"{min(params.drum_enclosure.side_pocket_chamfer, params.drum_enclosure.side_inset_depth):g} mm lead-in"
             ),
             "enclosure_construction": (
                 "one continuous printable shell without an assembly seam, "
@@ -371,8 +371,8 @@ def generate_captured_enclosure(
                 "derived as half the wall thickness, with a flat pawl land"
             ),
             "front_bed_printing": (
-                f"{min(params.drum_enclosure.side_feature_chamfer, params.drum_enclosure.side_inset_depth):g} mm "
-                "45 degree lead-ins on both side recesses and a "
+                f"{min(params.drum_enclosure.side_pocket_chamfer, params.drum_enclosure.side_inset_depth):g} mm "
+                "45 degree lead-ins on both full-side pockets and a "
                 f"{params.drum_enclosure.remaining_side_wall:g} mm lead-in through "
                 "the remaining motor bore wall; screw pilots remain cylindrical"
             ),
@@ -381,9 +381,9 @@ def generate_captured_enclosure(
                 "0.2 mm into the top face through a nominal 0.2 mm chamfer"
             ),
             "side_docking_relief": (
-                f"{params.drum_enclosure.side_inset_depth:g} mm motor/electronics "
-                f"inset plus {params.drum_enclosure.side_inset_depth:g} mm opposite "
-                f"recess; {remaining_docking_gap:g} mm body gap still required "
+                "two matching full-side pockets, each "
+                f"{params.drum_enclosure.side_inset_depth:g} mm deep; "
+                f"{remaining_docking_gap:g} mm body gap still required "
                 "for equal orientation"
             ),
         },

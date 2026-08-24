@@ -155,15 +155,14 @@ class DrumEnclosureDimensions:
     capture_outer_corner_radius: float = 10.0
     pawl_mount_land_margin: float = 2.0
     docking_clearance: float = 0.3
-    motor_cable_clearance: float = 1.0
-    side_feature_chamfer: float = 6.0
+    side_pocket_chamfer: float = 6.0
+    side_pocket_margin: float = 6.0
+    side_pocket_corner_radius: float = 8.0
     boss_end_chamfer: float = 1.5
     electronics_card_width: float = 50.0
     electronics_card_height: float = 35.0
     electronics_card_center_y: float = 0.0
     electronics_card_center_z: float = -50.0
-    electronics_card_clearance: float = 0.5
-    motor_electronics_corner_radius: float = 8.0
     motor_bore_diameter: float = 10.0
     shaft_bore_diameter: float = 3.4
     motor_mount_hole_diameter: float = 4.4
@@ -369,8 +368,20 @@ def design_from_mapping(
         raise ValueError(
             "side_inset_depth must be non-negative and smaller than wall_thickness"
         )
+    if enclosure.side_pocket_margin < 0:
+        raise ValueError("side_pocket_margin cannot be negative")
+    if enclosure.side_pocket_corner_radius < 0:
+        raise ValueError("side_pocket_corner_radius cannot be negative")
+    side_pocket_chamfer = min(
+        enclosure.side_pocket_chamfer,
+        enclosure.side_inset_depth,
+    )
+    if enclosure.side_pocket_corner_radius < side_pocket_chamfer:
+        raise ValueError(
+            "side_pocket_corner_radius must be at least the side pocket chamfer"
+        )
     chamfers = {
-        "side_feature_chamfer": enclosure.side_feature_chamfer,
+        "side_pocket_chamfer": enclosure.side_pocket_chamfer,
         "boss_end_chamfer": enclosure.boss_end_chamfer,
         "top_mark_chamfer": enclosure.top_mark_chamfer,
         "pawl_outer_chamfer": enclosure.pawl_outer_chamfer,

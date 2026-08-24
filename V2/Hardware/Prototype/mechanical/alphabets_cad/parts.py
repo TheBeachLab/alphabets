@@ -462,56 +462,11 @@ def _rounded_rectangle_wire(
 ) -> cq.Wire:
     """Rounded rectangle wire located on an arbitrary side-face plane."""
 
-    wire = (
-        cq.Workplane("XY")
-        .rect(width, height)
-        .extrude(EPSILON)
-        .edges("|Z")
-        .fillet(radius)
-        .faces("<Z")
-        .wires()
-        .val()
-    )
+    profile = cq.Workplane("XY").rect(width, height).extrude(EPSILON)
+    if radius > 0:
+        profile = profile.edges("|Z").fillet(radius)
+    wire = profile.faces("<Z").wires().val()
     return wire.moved(plane.location)
-
-
-def _motor_electronics_pocket_bounds(
-    params: DesignParameters,
-) -> tuple[float, float, float, float]:
-    """Inner rounded-rectangle bounds covering the motor and 50 x 35 mm PCB."""
-
-    enclosure = params.drum_enclosure
-    motor = params.motor
-    clearance = enclosure.docking_clearance
-    half_card_width = enclosure.electronics_card_width / 2
-    card_clearance = (
-        enclosure.electronics_card_clearance
-        + enclosure.motor_electronics_corner_radius * (1 - 1 / math.sqrt(2))
-    )
-    minimum_y = min(
-        enclosure.electronics_card_center_y - half_card_width - card_clearance,
-        -motor.mount_center_offset - motor.mount_outer_radius - clearance,
-    )
-    maximum_y = max(
-        enclosure.electronics_card_center_y + half_card_width + card_clearance,
-        motor.mount_center_offset + motor.mount_outer_radius + clearance,
-    )
-    minimum_z = min(
-        enclosure.electronics_card_center_z
-        - enclosure.electronics_card_height / 2
-        - card_clearance,
-        -motor.shaft_offset
-        - motor.backpack_extent
-        - clearance
-        - enclosure.motor_cable_clearance,
-    )
-    maximum_z = max(
-        enclosure.electronics_card_center_z
-        + enclosure.electronics_card_height / 2
-        + card_clearance,
-        -motor.shaft_offset + motor.chassis_radius + clearance,
-    )
-    return minimum_y, maximum_y, minimum_z, maximum_z
 
 
 def _x_axis_chamfered_circle(
@@ -562,9 +517,10 @@ def _x_axis_chamfered_circle(
     return lead_in.fuse(straight).clean()
 
 
-def _x_axis_chamfered_rectangle(
+def _x_axis_chamfered_rounded_rectangle(
     width: float,
     height: float,
+    corner_radius: float,
     depth: float,
     chamfer: float,
     x: float,
@@ -572,7 +528,7 @@ def _x_axis_chamfered_rectangle(
     z: float,
     direction: int,
 ) -> cq.Shape:
-    """Rectangular recess with a 45-degree lead-in from a side face."""
+    """Rounded-rectangle recess with a 45-degree side-face lead-in."""
 
     transition = min(chamfer, depth)
     outer_plane = cq.Plane(
@@ -581,35 +537,37 @@ def _x_axis_chamfered_rectangle(
         normal=(direction, 0, 0),
     )
     if transition <= 0:
-        return (
-            cq.Workplane(outer_plane)
-            .rect(width, height)
-            .extrude(depth + EPSILON)
-            .val()
-            .clean()
-        )
+        wire = _rounded_rectangle_wire(outer_plane, width, height, corner_radius)
+        return cq.Solid.extrudeLinear(
+            wire,
+            [],
+            cq.Vector(direction * (depth + EPSILON), 0, 0),
+        ).clean()
     inner_x = x + direction * transition
     inner_plane = cq.Plane(
         origin=(inner_x, y, z),
         xDir=(0, 1, 0),
         normal=(direction, 0, 0),
     )
-    lead_in = cq.Solid.makeLoft(
-        [
-            cq.Workplane(outer_plane)
-            .rect(width + 2 * transition, height + 2 * transition)
-            .val(),
-            cq.Workplane(inner_plane).rect(width, height).val(),
-        ],
-        True,
+    outer_wire = _rounded_rectangle_wire(
+        outer_plane,
+        width + 2 * transition,
+        height + 2 * transition,
+        corner_radius + transition,
     )
+    inner_wire = _rounded_rectangle_wire(
+        inner_plane,
+        width,
+        height,
+        corner_radius,
+    )
+    lead_in = cq.Solid.makeLoft([outer_wire, inner_wire], True)
     if transition == depth:
         return lead_in.clean()
-    straight = (
-        cq.Workplane(inner_plane)
-        .rect(width, height)
-        .extrude(depth - transition + EPSILON)
-        .val()
+    straight = cq.Solid.extrudeLinear(
+        inner_wire,
+        [],
+        cq.Vector(direction * (depth - transition + EPSILON), 0, 0),
     )
     return lead_in.fuse(straight).clean()
 
@@ -654,68 +612,56 @@ def captured_enclosure_limits(
     )
 
 
-def _captured_motor_mount_pocket(
+def _captured_side_pockets(
     limits: CapturedEnclosureLimits,
     params: DesignParameters = DESIGN,
-) -> cq.Shape:
-    """Convex motor/PCB pocket with one continuous printable side lead-in."""
+) -> tuple[cq.Shape, cq.Shape]:
+    """Matching full-face trays on the motor and shaft sides."""
 
     enclosure = params.drum_enclosure
-    start_x = limits.outer_x_min - EPSILON
-    depth = enclosure.side_inset_depth + EPSILON
-    chamfer = min(enclosure.side_feature_chamfer, enclosure.side_inset_depth)
-    minimum_y, maximum_y, minimum_z, maximum_z = _motor_electronics_pocket_bounds(
-        params
+    chamfer = min(enclosure.side_pocket_chamfer, enclosure.side_inset_depth)
+    opening_width = limits.outer_depth - 2 * enclosure.side_pocket_margin
+    opening_height = limits.outer_height - 2 * enclosure.side_pocket_margin
+    width = opening_width - 2 * chamfer
+    height = opening_height - 2 * chamfer
+    corner_radius = enclosure.side_pocket_corner_radius - chamfer
+    if width <= 0 or height <= 0:
+        raise ValueError("side_pocket_margin leaves no usable side pocket")
+    if corner_radius < 0:
+        raise ValueError(
+            "side_pocket_corner_radius must be at least the side pocket chamfer"
+        )
+    if enclosure.side_pocket_corner_radius > min(opening_width, opening_height) / 2:
+        raise ValueError("side_pocket_corner_radius is too large for the side pocket")
+    center_y = (limits.back_y + limits.front_y) / 2
+    center_z = (limits.outer_bottom_z + limits.outer_top_z) / 2
+    common = {
+        "width": width,
+        "height": height,
+        "corner_radius": corner_radius,
+        "depth": enclosure.side_inset_depth + EPSILON,
+        "chamfer": chamfer,
+        "y": center_y,
+        "z": center_z,
+    }
+    motor_side = _x_axis_chamfered_rounded_rectangle(
+        x=limits.outer_x_min - EPSILON,
+        direction=1,
+        **common,
     )
-    center_y = (minimum_y + maximum_y) / 2
-    center_z = (minimum_z + maximum_z) / 2
-    width = maximum_y - minimum_y
-    height = maximum_z - minimum_z
-    outer_plane = cq.Plane(
-        origin=(start_x, center_y, center_z),
-        xDir=(0, 1, 0),
-        normal=(1, 0, 0),
+    shaft_side = _x_axis_chamfered_rounded_rectangle(
+        x=limits.outer_x_max + EPSILON,
+        direction=-1,
+        **common,
     )
-    inner_x = start_x + chamfer
-    inner_plane = cq.Plane(
-        origin=(inner_x, center_y, center_z),
-        xDir=(0, 1, 0),
-        normal=(1, 0, 0),
-    )
-    outer_wire = _rounded_rectangle_wire(
-        outer_plane,
-        width + 2 * chamfer,
-        height + 2 * chamfer,
-        enclosure.motor_electronics_corner_radius + chamfer,
-    )
-    inner_wire = _rounded_rectangle_wire(
-        inner_plane,
-        width,
-        height,
-        enclosure.motor_electronics_corner_radius,
-    )
-    if chamfer <= 0:
-        return cq.Solid.extrudeLinear(
-            inner_wire,
-            [],
-            cq.Vector(depth + EPSILON, 0, 0),
-        ).clean()
-    lead_in = cq.Solid.makeLoft([outer_wire, inner_wire], True)
-    if chamfer == depth:
-        return lead_in.clean()
-    straight = cq.Solid.extrudeLinear(
-        inner_wire,
-        [],
-        cq.Vector(depth - chamfer + EPSILON, 0, 0),
-    )
-    return lead_in.fuse(straight).clean()
+    return motor_side, shaft_side
 
 
 def _captured_electronics_card_envelope(
     limits: CapturedEnclosureLimits,
     params: DesignParameters = DESIGN,
 ) -> cq.Shape:
-    """Exact 50 x 35 mm PCB envelope spanning the six-millimetre side pocket."""
+    """Movable PCB envelope spanning the configured motor-side pocket depth."""
 
     enclosure = params.drum_enclosure
     return (
@@ -808,25 +754,6 @@ def _captured_motor_mount_pilots(
         )
     ]
     return cq.Compound.makeCompound(pilots)
-
-
-def _captured_docking_recess(
-    limits: CapturedEnclosureLimits,
-    params: DesignParameters = DESIGN,
-) -> cq.Shape:
-    """Opposite recess matching the motor inset with a printable lead-in."""
-
-    enclosure = params.drum_enclosure
-    motor = params.motor
-    return _x_axis_chamfered_circle(
-        motor.chassis_radius + enclosure.docking_clearance,
-        enclosure.side_inset_depth + EPSILON,
-        min(enclosure.side_feature_chamfer, enclosure.side_inset_depth),
-        limits.outer_x_max + EPSILON,
-        0,
-        -motor.shaft_offset,
-        -1,
-    )
 
 
 def _captured_shaft_support(
@@ -1250,9 +1177,8 @@ def _captured_enclosure_shell(
     )
     shell = shell.fuse(pawl_mount_land).clean()
 
-    shell = shell.cut(_captured_motor_mount_pocket(limits, params)).cut(
-        _captured_docking_recess(limits, params)
-    )
+    motor_side_pocket, shaft_side_pocket = _captured_side_pockets(limits, params)
+    shell = shell.cut(motor_side_pocket).cut(shaft_side_pocket)
     shell = shell.fuse(_captured_motor_mount_bosses(limits, params)).clean()
     shell = shell.cut(_captured_motor_mount_pilots(limits, params))
 

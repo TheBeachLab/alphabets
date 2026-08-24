@@ -18,16 +18,16 @@
   "features": {
     "enclosure_construction": "one continuous printable shell without an assembly seam, magnet pockets or internal alignment keys",
     "front_alignment": "automatic from the saved front-card/pawl capture plane; there is no manual front offset",
-    "front_bed_printing": "6 mm 45 degree lead-ins on both side recesses and a 2 mm lead-in through the remaining motor bore wall; screw pilots remain cylindrical",
-    "front_edge": "4 mm inner chamfer, derived as half the wall thickness, with a flat pawl land",
+    "front_bed_printing": "4 mm 45 degree lead-ins on both full-side pockets and a 2 mm lead-in through the remaining motor bore wall; screw pilots remain cylindrical",
+    "front_edge": "3 mm inner chamfer, derived as half the wall thickness, with a flat pawl land",
     "front_open": true,
+    "full_side_pockets": "matching motor-side and shaft-side rounded-rectangle trays, each inset 6 mm from the projected side boundary, with a 8 mm opening corner radius and continuous 4 mm lead-in",
     "lower_shaft_support": "M3 self-tapping pilot in a 9 mm boss tapered continuously from the inside wall; user-supplied M3 screw forms the axle through the drum's 3.4 mm clearance hole",
-    "motor_electronics_pocket": "single approximately 55.7 x 76.6 mm rounded-rectangle side pocket around the motor and a 50 x 35 mm electronics-card envelope, with an 8 mm inner corner radius and continuous 6 mm lead-in",
     "motor_mount": "two M3 self-tapping pilots in internal bosses tapered continuously from the inside wall",
     "rear_open": true,
-    "replaceable_pawls": "Prototype pawl with a 1 mm outer-face chamfer, retained by one M3 screw into a self-tapping pilot",
+    "replaceable_pawls": "Prototype pawl with a 0 mm outer-face chamfer, retained by one M3 screw into a self-tapping pilot",
     "screw_lugs": false,
-    "side_docking_relief": "6 mm motor/electronics inset plus 6 mm opposite recess; 7.3 mm body gap still required for equal orientation",
+    "side_docking_relief": "two matching full-side pockets, each 4 mm deep; 11.3 mm body gap still required for equal orientation",
     "top_mark": "large split alpha rotated toward the front and recessed 0.2 mm into the top face through a nominal 0.2 mm chamfer",
     "vertical_stacking": "four downward 3 mm truncated pyramids and four matching top sockets with 0.2 mm clearance, inset to the tangent of the 10 mm enclosure corner radius",
     "visible_assembly_pawl": "prototype"
@@ -36,22 +36,22 @@
     "enclosure": {
       "bounds_mm": {
         "x": [
-          -40.15,
-          40.15
+          -39.15,
+          39.15
         ],
         "y": [
-          -64.75,
+          -63.0,
           40.301815
         ],
         "z": [
-          -86.0,
-          74.32
+          -81.0,
+          69.0
         ]
       },
-      "component_volume_sum_mm3": 324392.619427,
+      "component_volume_sum_mm3": 163025.525366,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 324392.619427
+      "volume_mm3": 163025.525366
     },
     "pawl_prototype": {
       "bounds_mm": {
@@ -64,48 +64,45 @@
           42.301813
         ],
         "z": [
-          44.239874,
-          74.32
+          41.239874,
+          69.0
         ]
       },
-      "component_volume_sum_mm3": 381.079892,
+      "component_volume_sum_mm3": 371.854272,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 381.079892
+      "volume_mm3": 371.854272
     }
   },
   "limits_mm": {
-    "back_y": -64.75,
+    "back_y": -63.0,
     "front_y": 40.301814675,
-    "inner_bottom_z": -75.0,
-    "inner_top_z": 66.32,
-    "inner_x_max": 32.15,
-    "inner_x_min": -32.15,
-    "outer_bottom_z": -83.0,
-    "outer_top_z": 74.32,
-    "outer_x_max": 40.15,
-    "outer_x_min": -40.15
+    "inner_bottom_z": -72.0,
+    "inner_top_z": 63.0,
+    "inner_x_max": 33.15,
+    "inner_x_min": -33.15,
+    "outer_bottom_z": -78.0,
+    "outer_top_z": 69.0,
+    "outer_x_max": 39.15,
+    "outer_x_min": -39.15
   },
   "parameters": {
     "alignment_base_size": 8.0,
     "alignment_clearance": 0.2,
     "alignment_height": 3.0,
     "alignment_top_size": 2.0,
-    "back_distance": 64.75,
+    "back_distance": 63.0,
     "boss_end_chamfer": 1.5,
-    "bottom_distance": 75.0,
+    "bottom_distance": 72.0,
     "docking_clearance": 0.3,
     "electronics_card_center_y": 0.0,
     "electronics_card_center_z": -50.0,
-    "electronics_card_clearance": 0.5,
     "electronics_card_height": 35.0,
     "electronics_card_width": 50.0,
-    "front_chamfer": 4.0,
-    "minimum_same_orientation_gap": 7.3,
-    "minimum_same_orientation_pitch": 87.6,
+    "front_chamfer": 3.0,
+    "minimum_same_orientation_gap": 11.3,
+    "minimum_same_orientation_pitch": 89.6,
     "motor_bore_diameter": 10.0,
-    "motor_cable_clearance": 1.0,
-    "motor_electronics_corner_radius": 8.0,
     "motor_mount_boss_radius": 4.5,
     "motor_mount_disc_clearance": 0.5,
     "motor_mount_pilot_diameter": 2.6,
@@ -113,13 +110,13 @@
     "pawl_head_recess_depth": 1.0,
     "pawl_head_recess_diameter": 6.0,
     "pawl_mount_width": 10.0,
-    "pawl_outer_chamfer": 1.0,
+    "pawl_outer_chamfer": 0.0,
     "pawl_pilot_depth": 8.0,
     "pawl_pilot_diameter": 2.6,
     "pawl_screw_clearance_diameter": 3.4,
     "pawl_thickness_addition": 1.0,
     "pawl_tip_radius": 2.0,
-    "prototype_pawl_extension": 3.0,
+    "prototype_pawl_extension": 6.0,
     "remaining_side_wall": 2.0,
     "shaft_head_recess_depth": 2.0,
     "shaft_head_recess_diameter": 6.0,
@@ -127,12 +124,14 @@
     "shaft_support_axial_clearance": 0.5,
     "shaft_support_boss_radius": 4.5,
     "shaft_support_pilot_diameter": 2.6,
-    "side_clearance": 2.0,
-    "side_feature_chamfer": 6.0,
-    "side_inset_depth": 6.0,
+    "side_clearance": 3.0,
+    "side_inset_depth": 4.0,
+    "side_pocket_chamfer": 4.0,
+    "side_pocket_corner_radius": 8.0,
+    "side_pocket_margin": 6.0,
     "stack_alignment_x_inset": 14.0,
     "stack_alignment_y_inset": 20.0,
-    "top_distance": 66.32,
+    "top_distance": 63.0,
     "top_mark_chamfer": 0.2,
     "top_mark_character": "α",
     "top_mark_depth": 0.2,
@@ -140,7 +139,7 @@
     "top_mark_font_size": 90.0,
     "top_mark_rotation": 180.0,
     "top_mark_split_gap": 2.0,
-    "wall_thickness": 8.0
+    "wall_thickness": 6.0
   },
   "physical_variant": "prototype",
   "print_plate": {
@@ -153,22 +152,22 @@
     "geometry": {
       "bounds_mm": {
         "x": [
-          49.85,
-          130.15
+          50.85,
+          129.15
         ],
         "y": [
-          9.84,
-          170.16
+          15.0,
+          165.0
         ],
         "z": [
           -0.0,
-          105.051815
+          103.301815
         ]
       },
-      "component_volume_sum_mm3": 324773.699412,
+      "component_volume_sum_mm3": 163397.379707,
       "solid_count": 2,
       "valid": true,
-      "volume_mm3": 324773.699412
+      "volume_mm3": 163397.379707
     },
     "margin_mm": 5.0,
     "part_gap_mm": 2.0,
@@ -177,16 +176,16 @@
         "bed_face": "front enclosure rim",
         "bounds_mm": {
           "x": [
-            49.85,
-            130.15
+            50.85,
+            129.15
           ],
           "y": [
-            9.84,
-            170.16
+            15.0,
+            165.0
           ],
           "z": [
             -0.0,
-            105.051815
+            103.301815
           ]
         },
         "rotation_deg": {
@@ -202,8 +201,8 @@
             95.0
           ],
           "y": [
-            74.959937,
-            105.040063
+            76.119937,
+            103.880063
           ],
           "z": [
             -0.0,

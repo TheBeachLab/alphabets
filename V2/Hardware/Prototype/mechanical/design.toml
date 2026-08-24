@@ -90,23 +90,23 @@ bottom_distance = 72.0
 back_distance = 63.0
 side_clearance = 3.0
 wall_thickness = 6.0
-# Both the motor/electronics pocket and the opposite docking recess enter this
-# far from their outside faces. The remaining side wall is wall thickness minus
-# this inset depth.
+# Both full-side pockets enter this far from their outside faces. The remaining
+# side wall is wall thickness minus this inset depth.
 side_inset_depth = 4.0
 
 capture_outer_corner_radius = 10.0
 pawl_mount_land_margin = 2.0
 docking_clearance = 0.3
-motor_cable_clearance = 1.0
-side_feature_chamfer = 4.0
+side_pocket_chamfer = 4.0
+side_pocket_margin = 6.0
+side_pocket_corner_radius = 8.0
 boss_end_chamfer = 1.5
 electronics_card_width = 50.0
 electronics_card_height = 35.0
+# Movable electronics envelope. Negative Y moves it toward the back; Z is its
+# height relative to the drum axis.
 electronics_card_center_y = 0.0
 electronics_card_center_z = -50.0
-electronics_card_clearance = 0.5
-motor_electronics_corner_radius = 8.0
 motor_bore_diameter = 10.0
 shaft_bore_diameter = 3.4
 motor_mount_hole_diameter = 4.4
