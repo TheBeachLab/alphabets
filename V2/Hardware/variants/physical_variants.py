@@ -30,10 +30,17 @@ class StickerDimensions:
     width_mm: float
     height_mm: float
     split_y_mm: float
+    cut_gap_mm: float
 
     @property
     def face_height_mm(self) -> float:
         return self.split_y_mm
+
+    @property
+    def artwork_height_mm(self) -> float:
+        """Printed height spanning both cuts and their intentional gap."""
+
+        return self.height_mm + self.cut_gap_mm
 
 
 @dataclass(frozen=True)
@@ -116,6 +123,7 @@ def _variant(data: dict[str, Any]) -> PhysicalVariant:
         _number(sticker_data, "width", f"{variant_id}.sticker_mm"),
         _number(sticker_data, "height", f"{variant_id}.sticker_mm"),
         _number(sticker_data, "split_y", f"{variant_id}.sticker_mm"),
+        _number(sticker_data, "cut_gap", f"{variant_id}.sticker_mm"),
     )
     card = CardDimensions(
         _number(card_data, "body_width", f"{variant_id}.card_mm"),

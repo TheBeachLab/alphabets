@@ -12,7 +12,8 @@
       "sticker_mm": {
         "width": 50.0,
         "height": 80.0,
-        "split_y": 40.0
+        "split_y": 40.0,
+        "cut_gap": 1.8
       },
       "card_mm": {
         "body_width": 55.0,
@@ -58,7 +59,8 @@
       "sticker_mm": {
         "width": 45.0,
         "height": 91.0,
-        "split_y": 45.5
+        "split_y": 45.5,
+        "cut_gap": 1.8
       },
       "card_mm": {
         "body_width": 50.0,

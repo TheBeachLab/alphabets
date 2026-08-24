@@ -20,17 +20,26 @@
       45.0,
       91.0
     ],
+    "cut_half": [
+      45.0,
+      45.5
+    ],
+    "cut_gap": 1.8,
+    "artwork": [
+      45.0,
+      92.8
+    ],
     "page": [
       1168.0,
-      293.0
+      298.4
     ],
     "margin": 5.0,
     "column_gap": 8.0,
     "row_gap": 5.0,
     "split_y": 45.5,
     "glyph_padding": [
-      3.0,
-      4.0
+      0.0,
+      0.0
     ],
     "columns": 22,
     "rows": 3
@@ -39,16 +48,16 @@
   "typography": {
     "alignment": "common-transform-baseline-centered-bounds",
     "spacing": "proportional",
-    "scale_x_mm_per_font_unit": 0.050387596899224806,
-    "scale_y_mm_per_font_unit": 0.06968933669185558,
-    "width_ratio": 0.7230316615298403,
+    "scale_x_mm_per_font_unit": 0.05813953488372093,
+    "scale_y_mm_per_font_unit": 0.05813953488372093,
+    "width_ratio": 1.0,
     "advance_range_mm": [
-      8.414728682170542,
-      40.46124031007752
+      9.709302325581396,
+      46.68604651162791
     ],
-    "max_visible_width_mm": 39.0,
-    "baseline_from_card_top_mm": 70.76238455079765,
-    "vertical_padding_min_mm": 4.0
+    "max_visible_width_mm": 45.0,
+    "baseline_from_card_top_mm": 67.47558139534884,
+    "vertical_padding_min_mm": 0.0
   },
   "fonts": [
     {

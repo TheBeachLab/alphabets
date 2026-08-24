@@ -74,11 +74,17 @@ class SheetGeometry:
     column_gap_mm: float = 8.0
     row_gap_mm: float = 5.0
     columns: int = 22
-    glyph_padding_x_mm: float = 3.0
-    glyph_padding_y_mm: float = 4.0
-    cap_height_mm: float = 67.0
+    glyph_padding_x_mm: float = 0.0
+    glyph_padding_y_mm: float = 0.0
     split_y_mm: float = 43.0
+    cut_gap_mm: float = 0.0
     guide_width_mm: float = 0.15
+
+    @property
+    def artwork_height_mm(self) -> float:
+        """Printed height across the two cut halves and their center gap."""
+
+        return self.card_height_mm + self.cut_gap_mm
 
     def page_size(self, count: int) -> tuple[float, float, int]:
         if self.columns < 1:
@@ -87,8 +93,12 @@ class SheetGeometry:
             raise StickerError("card dimensions must be positive")
         if not 0 <= self.glyph_padding_x_mm < self.card_width_mm / 2:
             raise StickerError("horizontal glyph padding does not fit the card")
-        if not 0 <= self.glyph_padding_y_mm < self.card_height_mm / 2:
+        if not 0 <= self.glyph_padding_y_mm < self.artwork_height_mm / 2:
             raise StickerError("vertical glyph padding does not fit the card")
+        if not 0 < self.split_y_mm < self.card_height_mm:
+            raise StickerError("split position must be inside the sticker height")
+        if self.cut_gap_mm < 0:
+            raise StickerError("cut gap cannot be negative")
         rows = math.ceil(count / self.columns)
         width = (
             2 * self.margin_mm
@@ -97,7 +107,7 @@ class SheetGeometry:
         )
         height = (
             2 * self.margin_mm
-            + rows * self.card_height_mm
+            + rows * self.artwork_height_mm
             + max(0, rows - 1) * self.row_gap_mm
         )
         return width, height, rows
@@ -278,14 +288,14 @@ def typography_layout(
     horizontal_scale = (
         geometry.card_width_mm - 2 * geometry.glyph_padding_x_mm
     ) / max_visible_width
-    vertical_scale = (geometry.card_height_mm - 2 * geometry.glyph_padding_y_mm) / (
-        y_max - y_min
-    )
-    cap_scale = geometry.cap_height_mm / face.cap_height
+    # Preserve the typeface geometry: width is the controlling dimension and
+    # the same scale is applied on both axes. If a profile becomes too tall,
+    # glyph_placement rejects it so the physical height can be changed rather
+    # than silently deforming the artwork.
     scale_x = horizontal_scale
-    scale_y = min(vertical_scale, cap_scale)
+    scale_y = horizontal_scale
 
-    baseline = geometry.card_height_mm / 2 + (y_max + y_min) * scale_y / 2
+    baseline = geometry.artwork_height_mm / 2 + (y_max + y_min) * scale_y / 2
     return TypographyLayout(
         scale_x=scale_x,
         scale_y=scale_y,
@@ -335,7 +345,10 @@ def glyph_placement(
         <= card_x + geometry.card_width_mm - geometry.glyph_padding_x_mm + tolerance
         and card_y + geometry.glyph_padding_y_mm - tolerance <= visible_top
         and visible_bottom
-        <= card_y + geometry.card_height_mm - geometry.glyph_padding_y_mm + tolerance
+        <= card_y
+        + geometry.artwork_height_mm
+        - geometry.glyph_padding_y_mm
+        + tolerance
     ):
         raise StickerError(f"glyph {character!r} exceeds its safe card limits")
 
@@ -354,7 +367,9 @@ def glyph_placement(
 def card_origin(index: int, geometry: SheetGeometry) -> tuple[float, float, int, int]:
     row, column = divmod(index, geometry.columns)
     x = geometry.margin_mm + column * (geometry.card_width_mm + geometry.column_gap_mm)
-    y = geometry.margin_mm + row * (geometry.card_height_mm + geometry.row_gap_mm)
+    y = geometry.margin_mm + row * (
+        geometry.artwork_height_mm + geometry.row_gap_mm
+    )
     return x, y, row, column
 
 
@@ -405,7 +420,7 @@ def build_svg(
             f'    <clipPath id="clip-card-{sheet_index + 1:02d}" '
             f'clipPathUnits="userSpaceOnUse"><rect x="{number(x)}" y="{number(y)}" '
             f'width="{number(geometry.card_width_mm)}" '
-            f'height="{number(geometry.card_height_mm)}"/></clipPath>'
+            f'height="{number(geometry.artwork_height_mm)}"/></clipPath>'
         )
     lines.extend(
         [
@@ -420,7 +435,7 @@ def build_svg(
         x, y, row, column = card_origin(sheet_index, geometry)
         lines.append(
             f'    <rect id="card-{sheet_index + 1:02d}" x="{number(x)}" y="{number(y)}" '
-            f'width="{number(geometry.card_width_mm)}" height="{number(geometry.card_height_mm)}" '
+            f'width="{number(geometry.card_width_mm)}" height="{number(geometry.artwork_height_mm)}" '
             f'fill="{background}"/>'
         )
         placement = None
@@ -461,13 +476,15 @@ def build_svg(
         )
         for sheet_index in range(len(characters)):
             x, y, _, _ = card_origin(sheet_index, geometry)
+            lower_y = y + geometry.split_y_mm + geometry.cut_gap_mm
+            lower_height = geometry.card_height_mm - geometry.split_y_mm
             lines.append(
                 f'    <rect x="{number(x)}" y="{number(y)}" width="{number(geometry.card_width_mm)}" '
-                f'height="{number(geometry.card_height_mm)}"/>'
+                f'height="{number(geometry.split_y_mm)}"/>'
             )
             lines.append(
-                f'    <path d="M {number(x)} {number(y + geometry.split_y_mm)} '
-                f'H {number(x + geometry.card_width_mm)}"/>'
+                f'    <rect x="{number(x)}" y="{number(lower_y)}" width="{number(geometry.card_width_mm)}" '
+                f'height="{number(lower_height)}"/>'
             )
         lines.append("  </g>")
     lines.append("</svg>")
@@ -501,14 +518,17 @@ def build_cut_svg(
     ]
     for sheet_index in range(len(characters)):
         x, y, _, _ = card_origin(sheet_index, geometry)
+        lower_y = y + geometry.split_y_mm + geometry.cut_gap_mm
+        lower_height = geometry.card_height_mm - geometry.split_y_mm
         lines.append(
             f'    <rect x="{number(x)}" y="{number(y)}" '
             f'width="{number(geometry.card_width_mm)}" '
-            f'height="{number(geometry.card_height_mm)}"/>'
+            f'height="{number(geometry.split_y_mm)}"/>'
         )
         lines.append(
-            f'    <path d="M {number(x)} {number(y + geometry.split_y_mm)} '
-            f'H {number(x + geometry.card_width_mm)}"/>'
+            f'    <rect x="{number(x)}" y="{number(lower_y)}" '
+            f'width="{number(geometry.card_width_mm)}" '
+            f'height="{number(lower_height)}"/>'
         )
     lines.extend(["  </g>", "</svg>"])
     return "\n".join(lines) + "\n"
@@ -578,12 +598,12 @@ def write_pdf(
     pdf.setFillColor(HexColor(background))
     for index in range(len(characters)):
         x, y_top, _, _ = card_origin(index, geometry)
-        y = page_height - y_top - geometry.card_height_mm
+        y = page_height - y_top - geometry.artwork_height_mm
         pdf.rect(
             x * mm,
             y * mm,
             geometry.card_width_mm * mm,
-            geometry.card_height_mm * mm,
+            geometry.artwork_height_mm * mm,
             fill=1,
             stroke=0,
         )
@@ -599,12 +619,12 @@ def write_pdf(
         glyph_set[placement.glyph_name].draw(CanvasPathPen(glyph_set, pdf_path))
         pdf.saveState()
         clip_path = pdf.beginPath()
-        clip_y = page_height - y_top - geometry.card_height_mm
+        clip_y = page_height - y_top - geometry.artwork_height_mm
         clip_path.rect(
             x * mm,
             clip_y * mm,
             geometry.card_width_mm * mm,
-            geometry.card_height_mm * mm,
+            geometry.artwork_height_mm * mm,
         )
         pdf.clipPath(clip_path, stroke=0, fill=0)
         pdf.translate(placement.x_mm * mm, (page_height - placement.baseline_y_mm) * mm)
@@ -620,18 +640,30 @@ def write_pdf(
         pdf.setLineWidth(geometry.guide_width_mm * mm)
         for index in range(len(characters)):
             x, y_top, _, _ = card_origin(index, geometry)
-            y = page_height - y_top - geometry.card_height_mm
+            upper_y = page_height - y_top - geometry.split_y_mm
             pdf.rect(
                 x * mm,
-                y * mm,
+                upper_y * mm,
                 geometry.card_width_mm * mm,
-                geometry.card_height_mm * mm,
+                geometry.split_y_mm * mm,
                 fill=0,
                 stroke=1,
             )
-            split_y = page_height - y_top - geometry.split_y_mm
-            pdf.line(
-                x * mm, split_y * mm, (x + geometry.card_width_mm) * mm, split_y * mm
+            lower_height = geometry.card_height_mm - geometry.split_y_mm
+            lower_y = (
+                page_height
+                - y_top
+                - geometry.split_y_mm
+                - geometry.cut_gap_mm
+                - lower_height
+            )
+            pdf.rect(
+                x * mm,
+                lower_y * mm,
+                geometry.card_width_mm * mm,
+                lower_height * mm,
+                fill=0,
+                stroke=1,
             )
 
     pdf.showPage()
@@ -670,6 +702,9 @@ def build_manifest(
         },
         "geometry_mm": {
             "card": [geometry.card_width_mm, geometry.card_height_mm],
+            "cut_half": [geometry.card_width_mm, geometry.split_y_mm],
+            "cut_gap": geometry.cut_gap_mm,
+            "artwork": [geometry.card_width_mm, geometry.artwork_height_mm],
             "page": [page_width, page_height],
             "margin": geometry.margin_mm,
             "column_gap": geometry.column_gap_mm,
@@ -770,8 +805,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--columns", type=int, default=22)
     parser.add_argument("--card-width", type=float, default=55.0)
     parser.add_argument("--card-height", type=float, default=86.0)
-    parser.add_argument("--horizontal-padding", type=float, default=3.0)
-    parser.add_argument("--vertical-padding", type=float, default=4.0)
+    parser.add_argument("--horizontal-padding", type=float, default=0.0)
+    parser.add_argument("--vertical-padding", type=float, default=0.0)
+    parser.add_argument(
+        "--cut-gap",
+        type=float,
+        default=0.0,
+        help="uncut printed gap between the two sticker rectangles",
+    )
     parser.add_argument(
         "--omit-blank", action="store_true", help="omit the blank drum position"
     )
@@ -829,13 +870,24 @@ def main(argv: Sequence[str] | None = None) -> int:
                 raise StickerError(
                     f"{physical_variant.name} requires a {physical_variant.sticker.height_mm:g} mm sticker height"
                 )
+            if (
+                option_was_supplied(argv, "--cut-gap")
+                and args.cut_gap != physical_variant.sticker.cut_gap_mm
+            ):
+                raise StickerError(
+                    f"{physical_variant.name} requires a {physical_variant.sticker.cut_gap_mm:g} mm cut gap"
+                )
             profile = load_profile(physical_variant.character_preset, None)
             card_width = physical_variant.sticker.width_mm
             card_height = physical_variant.sticker.height_mm
+            split_y = physical_variant.sticker.split_y_mm
+            cut_gap = physical_variant.sticker.cut_gap_mm
         else:
             profile = load_profile(args.preset, args.settings)
             card_width = args.card_width
             card_height = args.card_height
+            split_y = card_height / 2
+            cut_gap = args.cut_gap
         background, foreground = resolve_colors(
             args.color_preset, args.background, args.foreground
         )
@@ -850,7 +902,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             columns=args.columns,
             glyph_padding_x_mm=args.horizontal_padding,
             glyph_padding_y_mm=args.vertical_padding,
-            split_y_mm=card_height / 2,
+            split_y_mm=split_y,
+            cut_gap_mm=cut_gap,
         )
         include_guides = args.include_guides
         svg, positions = build_svg(

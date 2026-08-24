@@ -4,8 +4,9 @@
 
 [← Prototype mechanical CAD](../mechanical/README.md) · [Physical variants](../../variants/README.md) · [Shared generator →](../../Final/stickers/README.md)
 
-V2 Prototype uses the **Demo 64** character order and nominal 50 × 80 mm
-stickers. The centre cut creates two 50 × 40 mm faces. Each face is centred on
+V2 Prototype uses the **Demo 64** character order and two nominal `50 × 40 mm`
+sticker cuts. The cuts are separated by the historical `1.8 mm` printed gap,
+so each uninterrupted artwork cell is `50 × 81.8 mm`. Each face is centred on
 a 55 × 43 mm card, leaving 2.5 mm at each side and an unstickered 3 mm strip at
 the free edge.
 
@@ -29,7 +30,8 @@ This order must match the physical cards and controller mapping.
 
 The original `cut-print/cutprint.svg` and PDF remain as historical evidence.
 Their roughly 51 × 40.1 mm cutter rectangles include allowance around the
-nominal 50 × 40 mm sticker halves; they are not a 43 mm-high sticker.
+nominal 50 × 40 mm sticker halves, with a measured gap of approximately
+1.794 mm; they are not a 43 mm-high sticker.
 
 ## Typeface
 
