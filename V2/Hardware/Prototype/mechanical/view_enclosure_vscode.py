@@ -72,7 +72,7 @@ group_alphas = {}
 for name, members in group_members.items():
     if not members:
         continue
-    if name.startswith("pua_"):
+    if name == "enclosure" or name.startswith("pua_"):
         groups[name] = members[0].shape
         group_colors[name] = members[0].color.toTuple()[:3]
         group_alphas[name] = members[0].color.toTuple()[3]
