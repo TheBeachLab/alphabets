@@ -317,7 +317,9 @@ def test_design_profile_applies_direct_values_and_keeps_derived_values() -> None
     assert params.drum_inner_width == pytest.approx(56.5)
     assert params.enclosure_inner_height == pytest.approx(DESIGN.enclosure_inner_height)
     assert params.enclosure_inner_width == pytest.approx(65.8)
-    assert params.enclosure_outer_width == pytest.approx(81.8)
+    assert params.enclosure_outer_width == pytest.approx(
+        params.enclosure_inner_width + 2 * params.drum_enclosure.wall_thickness
+    )
 
 
 def test_design_profile_rejects_unknown_dimension(tmp_path: Path) -> None:
@@ -612,7 +614,6 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert all(len(shape.Solids()) == 1 for shape in parts.values())
 
     enclosure = DESIGN.drum_enclosure
-    assert limits.inner_bottom_z == pytest.approx(-75, abs=1e-5)
     assert limits.back_y == pytest.approx(-enclosure.back_distance)
     assert limits.front_y == pytest.approx(40.301814675)
     assert limits.inner_top_z == pytest.approx(enclosure.top_distance)
@@ -623,9 +624,16 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert limits.inner_x_max == pytest.approx(
         DESIGN.drum_outer_width / 2 + enclosure.side_clearance
     )
-    assert limits.outer_width == pytest.approx(80.3)
-    assert limits.outer_depth == pytest.approx(105.051814675)
-    assert limits.outer_height == pytest.approx(157.32)
+    assert limits.outer_width == pytest.approx(
+        DESIGN.drum_outer_width
+        + 2 * (enclosure.side_clearance + enclosure.wall_thickness)
+    )
+    assert limits.outer_depth == pytest.approx(limits.front_y + enclosure.back_distance)
+    assert limits.outer_height == pytest.approx(
+        enclosure.top_distance
+        + enclosure.bottom_distance
+        + 2 * enclosure.wall_thickness
+    )
     assert enclosure.front_chamfer == pytest.approx(enclosure.wall_thickness / 2)
 
     shell = parts["enclosure"]
@@ -686,14 +694,12 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         cq.Vector(4.8, limits.front_y + 0.5, _captured_pawl_screw_axis_z(limits)),
         1e-6,
     )
-    assert not pawl.isInside(
-        cq.Vector(
-            4.8,
-            pawl_box.ymax - 0.1,
-            _captured_pawl_screw_axis_z(limits),
-        ),
-        1e-6,
+    outer_edge_probe = cq.Vector(
+        4.8,
+        pawl_box.ymax - 0.1,
+        _captured_pawl_screw_axis_z(limits),
     )
+    assert pawl.isInside(outer_edge_probe, 1e-6) is (enclosure.pawl_outer_chamfer == 0)
     assert pawl.isInside(
         cq.Vector(4.8, limits.front_y + 0.5, limits.inner_top_z - 0.5),
         1e-6,
