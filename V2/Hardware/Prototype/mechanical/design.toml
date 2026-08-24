@@ -91,7 +91,8 @@ back_distance = 63.0
 side_clearance = 3.0
 wall_thickness = 6.0
 # Both the motor/electronics pocket and the opposite docking recess enter this
-# far from their outside faces. With an 8 mm wall and 6 mm inset, 2 mm remains.
+# far from their outside faces. The remaining side wall is wall thickness minus
+# this inset depth.
 side_inset_depth = 4.0
 
 capture_outer_corner_radius = 10.0
