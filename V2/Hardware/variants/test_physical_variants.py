@@ -36,6 +36,9 @@ class PhysicalVariantTests(unittest.TestCase):
         self.assertEqual(variants["prototype"].sticker.face_height_mm, 40.0)
         self.assertEqual(variants["definitive"].sticker.width_mm, 45.0)
         self.assertEqual(variants["definitive"].sticker.face_height_mm, 45.5)
+        self.assertEqual(variants["prototype"].sticker.cut_gap_mm, 1.8)
+        self.assertEqual(variants["definitive"].sticker.cut_gap_mm, 1.8)
+        self.assertEqual(variants["definitive"].sticker.artwork_height_mm, 92.8)
         for variant in variants.values():
             with self.subTest(variant=variant.id):
                 self.assertEqual(
@@ -80,4 +83,8 @@ class PhysicalVariantTests(unittest.TestCase):
                     self.assertEqual(
                         data["geometry_mm"]["card"],
                         [variant.sticker.width_mm, variant.sticker.height_mm],
+                    )
+                    self.assertEqual(
+                        data["geometry_mm"]["cut_gap"],
+                        variant.sticker.cut_gap_mm,
                     )

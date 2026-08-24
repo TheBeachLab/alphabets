@@ -35,15 +35,17 @@ python3 V2/Hardware/Final/stickers/generate_stickers.py \
 
 `--variant` fixes the character preset, sticker width and sticker height, and
 records the variant in the JSON manifest. It refuses a conflicting width or
-height override. The prototype sticker is nominally `50 × 80 mm`, split at
-40 mm. The body itself remains visible across its complete 43 mm height; the
+height override. The prototype has two nominal `50 × 40 mm` cuts separated by
+a `1.8 mm` printed gap. The body itself remains visible across its complete
+43 mm height; the
 40 mm half is placed from `y=3` to `y=43 mm`, aligned with the hinge/tab edge.
 The opposite `y=0…3 mm` strip remains visible but unstickered.
 
 In the preserved `cut-print/cutprint.svg`, each historical magenta cutter
 rectangle is about `51.0 × 40.1 mm` (`192.756 × 151.570` SVG px at 96 dpi).
 That is the cutter allowance around the nominal `50 × 40 mm` prototype
-sticker, not evidence of a 43 mm-high sticker.
+sticker, not evidence of a 43 mm-high sticker. Its measured center gap is
+approximately `1.794 mm`; the variant contract rounds this to `1.8 mm`.
 
 ## Generic legacy sheet
 
@@ -63,11 +65,12 @@ The SVG is accompanied by a JSON manufacturing manifest containing the exact
 character order, colors, card/page dimensions and font checksum. Card size is
 55 × 86 mm with the flap cut at 43 mm. The default 22-column layout is
 1388 × 278 mm, matching the limits of the surviving production sheet. The
-center cut passes through the uninterrupted character: the generator does not
-remove a strip from the artwork. The magenta sticker outlines and center cuts are
-superimposed vector paths in the print SVG and PDF by default, matching the
-production file. `--no-guides` produces clean artwork when required, while
-`--output-cut-svg` also writes the same cutter geometry as a separate SVG.
+artwork remains uninterrupted across the intentional center gap while the
+cutter geometry contains two independent rectangles. The magenta sticker
+outlines are superimposed vector paths in the print SVG and PDF by default,
+matching the production file. `--no-guides` produces clean artwork when
+required, while `--output-cut-svg` writes the same two-rectangle cutter
+geometry as a separate SVG.
 Every vector glyph is clipped to its own sticker boundary and uses the non-zero
 winding rule in SVG and PDF, avoiding inverted areas where the outlines
 overlap. In SVG, the clipping is applied to an outer group in sheet coordinates
@@ -77,20 +80,21 @@ These lines cut the rectangular stickers; they are not the physical flap/card
 die. The card die includes the two drum tabs and is generated separately in
 [`../cards/`](../cards/README.md).
 
-Every visible character uses one shared horizontal scale, vertical scale and
-baseline. The two scales are calculated once from the widest and tallest glyph
-in the selected 64-position profile. This global transform gives the complete
-set the tall, narrow proportion of Blue Highway D without per-character
-distortion. Each visible outline is geometrically centered in its equal-sized
-card; proportional advance widths do not change the card size. No glyph
-receives an individual scale or vertical offset.
+Every visible character uses one shared **uniform** scale and baseline. Width
+is the controlling dimension: the widest glyph reaches the two sides of the
+locked sticker width, and the same scale is applied vertically so Blue Highway
+D is never squeezed or stretched. Each visible outline is geometrically
+centered in its equal-sized artwork cell; proportional advance widths do not
+change the card size. No glyph receives an individual scale or vertical offset.
 
-The matched **V2 Definitivo** geometry is `45 × 91 mm`: after the center cut it
-creates two `45 × 45.5 mm` stickers. Each is centred laterally on the complete
+The matched **V2 Definitivo** geometry uses two `45 × 45.5 mm` cuts separated
+by a `1.8 mm` printed gap. The locked cut width remains `45 mm`; the complete
+artwork cell is therefore `45 × 92.8 mm`. Each sticker is centred laterally on the complete
 `50 × 48 mm` visible face and aligned to its hinge/tab edge. The opposite
 2.5 mm strip remains unstickered. The center-cut edge of each half is the edge
-that must face the tabs; this preserves continuous curves and diagonal strokes
-without a visual jump. Generate it without changing the shared alignment with:
+that must face the tabs. Skipping the `1.8 mm` printed interval between the two
+cuts compensates the physical separation and preserves continuous curves and
+diagonal strokes. Generate it without changing the shared alignment with:
 
 ```sh
 python3 V2/Hardware/Final/stickers/generate_stickers.py \
@@ -100,8 +104,9 @@ python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --output-pdf /tmp/international-45x91.pdf
 ```
 
-`--horizontal-padding` and `--vertical-padding` control the guaranteed clear
-area. Increasing either value reduces the entire type system uniformly.
+`--horizontal-padding` reduces the width available to the uniform scale.
+`--vertical-padding` is a validation clearance: it never rescales or deforms
+the type, and generation stops if the width-driven artwork is too tall.
 The matching card cutter and 51 mm drum separation are documented in
 [`../cards/`](../cards/README.md). Use `--variant prototype` for the existing
 55 mm cards with nominal `50 × 40 mm` stickers / Demo 64 hardware.

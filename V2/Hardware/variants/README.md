@@ -8,13 +8,18 @@ sticker sheet, card, drum spacing and enclosure source.
 
 | Variant | Character preset | Sticker / halves | Card | Drum inner / outer width | Enclosure |
 | --- | --- | --- | --- | --- | --- |
-| **V2 Prototipo** | `demo-64` | 50 × 80 / 50 × 40 mm | 55 × 43 mm, all visible | 56 / 60.3 mm | isolated CadQuery Prototype derivative; physical fit pending |
-| **V2 Definitivo** | `international-64` | 45 × 91 / 45 × 45.5 mm | 50 × 48 mm, all visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
+| **V2 Prototipo** | `demo-64` | two 50 × 40 mm cuts, 1.8 mm gap | 55 × 43 mm, all visible | 56 / 60.3 mm | isolated CadQuery Prototype derivative; physical fit pending |
+| **V2 Definitivo** | `international-64` | two 45 × 45.5 mm cuts, 1.8 mm gap | 50 × 48 mm, all visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
 
 Both variants leave a 2.5 mm placement margin at each lateral edge. The sticker
 is aligned with the hinge/tab edge, not the opposite free edge. The whole card
 face remains visible, with the uncovered strip at the free edge: 3 mm on the
 prototype and 2.5 mm on the definitive card.
+
+The `1.8 mm` center gap is part of the printed artwork layout, not a third
+sticker. The artwork remains continuous through it, while the cutter receives
+two independent half-card rectangles. Typography uses one width-driven uniform
+scale so the widest glyph reaches the locked sticker width without deformation.
 
 ## Sticker sheets
 

@@ -142,7 +142,7 @@ class StickerGeneratorTests(unittest.TestCase):
             visible_center = placement.x_mm + (x_min + x_max) * layout.scale_x / 2
             self.assertAlmostEqual(visible_center, geometry.card_width_mm / 2)
 
-    def test_tall_narrow_card_recalculates_one_safe_shared_scale(self):
+    def test_tall_narrow_card_uses_one_width_driven_uniform_scale(self):
         standard = typography_layout(
             self.profile.characters, self.faces[0], SheetGeometry(card_width_mm=55)
         )
@@ -151,12 +151,15 @@ class StickerGeneratorTests(unittest.TestCase):
             self.profile.characters, self.faces[0], narrow_geometry
         )
         self.assertLess(narrow.scale_x, standard.scale_x)
-        self.assertGreater(narrow.scale_y, standard.scale_y)
+        self.assertLess(narrow.scale_y, standard.scale_y)
+        self.assertEqual(narrow.scale_x, narrow.scale_y)
+        self.assertEqual(standard.scale_x, standard.scale_y)
         self.assertLessEqual(
             narrow.max_visible_width_units * narrow.scale_x,
             narrow_geometry.card_width_mm - 2 * narrow_geometry.glyph_padding_x_mm,
         )
-        self.assertLess(narrow.width_ratio, standard.width_ratio)
+        self.assertEqual(narrow.width_ratio, 1.0)
+        self.assertEqual(standard.width_ratio, 1.0)
         self.assertLess(
             narrow_geometry.page_size(64)[0],
             SheetGeometry(card_width_mm=55).page_size(64)[0],
@@ -208,13 +211,13 @@ class StickerGeneratorTests(unittest.TestCase):
             cut_root = ET.fromstring(cut_svg.read_text(encoding="utf-8"))
             cut_group = cut_root.find(f"{SVG}g[@id='cut-guides']")
             self.assertIsNotNone(cut_group)
-            self.assertEqual(len(cut_group.findall(f"{SVG}rect")), 64)
-            self.assertEqual(len(cut_group.findall(f"{SVG}path")), 64)
+            self.assertEqual(len(cut_group.findall(f"{SVG}rect")), 128)
+            self.assertEqual(len(cut_group.findall(f"{SVG}path")), 0)
             print_root = ET.fromstring(svg.read_text(encoding="utf-8"))
             print_guides = print_root.find(f"{SVG}g[@id='cut-guides']")
             self.assertIsNotNone(print_guides)
-            self.assertEqual(len(print_guides.findall(f"{SVG}rect")), 64)
-            self.assertEqual(len(print_guides.findall(f"{SVG}path")), 64)
+            self.assertEqual(len(print_guides.findall(f"{SVG}rect")), 128)
+            self.assertEqual(len(print_guides.findall(f"{SVG}path")), 0)
             data = json.loads(manifest.read_text(encoding="utf-8"))
             self.assertEqual(
                 {key: data[key] for key in JSON_LICENSE_METADATA},
@@ -254,6 +257,15 @@ class StickerGeneratorTests(unittest.TestCase):
                     self.assertEqual(data["physical_variant"], variant)
                     self.assertEqual(data["character_set"]["id"], preset)
                     self.assertEqual(data["geometry_mm"]["card"], card)
+                    self.assertEqual(data["geometry_mm"]["cut_gap"], 1.8)
+                    self.assertEqual(
+                        data["geometry_mm"]["artwork"],
+                        [card[0], card[1] + 1.8],
+                    )
+                    self.assertEqual(data["typography"]["width_ratio"], 1.0)
+                    self.assertAlmostEqual(
+                        data["typography"]["max_visible_width_mm"], card[0]
+                    )
 
     def test_variant_rejects_incompatible_sticker_dimension(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -305,8 +317,28 @@ class StickerGeneratorTests(unittest.TestCase):
         root = ET.fromstring(cut_svg)
         self.assertIsNone(root.find(f"{SVG}g[@id='backgrounds']"))
         self.assertIsNone(root.find(f"{SVG}g[@id='glyphs']"))
-        self.assertEqual(len(root.findall(f".//{SVG}rect")), 64)
-        self.assertEqual(len(root.findall(f".//{SVG}path")), 64)
+        self.assertEqual(len(root.findall(f".//{SVG}rect")), 128)
+        self.assertEqual(len(root.findall(f".//{SVG}path")), 0)
+
+    def test_definitive_cut_has_two_45_5_mm_rectangles_with_prototype_gap(self):
+        geometry = SheetGeometry(
+            card_width_mm=45.0,
+            card_height_mm=91.0,
+            split_y_mm=45.5,
+            cut_gap_mm=1.8,
+            columns=1,
+        )
+        root = ET.fromstring(
+            build_cut_svg(self.profile, geometry, "#FF00FF", True)
+        )
+        rectangles = root.findall(f".//{SVG}rect")[:2]
+        self.assertEqual(
+            [rectangle.attrib for rectangle in rectangles],
+            [
+                {"x": "5", "y": "5", "width": "45", "height": "45.5"},
+                {"x": "5", "y": "52.3", "width": "45", "height": "45.5"},
+            ],
+        )
 
     def test_pdf_glyphs_use_nonzero_winding_fill(self):
         with tempfile.TemporaryDirectory() as directory:
