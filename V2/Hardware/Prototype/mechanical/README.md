@@ -94,6 +94,11 @@ The front follows the saved front-card/pawl plane. `front_chamfer` is derived
 as `wall_thickness / 2`, and the material left behind both side recesses is
 `wall_thickness - side_inset_depth`.
 
+Captured card angles come from the settled Blender snapshot, while every card
+tab axis is rebuilt on the exact calculated centre of its rotated drum hole.
+The Prototype viewer does not inherit Blender hinge-constraint drift or the
+different centroid of the Final card used by that snapshot.
+
 For VS Code with OCP CAD Viewer:
 
 ```sh

@@ -241,30 +241,50 @@ def load_card_capture(path: Path) -> dict[str, Any]:
     return data
 
 
-def _captured_transform(shape: cq.Shape, capture: dict[str, Any]) -> cq.Shape:
-    """Apply a Blender rigid transform in millimetres without matrix shear."""
+def _captured_card_x_rotation_degrees(capture: dict[str, Any]) -> float:
+    """Return the captured flap angle around the physical drum axis only."""
 
-    quaternion = [float(value) for value in capture["rotation_quaternion_wxyz"]]
-    norm = math.sqrt(sum(value * value for value in quaternion))
-    if norm == 0:
-        raise ValueError(f"zero quaternion for {capture['name']}")
-    w, x, y, z = (value / norm for value in quaternion)
-    if w < 0:
-        w, x, y, z = (-w, -x, -y, -z)
-    angle = 2 * math.acos(max(-1.0, min(1.0, w)))
-    denominator = math.sqrt(max(0.0, 1 - w * w))
-    axis = (
-        (1.0, 0.0, 0.0)
-        if denominator < 1e-12
-        else (
-            x / denominator,
-            y / denominator,
-            z / denominator,
-        )
+    matrix = capture["matrix_world"]
+    return math.degrees(math.atan2(float(matrix[2][1]), float(matrix[1][1])))
+
+
+def _captured_hole_center(
+    card_number: int,
+    capture_rotation_degrees: float,
+    params: DesignParameters = DESIGN,
+) -> tuple[float, float, float]:
+    """Exact world centre of one card's drum hole in the captured position."""
+
+    drum = params.drum
+    if not 0 <= card_number < drum.positions:
+        raise ValueError(f"card number outside drum: {card_number}")
+    step_degrees = 360.0 / drum.positions
+    source_hole_position = (drum.positions // 2 - card_number) % drum.positions
+    initial_angle = math.radians(
+        180.0 - drum_stop_rotation_degrees(params) - source_hole_position * step_degrees
     )
-    return shape.rotate((0, 0, 0), axis, math.degrees(angle)).translate(
-        tuple(float(value) for value in capture["origin_world_mm"])
+    initial_y = drum.flap_hole_center_radius * math.cos(initial_angle)
+    initial_z = drum.flap_hole_center_radius * math.sin(initial_angle)
+    capture_angle = math.radians(capture_rotation_degrees)
+    return (
+        0.0,
+        initial_y * math.cos(capture_angle) - initial_z * math.sin(capture_angle),
+        initial_y * math.sin(capture_angle) + initial_z * math.cos(capture_angle),
     )
+
+
+def _place_captured_card_layer(
+    shape_at_pivot: cq.Shape,
+    capture: dict[str, Any],
+    hole_center: tuple[float, float, float],
+) -> cq.Shape:
+    """Preserve captured flap tilt while snapping its tab axis to the hole."""
+
+    return shape_at_pivot.rotate(
+        (0, 0, 0),
+        (1, 0, 0),
+        _captured_card_x_rotation_degrees(capture),
+    ).translate(hole_center)
 
 
 def _captured_card_components_from_data(
@@ -272,31 +292,34 @@ def _captured_card_components_from_data(
     params: DesignParameters,
 ) -> tuple[Component, ...]:
     card_at_pivot = _card_layer_at_pivot(flap_card(params), params)
-    center = card_at_pivot.Center()
-    center_offset = (-center.x, -center.y, -center.z)
-    card_centered = card_at_pivot.translate(center_offset)
-    stickers_centered = {
-        face: _card_layer_at_pivot(shape, params).translate(center_offset)
+    stickers_at_pivot = {
+        face: _card_layer_at_pivot(shape, params)
         for face, shape in flap_sticker_layers(params).items()
     }
+    capture_rotation = float(data["controller"]["rotation_x_degrees"])
 
     components: list[Component] = []
     for capture in data["cards"]:
         number = int(capture["card_number"])
+        hole_center = _captured_hole_center(number, capture_rotation, params)
         components.append(
             Component(
                 name=f"card_{number:02d}",
-                shape=_captured_transform(card_centered, capture),
+                shape=_place_captured_card_layer(
+                    card_at_pivot,
+                    capture,
+                    hole_center,
+                ),
                 color=FLAP,
             )
         )
         components.extend(
             Component(
                 name=f"sticker_{number:02d}_{face}",
-                shape=_captured_transform(shape, capture),
+                shape=_place_captured_card_layer(shape, capture, hole_center),
                 color=STICKER,
             )
-            for face, shape in stickers_centered.items()
+            for face, shape in stickers_at_pivot.items()
         )
     return tuple(components)
 

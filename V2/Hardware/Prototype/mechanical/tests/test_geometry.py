@@ -14,6 +14,7 @@ import ezdxf
 import pytest
 
 from alphabets_cad.assemblies import (
+    _captured_hole_center,
     captured_card_components,
     captured_enclosure_design_components,
     drum_component_shapes,
@@ -486,6 +487,38 @@ def test_blender_capture_maps_every_card_and_sticker_into_cadquery() -> None:
         for number in range(64)
         for face in ("front", "back")
     )
+
+
+def test_every_captured_tab_axis_is_centred_in_its_rotated_drum_hole() -> None:
+    data = json.loads(CARD_CAPTURE.read_text(encoding="utf-8"))
+    components = captured_card_components(CARD_CAPTURE)
+    cards = {
+        component.name: component.shape
+        for component in components
+        if component.name.startswith("card_")
+    }
+    capture_rotation = float(data["controller"]["rotation_x_degrees"])
+    tab_center_x = DESIGN.card.body_width / 2 + DESIGN.card.tab_width / 2
+
+    for number in range(DESIGN.drum.positions):
+        hole_center = _captured_hole_center(number, capture_rotation)
+        card = cards[f"card_{number:02d}"]
+        tab_centres = []
+        for x in (-tab_center_x, tab_center_x):
+            tab_section = card.intersect(
+                cq.Workplane("XY")
+                .box(0.2, 5, 5)
+                .translate((x, hole_center[1], hole_center[2]))
+                .val()
+            )
+            assert tab_section.Volume() > 0, f"card_{number:02d} tab misses its hole"
+            tab_centres.append(tab_section.Center())
+
+        for tab_center in tab_centres:
+            assert tab_center.y == pytest.approx(hole_center[1], abs=1e-6)
+            assert tab_center.z == pytest.approx(hole_center[2], abs=1e-6)
+        assert tab_centres[0].y == pytest.approx(tab_centres[1].y, abs=1e-6)
+        assert tab_centres[0].z == pytest.approx(tab_centres[1].z, abs=1e-6)
 
 
 def test_capture_design_view_groups_fit_data_without_floor_or_pawl_solids() -> None:
