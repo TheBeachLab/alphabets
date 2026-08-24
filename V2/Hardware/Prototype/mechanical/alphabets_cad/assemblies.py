@@ -450,3 +450,51 @@ def captured_enclosure_design_components(
         electronics,
         *_capture_reference_components(data),
     )
+
+
+def captured_enclosure_view_groups(
+    components: tuple[Component, ...],
+) -> dict[str, tuple[Component, ...]]:
+    """Group captured components for the interactive enclosure viewer."""
+
+    motor_names = {"motor_body", "motor_collar", "motor_backpack", "motor_shaft"}
+    return {
+        "enclosure": tuple(
+            component
+            for component in components
+            if component.name == "enclosure" or component.name.startswith("enclosure_")
+        ),
+        "pua_definitiva": tuple(
+            component for component in components if component.name == "pawl_definitive"
+        ),
+        "pua_prototipo": tuple(
+            component for component in components if component.name == "pawl_prototype"
+        ),
+        "tambor": tuple(
+            component
+            for component in components
+            if component.name
+            in ("motor_side", "shaft_side", "support_front", "support_back")
+        ),
+        "cards": tuple(
+            component for component in components if component.name.startswith("card_")
+        ),
+        "stickers": tuple(
+            component
+            for component in components
+            if component.name.startswith("sticker_")
+        ),
+        "motor": tuple(
+            component for component in components if component.name in motor_names
+        ),
+        "electronics": tuple(
+            component
+            for component in components
+            if component.name == "electronics_card_envelope"
+        ),
+        "envelopes": tuple(
+            component
+            for component in components
+            if component.name.startswith("capture_")
+        ),
+    }

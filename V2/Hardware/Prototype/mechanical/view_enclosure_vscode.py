@@ -10,7 +10,10 @@ from pathlib import Path
 import cadquery as cq
 from ocp_vscode import Render, reset_show, set_defaults, set_port, show
 
-from alphabets_cad.assemblies import captured_enclosure_design_components
+from alphabets_cad.assemblies import (
+    captured_enclosure_design_components,
+    captured_enclosure_view_groups,
+)
 from alphabets_cad.parameters import DESIGN, load_design_profile
 
 profile = os.environ.get("ALPHABETS_PROFILE")
@@ -30,42 +33,7 @@ def _viewer_group(name: str, members: tuple) -> cq.Assembly:
     return group
 
 
-group_members = {
-    "enclosure": tuple(
-        component
-        for component in components
-        if component.name == "enclosure" or component.name.startswith("enclosure_")
-    ),
-    "pua_definitiva": tuple(
-        component for component in components if component.name == "pawl_definitive"
-    ),
-    "pua_prototipo": tuple(
-        component for component in components if component.name == "pawl_prototype"
-    ),
-    "tambor": tuple(
-        component
-        for component in components
-        if component.name
-        in ("motor_side", "shaft_side", "support_front", "support_back")
-    ),
-    "cards": tuple(
-        component for component in components if component.name.startswith("card_")
-    ),
-    "stickers": tuple(
-        component for component in components if component.name.startswith("sticker_")
-    ),
-    "motor": tuple(
-        component for component in components if component.name.startswith("motor_")
-    ),
-    "electronics": tuple(
-        component
-        for component in components
-        if component.name == "electronics_card_envelope"
-    ),
-    "envelopes": tuple(
-        component for component in components if component.name.startswith("capture_")
-    ),
-}
+group_members = captured_enclosure_view_groups(components)
 groups = {}
 group_colors = {}
 group_alphas = {}

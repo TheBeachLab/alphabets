@@ -17,6 +17,7 @@ from alphabets_cad.assemblies import (
     _captured_hole_center,
     captured_card_components,
     captured_enclosure_design_components,
+    captured_enclosure_view_groups,
     drum_component_shapes,
     drum_stop_rotation_degrees,
     module_reference_assembly,
@@ -537,6 +538,29 @@ def test_capture_design_view_groups_fit_data_without_floor_or_pawl_solids() -> N
     } < names
     assert "capture_floor_reference" not in names
     assert "capture_pawl_reference" not in names
+
+
+def test_capture_view_groups_do_not_duplicate_drum_side_in_motor() -> None:
+    components = captured_enclosure_design_components(CARD_CAPTURE)
+    groups = captured_enclosure_view_groups(components)
+    names_by_group = {
+        group: {component.name for component in members}
+        for group, members in groups.items()
+    }
+
+    assert names_by_group["motor"] == {
+        "motor_body",
+        "motor_collar",
+        "motor_backpack",
+        "motor_shaft",
+    }
+    assert "motor_side" in names_by_group["tambor"]
+    assert "motor_side" not in names_by_group["motor"]
+
+    all_grouped_names = [
+        component.name for members in groups.values() for component in members
+    ]
+    assert len(all_grouped_names) == len(set(all_grouped_names))
 
 
 def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
