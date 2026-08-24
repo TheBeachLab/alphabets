@@ -909,32 +909,6 @@ def _captured_stack_alignment_frustums(
     return cq.Compound.makeCompound(frustums)
 
 
-def _captured_stack_magnet_pocket(
-    limits: CapturedEnclosureLimits,
-    params: DesignParameters = DESIGN,
-    *,
-    top: bool,
-) -> cq.Shape:
-    """Matching top/bottom magnet pocket centred on the split alpha mark."""
-
-    enclosure = params.drum_enclosure
-    radius = enclosure.magnet_diameter / 2 + enclosure.magnet_radial_clearance
-    depth = enclosure.magnet_thickness + enclosure.magnet_depth_clearance + EPSILON
-    center_y = (limits.back_y + limits.front_y) / 2
-    if top:
-        start_z = limits.outer_top_z + EPSILON
-        direction = cq.Vector(0, 0, -1)
-    else:
-        start_z = limits.outer_bottom_z - EPSILON
-        direction = cq.Vector(0, 0, 1)
-    return cq.Solid.makeCylinder(
-        radius,
-        depth,
-        cq.Vector(0, center_y, start_z),
-        direction,
-    )
-
-
 def _captured_top_alpha_cutter(
     limits: CapturedEnclosureLimits,
     params: DesignParameters = DESIGN,
@@ -1266,8 +1240,6 @@ def _captured_enclosure(
         .cut(_captured_shaft_head_recess(limits, params))
         .cut(stack_sockets)
         .cut(_captured_top_alpha_cutter(limits, params))
-        .cut(_captured_stack_magnet_pocket(limits, params, top=True))
-        .cut(_captured_stack_magnet_pocket(limits, params, top=False))
         .clean()
     )
 

@@ -16,7 +16,7 @@
   "character_set": "demo-64",
   "fabrication_status": "Parametric Prototype derivative of the printed Final CadQuery source. It uses the Prototype card, drum and pawl dimensions with the settled Final transforms; it requires a Prototype print and physical fit check.",
   "features": {
-    "enclosure_construction": "one continuous printable shell without an assembly seam, split magnets or internal alignment keys",
+    "enclosure_construction": "one continuous printable shell without an assembly seam, magnet pockets or internal alignment keys",
     "front_alignment": "automatic from the saved front-card/pawl capture plane; there is no manual front offset",
     "front_bed_printing": "6 mm 45 degree lead-ins on both side recesses and a 2 mm lead-in through the remaining motor bore wall; screw pilots remain cylindrical",
     "front_edge": "4 mm inner chamfer, derived as half the wall thickness, with a flat pawl land",
@@ -29,7 +29,6 @@
     "screw_lugs": false,
     "side_docking_relief": "6 mm motor/electronics inset plus 6 mm opposite recess; 7.3 mm body gap still required for equal orientation",
     "top_mark": "large split alpha rotated toward the front and recessed 0.2 mm into the top face through a nominal 0.2 mm chamfer",
-    "vertical_stack_magnets": "one centred unchamfered 3.4 x 1.2 mm insert in the alpha top face and one matching insert in the module base",
     "vertical_stacking": "four downward 3 mm truncated pyramids and four matching top sockets with 0.2 mm clearance, inset to the tangent of the 10 mm enclosure corner radius",
     "visible_assembly_pawl": "prototype"
   },
@@ -49,10 +48,10 @@
           74.32
         ]
       },
-      "component_volume_sum_mm3": 324370.829352,
+      "component_volume_sum_mm3": 324392.619427,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 324370.829352
+      "volume_mm3": 324392.619427
     },
     "pawl_prototype": {
       "bounds_mm": {
@@ -102,10 +101,6 @@
     "electronics_card_height": 35.0,
     "electronics_card_width": 50.0,
     "front_chamfer": 4.0,
-    "magnet_depth_clearance": 0.2,
-    "magnet_diameter": 3.0,
-    "magnet_radial_clearance": 0.2,
-    "magnet_thickness": 1.0,
     "minimum_same_orientation_gap": 7.3,
     "minimum_same_orientation_pitch": 87.6,
     "motor_bore_diameter": 10.0,
@@ -170,10 +165,10 @@
           105.051815
         ]
       },
-      "component_volume_sum_mm3": 324751.909335,
+      "component_volume_sum_mm3": 324773.699412,
       "solid_count": 2,
       "valid": true,
-      "volume_mm3": 324751.909335
+      "volume_mm3": 324773.699412
     },
     "margin_mm": 5.0,
     "part_gap_mm": 2.0,

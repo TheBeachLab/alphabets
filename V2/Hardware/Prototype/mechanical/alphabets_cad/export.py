@@ -327,10 +327,6 @@ def generate_captured_enclosure(
             "top_mark_chamfer": params.drum_enclosure.top_mark_chamfer,
             "top_mark_split_gap": params.drum_enclosure.top_mark_split_gap,
             "top_mark_rotation": params.drum_enclosure.top_mark_rotation,
-            "magnet_diameter": params.drum_enclosure.magnet_diameter,
-            "magnet_thickness": params.drum_enclosure.magnet_thickness,
-            "magnet_radial_clearance": (params.drum_enclosure.magnet_radial_clearance),
-            "magnet_depth_clearance": (params.drum_enclosure.magnet_depth_clearance),
         },
         "features": {
             "front_open": True,
@@ -363,11 +359,7 @@ def generate_captured_enclosure(
             ),
             "enclosure_construction": (
                 "one continuous printable shell without an assembly seam, "
-                "split magnets or internal alignment keys"
-            ),
-            "vertical_stack_magnets": (
-                "one centred unchamfered 3.4 x 1.2 mm insert in the alpha "
-                "top face and one matching insert in the module base"
+                "magnet pockets or internal alignment keys"
             ),
             "vertical_stacking": (
                 "four downward 3 mm truncated pyramids and four matching "

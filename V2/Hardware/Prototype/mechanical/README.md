@@ -42,7 +42,7 @@ This is a valid parametric and exportable model, but it is **not yet a
 physically validated Prototype enclosure**. Its height and depth remain
 conservative values derived from the trusted Final motion capture. Print one
 complete Prototype module and check the real card motion, pawl, motor, shaft,
-magnets and cable clearance before reproducing it.
+stacking keys and cable clearance before reproducing it.
 
 The historical Prototype contract also has one explicit fit exception: the
 corner radius of a rectangular 3 × 0.5 mm tab is about 1.5207 mm, approximately
@@ -96,8 +96,8 @@ as `wall_thickness / 2`, and the material left behind both side recesses is
 `wall_thickness - side_inset_depth`.
 
 The enclosure is one continuous shell. It has no horizontal assembly seam,
-split magnets or internal alignment keys. The external top/bottom magnet
-pockets and pyramids remain because they align complete modules when stacked.
+magnet pockets or internal alignment keys. Four external truncated pyramids on
+the bottom and their four top sockets align complete modules when stacked.
 
 Captured card angles come from the settled Blender snapshot, while every card
 tab axis is rebuilt on the exact calculated centre of its rotated drum hole.

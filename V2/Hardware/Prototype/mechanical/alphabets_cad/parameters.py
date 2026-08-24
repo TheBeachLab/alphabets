@@ -189,10 +189,6 @@ class DrumEnclosureDimensions:
     pawl_pilot_depth: float = 8.0
     pawl_thickness_addition: float = 1.0
     pawl_outer_chamfer: float = 1.0
-    magnet_diameter: float = 3.0
-    magnet_thickness: float = 1.0
-    magnet_radial_clearance: float = 0.2
-    magnet_depth_clearance: float = 0.2
     pawl_head_recess_diameter: float = 6.0
     pawl_head_recess_depth: float = 1.0
     pawl_tip_radius: float = 2.0

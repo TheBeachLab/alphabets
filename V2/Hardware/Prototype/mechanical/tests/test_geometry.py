@@ -42,7 +42,6 @@ from alphabets_cad.parts import (
     _captured_shaft_head_recess,
     _captured_shaft_support,
     _captured_stack_alignment_frustums,
-    _captured_stack_magnet_pocket,
     _captured_top_alpha_cutter,
     captured_drum_enclosure_parts,
     captured_enclosure_limits,
@@ -583,6 +582,9 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         ),
         1e-6,
     )
+    center_y = (limits.back_y + limits.front_y) / 2
+    assert shell.isInside(cq.Vector(0, center_y, limits.outer_top_z - 0.1), 1e-6)
+    assert shell.isInside(cq.Vector(0, center_y, limits.outer_bottom_z + 0.1), 1e-6)
 
     for end_y in (limits.back_y, limits.front_y):
         opening_probe = (
@@ -817,35 +819,6 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
     assert stack_keys.BoundingBox().xmax == pytest.approx(
         limits.outer_x_max - enclosure.capture_outer_corner_radius,
         abs=1e-5,
-    )
-
-    expected_magnet_radius = (
-        enclosure.magnet_diameter / 2 + enclosure.magnet_radial_clearance
-    )
-    expected_magnet_depth = (
-        enclosure.magnet_thickness + enclosure.magnet_depth_clearance + 0.05
-    )
-    top_stack_magnet = _captured_stack_magnet_pocket(limits, top=True)
-    bottom_stack_magnet = _captured_stack_magnet_pocket(limits, top=False)
-    assert top_stack_magnet.isValid()
-    assert bottom_stack_magnet.isValid()
-    assert top_stack_magnet.BoundingBox().xlen == pytest.approx(
-        2 * expected_magnet_radius
-    )
-    assert top_stack_magnet.BoundingBox().ylen == pytest.approx(
-        2 * expected_magnet_radius
-    )
-    assert top_stack_magnet.BoundingBox().zlen == pytest.approx(expected_magnet_depth)
-    assert top_stack_magnet.Center().x == pytest.approx(0)
-    assert bottom_stack_magnet.Center().x == pytest.approx(0)
-    assert top_stack_magnet.Center().y == pytest.approx(
-        (limits.back_y + limits.front_y) / 2
-    )
-    assert bottom_stack_magnet.Center().y == pytest.approx(top_stack_magnet.Center().y)
-    assert shell.intersect(top_stack_magnet).Volume() == pytest.approx(0, abs=1e-6)
-    assert shell.intersect(bottom_stack_magnet).Volume() == pytest.approx(
-        0,
-        abs=1e-6,
     )
 
     assert ALPHA_FONT_PATH.is_file()
@@ -1157,17 +1130,14 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert manifest["parameters"]["side_inset_depth"] == pytest.approx(6)
     assert manifest["parameters"]["remaining_side_wall"] == pytest.approx(2)
     assert manifest["parameters"]["front_chamfer"] == pytest.approx(4)
-    assert manifest["parameters"]["magnet_diameter"] == pytest.approx(3)
-    assert manifest["parameters"]["magnet_thickness"] == pytest.approx(1)
-    assert manifest["parameters"]["magnet_radial_clearance"] == pytest.approx(0.2)
-    assert manifest["parameters"]["magnet_depth_clearance"] == pytest.approx(0.2)
+    assert not any("magnet" in name for name in manifest["parameters"])
     assert "capture_split_height" not in manifest["parameters"]
     assert "split_gap" not in manifest["parameters"]
     assert manifest["parameters"]["pawl_head_recess_diameter"] == pytest.approx(6)
     assert manifest["parameters"]["pawl_head_recess_depth"] == pytest.approx(1)
     assert manifest["parameters"]["shaft_head_recess_diameter"] == pytest.approx(6)
     assert manifest["parameters"]["shaft_head_recess_depth"] == pytest.approx(2)
-    assert "alpha top face" in manifest["features"]["vertical_stack_magnets"]
+    assert "vertical_stack_magnets" not in manifest["features"]
     assert manifest["print_plate"]["printer"] == "Bambu Lab A1 mini"
     assert manifest["print_plate"]["build_volume_mm"] == [180, 180, 180]
     assert manifest["physical_variant"] == "prototype"
