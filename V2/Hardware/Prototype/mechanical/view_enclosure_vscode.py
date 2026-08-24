@@ -32,7 +32,9 @@ def _viewer_group(name: str, members: tuple) -> cq.Assembly:
 
 group_members = {
     "enclosure": tuple(
-        component for component in components if component.name.startswith("enclosure_")
+        component
+        for component in components
+        if component.name == "enclosure" or component.name.startswith("enclosure_")
     ),
     "pua_definitiva": tuple(
         component for component in components if component.name == "pawl_definitive"
