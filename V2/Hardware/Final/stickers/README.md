@@ -14,20 +14,13 @@ Install its two Python dependencies once:
 python3 -m pip install -r V2/Hardware/Final/stickers/requirements.txt
 ```
 
-## Physical variants
+## V2 Final physical profile
 
-The generator can lock characters and sticker dimensions to a physical V2
-variant. This is the normal fabrication path; see
-[`../../variants/`](../../variants/README.md) for the full card, drum and
-enclosure contract.
+Use the locked Definitivo profile for V2 Final fabrication. See
+[`../../variants/`](../../variants/README.md) for the full sticker, card, drum
+and enclosure contract.
 
 ```sh
-# V2 Prototype 55 mm hardware; 2.5 mm side margin.
-python3 V2/Hardware/Final/stickers/generate_stickers.py \
-  --variant prototype \
-  --output-svg /tmp/demo-64-prototype-50x80.svg
-
-# V2 Final 50 mm hardware; the same 2.5 mm side margin.
 python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --variant definitive \
   --output-svg /tmp/international-64-definitive-45x91.svg
@@ -35,11 +28,9 @@ python3 V2/Hardware/Final/stickers/generate_stickers.py \
 
 `--variant` fixes the character preset, sticker width, sticker height, cut gap,
 and `2 mm` background bleed, and records them in the JSON manifest. It refuses
-a conflicting physical override. The prototype has two nominal `50 × 40 mm`
-cuts separated by a `1.8 mm` printed gap. The body itself remains visible
-across its complete 43 mm height; the 40 mm half is placed from `y=3` to
-`y=43 mm`, aligned with the hinge/tab edge.
-The opposite `y=0…3 mm` strip remains visible but unstickered.
+a conflicting physical override. V2 Prototype fabrication uses the existing
+[`../../Prototype/stickers/cut-print/cutprint.svg`](../../Prototype/stickers/cut-print/cutprint.svg)
+print-and-cut artwork.
 
 ## Print bleed and cutter geometry
 
@@ -95,8 +86,7 @@ override the background extension with `--bleed`, but physical variants lock
 it to their declared manufacturing value.
 
 The matching card cutter and 51 mm drum separation are documented in
-[`../cards/`](../cards/README.md). Use `--variant prototype` for the existing
-55 mm cards with nominal `50 × 40 mm` stickers / Demo 64 hardware.
+[`../cards/`](../cards/README.md).
 
 ## Color presets
 
@@ -141,8 +131,8 @@ These commands produce the complete current `45x91` Final artifact set.
 
 ## Preset or custom characters
 
-Use `--variant prototype` for the ten existing demo drums. A `--preset` or
-settings file remains available for non-fabrication experiments:
+A `--preset` or settings file remains available for non-fabrication
+experiments:
 
 ```sh
 python3 V2/Hardware/Final/stickers/generate_stickers.py \
@@ -158,13 +148,14 @@ production files if any selected font cannot render a required character.
 
 The generator uses the traceable **BlueHighwayD-International** hybrid. It
 contains the Blue Highway D outlines and supplies the two characters missing
-from that source through documented fallbacks. The physical profiles use the
-exact Blue Highway Condensed W outline stored in Prototype `cutprint.svg`.
+from that source through documented fallbacks. The Final profile uses the exact
+Blue Highway Condensed W outline stored in the Prototype `cutprint.svg`
+fabrication file.
 International 64 also uses the Condensed Æ outline
 from Typodermic's official
 [CC0 Blue Highway package](https://typodermicfonts.com/public-domain/). Its
 final horizontal factor makes its visible width exactly match the transformed
-W. Both physical profiles use the exact condensed `%` outline stored in
+W. The Final profile also uses the exact condensed `%` outline stored in
 Prototype `cutprint.svg`. No locally installed font is required for these
 overrides.
 

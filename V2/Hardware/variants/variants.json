@@ -44,12 +44,7 @@
         ],
         "drum_source": "V2/Hardware/Prototype/mechanical/alphabets_cad",
         "enclosure_manifest": "V2/Hardware/Prototype/mechanical/generated/captured-enclosure/manifest.json",
-        "sticker_reference": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg",
-        "sticker_outputs": [
-          "V2/Hardware/Prototype/stickers/generated/demo-64-black-white-50x80.svg"
-        ],
-        "sticker_cut": "V2/Hardware/Prototype/stickers/generated/demo-64-black-white-50x80-cut.svg",
-        "sticker_pdf": "V2/Hardware/Prototype/stickers/generated/demo-64-black-white-50x80.pdf"
+        "sticker_print_cut": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg"
       }
     },
     {

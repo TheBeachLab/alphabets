@@ -1164,6 +1164,9 @@ def test_generated_manufacturing_files_are_readable() -> None:
     preview = GENERATED / "preview/module-reference.svg"
     assert preview.stat().st_size > 1000
     assert "<svg" in preview.read_text(encoding="utf-8")
+    motor_preview = GENERATED / "preview/motor-28byj48-reference.svg"
+    assert motor_preview.stat().st_size > 1000
+    assert "<svg" in motor_preview.read_text(encoding="utf-8")
 
 
 def test_parallel_stale_enclosure_exports_are_absent() -> None:
@@ -1276,3 +1279,11 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert {path.name for path in (output / "print").glob("*.stl")} == expected_stl
     for path in sorted((output / "print").glob("*.stl")):
         assert path.stat().st_size > 1000, path.name
+
+    preview = (output / "preview/captured-enclosure-module.svg").read_text(
+        encoding="utf-8"
+    )
+    hidden_lines = preview.split("<!-- hidden lines -->", 1)[1].split(
+        "<!-- solid lines -->", 1
+    )[0]
+    assert "<path" not in hidden_lines

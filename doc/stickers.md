@@ -6,13 +6,13 @@
 
 Stickers give the cards their color and characters. Every character is split
 across two neighbouring card faces. The centre cut must therefore remain in
-the correct place and the cards must be loaded in the exact generated order.
+the correct place and the cards must be loaded in the exact fabrication order.
 
 ![International 64 black-and-white sticker sheet](../V2/Hardware/Final/stickers/generated/international-64-black-white-45x91.svg)
 
 ## Demo 64 for V2 Prototype
 
-![Demo 64 Prototype sticker sheet](../V2/Hardware/Prototype/stickers/generated/demo-64-black-white-50x80.svg)
+![Prototype print-and-cut sticker sheet](../V2/Hardware/Prototype/stickers/cut-print/cutprint.svg)
 
 Prototype uses this exact 64-position order; the trailing position is one
 ASCII space:
@@ -21,11 +21,11 @@ ASCII space:
 ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,'°■£~©␠
 ```
 
-`␠` denotes the final ASCII space. One uncut Prototype sticker is 50 × 80 mm.
-The centre cut creates two
-50 × 40 mm faces for the 55 × 43 mm card. Read the
-[Prototype sticker guide](../V2/Hardware/Prototype/stickers/README.md) for the
-current SVG, cutter SVG, PDF, manifest and font provenance.
+`␠` denotes the final ASCII space. The current Prototype fabrication file is
+[`cut-print/cutprint.svg`](../V2/Hardware/Prototype/stickers/cut-print/cutprint.svg).
+It contains the printed artwork and cutter lines used for the ten sticker sets
+printed in Dubai. One uncut sticker is 50 × 80 mm; the centre cut creates two
+50 × 40 mm faces for the 55 × 43 mm card.
 
 ## International 64
 
@@ -59,7 +59,7 @@ independent of the fonts installed on the printer's computer.
 - See the [character-set definitions](../V2/Hardware/Final/stickers/letters.md).
 - Inspect the generated SVG, cutter SVG, JSON manifest, and PDF outputs in
   [`V2/Hardware/Final/stickers`](../V2/Hardware/Final/stickers/).
-- Inspect the isolated Demo‑64 Prototype outputs in
+- Open the Prototype print-and-cut file in
   [`V2/Hardware/Prototype/stickers`](../V2/Hardware/Prototype/stickers/README.md).
 
 > [!CAUTION]

@@ -7,7 +7,7 @@
 Every character module has its own motor. That motor only turns forward: it
 advances the drum until the requested one of 64 positions reaches the window.
 
-![Module reference including the motor and drum](../V2/Hardware/Final/mechanical/generated/preview/module-reference.svg)
+![28BYJ-48 motor clearance model](../V2/Hardware/Final/mechanical/generated/preview/motor-28byj48-reference.svg)
 
 ## Current target
 

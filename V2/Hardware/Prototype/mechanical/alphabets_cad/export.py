@@ -209,6 +209,8 @@ def generate_captured_enclosure(
             component.shape
             for component in review_components
             if component.name != "pawl_definitive"
+            and not component.name.startswith("capture_")
+            and component.name != "electronics_card_envelope"
         ]
     )
     preview_path = directories["preview"] / "captured-enclosure-module.svg"
@@ -221,10 +223,10 @@ def generate_captured_enclosure(
             "height": 900,
             "marginLeft": 30,
             "marginTop": 30,
-            "projectionDir": (1.0, -1.3, 0.8),
+            "projectionDir": (-1.0, 1.3, -0.8),
             "showAxes": False,
-            "showHidden": True,
-            "strokeWidth": 0.35,
+            "showHidden": False,
+            "strokeWidth": 0.5,
         },
     )
     _strip_trailing_whitespace(preview_path)
@@ -587,6 +589,24 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
     )
     for path in directories["print"].glob("*.stl"):
         embed_artifact_license(path)
+
+    cq.exporters.export(
+        motor,
+        str(directories["preview"] / "motor-28byj48-reference.svg"),
+        exportType="SVG",
+        opt={
+            "width": 900,
+            "height": 650,
+            "marginLeft": 30,
+            "marginTop": 30,
+            "projectionDir": (0.5, -1.0, 0.6),
+            "showAxes": False,
+            "showHidden": False,
+            "strokeWidth": 0.5,
+        },
+    )
+    _strip_trailing_whitespace(directories["preview"] / "motor-28byj48-reference.svg")
+    embed_artifact_license(directories["preview"] / "motor-28byj48-reference.svg")
 
     cq.exporters.export(
         module.toCompound(),
