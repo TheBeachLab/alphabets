@@ -108,7 +108,7 @@ The controller responds with `display.description`:
   },
   "character_set": {
     "id": "international-64",
-    "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
+    "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØ0123456789.,:!?-/'&@%€$£+#°"
   }
 }
 ```

@@ -57,12 +57,17 @@
     ],
     "max_visible_width_mm": 50.0,
     "glyph_x_scale_factors": {
-      "W": 0.95902088
+      "W": 0.95902088,
+      "%": 1.0
     },
     "glyph_outline_overrides": {
       "W": {
         "family": "Blue Highway Condensed",
         "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4554"
+      },
+      "%": {
+        "family": "Blue Highway Condensed",
+        "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4491"
       }
     },
     "baseline_from_card_top_mm": 60.704741980474196,

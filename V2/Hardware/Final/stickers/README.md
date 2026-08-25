@@ -80,9 +80,9 @@ These lines cut the rectangular stickers; they are not the physical flap/card
 die. The card die includes the two drum tabs and is generated separately in
 [`../cards/`](../cards/README.md).
 
-Every visible character uses one shared **uniform** scale and baseline. Width
-is the controlling dimension: the widest glyph reaches the two sides of the
-locked sticker width, and the same base scale is applied vertically. The sole
+Every visible character uses one shared **uniform** scale and baseline. The
+largest safe uniform scale is selected against both locked sticker dimensions;
+no character is squeezed or stretched on one axis. The sole
 historical exception currently reproduced is `W`: it uses the exact Blue
 Highway Condensed outline recovered from the Prototype artwork and its
 additional `0.95902088` horizontal factor. Each visible outline is geometrically
@@ -170,7 +170,9 @@ Prototype artwork. International 64 also uses the actual Condensed Æ outline
 from Typodermic's official
 [CC0 Blue Highway package](https://typodermicfonts.com/public-domain/). Its
 final horizontal factor makes its visible width exactly match the transformed
-W. No locally installed font is required for either override.
+W. Both physical profiles use the exact condensed `%` outline recovered from
+the historical Prototype artwork. No locally installed font is required for
+these overrides.
 
 The alignment model follows the lesson from Scott Bezek's production
 [splitflap generator](https://github.com/scottbez1/splitflap/blob/master/3d/flap_fonts.scad):
