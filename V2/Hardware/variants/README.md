@@ -19,7 +19,9 @@ prototype and 2.5 mm on the definitive card.
 The `1.8 mm` center gap is part of the printed artwork layout, not a third
 sticker. The artwork remains continuous through it, while the cutter receives
 two independent half-card rectangles. Typography uses one width-driven uniform
-scale so the widest glyph reaches the locked sticker width without deformation.
+base scale so the widest glyph reaches the locked sticker width. The current
+historical exception is the exact Prototype Blue Highway Condensed W outline
+with its horizontal factor `0.95902088`.
 
 ## Sticker sheets
 
