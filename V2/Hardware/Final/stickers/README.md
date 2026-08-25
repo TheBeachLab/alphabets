@@ -22,12 +22,12 @@ variant. This is the normal fabrication path; see
 enclosure contract.
 
 ```sh
-# Existing 55 mm demonstration hardware; 2.5 mm side margin.
+# V2 Prototype 55 mm hardware; 2.5 mm side margin.
 python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --variant prototype \
   --output-svg /tmp/demo-64-prototype-50x80.svg
 
-# Matched 50 mm definitive hardware; the same 2.5 mm side margin.
+# V2 Final 50 mm hardware; the same 2.5 mm side margin.
 python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --variant definitive \
   --output-svg /tmp/international-64-definitive-45x91.svg
@@ -40,12 +40,6 @@ cuts separated by a `1.8 mm` printed gap. The body itself remains visible
 across its complete 43 mm height; the 40 mm half is placed from `y=3` to
 `y=43 mm`, aligned with the hinge/tab edge.
 The opposite `y=0…3 mm` strip remains visible but unstickered.
-
-In the preserved `cut-print/cutprint.svg`, each historical magenta cutter
-rectangle is about `51.0 × 40.1 mm` (`192.756 × 151.570` SVG px at 96 dpi).
-That is the cutter allowance around the nominal `50 × 40 mm` prototype
-sticker, not evidence of a 43 mm-high sticker. Its measured center gap is
-approximately `1.794 mm`; the variant contract rounds this to `1.8 mm`.
 
 ## Print bleed and cutter geometry
 
@@ -70,9 +64,8 @@ die. The card die includes the two drum tabs and is generated separately in
 
 Every visible character uses one shared **uniform** scale and baseline. The
 largest safe uniform scale is selected against both locked sticker dimensions;
-no character is squeezed or stretched on one axis. The sole
-historical exception currently reproduced is `W`: it uses the exact Blue
-Highway Condensed outline recovered from the Prototype artwork and its
+no character is squeezed or stretched on one axis. `W` uses the exact Blue
+Highway Condensed outline stored in the Prototype `cutprint.svg` source and an
 additional `0.95902088` horizontal factor. Each visible outline is geometrically
 centered in its equal-sized artwork cell; proportional advance widths do not
 change the card size. No glyph receives an individual vertical offset.
@@ -123,7 +116,7 @@ python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --output-svg /tmp/my-stickers.svg --output-pdf /tmp/my-stickers.pdf
 ```
 
-Colors use `#RRGGBB`. Yellow is the historical `#FFCC00`.
+Colors use `#RRGGBB`. Yellow is `#FFCC00`.
 
 Generate the four production color variants at 45 × 91 mm with:
 
@@ -144,8 +137,7 @@ python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --output-cut-svg V2/Hardware/Final/stickers/generated/international-64-black-white-45x91-cut.svg
 ```
 
-Only these current `45x91` Final artifacts are retained in the working tree;
-discarded dimensions remain available through Git history.
+These commands produce the complete current `45x91` Final artifact set.
 
 ## Preset or custom characters
 
@@ -165,16 +157,16 @@ production files if any selected font cannot render a required character.
 ## Typeface
 
 The generator uses the traceable **BlueHighwayD-International** hybrid. It
-preserves the Blue Highway D outlines and supplies the two characters missing
-from that source through documented fallbacks. The physical profiles replace
-W with the exact Blue Highway Condensed outline recovered from the historical
-Prototype artwork. International 64 also uses the actual Condensed Æ outline
+contains the Blue Highway D outlines and supplies the two characters missing
+from that source through documented fallbacks. The physical profiles use the
+exact Blue Highway Condensed W outline stored in Prototype `cutprint.svg`.
+International 64 also uses the Condensed Æ outline
 from Typodermic's official
 [CC0 Blue Highway package](https://typodermicfonts.com/public-domain/). Its
 final horizontal factor makes its visible width exactly match the transformed
-W. Both physical profiles use the exact condensed `%` outline recovered from
-the historical Prototype artwork. No locally installed font is required for
-these overrides.
+W. Both physical profiles use the exact condensed `%` outline stored in
+Prototype `cutprint.svg`. No locally installed font is required for these
+overrides.
 
 The alignment model follows the lesson from Scott Bezek's production
 [splitflap generator](https://github.com/scottbez1/splitflap/blob/master/3d/flap_fonts.scad):

@@ -54,8 +54,8 @@ instead of silently moving to the wrong flap.
 
 ## Demo 64
 
-`demo-64` preserves the physical order of the original demo drums already
-installed on ten modules. Its blank flap remains at position 63.
+`demo-64` is the physical order installed on the ten Prototype modules. Its
+blank flap is at position 63.
 
 ```text
 ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,'°■£~©␠
