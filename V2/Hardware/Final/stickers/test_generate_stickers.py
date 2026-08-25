@@ -121,6 +121,53 @@ class StickerGeneratorTests(unittest.TestCase):
             {"Blue Highway D International Regular"},
         )
 
+    def test_background_bleeds_past_outer_cuts_without_changing_cut_geometry(self):
+        geometry = SheetGeometry(
+            card_width_mm=45.0,
+            card_height_mm=91.0,
+            split_y_mm=45.5,
+            cut_gap_mm=1.8,
+            bleed_mm=2.0,
+            columns=1,
+        )
+        svg, _ = build_svg(
+            self.profile,
+            self.faces,
+            geometry,
+            "#FFCC00",
+            "#000000",
+            "#FF00FF",
+            False,
+            False,
+        )
+        root = ET.fromstring(svg)
+        background = root.find(f"{SVG}g[@id='backgrounds']/{SVG}rect")
+        self.assertIsNotNone(background)
+        self.assertEqual(
+            background.attrib,
+            {
+                "id": "card-01",
+                "x": "3",
+                "y": "3",
+                "width": "49",
+                "height": "96.8",
+                "fill": "#FFCC00",
+            },
+        )
+        cut_root = ET.fromstring(
+            build_cut_svg(self.profile, geometry, "#FF00FF", False)
+        )
+        self.assertEqual(
+            [
+                rectangle.attrib
+                for rectangle in cut_root.findall(f".//{SVG}rect")[:2]
+            ],
+            [
+                {"x": "5", "y": "5", "width": "45", "height": "45.5"},
+                {"x": "5", "y": "52.3", "width": "45", "height": "45.5"},
+            ],
+        )
+
     def test_special_characters_share_scale_baseline_and_card_center(self):
         geometry = SheetGeometry(columns=22)
         layout = typography_layout(self.profile.characters, self.faces[0], geometry)
@@ -291,6 +338,7 @@ class StickerGeneratorTests(unittest.TestCase):
             self.assertEqual(data["colors"]["foreground"], "#FFCC00")
             self.assertEqual(data["colors"]["guide"], "#FF00FF")
             self.assertEqual(data["geometry_mm"]["rows"], 3)
+            self.assertEqual(data["geometry_mm"]["background_bleed"], 2.0)
             self.assertEqual(len(data["fonts"]), 1)
             self.assertEqual(data["fonts"][0]["family"], "Blue Highway D International")
             self.assertEqual(data["fonts"][0]["variation"], {})
@@ -319,6 +367,7 @@ class StickerGeneratorTests(unittest.TestCase):
                     self.assertEqual(data["character_set"]["id"], preset)
                     self.assertEqual(data["geometry_mm"]["card"], card)
                     self.assertEqual(data["geometry_mm"]["cut_gap"], 1.8)
+                    self.assertEqual(data["geometry_mm"]["background_bleed"], 2.0)
                     self.assertEqual(
                         data["geometry_mm"]["artwork"],
                         [card[0], card[1] + 1.8],
@@ -372,6 +421,20 @@ class StickerGeneratorTests(unittest.TestCase):
                         "definitive",
                         "--card-width",
                         "55",
+                        "--output-svg",
+                        str(svg),
+                    ]
+                ),
+                2,
+            )
+            self.assertFalse(svg.exists())
+            self.assertEqual(
+                main(
+                    [
+                        "--variant",
+                        "definitive",
+                        "--bleed",
+                        "1",
                         "--output-svg",
                         str(svg),
                     ]

@@ -38,6 +38,8 @@ class PhysicalVariantTests(unittest.TestCase):
         self.assertEqual(variants["definitive"].sticker.face_height_mm, 45.5)
         self.assertEqual(variants["prototype"].sticker.cut_gap_mm, 1.8)
         self.assertEqual(variants["definitive"].sticker.cut_gap_mm, 1.8)
+        self.assertEqual(variants["prototype"].sticker.bleed_mm, 2.0)
+        self.assertEqual(variants["definitive"].sticker.bleed_mm, 2.0)
         self.assertEqual(variants["definitive"].sticker.artwork_height_mm, 92.8)
         for variant in variants.values():
             with self.subTest(variant=variant.id):
@@ -88,3 +90,35 @@ class PhysicalVariantTests(unittest.TestCase):
                         data["geometry_mm"]["cut_gap"],
                         variant.sticker.cut_gap_mm,
                     )
+                    self.assertEqual(
+                        data["geometry_mm"]["background_bleed"],
+                        variant.sticker.bleed_mm,
+                    )
+
+    def test_final_sticker_directories_contain_only_current_artifacts(self):
+        variant = load_variants()["definitive"]
+        generated_dir = REPOSITORY_ROOT / "V2/Hardware/Final/stickers/generated"
+        pdf_dir = REPOSITORY_ROOT / "V2/Hardware/Final/stickers/output/pdf"
+        expected_generated = {
+            Path(path).name
+            for path in variant.artifacts["sticker_outputs"]
+        }
+        expected_generated.update(
+            Path(path).with_suffix(".json").name
+            for path in variant.artifacts["sticker_outputs"]
+        )
+        expected_generated.add(Path(variant.artifacts["sticker_cut"]).name)
+        self.assertEqual(
+            {path.name for path in generated_dir.iterdir() if path.is_file()},
+            expected_generated,
+        )
+        self.assertEqual(
+            {path.name for path in pdf_dir.iterdir() if path.is_file()},
+            {
+                Path(path).name
+                for path in variant.artifacts["sticker_pdfs"]
+            },
+        )
+        self.assertFalse(
+            (REPOSITORY_ROOT / "V2/Hardware/Final/stickers/archive").exists()
+        )

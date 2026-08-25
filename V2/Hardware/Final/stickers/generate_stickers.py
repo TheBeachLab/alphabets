@@ -150,6 +150,7 @@ class SheetGeometry:
     glyph_padding_y_mm: float = 0.0
     split_y_mm: float = 43.0
     cut_gap_mm: float = 0.0
+    bleed_mm: float = 2.0
     use_condensed_overrides: bool = False
     guide_width_mm: float = 0.15
 
@@ -172,6 +173,10 @@ class SheetGeometry:
             raise StickerError("split position must be inside the sticker height")
         if self.cut_gap_mm < 0:
             raise StickerError("cut gap cannot be negative")
+        if self.bleed_mm < 0:
+            raise StickerError("background bleed cannot be negative")
+        if self.bleed_mm > self.margin_mm:
+            raise StickerError("background bleed does not fit inside the page margin")
         rows = math.ceil(count / self.columns)
         width = (
             2 * self.margin_mm
@@ -557,8 +562,11 @@ def build_svg(
     for sheet_index, character in enumerate(characters):
         x, y, row, column = card_origin(sheet_index, geometry)
         lines.append(
-            f'    <rect id="card-{sheet_index + 1:02d}" x="{number(x)}" y="{number(y)}" '
-            f'width="{number(geometry.card_width_mm)}" height="{number(geometry.artwork_height_mm)}" '
+            f'    <rect id="card-{sheet_index + 1:02d}" '
+            f'x="{number(x - geometry.bleed_mm)}" '
+            f'y="{number(y - geometry.bleed_mm)}" '
+            f'width="{number(geometry.card_width_mm + 2 * geometry.bleed_mm)}" '
+            f'height="{number(geometry.artwork_height_mm + 2 * geometry.bleed_mm)}" '
             f'fill="{background}"/>'
         )
         placement = None
@@ -721,12 +729,17 @@ def write_pdf(
     pdf.setFillColor(HexColor(background))
     for index in range(len(characters)):
         x, y_top, _, _ = card_origin(index, geometry)
-        y = page_height - y_top - geometry.artwork_height_mm
+        y = (
+            page_height
+            - y_top
+            - geometry.artwork_height_mm
+            - geometry.bleed_mm
+        )
         pdf.rect(
-            x * mm,
+            (x - geometry.bleed_mm) * mm,
             y * mm,
-            geometry.card_width_mm * mm,
-            geometry.artwork_height_mm * mm,
+            (geometry.card_width_mm + 2 * geometry.bleed_mm) * mm,
+            (geometry.artwork_height_mm + 2 * geometry.bleed_mm) * mm,
             fill=1,
             stroke=0,
         )
@@ -831,6 +844,7 @@ def build_manifest(
             "card": [geometry.card_width_mm, geometry.card_height_mm],
             "cut_half": [geometry.card_width_mm, geometry.split_y_mm],
             "cut_gap": geometry.cut_gap_mm,
+            "background_bleed": geometry.bleed_mm,
             "artwork": [geometry.card_width_mm, geometry.artwork_height_mm],
             "page": [page_width, page_height],
             "margin": geometry.margin_mm,
@@ -953,6 +967,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         help="uncut printed gap between the two sticker rectangles",
     )
     parser.add_argument(
+        "--bleed",
+        type=float,
+        default=2.0,
+        help="background extension beyond the outer cut lines in millimetres",
+    )
+    parser.add_argument(
         "--omit-blank", action="store_true", help="omit the blank drum position"
     )
     guide_mode = parser.add_mutually_exclusive_group()
@@ -1016,17 +1036,27 @@ def main(argv: Sequence[str] | None = None) -> int:
                 raise StickerError(
                     f"{physical_variant.name} requires a {physical_variant.sticker.cut_gap_mm:g} mm cut gap"
                 )
+            if (
+                option_was_supplied(argv, "--bleed")
+                and args.bleed != physical_variant.sticker.bleed_mm
+            ):
+                raise StickerError(
+                    f"{physical_variant.name} requires a "
+                    f"{physical_variant.sticker.bleed_mm:g} mm background bleed"
+                )
             profile = load_profile(physical_variant.character_preset, None)
             card_width = physical_variant.sticker.width_mm
             card_height = physical_variant.sticker.height_mm
             split_y = physical_variant.sticker.split_y_mm
             cut_gap = physical_variant.sticker.cut_gap_mm
+            bleed = physical_variant.sticker.bleed_mm
         else:
             profile = load_profile(args.preset, args.settings)
             card_width = args.card_width
             card_height = args.card_height
             split_y = card_height / 2
             cut_gap = args.cut_gap
+            bleed = args.bleed
         background, foreground = resolve_colors(
             args.color_preset, args.background, args.foreground
         )
@@ -1043,6 +1073,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             glyph_padding_y_mm=args.vertical_padding,
             split_y_mm=split_y,
             cut_gap_mm=cut_gap,
+            bleed_mm=bleed,
             use_condensed_overrides=physical_variant is not None,
         )
         include_guides = args.include_guides
