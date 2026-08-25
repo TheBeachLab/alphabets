@@ -2,13 +2,22 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Alphabets
 
+> [!IMPORTANT]
+> **Why V2 has two versions:** V2 Prototype uses the ten existing sticker sets
+> printed in Dubai and is available for prototyping while those sets remain in
+> service. The expanded DACH and Nordic character map needs more vertical
+> artwork space, so V2 Final uses taller stickers and cards together with a
+> matched drum and enclosure. V2 Final is the supported target for new batches;
+> Prototype support ends when the new Final sticker and card batches are
+> available.
+
 > [!WARNING]
 > **UNDER HEAVY DEVELOPMENT — NOT READY FOR USE OR FABRICATION.**
-> The mechanical designs, electronics and generated manufacturing files are
-> being actively revised and have not been physically validated. Do not order,
-> print, cut or assemble parts from this repository without independently
-> checking every dimension. V2 Prototype and V2 Final are incompatible systems;
-> never mix files between their folders.
+> The V2 Final enclosure has a recorded print check, but the complete mechanism,
+> Prototype enclosure, electronics and production process are not physically
+> validated. Do not order, print, cut or assemble multiple parts without
+> checking the dimensions and validating one complete module. V2 Prototype and
+> V2 Final are incompatible systems; never mix files between their folders.
 
 ![Blender render of ten modular Alphabets V2 split-flap units displaying HALLO WELT!](hallov2.webp)
 
