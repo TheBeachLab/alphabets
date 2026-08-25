@@ -48,15 +48,24 @@
   "typography": {
     "alignment": "common-transform-baseline-centered-bounds",
     "spacing": "proportional",
-    "scale_x_mm_per_font_unit": 0.06459948320413436,
-    "scale_y_mm_per_font_unit": 0.06459948320413436,
+    "scale_x_mm_per_font_unit": 0.0697350069735007,
+    "scale_y_mm_per_font_unit": 0.0697350069735007,
     "width_ratio": 1.0,
     "advance_range_mm": [
-      10.788113695090438,
-      51.87338501291989
+      11.645746164574616,
+      55.36959553695956
     ],
-    "max_visible_width_mm": 49.99999999999999,
-    "baseline_from_card_top_mm": 59.24625322997416,
+    "max_visible_width_mm": 50.0,
+    "glyph_x_scale_factors": {
+      "W": 0.95902088
+    },
+    "glyph_outline_overrides": {
+      "W": {
+        "family": "Blue Highway Condensed",
+        "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4554"
+      }
+    },
+    "baseline_from_card_top_mm": 60.704741980474196,
     "vertical_padding_min_mm": 0.0
   },
   "fonts": [

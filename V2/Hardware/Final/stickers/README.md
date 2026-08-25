@@ -82,10 +82,12 @@ die. The card die includes the two drum tabs and is generated separately in
 
 Every visible character uses one shared **uniform** scale and baseline. Width
 is the controlling dimension: the widest glyph reaches the two sides of the
-locked sticker width, and the same scale is applied vertically so Blue Highway
-D is never squeezed or stretched. Each visible outline is geometrically
+locked sticker width, and the same base scale is applied vertically. The sole
+historical exception currently reproduced is `W`: it uses the exact Blue
+Highway Condensed outline recovered from the Prototype artwork and its
+additional `0.95902088` horizontal factor. Each visible outline is geometrically
 centered in its equal-sized artwork cell; proportional advance widths do not
-change the card size. No glyph receives an individual scale or vertical offset.
+change the card size. No glyph receives an individual vertical offset.
 
 The matched **V2 Definitivo** geometry uses two `45 × 45.5 mm` cuts separated
 by a `1.8 mm` printed gap. The locked cut width remains `45 mm`; the complete

@@ -18,6 +18,7 @@ from typing import Any, Sequence
 from fontTools.pens.basePen import BasePen
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.pens.svgPathPen import SVGPathPen
+from fontTools.svgLib.path import parse_path
 from fontTools.ttLib import TTFont
 from reportlab.lib.colors import HexColor
 from reportlab.lib.units import mm
@@ -61,6 +62,24 @@ DEFAULT_FONT_WEIGHT: float | None = None
 DEFAULT_FONT_WIDTH: float | None = None
 HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
+# Exact Blue Highway Condensed W outline recovered from path4554 in the
+# historical Prototype cutprint.svg. The original 290 px / Inkscape 90 dpi
+# coordinates are normalized to the shared 1000-unit font space. The historical
+# group then applied this additional horizontal transform.
+CONDENSED_W_PATH = (
+    "M101 0 0 718H100L163 233L227 718H328L390 235L454 718H555L450 0H327"
+    "L275 374L219 0H101Z"
+)
+CONDENSED_W_BOUNDS = (0.0, 0.0, 555.0, 718.0)
+CONDENSED_W_ADVANCE = 555.0
+GLYPH_X_SCALE_FACTORS = {"W": 0.95902088}
+GLYPH_OUTLINE_OVERRIDES = {
+    "W": {
+        "family": "Blue Highway Condensed",
+        "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4554",
+    }
+}
+
 
 class StickerError(ValueError):
     """Raised when a sticker sheet cannot be generated safely."""
@@ -78,6 +97,7 @@ class SheetGeometry:
     glyph_padding_y_mm: float = 0.0
     split_y_mm: float = 43.0
     cut_gap_mm: float = 0.0
+    use_historical_w: bool = False
     guide_width_mm: float = 0.15
 
     @property
@@ -203,7 +223,7 @@ class GlyphPlacement:
 
 @dataclass(frozen=True)
 class TypographyLayout:
-    """One global x/y transform and baseline shared by the complete sheet."""
+    """One global uniform scale and baseline shared by the complete sheet."""
 
     scale_x: float
     scale_y: float
@@ -258,6 +278,42 @@ def select_face(character: str, faces: Sequence[FontFace]) -> FontFace:
     raise StickerError(f"no configured font contains {character!r}: {names}")
 
 
+def glyph_x_scale_factor(character: str, use_historical_w: bool) -> float:
+    """Return a documented historical per-glyph horizontal transform."""
+
+    if not use_historical_w:
+        return 1.0
+    return GLYPH_X_SCALE_FACTORS.get(character, 1.0)
+
+
+def glyph_bounds(
+    character: str,
+    face: FontFace,
+    use_historical_w: bool,
+) -> tuple[float, float, float, float]:
+    """Return visible bounds, including historical outline substitutions."""
+
+    if character == "W" and use_historical_w:
+        return CONDENSED_W_BOUNDS
+    glyph_set = face.glyph_set()
+    bounds_pen = BoundsPen(glyph_set)
+    glyph_set[face.glyph_name(character)].draw(bounds_pen)
+    if not bounds_pen.bounds:
+        raise StickerError(f"glyph {character!r} has no visible outline")
+    return bounds_pen.bounds
+
+
+def glyph_path_data(character: str, face: FontFace, use_historical_w: bool) -> str:
+    """Return SVG outline data, including historical outline substitutions."""
+
+    if character == "W" and use_historical_w:
+        return CONDENSED_W_PATH
+    glyph_set = face.glyph_set()
+    svg_pen = SVGPathPen(glyph_set)
+    glyph_set[face.glyph_name(character)].draw(svg_pen)
+    return svg_pen.getCommands()
+
+
 def typography_layout(
     characters: str,
     face: FontFace,
@@ -271,19 +327,30 @@ def typography_layout(
     for character in characters:
         if character == " ":
             continue
+        x_scale_factor = glyph_x_scale_factor(character, geometry.use_historical_w)
         glyph = glyph_set[face.glyph_name(character)]
-        advances.append(glyph.width)
-        bounds_pen = BoundsPen(glyph_set)
-        glyph.draw(bounds_pen)
-        if not bounds_pen.bounds:
-            raise StickerError(f"glyph {character!r} has no visible outline")
-        bounds.append(bounds_pen.bounds)
+        advance = (
+            CONDENSED_W_ADVANCE
+            if character == "W" and geometry.use_historical_w
+            else glyph.width
+        )
+        advances.append(advance * x_scale_factor)
+        bounds.append(glyph_bounds(character, face, geometry.use_historical_w))
 
     x_min = min(bound[0] for bound in bounds)
     y_min = min(bound[1] for bound in bounds)
     x_max = max(bound[2] for bound in bounds)
     y_max = max(bound[3] for bound in bounds)
-    max_visible_width = max(bound[2] - bound[0] for bound in bounds)
+    visible_widths = [
+        (bound[2] - bound[0])
+        * glyph_x_scale_factor(character, geometry.use_historical_w)
+        for character, bound in zip(
+            (character for character in characters if character != " "),
+            bounds,
+            strict=True,
+        )
+    ]
+    max_visible_width = max(visible_widths)
 
     horizontal_scale = (
         geometry.card_width_mm - 2 * geometry.glyph_padding_x_mm
@@ -314,21 +381,15 @@ def glyph_placement(
     geometry: SheetGeometry,
     typography: TypographyLayout,
 ) -> GlyphPlacement:
-    glyph_set = face.glyph_set()
     glyph_name = face.glyph_name(character)
-    glyph = glyph_set[glyph_name]
+    x_min, y_min, x_max, y_max = glyph_bounds(
+        character, face, geometry.use_historical_w
+    )
+    path_data = glyph_path_data(character, face, geometry.use_historical_w)
 
-    bounds_pen = BoundsPen(glyph_set)
-    glyph.draw(bounds_pen)
-    if not bounds_pen.bounds:
-        raise StickerError(f"glyph {character!r} has no visible outline")
-    x_min, y_min, x_max, y_max = bounds_pen.bounds
-
-    svg_pen = SVGPathPen(glyph_set)
-    glyph.draw(svg_pen)
-    path_data = svg_pen.getCommands()
-
-    scale_x = typography.scale_x
+    scale_x = typography.scale_x * glyph_x_scale_factor(
+        character, geometry.use_historical_w
+    )
     scale_y = typography.scale_y
     visible_width_mm = (x_max - x_min) * scale_x
     x_mm = card_x + (geometry.card_width_mm - visible_width_mm) / 2 - x_min * scale_x
@@ -616,7 +677,11 @@ def write_pdf(
         placement = glyph_placement(character, face, x, y_top, geometry, typography)
         glyph_set = face.glyph_set()
         pdf_path = pdf.beginPath()
-        glyph_set[placement.glyph_name].draw(CanvasPathPen(glyph_set, pdf_path))
+        outline_pen = CanvasPathPen(glyph_set, pdf_path)
+        if character == "W":
+            parse_path(placement.path_data, outline_pen)
+        else:
+            glyph_set[placement.glyph_name].draw(outline_pen)
         pdf.saveState()
         clip_path = pdf.beginPath()
         clip_y = page_height - y_top - geometry.artwork_height_mm
@@ -727,6 +792,12 @@ def build_manifest(
             "advance_range_mm": list(typography.advance_mm_range),
             "max_visible_width_mm": typography.max_visible_width_units
             * typography.scale_x,
+            "glyph_x_scale_factors": (
+                GLYPH_X_SCALE_FACTORS if geometry.use_historical_w else {}
+            ),
+            "glyph_outline_overrides": (
+                GLYPH_OUTLINE_OVERRIDES if geometry.use_historical_w else {}
+            ),
             "baseline_from_card_top_mm": typography.baseline_in_card_mm,
             "vertical_padding_min_mm": geometry.glyph_padding_y_mm,
         },
@@ -904,6 +975,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             glyph_padding_y_mm=args.vertical_padding,
             split_y_mm=split_y,
             cut_gap_mm=cut_gap,
+            use_historical_w=physical_variant is not None,
         )
         include_guides = args.include_guides
         svg, positions = build_svg(

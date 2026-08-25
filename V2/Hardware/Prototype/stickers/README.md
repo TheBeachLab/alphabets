@@ -39,6 +39,9 @@ The historical `Blue Highway D.otf` is preserved in `fonts/`, but it does not
 contain the Demo‑64 `■` character. The generated sheet therefore uses the
 traceable `BlueHighwayD-International.otf` hybrid: it preserves every available
 Blue Highway glyph and adds the missing square outline from Overpass Mono.
+The historical sheet used a Blue Highway Condensed outline for `W` plus a
+`0.95902088` horizontal transform. The generated sheet reproduces both from the
+outlined historical artwork; no installed Condensed font is required.
 Hashes and source information are stored beside the font. Overpass is also
 kept locally for the enclosure's `α` mark.
 
