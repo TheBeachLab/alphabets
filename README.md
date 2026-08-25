@@ -5,7 +5,7 @@
 Welcome to the public repository of the second edition (**V2**) of Alphabets,
 an open-source modular split-flap display. Each module shows one character, and
 modules can be arranged together to display messages. For information about
-the first release from 2014, see [V1](V1).
+the first release from 2014, see [V1](V1). Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLKDpiLmgp6EuLGCovD-QFxrmyNdrbUmKX)
 
 ![Blender render of ten modular Alphabets V2 split-flap units displaying HALLO WELT!](hallov2.webp)
 
@@ -15,16 +15,13 @@ In this repository you will find two V2 versions: **V2 Prototype** and
 **V2 Final**. They are complete, incompatible physical profiles; each has its
 own stickers, cards, drum and enclosure, and their parts must not be mixed.
 
-- **V2 Prototype** allows the project to use the ten existing sticker sets
-  printed in Dubai during prototyping.
+- **V2 Prototype** is for myself. A while ago I printed ten module sticker sets in Dubai and I am using those for prototyping. Of course might use those too. When new V2 Final sticker and card batches are available I will no longer develop this variant.
 - **V2 Final** is the supported target for new batches. The expanded character
   map for the German-speaking DACH region (Germany, Austria and Switzerland)
   and Nordic languages requires more vertical artwork space, so this version
   uses taller stickers and cards with a matching drum and enclosure.
 
-V2 Prototype remains supported while the existing Dubai sets are in service.
-Its support ends when new V2 Final sticker and card batches are available. See
-the [V2 physical variants](V2/Hardware/variants/README.md) for the exact parts
+See the [V2 physical variants](V2/Hardware/variants/README.md) for the exact parts
 and dimensions belonging to each version.
 
 > [!WARNING]
@@ -35,9 +32,7 @@ and dimensions belonging to each version.
 > checking the dimensions and validating one complete module. Never mix files
 > between the Prototype and Final folders.
 
-Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLKDpiLmgp6EuLGCovD-QFxrmyNdrbUmKX)
-
-## What's new in V2 Final
+## What's new in V2
 
 * 120% pure awesomeness.
 * 64 cards with international character set.
