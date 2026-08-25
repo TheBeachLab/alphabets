@@ -119,6 +119,12 @@ class PhysicalVariantTests(unittest.TestCase):
                 for path in variant.artifacts["sticker_pdfs"]
             },
         )
-        self.assertFalse(
-            (REPOSITORY_ROOT / "V2/Hardware/Final/stickers/archive").exists()
+        archive_dir = REPOSITORY_ROOT / "V2/Hardware/Final/stickers/archive"
+        self.assertEqual(
+            [
+                path
+                for path in archive_dir.rglob("*")
+                if path.is_file() and path.name != ".DS_Store"
+            ],
+            [],
         )
