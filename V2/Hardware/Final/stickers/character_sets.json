@@ -8,7 +8,7 @@
     {
       "id": "demo-64",
       "name": "Demo 64",
-      "description": "Original 64-position demo drum used by the first ten V2 modules.",
+      "description": "Demo 64 physical drum profile installed on the ten V2 Prototype modules.",
       "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,'°■£~© ",
       "uppercase_input": true,
       "aliases": {
