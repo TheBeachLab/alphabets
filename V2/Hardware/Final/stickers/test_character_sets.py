@@ -14,7 +14,7 @@ from character_sets import (
 )
 from json_license_metadata import JSON_LICENSE_METADATA
 
-INTERNATIONAL_64 = " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
+INTERNATIONAL_64 = " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØ0123456789.,:!?-/'&@%€$£+#°"
 DEMO_64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ:.0123456789$€&@%×/·#=*+-±()<>,\u0027°■£~© "
 
 
@@ -54,6 +54,10 @@ class CharacterSetTests(unittest.TestCase):
             preset.normalize_text("Grüße, señor! François 20°"),
             "GRÜẞE, SEÑOR! FRANÇOIS 20°",
         )
+
+    def test_removed_physical_characters_use_message_board_aliases(self):
+        preset = self.presets["international-64"]
+        self.assertEqual(preset.normalize_text("ŁÓDŹ ¿20€? ¡SÍ!"), "LODZ ?20€? !SI!")
 
     def test_commands_cover_protocol_range(self):
         preset = self.presets["international-64"]

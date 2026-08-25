@@ -23,6 +23,8 @@ from generate_stickers import (  # noqa: E402
     DEFAULT_FONT_WEIGHT,
     DEFAULT_FONT_WIDTH,
     GLYPH_X_SCALE_FACTORS,
+    PROTOTYPE_PERCENT_BOUNDS,
+    PROTOTYPE_PERCENT_PATH,
     FontFace,
     SheetGeometry,
     StickerError,
@@ -146,7 +148,7 @@ class StickerGeneratorTests(unittest.TestCase):
             visible_center = placement.x_mm + (x_min + x_max) * layout.scale_x / 2
             self.assertAlmostEqual(visible_center, geometry.card_width_mm / 2)
 
-    def test_w_and_ae_use_condensed_outlines_with_matching_visible_width(self):
+    def test_prototype_percent_and_condensed_w_ae_overrides(self):
         geometry = SheetGeometry(
             card_width_mm=45.0,
             card_height_mm=91.0,
@@ -157,9 +159,12 @@ class StickerGeneratorTests(unittest.TestCase):
         layout = typography_layout(self.profile.characters, self.faces[0], geometry)
         w = glyph_placement("W", self.faces[0], 0, 0, geometry, layout)
         ae = glyph_placement("Æ", self.faces[0], 0, 0, geometry, layout)
+        percent = glyph_placement("%", self.faces[0], 0, 0, geometry, layout)
         self.assertEqual(GLYPH_X_SCALE_FACTORS["W"], 0.95902088)
         self.assertEqual(w.path_data, CONDENSED_W_PATH)
         self.assertEqual(ae.path_data, CONDENSED_AE_PATH)
+        self.assertEqual(percent.path_data, PROTOTYPE_PERCENT_PATH)
+        self.assertEqual(GLYPH_X_SCALE_FACTORS["%"], 1.0)
         self.assertAlmostEqual(
             w.scale_x, layout.scale_x * GLYPH_X_SCALE_FACTORS["W"]
         )
@@ -177,17 +182,28 @@ class StickerGeneratorTests(unittest.TestCase):
             / 2,
             22.5,
         )
+        self.assertAlmostEqual(
+            percent.x_mm
+            + (PROTOTYPE_PERCENT_BOUNDS[0] + PROTOTYPE_PERCENT_BOUNDS[2])
+            * percent.scale_x
+            / 2,
+            22.5,
+        )
+        self.assertLess(480.0 * percent.scale_x, 555.0 * w.scale_x)
 
-        widest = glyph_placement("%", self.faces[0], 0, 0, geometry, layout)
+        widest = glyph_placement("&", self.faces[0], 0, 0, geometry, layout)
         glyph_set = self.faces[0].glyph_set()
         bounds_pen = BoundsPen(glyph_set)
         glyph_set[widest.glyph_name].draw(bounds_pen)
         self.assertIsNotNone(bounds_pen.bounds)
         x_min, _, x_max, _ = bounds_pen.bounds
-        self.assertAlmostEqual(widest.x_mm + x_min * widest.scale_x, 0.0)
-        self.assertAlmostEqual(widest.x_mm + x_max * widest.scale_x, 45.0)
+        left = widest.x_mm + x_min * widest.scale_x
+        right = widest.x_mm + x_max * widest.scale_x
+        self.assertAlmostEqual(left, 45.0 - right)
+        self.assertLess(left, 0.26)
+        self.assertEqual(layout.scale_x, layout.scale_y)
 
-    def test_tall_narrow_card_uses_one_width_driven_uniform_scale(self):
+    def test_tall_narrow_card_uses_one_safe_uniform_scale(self):
         standard = typography_layout(
             self.profile.characters, self.faces[0], SheetGeometry(card_width_mm=55)
         )
@@ -308,7 +324,7 @@ class StickerGeneratorTests(unittest.TestCase):
                         [card[0], card[1] + 1.8],
                     )
                     self.assertEqual(data["typography"]["width_ratio"], 1.0)
-                    expected_condensed = {"W"}
+                    expected_condensed = {"W", "%"}
                     if variant == "definitive":
                         expected_condensed.add("Æ")
                     self.assertEqual(
@@ -323,6 +339,10 @@ class StickerGeneratorTests(unittest.TestCase):
                         data["typography"]["glyph_outline_overrides"]["W"]["family"],
                         "Blue Highway Condensed",
                     )
+                    self.assertEqual(
+                        data["typography"]["glyph_outline_overrides"]["%"]["family"],
+                        "Blue Highway Condensed",
+                    )
                     if variant == "definitive":
                         self.assertEqual(
                             data["typography"]["glyph_outline_overrides"]["Æ"][
@@ -330,9 +350,17 @@ class StickerGeneratorTests(unittest.TestCase):
                             ],
                             "Blue Highway Condensed",
                         )
-                    self.assertAlmostEqual(
+                    self.assertLessEqual(
                         data["typography"]["max_visible_width_mm"], card[0]
                     )
+                    if variant == "prototype":
+                        self.assertAlmostEqual(
+                            data["typography"]["max_visible_width_mm"], card[0]
+                        )
+                    else:
+                        self.assertGreater(
+                            data["typography"]["max_visible_width_mm"], 44.0
+                        )
 
     def test_variant_rejects_incompatible_sticker_dimension(self):
         with tempfile.TemporaryDirectory() as directory:

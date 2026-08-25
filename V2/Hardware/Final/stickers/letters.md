@@ -28,7 +28,7 @@ matched flaps; it is not a software-only conversion of either existing drum.
 homed display starts empty.
 
 ```text
- ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°
+ ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØ0123456789.,:!?-/'&@%€$£+#°
 ```
 
 This sequence contains exactly 64 unique characters:
@@ -36,18 +36,21 @@ This sequence contains exactly 64 unique characters:
 - one blank;
 - `A` to `Z`;
 - complete uppercase German: `Ä Ö Ü ẞ`;
-- `Ñ Ç É Å Æ Ø Ł` for practical additional Latin-script coverage;
+- `Ñ Ç É Å Æ Ø` for practical additional Latin-script coverage;
 - `0` to `9`;
-- `. , : ! ? ¡ ¿ - / ' & @ % € $ °`.
+- `. , : ! ? - / ' & @ % € $ £ + # °`.
 
 The German group follows the uppercase inventory in the
 [2024 official German spelling rules, page 31](https://www.rechtschreibrat.com/DOX/RfdR_Amtliches-Regelwerk_2024.pdf):
 `A–Z`, `Ä`, `Ö`, `Ü`, and `ẞ`.
 
-The preset normalizes lowercase input to uppercase, preserves the characters
-printed on the drum, and maps common unsupported Latin diacritics to an
-available base letter. Unsupported characters cause an explicit error instead
-of silently moving to the wrong flap.
+The set is optimized for short commercial message-board copy rather than full
+grammatical typography. It keeps the currency and promotion symbols `$`, `€`,
+`£`, `+`, and `#`. The inverted Spanish marks are not physical positions;
+input `¡` and `¿` maps to `!` and `?`. The preset also normalizes lowercase
+input to uppercase and maps `Ł` and common unsupported Latin diacritics to an
+available base letter. Other unsupported characters cause an explicit error
+instead of silently moving to the wrong flap.
 
 ## Demo 64
 
@@ -89,7 +92,7 @@ Custom setting:
   "settings_version": 1,
   "character_set": {
     "name": "My 64",
-    "custom": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°",
+    "custom": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØ0123456789.,:!?-/'&@%€$£+#°",
     "uppercase_input": true
   }
 }

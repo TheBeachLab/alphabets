@@ -18,11 +18,13 @@ prototype and 2.5 mm on the definitive card.
 
 The `1.8 mm` center gap is part of the printed artwork layout, not a third
 sticker. The artwork remains continuous through it, while the cutter receives
-two independent half-card rectangles. Typography uses one width-driven uniform
-base scale so the widest glyph reaches the locked sticker width. W uses the
+two independent half-card rectangles. Typography uses one safe uniform base
+scale against the locked sticker width and height, without squeezing or
+stretching individual glyphs. W uses the
 exact historical Prototype Blue Highway Condensed outline with horizontal
 factor `0.95902088`. International 64 uses the actual Condensed Æ outline and
-a small width adjustment so its final visible width exactly matches W.
+a small width adjustment so its final visible width exactly matches W. Both
+physical profiles use the exact condensed `%` outline from the Prototype.
 
 ## Sticker sheets
 

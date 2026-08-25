@@ -6,7 +6,7 @@
   "character_set": {
     "id": "international-64",
     "name": "International 64",
-    "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°"
+    "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØ0123456789.,:!?-/'&@%€$£+#°"
   },
   "physical_variant": "definitive",
   "colors": {
@@ -48,17 +48,18 @@
   "typography": {
     "alignment": "common-transform-baseline-centered-bounds",
     "spacing": "proportional",
-    "scale_x_mm_per_font_unit": 0.06976744186046512,
-    "scale_y_mm_per_font_unit": 0.06976744186046512,
+    "scale_x_mm_per_font_unit": 0.07791771620486986,
+    "scale_y_mm_per_font_unit": 0.07791771620486986,
     "width_ratio": 1.0,
     "advance_range_mm": [
-      11.651162790697674,
-      52.116279069767444
+      13.012258606213265,
+      50.49068010075567
     ],
-    "max_visible_width_mm": 45.0,
+    "max_visible_width_mm": 44.49101595298069,
     "glyph_x_scale_factors": {
       "W": 0.95902088,
-      "Æ": 1.0216057358925144
+      "Æ": 1.0216057358925144,
+      "%": 1.0
     },
     "glyph_outline_overrides": {
       "W": {
@@ -69,9 +70,13 @@
         "family": "Blue Highway Condensed",
         "version": "5.002",
         "source": "https://typodermicfonts.com/assets/downloads/cc0-fonts/blue-highway.zip#Blue Highway Cd.otf:AE"
+      },
+      "%": {
+        "family": "Blue Highway Condensed",
+        "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4491"
       }
     },
-    "baseline_from_card_top_mm": 71.6906976744186,
+    "baseline_from_card_top_mm": 74.64517212426532,
     "vertical_padding_min_mm": 0.0
   },
   "fonts": [
@@ -384,7 +389,7 @@
     {
       "sheet_position": 38,
       "drum_position": 37,
-      "character": "Ł",
+      "character": "0",
       "row": 2,
       "column": 16,
       "font": "Blue Highway D International Regular"
@@ -392,7 +397,7 @@
     {
       "sheet_position": 39,
       "drum_position": 38,
-      "character": "0",
+      "character": "1",
       "row": 2,
       "column": 17,
       "font": "Blue Highway D International Regular"
@@ -400,7 +405,7 @@
     {
       "sheet_position": 40,
       "drum_position": 39,
-      "character": "1",
+      "character": "2",
       "row": 2,
       "column": 18,
       "font": "Blue Highway D International Regular"
@@ -408,7 +413,7 @@
     {
       "sheet_position": 41,
       "drum_position": 40,
-      "character": "2",
+      "character": "3",
       "row": 2,
       "column": 19,
       "font": "Blue Highway D International Regular"
@@ -416,7 +421,7 @@
     {
       "sheet_position": 42,
       "drum_position": 41,
-      "character": "3",
+      "character": "4",
       "row": 2,
       "column": 20,
       "font": "Blue Highway D International Regular"
@@ -424,7 +429,7 @@
     {
       "sheet_position": 43,
       "drum_position": 42,
-      "character": "4",
+      "character": "5",
       "row": 2,
       "column": 21,
       "font": "Blue Highway D International Regular"
@@ -432,7 +437,7 @@
     {
       "sheet_position": 44,
       "drum_position": 43,
-      "character": "5",
+      "character": "6",
       "row": 2,
       "column": 22,
       "font": "Blue Highway D International Regular"
@@ -440,7 +445,7 @@
     {
       "sheet_position": 45,
       "drum_position": 44,
-      "character": "6",
+      "character": "7",
       "row": 3,
       "column": 1,
       "font": "Blue Highway D International Regular"
@@ -448,7 +453,7 @@
     {
       "sheet_position": 46,
       "drum_position": 45,
-      "character": "7",
+      "character": "8",
       "row": 3,
       "column": 2,
       "font": "Blue Highway D International Regular"
@@ -456,7 +461,7 @@
     {
       "sheet_position": 47,
       "drum_position": 46,
-      "character": "8",
+      "character": "9",
       "row": 3,
       "column": 3,
       "font": "Blue Highway D International Regular"
@@ -464,7 +469,7 @@
     {
       "sheet_position": 48,
       "drum_position": 47,
-      "character": "9",
+      "character": ".",
       "row": 3,
       "column": 4,
       "font": "Blue Highway D International Regular"
@@ -472,7 +477,7 @@
     {
       "sheet_position": 49,
       "drum_position": 48,
-      "character": ".",
+      "character": ",",
       "row": 3,
       "column": 5,
       "font": "Blue Highway D International Regular"
@@ -480,7 +485,7 @@
     {
       "sheet_position": 50,
       "drum_position": 49,
-      "character": ",",
+      "character": ":",
       "row": 3,
       "column": 6,
       "font": "Blue Highway D International Regular"
@@ -488,7 +493,7 @@
     {
       "sheet_position": 51,
       "drum_position": 50,
-      "character": ":",
+      "character": "!",
       "row": 3,
       "column": 7,
       "font": "Blue Highway D International Regular"
@@ -496,7 +501,7 @@
     {
       "sheet_position": 52,
       "drum_position": 51,
-      "character": "!",
+      "character": "?",
       "row": 3,
       "column": 8,
       "font": "Blue Highway D International Regular"
@@ -504,7 +509,7 @@
     {
       "sheet_position": 53,
       "drum_position": 52,
-      "character": "?",
+      "character": "-",
       "row": 3,
       "column": 9,
       "font": "Blue Highway D International Regular"
@@ -512,7 +517,7 @@
     {
       "sheet_position": 54,
       "drum_position": 53,
-      "character": "¡",
+      "character": "/",
       "row": 3,
       "column": 10,
       "font": "Blue Highway D International Regular"
@@ -520,7 +525,7 @@
     {
       "sheet_position": 55,
       "drum_position": 54,
-      "character": "¿",
+      "character": "'",
       "row": 3,
       "column": 11,
       "font": "Blue Highway D International Regular"
@@ -528,7 +533,7 @@
     {
       "sheet_position": 56,
       "drum_position": 55,
-      "character": "-",
+      "character": "&",
       "row": 3,
       "column": 12,
       "font": "Blue Highway D International Regular"
@@ -536,7 +541,7 @@
     {
       "sheet_position": 57,
       "drum_position": 56,
-      "character": "/",
+      "character": "@",
       "row": 3,
       "column": 13,
       "font": "Blue Highway D International Regular"
@@ -544,7 +549,7 @@
     {
       "sheet_position": 58,
       "drum_position": 57,
-      "character": "'",
+      "character": "%",
       "row": 3,
       "column": 14,
       "font": "Blue Highway D International Regular"
@@ -552,7 +557,7 @@
     {
       "sheet_position": 59,
       "drum_position": 58,
-      "character": "&",
+      "character": "€",
       "row": 3,
       "column": 15,
       "font": "Blue Highway D International Regular"
@@ -560,7 +565,7 @@
     {
       "sheet_position": 60,
       "drum_position": 59,
-      "character": "@",
+      "character": "$",
       "row": 3,
       "column": 16,
       "font": "Blue Highway D International Regular"
@@ -568,7 +573,7 @@
     {
       "sheet_position": 61,
       "drum_position": 60,
-      "character": "%",
+      "character": "£",
       "row": 3,
       "column": 17,
       "font": "Blue Highway D International Regular"
@@ -576,7 +581,7 @@
     {
       "sheet_position": 62,
       "drum_position": 61,
-      "character": "€",
+      "character": "+",
       "row": 3,
       "column": 18,
       "font": "Blue Highway D International Regular"
@@ -584,7 +589,7 @@
     {
       "sheet_position": 63,
       "drum_position": 62,
-      "character": "$",
+      "character": "#",
       "row": 3,
       "column": 19,
       "font": "Blue Highway D International Regular"

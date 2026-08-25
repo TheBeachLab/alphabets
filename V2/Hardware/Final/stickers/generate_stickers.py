@@ -78,18 +78,41 @@ CONDENSED_AE_PATH = (
 )
 CONDENSED_AE_BOUNDS = (0.0, 0.0, 521.0, 718.0)
 CONDENSED_AE_ADVANCE = 586.0
+PROTOTYPE_PERCENT_PATH = (
+    "M107 0 442 718H373L40 0ZM380 -16C444 -16 480 52 480 189C480 329 444 393"
+    " 380 393C316 393 281 329 281 189C281 52 316 -16 380 -16ZM99 324C163 324"
+    " 199 392 199 529C199 669 163 733 99 733C35 733 0 669 0 529C0 392 35 324"
+    " 99 324ZM380 53C355 53 344 101 344 189C344 285 355 326 380 326C404 326"
+    " 417 285 417 189C417 93 404 53 380 53ZM99 393C74 393 63 441 63 529C63"
+    " 625 74 666 99 666C123 666 136 625 136 529C136 433 123 393 99 393Z"
+)
+PROTOTYPE_PERCENT_BOUNDS = (0.0, -16.0, 480.0, 733.0)
+PROTOTYPE_PERCENT_ADVANCE = 567.0
 CONDENSED_W_X_SCALE = 0.95902088
 # The true Condensed AE is slightly narrower than the transformed historical W.
 # Widen it by about 2.16% so their final visible widths are exactly equal.
 CONDENSED_AE_X_SCALE = (
     (CONDENSED_W_BOUNDS[2] - CONDENSED_W_BOUNDS[0]) * CONDENSED_W_X_SCALE
 ) / (CONDENSED_AE_BOUNDS[2] - CONDENSED_AE_BOUNDS[0])
-CONDENSED_PATHS = {"W": CONDENSED_W_PATH, "Æ": CONDENSED_AE_PATH}
-CONDENSED_BOUNDS = {"W": CONDENSED_W_BOUNDS, "Æ": CONDENSED_AE_BOUNDS}
-CONDENSED_ADVANCES = {"W": CONDENSED_W_ADVANCE, "Æ": CONDENSED_AE_ADVANCE}
+CONDENSED_PATHS = {
+    "W": CONDENSED_W_PATH,
+    "Æ": CONDENSED_AE_PATH,
+    "%": PROTOTYPE_PERCENT_PATH,
+}
+CONDENSED_BOUNDS = {
+    "W": CONDENSED_W_BOUNDS,
+    "Æ": CONDENSED_AE_BOUNDS,
+    "%": PROTOTYPE_PERCENT_BOUNDS,
+}
+CONDENSED_ADVANCES = {
+    "W": CONDENSED_W_ADVANCE,
+    "Æ": CONDENSED_AE_ADVANCE,
+    "%": PROTOTYPE_PERCENT_ADVANCE,
+}
 GLYPH_X_SCALE_FACTORS = {
     "W": CONDENSED_W_X_SCALE,
     "Æ": CONDENSED_AE_X_SCALE,
+    "%": 1.0,
 }
 GLYPH_OUTLINE_OVERRIDES = {
     "W": {
@@ -103,6 +126,10 @@ GLYPH_OUTLINE_OVERRIDES = {
             "https://typodermicfonts.com/assets/downloads/cc0-fonts/"
             "blue-highway.zip#Blue Highway Cd.otf:AE"
         ),
+    },
+    "%": {
+        "family": "Blue Highway Condensed",
+        "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4491",
     },
 }
 
@@ -387,12 +414,15 @@ def typography_layout(
     horizontal_scale = (
         geometry.card_width_mm - 2 * geometry.glyph_padding_x_mm
     ) / max_visible_width
-    # Preserve the typeface geometry: width is the controlling dimension and
-    # the same scale is applied on both axes. If a profile becomes too tall,
-    # glyph_placement rejects it so the physical height can be changed rather
-    # than silently deforming the artwork.
-    scale_x = horizontal_scale
-    scale_y = horizontal_scale
+    vertical_scale = (
+        geometry.artwork_height_mm - 2 * geometry.glyph_padding_y_mm
+    ) / (y_max - y_min)
+    # Preserve the typeface geometry with one uniform scale. The locked
+    # physical profile must fit in both dimensions; never squeeze only one
+    # axis to make a glyph pass the safety check.
+    uniform_scale = min(horizontal_scale, vertical_scale)
+    scale_x = uniform_scale
+    scale_y = uniform_scale
 
     baseline = geometry.artwork_height_mm / 2 + (y_max + y_min) * scale_y / 2
     return TypographyLayout(

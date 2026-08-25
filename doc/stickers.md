@@ -33,7 +33,7 @@ V2 Final uses the `international-64` sequence. Position 0 is a blank so a
 homed display begins empty.
 
 ```text
- ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°
+ ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØ0123456789.,:!?-/'&@%€$£+#°
 ```
 
 The sequence is not just a list for the web interface: it is the physical

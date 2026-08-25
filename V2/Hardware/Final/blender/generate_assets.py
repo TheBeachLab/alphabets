@@ -276,6 +276,7 @@ def write_atlas() -> None:
         glyph_padding_x_mm=3,
         glyph_padding_y_mm=4,
         split_y_mm=DESIGN.card.sticker_face_height,
+        use_condensed_overrides=True,
     )
     svg, _ = build_svg(
         profile,

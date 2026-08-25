@@ -22,8 +22,8 @@
     {
       "id": "international-64",
       "name": "International 64",
-      "description": "International uppercase set with complete German support and practical Latin-script coverage.",
-      "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØŁ0123456789.,:!?¡¿-/'&@%€$°",
+      "description": "International uppercase set for concise commercial messages, with complete German support and practical Latin-script coverage.",
+      "characters": " ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞÑÇÉÅÆØ0123456789.,:!?-/'&@%€$£+#°",
       "uppercase_input": true,
       "aliases": {
         "ß": "ẞ",
@@ -48,6 +48,7 @@
         "Î": "I",
         "Ï": "I",
         "Ľ": "L",
+        "Ł": "L",
         "Ń": "N",
         "Ň": "N",
         "Ó": "O",
@@ -79,7 +80,9 @@
         "’": "'",
         "“": "'",
         "”": "'",
-        "„": "'"
+        "„": "'",
+        "¡": "!",
+        "¿": "?"
       }
     }
   ]
