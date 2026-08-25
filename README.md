@@ -2,30 +2,43 @@
 <!-- SPDX-License-Identifier: MIT -->
 # Alphabets
 
-> [!IMPORTANT]
-> **Why V2 has two versions:** V2 Prototype uses the ten existing sticker sets
-> printed in Dubai and is available for prototyping while those sets remain in
-> service. The expanded DACH and Nordic character map needs more vertical
-> artwork space, so V2 Final uses taller stickers and cards together with a
-> matched drum and enclosure. V2 Final is the supported target for new batches;
-> Prototype support ends when the new Final sticker and card batches are
-> available.
+Welcome to the public repository of the second edition (**V2**) of Alphabets,
+an open-source modular split-flap display. Each module shows one character, and
+modules can be arranged together to display messages. For information about
+the first release from 2014, see [V1](V1).
+
+![Blender render of ten modular Alphabets V2 split-flap units displaying HALLO WELT!](hallov2.webp)
+
+## The two V2 versions
+
+In this repository you will find two V2 versions: **V2 Prototype** and
+**V2 Final**. They are complete, incompatible physical profiles; each has its
+own stickers, cards, drum and enclosure, and their parts must not be mixed.
+
+- **V2 Prototype** allows the project to use the ten existing sticker sets
+  printed in Dubai during prototyping.
+- **V2 Final** is the supported target for new batches. The expanded character
+  map for the German-speaking DACH region (Germany, Austria and Switzerland)
+  and Nordic languages requires more vertical artwork space, so this version
+  uses taller stickers and cards with a matching drum and enclosure.
+
+V2 Prototype remains supported while the existing Dubai sets are in service.
+Its support ends when new V2 Final sticker and card batches are available. See
+the [V2 physical variants](V2/Hardware/variants/README.md) for the exact parts
+and dimensions belonging to each version.
 
 > [!WARNING]
 > **UNDER HEAVY DEVELOPMENT — NOT READY FOR USE OR FABRICATION.**
 > The V2 Final enclosure has a recorded print check, but the complete mechanism,
 > Prototype enclosure, electronics and production process are not physically
 > validated. Do not order, print, cut or assemble multiple parts without
-> checking the dimensions and validating one complete module. V2 Prototype and
-> V2 Final are incompatible systems; never mix files between their folders.
-
-![Blender render of ten modular Alphabets V2 split-flap units displaying HALLO WELT!](hallov2.webp)
-
-Welcome to the public repository of the second edition of the worldwide loved **open source split-flap display**. For information about the first release (2014) go [here](V1).
+> checking the dimensions and validating one complete module. Never mix files
+> between the Prototype and Final folders.
 
 Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLKDpiLmgp6EuLGCovD-QFxrmyNdrbUmKX)
 
-## What's new
+## What's new in V2 Final
+
 * 120% pure awesomeness.
 * 64 cards with international character set.
 * Custom colors: Request custom colored modules and custom characters.
@@ -41,7 +54,7 @@ Please also check the [YouTube videos](https://www.youtube.com/playlist?list=PLK
 
 ## TOC
 
-This TOC refers to the V2 Final version
+This table of contents documents V2 Final.
 
 - Mechanical
   - [Cards](doc/cards.md)
