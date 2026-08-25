@@ -4,17 +4,26 @@
 
 [← Project README](../README.md) · [Start with the cards →](cards.md)
 
-This guide explains **V2 Final** in the order that information moves through
-the display: a message enters the controller, travels through the module
-chain, and each module turns its drum until the requested card is visible.
+Alphabets V2 is an open-source modular split-flap display. Each module shows one
+character by turning a drum of 64 cards. Modules can be arranged together to
+display complete messages.
 
-V2 Prototype exists to use the ten sticker sets printed in Dubai during
-prototyping. The expanded DACH and Nordic character map needs more vertical
-artwork space, so V2 Final uses matched taller stickers, cards, drum and
-enclosure. Final is the supported target for new batches; Prototype support
+## The two V2 versions
+
+This repository contains **V2 Prototype** and **V2 Final**. Each is a complete
+physical profile with its own stickers, cards, drum and enclosure, so their
+parts cannot be mixed. Prototype uses the ten existing sticker sets printed in
+Dubai. Final is the supported target for new batches; its expanded character
+map for the German-speaking DACH region (Germany, Austria and Switzerland) and
+Nordic languages requires taller artwork, stickers and cards. Prototype support
 ends when new Final sticker and card batches are available. The
 [physical variants contract](../V2/Hardware/variants/README.md) records the
 exact dimensions and files that belong together.
+
+The rest of this guide explains **V2 Final** in the order that information
+moves through the display: a message enters the controller, travels through the
+module chain, and each module turns its drum until the requested card is
+visible.
 
 > [!WARNING]
 > V2 is under development. The V2 Final enclosure has a recorded print check,
