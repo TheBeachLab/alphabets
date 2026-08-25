@@ -25,6 +25,7 @@
       45.5
     ],
     "cut_gap": 1.8,
+    "background_bleed": 2.0,
     "artwork": [
       45.0,
       92.8

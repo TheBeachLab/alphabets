@@ -25,6 +25,9 @@ exact historical Prototype Blue Highway Condensed outline with horizontal
 factor `0.95902088`. International 64 uses the actual Condensed Æ outline and
 a small width adjustment so its final visible width exactly matches W. Both
 physical profiles use the exact condensed `%` outline from the Prototype.
+The colored background extends `2 mm` past the outer cutter edges without
+changing either finished sticker rectangle, preventing white slivers from a
+small print/cut registration shift.
 
 ## Sticker sheets
 

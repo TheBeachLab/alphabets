@@ -44,6 +44,8 @@ software sequence and installed cards must match exactly.
 
 - One uncut sticker is 45 × 91 mm.
 - The centre cut creates two 45 × 45.5 mm faces.
+- The colored background extends 2 mm beyond the outer cut lines; the finished
+  sticker dimensions do not change.
 - Each face is centred on a 50 × 48 mm card.
 - The standard presets are black/white, black/yellow, yellow/black, and
   white/black.

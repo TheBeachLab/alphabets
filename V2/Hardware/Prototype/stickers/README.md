@@ -6,9 +6,11 @@
 
 V2 Prototype uses the **Demo 64** character order and two nominal `50 × 40 mm`
 sticker cuts. The cuts are separated by the historical `1.8 mm` printed gap,
-so each uninterrupted artwork cell is `50 × 81.8 mm`. Each face is centred on
-a 55 × 43 mm card, leaving 2.5 mm at each side and an unstickered 3 mm strip at
-the free edge.
+so each uninterrupted cut-aligned artwork cell is `50 × 81.8 mm`. Its colored
+background extends `2 mm` past the outer cut lines, producing `54 × 85.8 mm`
+background bounds without changing either finished sticker. Each face is
+centred on a 55 × 43 mm card, leaving 2.5 mm at each side and an unstickered
+3 mm strip at the free edge.
 
 ![Demo 64 Prototype sticker sheet](generated/demo-64-black-white-50x80.svg)
 
@@ -28,7 +30,8 @@ This order must match the physical cards and controller mapping.
 - [`generated/demo-64-black-white-50x80.pdf`](generated/demo-64-black-white-50x80.pdf): vector PDF.
 - [`generated/demo-64-black-white-50x80.json`](generated/demo-64-black-white-50x80.json): dimensions, exact order, font hashes and variant metadata.
 
-The original `cut-print/cutprint.svg` and PDF remain as historical evidence.
+The original `cut-print/cutprint.svg` remains as historical vector evidence;
+the obsolete companion PDF is available through Git history.
 Their roughly 51 × 40.1 mm cutter rectangles include allowance around the
 nominal 50 × 40 mm sticker halves, with a measured gap of approximately
 1.794 mm; they are not a 43 mm-high sticker.

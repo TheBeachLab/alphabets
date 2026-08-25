@@ -31,6 +31,7 @@ class StickerDimensions:
     height_mm: float
     split_y_mm: float
     cut_gap_mm: float
+    bleed_mm: float
 
     @property
     def face_height_mm(self) -> float:
@@ -124,6 +125,7 @@ def _variant(data: dict[str, Any]) -> PhysicalVariant:
         _number(sticker_data, "height", f"{variant_id}.sticker_mm"),
         _number(sticker_data, "split_y", f"{variant_id}.sticker_mm"),
         _number(sticker_data, "cut_gap", f"{variant_id}.sticker_mm"),
+        _number(sticker_data, "bleed", f"{variant_id}.sticker_mm"),
     )
     card = CardDimensions(
         _number(card_data, "body_width", f"{variant_id}.card_mm"),

@@ -33,12 +33,12 @@ python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --output-svg /tmp/international-64-definitive-45x91.svg
 ```
 
-`--variant` fixes the character preset, sticker width and sticker height, and
-records the variant in the JSON manifest. It refuses a conflicting width or
-height override. The prototype has two nominal `50 × 40 mm` cuts separated by
-a `1.8 mm` printed gap. The body itself remains visible across its complete
-43 mm height; the
-40 mm half is placed from `y=3` to `y=43 mm`, aligned with the hinge/tab edge.
+`--variant` fixes the character preset, sticker width, sticker height, cut gap,
+and `2 mm` background bleed, and records them in the JSON manifest. It refuses
+a conflicting physical override. The prototype has two nominal `50 × 40 mm`
+cuts separated by a `1.8 mm` printed gap. The body itself remains visible
+across its complete 43 mm height; the 40 mm half is placed from `y=3` to
+`y=43 mm`, aligned with the hinge/tab edge.
 The opposite `y=0…3 mm` strip remains visible but unstickered.
 
 In the preserved `cut-print/cutprint.svg`, each historical magenta cutter
@@ -47,26 +47,14 @@ That is the cutter allowance around the nominal `50 × 40 mm` prototype
 sticker, not evidence of a 43 mm-high sticker. Its measured center gap is
 approximately `1.794 mm`; the variant contract rounds this to `1.8 mm`.
 
-## Generic legacy sheet
-
-This mode is for experiments only: it is not associated with either physical
-variant and must not be sent to fabrication.
-
-From the repository root:
-
-```sh
-python3 V2/Hardware/Final/stickers/generate_stickers.py \
-  --output-svg /tmp/international-64-generic-55x86.svg \
-  --output-cut-svg /tmp/international-64-generic-55x86-cut.svg \
-  --output-pdf /tmp/international-64-generic-55x86.pdf
-```
+## Print bleed and cutter geometry
 
 The SVG is accompanied by a JSON manufacturing manifest containing the exact
-character order, colors, card/page dimensions and font checksum. Card size is
-55 × 86 mm with the flap cut at 43 mm. The default 22-column layout is
-1388 × 278 mm, matching the limits of the surviving production sheet. The
-artwork remains uninterrupted across the intentional center gap while the
-cutter geometry contains two independent rectangles. The magenta sticker
+character order, colors, finished cut dimensions, `2 mm` background bleed and
+font checksum. The background extends `2 mm` beyond every outer cutter edge,
+so a small registration shift cannot expose white material. The artwork also
+remains uninterrupted across the intentional center gap while the cutter
+geometry contains two independent rectangles. The magenta sticker
 outlines are superimposed vector paths in the print SVG and PDF by default,
 matching the production file. `--no-guides` produces clean artwork when
 required, while `--output-cut-svg` writes the same two-rectangle cutter
@@ -91,7 +79,9 @@ change the card size. No glyph receives an individual vertical offset.
 
 The matched **V2 Definitivo** geometry uses two `45 × 45.5 mm` cuts separated
 by a `1.8 mm` printed gap. The locked cut width remains `45 mm`; the complete
-artwork cell is therefore `45 × 92.8 mm`. Each sticker is centred laterally on the complete
+cut-aligned artwork cell is therefore `45 × 92.8 mm`, while its colored
+background bounds are `49 × 96.8 mm` after the `2 mm` bleed on every outer
+side. Each sticker is centred laterally on the complete
 `50 × 48 mm` visible face and aligned to its hinge/tab edge. The opposite
 2.5 mm strip remains unstickered. The center-cut edge of each half is the edge
 that must face the tabs. Skipping the `1.8 mm` printed interval between the two
@@ -106,9 +96,11 @@ python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --output-pdf /tmp/international-45x91.pdf
 ```
 
-`--horizontal-padding` reduces the width available to the uniform scale.
-`--vertical-padding` is a validation clearance: it never rescales or deforms
-the type, and generation stops if the width-driven artwork is too tall.
+`--horizontal-padding` and `--vertical-padding` reduce the safe area available
+to the uniform scale; neither option deforms the type. Generic experiments can
+override the background extension with `--bleed`, but physical variants lock
+it to their declared manufacturing value.
+
 The matching card cutter and 51 mm drum separation are documented in
 [`../cards/`](../cards/README.md). Use `--variant prototype` for the existing
 55 mm cards with nominal `50 × 40 mm` stickers / Demo 64 hardware.
@@ -143,7 +135,17 @@ for preset in black-white black-yellow yellow-black white-black; do
     --output-svg "V2/Hardware/Final/stickers/generated/international-64-${preset}-45x91.svg" \
     --output-pdf "V2/Hardware/Final/stickers/output/pdf/alphabets-international-64-${preset}-45x91-stickers.pdf"
 done
+
+# The cutter geometry is color-independent, so one current cut file is enough.
+python3 V2/Hardware/Final/stickers/generate_stickers.py \
+  --variant definitive \
+  --color-preset black-white \
+  --output-svg /tmp/international-64-black-white-45x91.svg \
+  --output-cut-svg V2/Hardware/Final/stickers/generated/international-64-black-white-45x91-cut.svg
 ```
+
+Only these current `45x91` Final artifacts are retained in the working tree;
+discarded dimensions remain available through Git history.
 
 ## Preset or custom characters
 
