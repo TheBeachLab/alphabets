@@ -8,6 +8,14 @@ This guide explains **V2 Final** in the order that information moves through
 the display: a message enters the controller, travels through the module
 chain, and each module turns its drum until the requested card is visible.
 
+V2 Prototype exists to use the ten sticker sets printed in Dubai during
+prototyping. The expanded DACH and Nordic character map needs more vertical
+artwork space, so V2 Final uses matched taller stickers, cards, drum and
+enclosure. Final is the supported target for new batches; Prototype support
+ends when new Final sticker and card batches are available. The
+[physical variants contract](../V2/Hardware/variants/README.md) records the
+exact dimensions and files that belong together.
+
 > [!WARNING]
 > V2 is under development. The V2 Final enclosure has a recorded print check,
 > but the complete mechanism, Prototype enclosure, electronics and production
@@ -46,5 +54,4 @@ chain, and each module turns its drum until the requested card is visible.
 | Motherboard hardware and firmware | Protocol responsibilities are defined; implementation is not in the repository yet |
 | Web interface | Message protocol is defined; implementation is not in the repository yet |
 
-The [V2 physical variants contract](../V2/Hardware/variants/README.md) explains
-why V2 Prototype and V2 Final parts must never be mixed.
+V2 Prototype and V2 Final parts must never be mixed.
