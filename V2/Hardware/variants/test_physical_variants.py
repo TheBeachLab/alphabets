@@ -41,6 +41,11 @@ class PhysicalVariantTests(unittest.TestCase):
         self.assertEqual(variants["prototype"].sticker.bleed_mm, 2.0)
         self.assertEqual(variants["definitive"].sticker.bleed_mm, 2.0)
         self.assertEqual(variants["definitive"].sticker.artwork_height_mm, 92.8)
+        self.assertEqual(
+            variants["prototype"].artifacts["sticker_print_cut"],
+            "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg",
+        )
+        self.assertNotIn("sticker_outputs", variants["prototype"].artifacts)
         for variant in variants.values():
             with self.subTest(variant=variant.id):
                 self.assertEqual(

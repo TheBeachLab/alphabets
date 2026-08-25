@@ -38,24 +38,22 @@ small print/cut registration shift.
 
 ## Sticker sheets
 
-Always select a physical variant, rather than manually combining an alphabet
-and dimensions:
+V2 Prototype uses the existing
+[`cut-print/cutprint.svg`](../Prototype/stickers/cut-print/cutprint.svg) file.
+It contains the print artwork and cutter lines used for the ten Dubai sticker
+sets.
+
+Generate V2 Final sheets with the locked Definitivo profile:
 
 ```sh
-# V2 Prototype
-python3 V2/Hardware/Final/stickers/generate_stickers.py \
-  --variant prototype \
-  --output-svg /tmp/demo-64-prototype-50x80.svg
-
-# V2 Final
 python3 V2/Hardware/Final/stickers/generate_stickers.py \
   --variant definitive \
   --color-preset black-white \
   --output-svg /tmp/international-64-definitive-45x91.svg
 ```
 
-The sticker generator records the chosen physical variant in its JSON
-manufacturing manifest. It rejects an incompatible width or height override.
+The Final sticker generator records the physical variant in its JSON
+manufacturing manifest and rejects an incompatible width or height override.
 
 ## Sources and fabrication status
 
