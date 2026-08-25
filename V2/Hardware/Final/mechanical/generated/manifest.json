@@ -3,11 +3,11 @@
   "SPDX-License-Identifier": "MIT",
   "cad_engine": "CadQuery 2.8.0 / OCCT",
   "fabrication_status": {
-    "card_and_laser_cut_drum": "ported from current dimensional sources",
+    "card_and_laser_cut_drum": "current dimensional manufacturing source; physical sample validation required",
     "enclosure_sketch": "non-solid reference geometry",
-    "holder_side": "ported dormant legacy profile; physical validation required",
+    "holder_side": "optional holder geometry; physical validation required",
     "motor": "clearance reference, not a manufacturing model",
-    "printed_spool": "ported legacy alternative; physical validation required"
+    "printed_spool": "optional additive part; physical validation required"
   },
   "geometry": {
     "card": {
@@ -360,12 +360,12 @@
   },
   "schema_version": 1,
   "source_lineage": {
-    "card": "V2/Hardware/Final/cards/generate_card.py",
-    "enclosure_reference": "V2/Hardware/Prototype/structure/side_motor.FCStd Sketch",
-    "holder_reference": "V2/Hardware/Prototype/structure/spool-holder.scad side()",
-    "laser_cut_drum": "V2/Hardware/Prototype/structure/spool.scad",
-    "motor_reference": "V2/Hardware/Prototype/structure/28byj48.scad",
-    "printed_spool": "V2/Hardware/Prototype/structure/spool-3dp.scad"
+    "card": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+    "enclosure_reference": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+    "holder_reference": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+    "laser_cut_drum": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+    "motor_reference": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+    "printed_spool": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py"
   },
   "units": "mm"
 }

@@ -12,7 +12,7 @@
     "file": "cards-position-capture.json",
     "frame": 27464
   },
-  "fabrication_status": "Parametric prototype derived from the captured settled mechanism; clearances and print orientation require physical fit validation before final fabrication.",
+  "fabrication_status": "Current V2 Final enclosure source; the enclosure print is checked, but the complete mechanism and production process require physical validation.",
   "features": {
     "front_bed_printing": "6 mm 45 degree lead-ins on both side recesses and a 2 mm lead-in through the remaining motor bore wall; screw pilots remain cylindrical",
     "front_edge": "4 mm inner chamfer with a flat mounting land at the pawl",

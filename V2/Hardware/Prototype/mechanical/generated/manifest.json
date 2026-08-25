@@ -5,7 +5,7 @@
   "fabrication_status": {
     "card_and_laser_cut_drum": "generated from the matched Prototype variant contract",
     "motor": "clearance reference, not a manufacturing model",
-    "printed_spool": "ported legacy alternative; physical validation required"
+    "printed_spool": "optional additive part; physical validation required"
   },
   "geometry": {
     "card": {
@@ -336,10 +336,10 @@
   },
   "schema_version": 1,
   "source_lineage": {
-    "card": "V2/Hardware/Prototype/mechanical/design.toml",
-    "laser_cut_drum": "V2/Hardware/Prototype/mechanical/design.toml",
-    "motor_reference": "V2/Hardware/Prototype/structure/28byj48.scad",
-    "printed_spool": "V2/Hardware/Prototype/structure/spool-3dp.scad"
+    "card": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py",
+    "laser_cut_drum": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py",
+    "motor_reference": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py",
+    "printed_spool": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py"
   },
   "units": "mm"
 }

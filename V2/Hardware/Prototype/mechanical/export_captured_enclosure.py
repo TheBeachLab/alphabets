@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2014-2026 The Beach Lab <https://beachlab.org>
 # SPDX-License-Identifier: MIT
-"""Export the enclosure fitted to the saved Blender card positions."""
+"""Export the current V2 Prototype enclosure and print plate."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ def main() -> None:
         "--capture",
         type=Path,
         default=DEFAULT_CAPTURE,
-        help="trusted Final card-position capture used as the Prototype transform reference",
+        help="local card-position capture used for Prototype card orientations",
     )
     parser.add_argument(
         "--output",
