@@ -162,20 +162,23 @@ production files if any selected font cannot render a required character.
 
 ## Typeface
 
-The generator uses **Overpass Mono Medium** at weight 500. Blue Highway and
-Overpass both derive from FHWA/Highway Gothic road-sign lettering, while the
-mono variant keeps every drum position on a common advance. It provides the
-full `international-64` and `demo-64` coverage in one font, including `ẞ` and
-`■`. The bundled OTF is the unmodified official release from the
-[Red Hat Overpass repository](https://github.com/RedHatOfficial/Overpass) and
-is distributed under the SIL Open Font License 1.1.
+The generator uses the traceable **BlueHighwayD-International** hybrid. It
+preserves the Blue Highway D outlines and supplies the two characters missing
+from that source through documented fallbacks. The physical profiles replace
+W with the exact Blue Highway Condensed outline recovered from the historical
+Prototype artwork. International 64 also uses the actual Condensed Æ outline
+from Typodermic's official
+[CC0 Blue Highway package](https://typodermicfonts.com/public-domain/). Its
+final horizontal factor makes its visible width exactly match the transformed
+W. No locally installed font is required for either override.
 
 The alignment model follows the lesson from Scott Bezek's production
 [splitflap generator](https://github.com/scottbez1/splitflap/blob/master/3d/flap_fonts.scad):
 font scale and position are explicit manufacturing parameters. This generator
-uses one global x/y transform and baseline for the entire profile, with each
-font outline centered inside the common physical card. Exact provenance and
-checksums are recorded in [`fonts/`](fonts/README.md).
+uses one global uniform base scale and baseline for the entire profile, with
+each font outline centered inside the common physical card. The documented W
+and Æ horizontal factors are applied after that base scale. Exact provenance
+and checksums are recorded in [`fonts/`](fonts/README.md).
 
 Choose another OpenType font with `--font path/to/font.otf`. For a variable
 font, select its weight and width with `--font-weight 600 --font-width 80`.

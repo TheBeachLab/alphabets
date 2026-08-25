@@ -48,24 +48,30 @@
   "typography": {
     "alignment": "common-transform-baseline-centered-bounds",
     "spacing": "proportional",
-    "scale_x_mm_per_font_unit": 0.06726457399103139,
-    "scale_y_mm_per_font_unit": 0.06726457399103139,
+    "scale_x_mm_per_font_unit": 0.06976744186046512,
+    "scale_y_mm_per_font_unit": 0.06976744186046512,
     "width_ratio": 1.0,
     "advance_range_mm": [
-      11.233183856502242,
-      50.24663677130045
+      11.651162790697674,
+      52.116279069767444
     ],
     "max_visible_width_mm": 45.0,
     "glyph_x_scale_factors": {
-      "W": 0.95902088
+      "W": 0.95902088,
+      "Æ": 1.0216057358925144
     },
     "glyph_outline_overrides": {
       "W": {
         "family": "Blue Highway Condensed",
         "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4554"
+      },
+      "Æ": {
+        "family": "Blue Highway Condensed",
+        "version": "5.002",
+        "source": "https://typodermicfonts.com/assets/downloads/cc0-fonts/blue-highway.zip#Blue Highway Cd.otf:AE"
       }
     },
-    "baseline_from_card_top_mm": 70.78340807174888,
+    "baseline_from_card_top_mm": 71.6906976744186,
     "vertical_padding_min_mm": 0.0
   },
   "fonts": [
