@@ -16,6 +16,8 @@ if str(STICKERS_DIR) not in sys.path:
 
 from generate_stickers import (  # noqa: E402
     COLOR_PRESETS,
+    CONDENSED_AE_BOUNDS,
+    CONDENSED_AE_PATH,
     CONDENSED_W_PATH,
     DEFAULT_FONT,
     DEFAULT_FONT_WEIGHT,
@@ -144,24 +146,39 @@ class StickerGeneratorTests(unittest.TestCase):
             visible_center = placement.x_mm + (x_min + x_max) * layout.scale_x / 2
             self.assertAlmostEqual(visible_center, geometry.card_width_mm / 2)
 
-    def test_w_uses_historical_condensed_outline_and_horizontal_transform(self):
+    def test_w_and_ae_use_condensed_outlines_with_matching_visible_width(self):
         geometry = SheetGeometry(
             card_width_mm=45.0,
             card_height_mm=91.0,
             split_y_mm=45.5,
             cut_gap_mm=1.8,
-            use_historical_w=True,
+            use_condensed_overrides=True,
         )
         layout = typography_layout(self.profile.characters, self.faces[0], geometry)
-        placement = glyph_placement("W", self.faces[0], 0, 0, geometry, layout)
-        self.assertEqual(GLYPH_X_SCALE_FACTORS, {"W": 0.95902088})
-        self.assertEqual(placement.path_data, CONDENSED_W_PATH)
+        w = glyph_placement("W", self.faces[0], 0, 0, geometry, layout)
+        ae = glyph_placement("Æ", self.faces[0], 0, 0, geometry, layout)
+        self.assertEqual(GLYPH_X_SCALE_FACTORS["W"], 0.95902088)
+        self.assertEqual(w.path_data, CONDENSED_W_PATH)
+        self.assertEqual(ae.path_data, CONDENSED_AE_PATH)
         self.assertAlmostEqual(
-            placement.scale_x, layout.scale_x * GLYPH_X_SCALE_FACTORS["W"]
+            w.scale_x, layout.scale_x * GLYPH_X_SCALE_FACTORS["W"]
         )
-        self.assertEqual(placement.scale_y, layout.scale_y)
-        self.assertLess(555.0 * placement.scale_x, 45.0)
-        widest = glyph_placement("Æ", self.faces[0], 0, 0, geometry, layout)
+        self.assertAlmostEqual(
+            ae.scale_x, layout.scale_x * GLYPH_X_SCALE_FACTORS["Æ"]
+        )
+        self.assertEqual(w.scale_y, layout.scale_y)
+        self.assertEqual(ae.scale_y, layout.scale_y)
+        self.assertAlmostEqual(555.0 * w.scale_x, 521.0 * ae.scale_x)
+        self.assertAlmostEqual(w.x_mm + 555.0 * w.scale_x / 2, 22.5)
+        self.assertAlmostEqual(
+            ae.x_mm
+            + (CONDENSED_AE_BOUNDS[0] + CONDENSED_AE_BOUNDS[2])
+            * ae.scale_x
+            / 2,
+            22.5,
+        )
+
+        widest = glyph_placement("%", self.faces[0], 0, 0, geometry, layout)
         glyph_set = self.faces[0].glyph_set()
         bounds_pen = BoundsPen(glyph_set)
         glyph_set[widest.glyph_name].draw(bounds_pen)
@@ -291,14 +308,28 @@ class StickerGeneratorTests(unittest.TestCase):
                         [card[0], card[1] + 1.8],
                     )
                     self.assertEqual(data["typography"]["width_ratio"], 1.0)
+                    expected_condensed = {"W"}
+                    if variant == "definitive":
+                        expected_condensed.add("Æ")
                     self.assertEqual(
-                        data["typography"]["glyph_x_scale_factors"],
-                        {"W": 0.95902088},
+                        set(data["typography"]["glyph_x_scale_factors"]),
+                        expected_condensed,
+                    )
+                    self.assertAlmostEqual(
+                        data["typography"]["glyph_x_scale_factors"]["W"],
+                        0.95902088,
                     )
                     self.assertEqual(
                         data["typography"]["glyph_outline_overrides"]["W"]["family"],
                         "Blue Highway Condensed",
                     )
+                    if variant == "definitive":
+                        self.assertEqual(
+                            data["typography"]["glyph_outline_overrides"]["Æ"][
+                                "family"
+                            ],
+                            "Blue Highway Condensed",
+                        )
                     self.assertAlmostEqual(
                         data["typography"]["max_visible_width_mm"], card[0]
                     )

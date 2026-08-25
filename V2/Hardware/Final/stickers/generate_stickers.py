@@ -72,12 +72,38 @@ CONDENSED_W_PATH = (
 )
 CONDENSED_W_BOUNDS = (0.0, 0.0, 555.0, 718.0)
 CONDENSED_W_ADVANCE = 555.0
-GLYPH_X_SCALE_FACTORS = {"W": 0.95902088}
+CONDENSED_AE_PATH = (
+    "M284 0H521V106H375L358 315H458V421H349L334 612H521V718H128L0 0H99"
+    "L122 138H272ZM202 612H233L264 244H140Z"
+)
+CONDENSED_AE_BOUNDS = (0.0, 0.0, 521.0, 718.0)
+CONDENSED_AE_ADVANCE = 586.0
+CONDENSED_W_X_SCALE = 0.95902088
+# The true Condensed AE is slightly narrower than the transformed historical W.
+# Widen it by about 2.16% so their final visible widths are exactly equal.
+CONDENSED_AE_X_SCALE = (
+    (CONDENSED_W_BOUNDS[2] - CONDENSED_W_BOUNDS[0]) * CONDENSED_W_X_SCALE
+) / (CONDENSED_AE_BOUNDS[2] - CONDENSED_AE_BOUNDS[0])
+CONDENSED_PATHS = {"W": CONDENSED_W_PATH, "Æ": CONDENSED_AE_PATH}
+CONDENSED_BOUNDS = {"W": CONDENSED_W_BOUNDS, "Æ": CONDENSED_AE_BOUNDS}
+CONDENSED_ADVANCES = {"W": CONDENSED_W_ADVANCE, "Æ": CONDENSED_AE_ADVANCE}
+GLYPH_X_SCALE_FACTORS = {
+    "W": CONDENSED_W_X_SCALE,
+    "Æ": CONDENSED_AE_X_SCALE,
+}
 GLYPH_OUTLINE_OVERRIDES = {
     "W": {
         "family": "Blue Highway Condensed",
         "source": "V2/Hardware/Prototype/stickers/cut-print/cutprint.svg#path4554",
-    }
+    },
+    "Æ": {
+        "family": "Blue Highway Condensed",
+        "version": "5.002",
+        "source": (
+            "https://typodermicfonts.com/assets/downloads/cc0-fonts/"
+            "blue-highway.zip#Blue Highway Cd.otf:AE"
+        ),
+    },
 }
 
 
@@ -97,7 +123,7 @@ class SheetGeometry:
     glyph_padding_y_mm: float = 0.0
     split_y_mm: float = 43.0
     cut_gap_mm: float = 0.0
-    use_historical_w: bool = False
+    use_condensed_overrides: bool = False
     guide_width_mm: float = 0.15
 
     @property
@@ -278,10 +304,10 @@ def select_face(character: str, faces: Sequence[FontFace]) -> FontFace:
     raise StickerError(f"no configured font contains {character!r}: {names}")
 
 
-def glyph_x_scale_factor(character: str, use_historical_w: bool) -> float:
-    """Return a documented historical per-glyph horizontal transform."""
+def glyph_x_scale_factor(character: str, use_condensed_overrides: bool) -> float:
+    """Return a documented per-glyph horizontal transform."""
 
-    if not use_historical_w:
+    if not use_condensed_overrides:
         return 1.0
     return GLYPH_X_SCALE_FACTORS.get(character, 1.0)
 
@@ -289,12 +315,12 @@ def glyph_x_scale_factor(character: str, use_historical_w: bool) -> float:
 def glyph_bounds(
     character: str,
     face: FontFace,
-    use_historical_w: bool,
+    use_condensed_overrides: bool,
 ) -> tuple[float, float, float, float]:
-    """Return visible bounds, including historical outline substitutions."""
+    """Return visible bounds, including physical-profile substitutions."""
 
-    if character == "W" and use_historical_w:
-        return CONDENSED_W_BOUNDS
+    if use_condensed_overrides and character in CONDENSED_BOUNDS:
+        return CONDENSED_BOUNDS[character]
     glyph_set = face.glyph_set()
     bounds_pen = BoundsPen(glyph_set)
     glyph_set[face.glyph_name(character)].draw(bounds_pen)
@@ -303,11 +329,13 @@ def glyph_bounds(
     return bounds_pen.bounds
 
 
-def glyph_path_data(character: str, face: FontFace, use_historical_w: bool) -> str:
-    """Return SVG outline data, including historical outline substitutions."""
+def glyph_path_data(
+    character: str, face: FontFace, use_condensed_overrides: bool
+) -> str:
+    """Return SVG outline data, including physical-profile substitutions."""
 
-    if character == "W" and use_historical_w:
-        return CONDENSED_W_PATH
+    if use_condensed_overrides and character in CONDENSED_PATHS:
+        return CONDENSED_PATHS[character]
     glyph_set = face.glyph_set()
     svg_pen = SVGPathPen(glyph_set)
     glyph_set[face.glyph_name(character)].draw(svg_pen)
@@ -327,15 +355,19 @@ def typography_layout(
     for character in characters:
         if character == " ":
             continue
-        x_scale_factor = glyph_x_scale_factor(character, geometry.use_historical_w)
+        x_scale_factor = glyph_x_scale_factor(
+            character, geometry.use_condensed_overrides
+        )
         glyph = glyph_set[face.glyph_name(character)]
         advance = (
-            CONDENSED_W_ADVANCE
-            if character == "W" and geometry.use_historical_w
+            CONDENSED_ADVANCES[character]
+            if character in CONDENSED_ADVANCES and geometry.use_condensed_overrides
             else glyph.width
         )
         advances.append(advance * x_scale_factor)
-        bounds.append(glyph_bounds(character, face, geometry.use_historical_w))
+        bounds.append(
+            glyph_bounds(character, face, geometry.use_condensed_overrides)
+        )
 
     x_min = min(bound[0] for bound in bounds)
     y_min = min(bound[1] for bound in bounds)
@@ -343,7 +375,7 @@ def typography_layout(
     y_max = max(bound[3] for bound in bounds)
     visible_widths = [
         (bound[2] - bound[0])
-        * glyph_x_scale_factor(character, geometry.use_historical_w)
+        * glyph_x_scale_factor(character, geometry.use_condensed_overrides)
         for character, bound in zip(
             (character for character in characters if character != " "),
             bounds,
@@ -383,12 +415,12 @@ def glyph_placement(
 ) -> GlyphPlacement:
     glyph_name = face.glyph_name(character)
     x_min, y_min, x_max, y_max = glyph_bounds(
-        character, face, geometry.use_historical_w
+        character, face, geometry.use_condensed_overrides
     )
-    path_data = glyph_path_data(character, face, geometry.use_historical_w)
+    path_data = glyph_path_data(character, face, geometry.use_condensed_overrides)
 
     scale_x = typography.scale_x * glyph_x_scale_factor(
-        character, geometry.use_historical_w
+        character, geometry.use_condensed_overrides
     )
     scale_y = typography.scale_y
     visible_width_mm = (x_max - x_min) * scale_x
@@ -678,7 +710,7 @@ def write_pdf(
         glyph_set = face.glyph_set()
         pdf_path = pdf.beginPath()
         outline_pen = CanvasPathPen(glyph_set, pdf_path)
-        if character == "W":
+        if geometry.use_condensed_overrides and character in CONDENSED_PATHS:
             parse_path(placement.path_data, outline_pen)
         else:
             glyph_set[placement.glyph_name].draw(outline_pen)
@@ -792,12 +824,18 @@ def build_manifest(
             "advance_range_mm": list(typography.advance_mm_range),
             "max_visible_width_mm": typography.max_visible_width_units
             * typography.scale_x,
-            "glyph_x_scale_factors": (
-                GLYPH_X_SCALE_FACTORS if geometry.use_historical_w else {}
-            ),
-            "glyph_outline_overrides": (
-                GLYPH_OUTLINE_OVERRIDES if geometry.use_historical_w else {}
-            ),
+            "glyph_x_scale_factors": {
+                character: factor
+                for character, factor in GLYPH_X_SCALE_FACTORS.items()
+                if geometry.use_condensed_overrides
+                and character in profile.characters
+            },
+            "glyph_outline_overrides": {
+                character: override
+                for character, override in GLYPH_OUTLINE_OVERRIDES.items()
+                if geometry.use_condensed_overrides
+                and character in profile.characters
+            },
             "baseline_from_card_top_mm": typography.baseline_in_card_mm,
             "vertical_padding_min_mm": geometry.glyph_padding_y_mm,
         },
@@ -975,7 +1013,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             glyph_padding_y_mm=args.vertical_padding,
             split_y_mm=split_y,
             cut_gap_mm=cut_gap,
-            use_historical_w=physical_variant is not None,
+            use_condensed_overrides=physical_variant is not None,
         )
         include_guides = args.include_guides
         svg, positions = build_svg(
