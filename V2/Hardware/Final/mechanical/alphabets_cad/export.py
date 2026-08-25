@@ -426,9 +426,8 @@ def generate_captured_enclosure(
             "parts": print_plate_layout,
         },
         "fabrication_status": (
-            "Parametric prototype derived from the captured settled mechanism; "
-            "clearances and print orientation require physical fit validation before "
-            "final fabrication."
+            "Current V2 Final enclosure source; the enclosure print is checked, but "
+            "the complete mechanism and production process require physical validation."
         ),
     }
     write_licensed_json(output_root / "manifest.json", manifest, sort_keys=True)
@@ -665,19 +664,19 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
         "cad_engine": "CadQuery 2.8.0 / OCCT",
         "parameters": params.as_dict(),
         "source_lineage": {
-            "card": "V2/Hardware/Final/cards/generate_card.py",
-            "laser_cut_drum": "V2/Hardware/Prototype/structure/spool.scad",
-            "printed_spool": "V2/Hardware/Prototype/structure/spool-3dp.scad",
-            "motor_reference": "V2/Hardware/Prototype/structure/28byj48.scad",
-            "holder_reference": "V2/Hardware/Prototype/structure/spool-holder.scad side()",
-            "enclosure_reference": "V2/Hardware/Prototype/structure/side_motor.FCStd Sketch",
+            "card": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+            "laser_cut_drum": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+            "printed_spool": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+            "motor_reference": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+            "holder_reference": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
+            "enclosure_reference": "V2/Hardware/Final/mechanical/design.toml + alphabets_cad/parts.py",
         },
         "geometry": geometry_summary,
         "fabrication_status": {
-            "card_and_laser_cut_drum": "ported from current dimensional sources",
-            "printed_spool": "ported legacy alternative; physical validation required",
+            "card_and_laser_cut_drum": "current dimensional manufacturing source; physical sample validation required",
+            "printed_spool": "optional additive part; physical validation required",
             "motor": "clearance reference, not a manufacturing model",
-            "holder_side": "ported dormant legacy profile; physical validation required",
+            "holder_side": "optional holder geometry; physical validation required",
             "enclosure_sketch": "non-solid reference geometry",
         },
     }

@@ -4,10 +4,14 @@
 
 [← Prototype stickers](../stickers/README.md) · [Physical variants](../../variants/README.md) · [Final CAD →](../../Final/mechanical/README.md)
 
-This directory is an isolated CadQuery source for **V2 Prototype**. It is a
-copy of the last trusted V2 Final source—the source used for the printed model
-confirmed on 2026-08-23—with the complete Prototype profile applied. Prototype
-and Final parts must not be mixed.
+This directory is the CadQuery manufacturing source for **V2 Prototype**. It
+generates the matched Prototype card, drum, pawl and one-piece enclosure.
+Prototype and Final parts must not be mixed.
+
+This profile supports prototyping with the ten existing sticker sets printed in
+Dubai. It remains usable while those sets are in service, but support ends when
+new V2 Final sticker and card batches are available. V2 Final is the target for
+new batches and carries the taller DACH/Nordic character set.
 
 ![Prototype enclosure and mechanism](generated/captured-enclosure/preview/captured-enclosure-module.svg)
 
@@ -23,28 +27,24 @@ and Final parts must not be mixed.
 | Sticker on each card face | 50 × 40 × 0.1 mm |
 | Drum | 64 positions, 85 mm diameter |
 | Drum inner / outer width | 56 / 60.3 mm |
-| Visible pawl | Prototype, 3 mm longer than Final |
+| Visible pawl | Prototype, 6 mm extension parameter |
 
 The sticker starts 3 mm from the card's free edge and reaches the hinge edge.
 The complete 43 mm card remains visible; the 3 mm free-edge strip is simply
 unstickered.
 
-## Enclosure provenance and limit
+## Enclosure and validation
 
-`reference/cards-position-capture-final.json` is a local, unchanged copy of
-the settled transforms from the trusted Final capture at frame 27464. CadQuery
-rebuilds the cards, stickers, drum width and pawl from this directory's
-`design.toml`, then applies those transforms. This gives a reproducible
-Prototype derivative without reviving the stale FreeCAD enclosure or old
-rendered files.
+`reference/cards-position-capture-final.json` supplies the settled card
+orientations at frame 27464. CadQuery rebuilds the Prototype cards, stickers,
+drum, pawl and enclosure from this directory's `design.toml`, then places the
+cards at those orientations.
 
-This is a valid parametric and exportable model, but it is **not yet a
-physically validated Prototype enclosure**. Its height and depth remain
-conservative values derived from the trusted Final motion capture. Print one
-complete Prototype module and check the real card motion, pawl, motor, shaft,
-stacking keys and cable clearance before reproducing it.
+The enclosure is **not yet physically validated**. Print one complete Prototype
+module and check the real card motion, pawl, motor, shaft, stacking features and
+cable clearance before reproducing it.
 
-The historical Prototype contract also has one explicit fit exception: the
+The Prototype card has one explicit fit exception: the
 corner radius of a rectangular 3 × 0.5 mm tab is about 1.5207 mm, approximately
 0.0207 mm larger than the radius of its nominal 3 mm pivot hole. The model
 records this as `allow_tab_interference = true`; it does not claim theoretical
@@ -135,7 +135,7 @@ or `make gui-enclosure`.
   pawl and two-object A1 Mini plate.
 - `generated/captured-enclosure/step/`: enclosure, pawl and assembly STEP.
 - `generated/manifest.json` and `generated/captured-enclosure/manifest.json`:
-  exact dimensions, bounds, source lineage and validation boundary.
+  exact dimensions, bounds, source files and validation boundary.
 
 The matching Demo‑64 artwork and cutter files are in
 [`../stickers/generated`](../stickers/README.md).

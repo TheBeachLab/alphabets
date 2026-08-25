@@ -3,8 +3,8 @@
 """Manufacturing dimensions shared by every Prototype CadQuery part.
 
 All dimensions are millimetres. The active card and drum values come from the
-matched Prototype variant contract; the motor and dormant holder remain copied
-reference geometry.
+matched Prototype variant contract. The motor and holder are reference
+geometry.
 """
 
 from __future__ import annotations

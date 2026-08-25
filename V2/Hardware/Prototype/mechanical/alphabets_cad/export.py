@@ -134,7 +134,7 @@ def generate_captured_enclosure(
     capture_path: Path,
     params: DesignParameters = DESIGN,
 ) -> None:
-    """Export the Prototype enclosure derived from the trusted Final capture."""
+    """Export the current V2 Prototype enclosure and print plate."""
 
     output_root = output_root.resolve()
     directories = {name: output_root / name for name in ("print", "step", "preview")}
@@ -240,9 +240,9 @@ def generate_captured_enclosure(
             "file": capture_path.name,
             "frame": capture["capture_frame"],
             "controller": capture["controller"],
-            "provenance": (
-                "settled transforms copied from the trusted Final capture; "
-                "Prototype card geometry is rebuilt from this local design.toml"
+            "geometry_source": (
+                "card orientations come from the local capture; Prototype card, "
+                "drum, pawl and enclosure geometry comes from design.toml"
             ),
         },
         "limits_mm": asdict(limits),
@@ -398,9 +398,8 @@ def generate_captured_enclosure(
             "parts": print_plate_layout,
         },
         "fabrication_status": (
-            "Parametric Prototype derivative of the printed Final CadQuery source. "
-            "It uses the Prototype card, drum and pawl dimensions with the settled "
-            "Final transforms; it requires a Prototype print and physical fit check."
+            "Current V2 Prototype enclosure source; automated geometry checks pass, "
+            "but a complete Prototype print and physical fit check are required."
         ),
     }
     write_licensed_json(output_root / "manifest.json", manifest, sort_keys=True)
@@ -613,17 +612,17 @@ def generate(output_root: Path, params: DesignParameters = DESIGN) -> None:
         "cad_engine": "CadQuery 2.8.0 / OCCT",
         "parameters": params.as_dict(),
         "source_lineage": {
-            "card": "V2/Hardware/Prototype/mechanical/design.toml",
-            "laser_cut_drum": "V2/Hardware/Prototype/mechanical/design.toml",
-            "printed_spool": "V2/Hardware/Prototype/structure/spool-3dp.scad",
-            "motor_reference": "V2/Hardware/Prototype/structure/28byj48.scad",
+            "card": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py",
+            "laser_cut_drum": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py",
+            "printed_spool": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py",
+            "motor_reference": "V2/Hardware/Prototype/mechanical/design.toml + alphabets_cad/parts.py",
         },
         "geometry": geometry_summary,
         "fabrication_status": {
             "card_and_laser_cut_drum": (
                 "generated from the matched Prototype variant contract"
             ),
-            "printed_spool": "ported legacy alternative; physical validation required",
+            "printed_spool": "optional additive part; physical validation required",
             "motor": "clearance reference, not a manufacturing model",
         },
     }

@@ -7,7 +7,7 @@
     {
       "id": "prototype",
       "name": "V2 Prototipo",
-      "description": "V2 Prototype 55 mm Demo 64 hardware profile; its parts are incompatible with the definitive module.",
+      "description": "Transitional 55 mm Demo 64 hardware profile for the ten existing Dubai sticker sets; support ends when new Definitivo sticker and card batches are available.",
       "character_preset": "demo-64",
       "sticker_mm": {
         "width": 50.0,
@@ -35,7 +35,7 @@
       "enclosure": {
         "status": "manufacturing-source",
         "source": "V2/Hardware/Prototype/mechanical/alphabets_cad",
-        "note": "Parametric Prototype derivative of the printed Final CadQuery source. It uses the Prototype dimensions and the trusted Final settled transforms, but still requires a Prototype print and physical fit check."
+        "note": "One-piece, open-front/rear Prototype CadQuery enclosure with matched Prototype card, drum and pawl geometry. A complete Prototype print and physical fit check are required."
       },
       "artifacts": {
         "cards": [
@@ -55,7 +55,7 @@
     {
       "id": "definitive",
       "name": "V2 Definitivo",
-      "description": "International 50 mm manufacturing geometry with its matched card, drum and two-part CadQuery enclosure.",
+      "description": "Supported target for new batches: expanded DACH and Nordic character coverage with matched taller stickers, cards, drum and two-part CadQuery enclosure.",
       "character_preset": "international-64",
       "sticker_mm": {
         "width": 45.0,

@@ -9,9 +9,10 @@ the display: a message enters the controller, travels through the module
 chain, and each module turns its drum until the requested card is visible.
 
 > [!WARNING]
-> V2 is under development and has not been physically validated. The files are
-> useful for studying and testing the design, but they are not ready to send
-> directly to a printer, cutter, or PCB manufacturer.
+> V2 is under development. The V2 Final enclosure has a recorded print check,
+> but the complete mechanism, Prototype enclosure, electronics and production
+> process are not physically validated. Make fit samples and validate one
+> complete module before ordering multiple parts.
 
 ## Mechanical
 
@@ -38,7 +39,7 @@ chain, and each module turns its drum until the requested card is visible.
 
 | Area | Current repository status |
 | --- | --- |
-| Cards, stickers, drum, enclosure | Editable sources and generated previews exist; physical validation is still required |
+| Cards, stickers, drum, enclosure | Matched Prototype and Final sources and manufacturing exports exist; complete physical validation is still required |
 | Motor | A 28BYJ-48 reference model and firmware defaults exist; the real assembly still needs validation |
 | Module board | Editable ATtiny1624 KiCad design and fabrication exports exist |
 | Module firmware | ATtiny1624 firmware and host-side tests exist |

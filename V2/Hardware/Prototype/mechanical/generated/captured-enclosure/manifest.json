@@ -11,10 +11,10 @@
     },
     "file": "cards-position-capture-final.json",
     "frame": 27464,
-    "provenance": "settled transforms copied from the trusted Final capture; Prototype card geometry is rebuilt from this local design.toml"
+    "geometry_source": "card orientations come from the local capture; Prototype card, drum, pawl and enclosure geometry comes from design.toml"
   },
   "character_set": "demo-64",
-  "fabrication_status": "Parametric Prototype derivative of the printed Final CadQuery source. It uses the Prototype card, drum and pawl dimensions with the settled Final transforms; it requires a Prototype print and physical fit check.",
+  "fabrication_status": "Current V2 Prototype enclosure source; automated geometry checks pass, but a complete Prototype print and physical fit check are required.",
   "features": {
     "enclosure_construction": "one continuous printable shell without an assembly seam, magnet pockets or internal alignment keys",
     "front_alignment": "automatic from the saved front-card/pawl capture plane; there is no manual front offset",

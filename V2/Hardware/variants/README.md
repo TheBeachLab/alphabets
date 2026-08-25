@@ -6,9 +6,16 @@
 incompatible V2 builds being mixed. A character order is inseparable from its
 sticker sheet, card, drum spacing and enclosure source.
 
+V2 Prototipo supports prototyping with the ten existing sticker sets printed in
+Dubai. V2 Definitivo is the target profile for new batches. Its expanded DACH
+and Nordic character map needs taller artwork, so it uses matched taller
+stickers and cards together with the corresponding drum and enclosure.
+Prototipo remains usable while the existing sets are in service, but support
+ends when new Definitivo sticker and card batches are available.
+
 | Variant | Character preset | Sticker / halves | Card | Drum inner / outer width | Enclosure |
 | --- | --- | --- | --- | --- | --- |
-| **V2 Prototipo** | `demo-64` | two 50 × 40 mm cuts, 1.8 mm gap | 55 × 43 mm, all visible | 56 / 60.3 mm | isolated CadQuery Prototype derivative; physical fit pending |
+| **V2 Prototipo** | `demo-64` | two 50 × 40 mm cuts, 1.8 mm gap | 55 × 43 mm, all visible | 56 / 60.3 mm | one-piece, open-front/rear CadQuery source; physical fit pending |
 | **V2 Definitivo** | `international-64` | two 45 × 45.5 mm cuts, 1.8 mm gap | 50 × 48 mm, all visible | 51 / 55.3 mm | current two-piece, open-rear CadQuery source |
 
 Both variants leave a 2.5 mm placement margin at each lateral edge. The sticker
@@ -55,7 +62,8 @@ manufacturing manifest. It rejects an incompatible width or height override.
 The Prototype CadQuery package is under
 [`../Prototype/mechanical`](../Prototype/mechanical/README.md). It defines one
 matched card, sticker, drum, pawl and enclosure profile. The Prototype
-enclosure is **not yet physically validated**.
+enclosure is **not yet physically validated**. This profile is supported only
+for the existing prototyping batches described above.
 
 Rebuild the Prototype package with:
 
@@ -64,7 +72,8 @@ cd V2/Hardware/Prototype/mechanical
 make check
 ```
 
-The Final variant is confirmed against the 2026-08-23 physical print. Its card
+The Final variant is the supported target for new sticker and card batches. Its
+enclosure is confirmed against the 2026-08-23 physical print. Its card
 and 64-position drum are generated from
 `V2/Hardware/Final/mechanical/alphabets_cad/`, and its sole current enclosure is
 the capture-fitted pipeline under
