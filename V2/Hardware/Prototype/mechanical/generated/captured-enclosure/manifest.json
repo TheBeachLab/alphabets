@@ -25,7 +25,7 @@
     "lower_shaft_support": "M3 self-tapping pilot in a 9 mm boss tapered continuously from the inside wall; user-supplied M3 screw forms the axle through the drum's 3.4 mm clearance hole",
     "motor_mount": "two M3 self-tapping pilots in internal bosses tapered continuously from the inside wall",
     "rear_open": true,
-    "replaceable_pawls": "Prototype pawl with a 0 mm outer-face chamfer, retained by one M3 screw into a self-tapping pilot",
+    "replaceable_pawls": "Prototype pawl with a 0 mm outer-face chamfer and no screw-head recess, retained by one M3 screw into a self-tapping pilot",
     "screw_lugs": false,
     "side_docking_relief": "two matching full-side pockets, each 4 mm deep; 11.3 mm body gap still required for equal orientation",
     "top_mark": "large split alpha rotated toward the front and recessed 0.2 mm into the top face through a nominal 0.2 mm chamfer",
@@ -68,10 +68,10 @@
           69.0
         ]
       },
-      "component_volume_sum_mm3": 371.854272,
+      "component_volume_sum_mm3": 391.049403,
       "solid_count": 1,
       "valid": true,
-      "volume_mm3": 371.854272
+      "volume_mm3": 391.049403
     }
   },
   "limits_mm": {
@@ -107,12 +107,11 @@
     "motor_mount_disc_clearance": 0.5,
     "motor_mount_pilot_diameter": 2.6,
     "outer_corner_radius": 10.0,
-    "pawl_head_recess_depth": 1.0,
-    "pawl_head_recess_diameter": 6.0,
     "pawl_mount_width": 10.0,
     "pawl_outer_chamfer": 0.0,
     "pawl_pilot_depth": 8.0,
     "pawl_pilot_diameter": 2.6,
+    "pawl_screw_axis_z": 66.0,
     "pawl_screw_clearance_diameter": 3.4,
     "pawl_thickness_addition": 1.0,
     "pawl_tip_radius": 2.0,
@@ -164,10 +163,10 @@
           103.301815
         ]
       },
-      "component_volume_sum_mm3": 163397.379707,
+      "component_volume_sum_mm3": 163416.574817,
       "solid_count": 2,
       "valid": true,
-      "volume_mm3": 163397.379707
+      "volume_mm3": 163416.574817
     },
     "margin_mm": 5.0,
     "part_gap_mm": 2.0,

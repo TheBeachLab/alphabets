@@ -28,6 +28,7 @@ from .assemblies import (
 )
 from .parameters import DESIGN, DesignParameters
 from .parts import (
+    _captured_pawl_screw_axis_z,
     captured_drum_enclosure_parts,
     captured_enclosure_limits,
     captured_pawl_parts,
@@ -302,11 +303,8 @@ def generate_captured_enclosure(
             "pawl_pilot_depth": params.drum_enclosure.pawl_pilot_depth,
             "pawl_thickness_addition": (params.drum_enclosure.pawl_thickness_addition),
             "pawl_outer_chamfer": params.drum_enclosure.pawl_outer_chamfer,
-            "pawl_head_recess_diameter": (
-                params.drum_enclosure.pawl_head_recess_diameter
-            ),
-            "pawl_head_recess_depth": (params.drum_enclosure.pawl_head_recess_depth),
             "pawl_tip_radius": params.drum_enclosure.pawl_tip_radius,
+            "pawl_screw_axis_z": _captured_pawl_screw_axis_z(limits),
             "pawl_screw_clearance_diameter": (
                 params.drum_enclosure.screw_clearance_diameter
             ),
@@ -338,8 +336,8 @@ def generate_captured_enclosure(
             "replaceable_pawls": (
                 "Prototype pawl with a "
                 f"{params.drum_enclosure.pawl_outer_chamfer:g} mm outer-face "
-                "chamfer, retained by "
-                "one M3 screw into a self-tapping pilot"
+                "chamfer and no screw-head recess, retained by one M3 screw "
+                "into a self-tapping pilot"
             ),
             "visible_assembly_pawl": "prototype",
             "lower_shaft_support": (

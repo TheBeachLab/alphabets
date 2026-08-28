@@ -98,7 +98,9 @@ The primary `[drum_enclosure]` controls use the drum centre as their origin:
 
 The front follows the saved front-card/pawl plane. `front_chamfer` is derived
 as `wall_thickness / 2`, and the material left behind both side pockets is
-`wall_thickness - side_inset_depth`.
+`wall_thickness - side_inset_depth`. The pawl screw clearance and matching
+enclosure pilot share the exact midpoint of the flat top-wall land (3 mm from
+either face with the current 6 mm wall). The pawl has no screw-head recess.
 
 Both enclosure faces use the same large rounded-rectangle pocket. The pocket
 shape is independent of the electronics envelope, so

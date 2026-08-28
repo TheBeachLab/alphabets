@@ -665,6 +665,16 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         + 2 * enclosure.wall_thickness
     )
     assert enclosure.front_chamfer == pytest.approx(enclosure.wall_thickness / 2)
+    pawl_screw_axis_z = _captured_pawl_screw_axis_z(limits)
+    assert pawl_screw_axis_z == pytest.approx(
+        limits.inner_top_z + enclosure.wall_thickness / 2
+    )
+    assert pawl_screw_axis_z - limits.inner_top_z == pytest.approx(
+        enclosure.wall_thickness / 2
+    )
+    assert limits.outer_top_z - pawl_screw_axis_z == pytest.approx(
+        enclosure.wall_thickness / 2
+    )
 
     shell = parts["enclosure"]
     assert shell.BoundingBox().xlen == pytest.approx(limits.outer_width)
@@ -747,19 +757,21 @@ def test_captured_enclosure_is_open_ended_tube_with_replaceable_pawls() -> None:
         ),
         1e-6,
     )
+    # The M3 clearance is through-cut and shares the enclosure pilot axis. The
+    # outer face is otherwise solid: Prototype does not need a head recess.
     assert not pawl.isInside(
         cq.Vector(
-            enclosure.pawl_head_recess_diameter / 2 - 0.2,
-            pawl_box.ymax - enclosure.pawl_head_recess_depth / 2,
-            _captured_pawl_screw_axis_z(limits),
+            0,
+            pawl_box.ymax - 0.1,
+            pawl_screw_axis_z,
         ),
         1e-6,
     )
     assert pawl.isInside(
         cq.Vector(
-            enclosure.pawl_head_recess_diameter / 2 - 0.2,
-            limits.front_y + 0.5,
-            _captured_pawl_screw_axis_z(limits),
+            enclosure.screw_clearance_diameter / 2 + 0.2,
+            pawl_box.ymax - 0.1,
+            pawl_screw_axis_z,
         ),
         1e-6,
     )
@@ -1232,11 +1244,10 @@ def test_captured_enclosure_manufacturing_files_are_readable() -> None:
     assert not any("magnet" in name for name in manifest["parameters"])
     assert "capture_split_height" not in manifest["parameters"]
     assert "split_gap" not in manifest["parameters"]
-    assert manifest["parameters"]["pawl_head_recess_diameter"] == pytest.approx(
-        enclosure.pawl_head_recess_diameter
-    )
-    assert manifest["parameters"]["pawl_head_recess_depth"] == pytest.approx(
-        enclosure.pawl_head_recess_depth
+    assert "pawl_head_recess_diameter" not in manifest["parameters"]
+    assert "pawl_head_recess_depth" not in manifest["parameters"]
+    assert manifest["parameters"]["pawl_screw_axis_z"] == pytest.approx(
+        enclosure.top_distance + enclosure.wall_thickness / 2
     )
     assert manifest["parameters"]["shaft_head_recess_diameter"] == pytest.approx(
         enclosure.shaft_head_recess_diameter
