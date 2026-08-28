@@ -48,6 +48,12 @@ class CapturedEnclosureLimits:
     def outer_height(self) -> float:
         return self.outer_top_z - self.outer_bottom_z
 
+    @property
+    def top_wall_midpoint_z(self) -> float:
+        """Centre plane of the flat top-wall land used by the pawl screw."""
+
+        return (self.inner_top_z + self.outer_top_z) / 2
+
 
 def _cutting_cylinder(radius: float, height: float) -> cq.Workplane:
     return (
@@ -969,7 +975,9 @@ def _captured_top_alpha_cutter(
 
 
 def _captured_pawl_screw_axis_z(limits: CapturedEnclosureLimits) -> float:
-    return (limits.inner_top_z + limits.outer_top_z) / 2
+    """Keep the enclosure pilot and pawl clearance centred in the top wall."""
+
+    return limits.top_wall_midpoint_z
 
 
 def _captured_pawl_pilot(
@@ -1054,17 +1062,7 @@ def _captured_pawl_shape(
         cq.Vector(center_x, limits.front_y - EPSILON, mount_center_z),
         cq.Vector(0, 1, 0),
     )
-    head_recess = cq.Solid.makeCylinder(
-        enclosure.pawl_head_recess_diameter / 2,
-        enclosure.pawl_head_recess_depth + EPSILON,
-        cq.Vector(
-            center_x,
-            limits.front_y + thickness + EPSILON,
-            mount_center_z,
-        ),
-        cq.Vector(0, -1, 0),
-    )
-    return outer.cut(screw_clearance).cut(head_recess).clean()
+    return outer.cut(screw_clearance).clean()
 
 
 def _captured_pawl_mount(
